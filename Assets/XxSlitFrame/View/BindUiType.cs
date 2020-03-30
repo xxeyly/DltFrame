@@ -7,28 +7,16 @@ namespace XxSlitFrame.View
     {
         public enum UiType
         {
-            GameObject,
-            LGameObject,
             Button,
             Image,
             Text,
             Toggle,
-            Input,
-            DropDown,
             RawImage,
-            Slider,
             Scrollbar,
+            Dropdown,
+            InputField,
             ScrollRect,
-            LButton,
-            LImage,
-            LText,
-            LToggle,
-            LInput,
-            LDropDown,
-            LRawImage,
-            LSlider,
-            LScrollbar,
-            LScrollView,
+            GameObject
         }
 
         [FormerlySerializedAs("Type")] 

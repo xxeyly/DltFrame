@@ -242,6 +242,7 @@ namespace XxSlitFrame.View
                         break;
                 }
             }
+
             timeTaskInfoList.Clear();
         }
 
@@ -647,9 +648,6 @@ namespace XxSlitFrame.View
                         case BindUiType.UiType.GameObject:
                             allUiName += "private GameObject _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
                             break;
-                        case BindUiType.UiType.LGameObject:
-                            allUiName += "private List<GameObject> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
                         case BindUiType.UiType.Button:
                             allUiName += "private Button _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
                             break;
@@ -662,18 +660,8 @@ namespace XxSlitFrame.View
                         case BindUiType.UiType.Toggle:
                             allUiName += "private Toggle _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
                             break;
-                        case BindUiType.UiType.Input:
-                            allUiName += "private InputField _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.DropDown:
-                            allUiName += "private DropDown _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-
-                            break;
                         case BindUiType.UiType.RawImage:
                             allUiName += "private RawImage _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.Slider:
-                            allUiName += "private Slider _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
                             break;
                         case BindUiType.UiType.Scrollbar:
                             allUiName += "private Scrollbar _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
@@ -681,38 +669,12 @@ namespace XxSlitFrame.View
                         case BindUiType.UiType.ScrollRect:
                             allUiName += "private ScrollRect _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
                             break;
-                        case BindUiType.UiType.LButton:
-                            allUiName += "private List<Button> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
+                        case BindUiType.UiType.InputField:
+                            allUiName += "private InputField _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
                             break;
-                        case BindUiType.UiType.LImage:
-                            allUiName += "private List<Image> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
+                        case BindUiType.UiType.Dropdown:
+                            allUiName += "private Dropdown _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
                             break;
-                        case BindUiType.UiType.LText:
-                            allUiName += "private List<Text> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.LToggle:
-                            allUiName += "private List<Toggle> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.LInput:
-                            allUiName += "private List<InputField> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.LDropDown:
-                            allUiName += "private List<DropDown> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.LRawImage:
-                            allUiName += "private List<RawImage> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.LSlider:
-                            allUiName += "private List<Slider> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.LScrollbar:
-                            allUiName += "private List<Scrollbar> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.LScrollView:
-                            allUiName += "private List<ScrollView> _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
                     }
                 }
             }
@@ -832,12 +794,6 @@ namespace XxSlitFrame.View
                         allBindName += "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," + "EventTriggerType.PointerClick" + "," + "On" + child.name +
                                        ");" + "\n";
                     }
-
-                    if (child.GetComponent<BindUiType>().type == BindUiType.UiType.LButton)
-                    {
-                        allBindName += "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," + "EventTriggerType.PointerClick" + "," + "On" + child.name +
-                                       ");" + "\n";
-                    }
                 }
             }
 
@@ -859,10 +815,6 @@ namespace XxSlitFrame.View
                 if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
                 {
                     if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Button)
-                    {
-                        allBindName += "private void On" + child.name + "(BaseEventData targetObj)" + "\n" + "{" + "\n" + "}" + "\n";
-                    }
-                    else if (child.GetComponent<BindUiType>().type == BindUiType.UiType.LButton)
                     {
                         allBindName += "private void On" + child.name + "(BaseEventData targetObj)" + "\n" + "{" + "\n" + "}" + "\n";
                     }

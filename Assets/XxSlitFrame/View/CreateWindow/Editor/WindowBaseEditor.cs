@@ -2,6 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 using Object = UnityEngine.Object;
 
 namespace XxSlitFrame.View.CreateWindow.Editor
@@ -38,186 +39,63 @@ namespace XxSlitFrame.View.CreateWindow.Editor
             }
         }
 
-        [MenuItem("GameObject/绑定UI /@(Alt+B) 绑定Button  &b", false, 0)]
-        public static void BindButton()
+        [MenuItem("GameObject/绑定UI /@(Alt+T) 绑定Button  &t", false, 0)]
+        public static void BindComponent()
         {
             GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.Button;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Button;
-            }
 
-            if (uiObj != null && !uiObj.GetComponent<UnityEngine.UI.Button>())
+            if (uiObj != null)
             {
-                uiObj.AddComponent<UnityEngine.UI.Button>();
-            }
-        }
+                if (!uiObj.GetComponent<BindUiType>())
+                {
+                    uiObj.AddComponent<BindUiType>();
+                }
 
-        [MenuItem("GameObject/绑定UI /@(Shift+Alt+B) 绑定ButtonList  #&b", false, 0)]
-        public static void BindListButton()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.LButton;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.LButton;
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Ctrl+I) 绑定Image  %i", false, 0)]
-        public static void BindImage()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.Image;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Image;
-            }
-
-            if (uiObj != null && !uiObj.GetComponent<Image>())
-            {
-                uiObj.AddComponent<Image>();
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Shift+Ctrl+I) 绑定ImageList  #%i", false, 0)]
-        public static void BindListImage()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.LImage;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.LImage;
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Ctrl+T) 绑定Text  %t", false, 0)]
-        public static void BindText()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.Text;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Text;
-            }
-
-            if (uiObj != null && !uiObj.GetComponent<Text>())
-            {
-                uiObj.AddComponent<Text>();
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Shift+Ctrl+T) 绑定TextList  #%t", false, 0)]
-        public static void BindListText()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.LText;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.LText;
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Alt+T) 绑定Toggle   &t", false, 0)]
-        public static void BindToggle()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.Toggle;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Toggle;
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Shift+Alt+T) 绑定ToggleList  #&t", false, 0)]
-        public static void BindListToggle()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.LToggle;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.LToggle;
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Alt+I) 绑定InputField   &i", false, 0)]
-        public static void BindInputField()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.Input;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Input;
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Shift+Alt+I) 绑定InputFieldList  #&i", false, 0)]
-        public static void BindListInputField()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.LInput;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.LInput;
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Ctrl+G) GameObject  %g", false, 0)]
-        public static void BindGameObject()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.GameObject;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.GameObject;
-            }
-        }
-
-        [MenuItem("GameObject/绑定UI /@(Shift+Ctrl+G) GameObject  #%g", false, 0)]
-        public static void BindListGameObject()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && !uiObj.GetComponent<BindUiType>())
-            {
-                uiObj.AddComponent<BindUiType>().type = BindUiType.UiType.LGameObject;
-            }
-            else
-            {
-                if (uiObj != null) uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.LGameObject;
+                if (uiObj.GetComponent<UnityEngine.UI.Button>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Button;
+                }
+                else if (uiObj.GetComponent<Image>() && !uiObj.GetComponent<UnityEngine.UI.Button>() && !uiObj.GetComponent<Scrollbar>() &&
+                         !uiObj.GetComponent<ScrollRect>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Image;
+                }
+                else if (uiObj.GetComponent<Text>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Text;
+                }
+                else if (uiObj.GetComponent<Toggle>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Toggle;
+                }
+                else if (uiObj.GetComponent<RawImage>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.RawImage;
+                }
+                else if (uiObj.GetComponent<Scrollbar>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Scrollbar;
+                }
+                else if (uiObj.GetComponent<Dropdown>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Dropdown;
+                }
+                else if (uiObj.GetComponent<InputField>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.InputField;
+                }
+                else if (uiObj.GetComponent<ScrollRect>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.ScrollRect;
+                }
+                else if (uiObj.GetComponent<VideoPlayer>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Text;
+                }
+                else
+                {
+                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.GameObject;
+                }
             }
         }
     }
