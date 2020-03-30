@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Windows;
 using XxSlitFrame.ConfigData;
+using XxSlitFrame.Tools.ConfigData;
 
 namespace XxSlitFrame.Tools.Editor
 {

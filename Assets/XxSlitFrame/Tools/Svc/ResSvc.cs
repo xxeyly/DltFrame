@@ -33,10 +33,12 @@ namespace XxSlitFrame.Tools.Svc
         /// <returns></returns>
         private void GetAudio()
         {
+            /*
             foreach (KeyValuePair<AudioType, string> pair in General.General.AudioPath)
             {
                 AudioSvc.Instance.audioDlc[pair.Key] = GetData<AudioClip>(pair.Value);
             }
+            */
 
             AudioSvc.Instance.PlayBackgroundAudio();
         }

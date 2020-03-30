@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace XxSlitFrame.ConfigData
+namespace XxSlitFrame.Tools.ConfigData
 {
     /// <summary>
     /// 提示数据
     /// </summary>
+    [CreateAssetMenu(fileName = "TipsData", menuName = "配置文件/提示数据", order = 1)]
     public class TipsData : ScriptableObject
     {
         public List<TipsDataInfo> tipsDataInfos;

@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using AudioType = XxSlitFrame.Tools.Svc.AudioType;
+﻿using UnityEngine;
+using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools.General
 {
@@ -41,22 +40,6 @@ namespace XxSlitFrame.Tools.General
         #region 网络地址
 
         public const string ServerAssetBundle = "http://127.0.0.1/AssetBundle/";
-
-        public static readonly Dictionary<AudioType, string> AudioPath = new Dictionary<AudioType, string>()
-        {
-            {AudioType.EBackground, "Effect/Background"},
-            {AudioType.EEnterExperiment, "Effect/EnterScene"},
-            {AudioType.EErrorPopup, "Effect/TipsError"},
-            {AudioType.ETipsPopup, "Effect/TipsPopup"},
-            {AudioType.EClose, "Effect/Close"},
-            {AudioType.ECloseBackground, "Effect/CloseBackGround"},
-            {AudioType.ESure, "Effect/Sure"},
-            {AudioType.ENextStep, "Effect/NextStep"},
-            {AudioType.ERedo, "Effect/Redo"},
-            {AudioType.EClick, "Effect/Click"},
-            {AudioType.DisplayObjects, "Effect/DisplayObjects"},
-        };
-
         #endregion
 
         /// <summary>
@@ -73,7 +56,8 @@ namespace XxSlitFrame.Tools.General
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
 #endif
-                string url = Application.absoluteURL;
+                return PersistentDataSvc.Instance.serverPath;
+                /*string url = Application.absoluteURL;
                 //当前网页的url
                 int index = url.LastIndexOf('/');
                 if (index > 0)
@@ -86,7 +70,7 @@ namespace XxSlitFrame.Tools.General
                 {
                     Debug.LogError("未找到文件");
                     return "";
-                }
+                }*/
             }
             else if (Application.isEditor)
             {
@@ -112,7 +96,8 @@ namespace XxSlitFrame.Tools.General
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
 #endif
-                string url = Application.absoluteURL;
+                return PersistentDataSvc.Instance.serverPath;
+                /*string url = Application.absoluteURL;
                 //当前网页的url
                 int index = url.LastIndexOf('/');
                 if (index > 0)
@@ -125,7 +110,7 @@ namespace XxSlitFrame.Tools.General
                 {
                     Debug.LogError("未找到文件");
                     return "";
-                }
+                }*/
             }
             else if (Application.isEditor)
             {

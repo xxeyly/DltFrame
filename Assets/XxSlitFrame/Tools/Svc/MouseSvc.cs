@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools.Svc
@@ -50,7 +51,7 @@ namespace XxSlitFrame.Tools.Svc
         {
             if (Input.GetMouseButtonDown(0) && !GetMouseOverUI())
             {
-                AudioSvc.Instance.PlayEffectAudio(AudioType.EClick);
+                AudioSvc.Instance.PlayEffectAudio(AudioData.AudioType.EClick);
             }
         }
 

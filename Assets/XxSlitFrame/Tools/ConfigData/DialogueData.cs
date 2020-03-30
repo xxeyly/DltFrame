@@ -25,6 +25,7 @@ public enum Length
 namespace XxSlitFrame.ConfigData
 {
     [Serializable]
+    [CreateAssetMenu(fileName = "DialogueData", menuName = "配置文件/对话数据", order = 1)]
     public class DialogueData : ScriptableObject
     {
         [Header("对话片段")] public List<DialogDataInfoContainer> dataInfos;

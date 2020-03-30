@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
@@ -71,6 +72,32 @@ namespace XxSlitFrame.Tools.Svc
         /// <summary>
         /// 加载场景方式
         /// </summary>
-        public SceneLoadType sceneLoadType;
+        [Header("加载场景方式")] public SceneLoadType sceneLoadType;
+
+        /// <summary>
+        /// 服务器地址
+        /// </summary>
+        [Header("服务器地址")] public string serverPath;
+
+        /// <summary>
+        /// 设置服务器地址
+        /// </summary>
+        /// <param name="url"></param>
+        private void SetServerURL(string url)
+        {
+            serverPath = url;
+        }
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+        [DllImport("__Internal")]
+        private static extern void GetIP();
+#endif
+        public override void StartSvc()
+        {
+            base.StartSvc();
+#if UNITY_WEBGL && !UNITY_EDITOR
+            GetIP();
+#endif
+        }
     }
 }

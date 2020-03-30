@@ -8,7 +8,7 @@ namespace XxSlitFrame.Tools.Editor
     public class CreateDialogueData : UnityEditor.Editor
     {
         // 在菜单栏创建对话数据
-        [MenuItem("xxslit/创建对话数据")]
+        // [MenuItem("xxslit/创建对话数据")]
         static void CreateData()
         {
             ScriptableObject dialogueData = ScriptableObject.CreateInstance<DialogueData>();
