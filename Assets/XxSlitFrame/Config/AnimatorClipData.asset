@@ -12,18 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a80e737b6bd2f114e91ded63402b2b09, type: 3}
   m_Name: AnimatorClipData
   m_EditorClassIdentifier: 
-  animatorClipDataInfos:
-  - animatorClipName: clil1
-    animatorControllerParameterType: 9
-    fixedDuration: 0
-    transitionDuration: 0
-    animatorClipFirstFrame: 0
-    animatorClipLastFrame: 1
-    animatorClipIsLoop: 0
-  - animatorClipName: clil2
-    animatorControllerParameterType: 9
-    fixedDuration: 0
-    transitionDuration: 0
-    animatorClipFirstFrame: 2
-    animatorClipLastFrame: 3
-    animatorClipIsLoop: 1
+  animatorClipDataInfos: []

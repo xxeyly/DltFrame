@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d221e0809dee1f4ab4796da7e51d1d0, type: 3}
   m_Name: CustomAnimatorClipConfig
   m_EditorClassIdentifier: 
-  currentFbxPath: 
-  animatorName: 
-  exportPath: 
-  profilePath: 
+  currentFbx: {fileID: 0}
+  animatorName: 0
+  exportPath: 0
+  profilePath: 0

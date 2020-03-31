@@ -12,8 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52c79eaa7ba15574983c247aa03559cf, type: 3}
   m_Name: TipsData
   m_EditorClassIdentifier: 
-  tipsDataInfos:
-  - tipIndex: 0
-    tipsContent: 
-    tipsAudioClip: {fileID: 0}
-    tipsLength: 0
+  tipsDataInfos: []
