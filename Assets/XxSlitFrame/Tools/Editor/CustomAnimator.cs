@@ -1,40 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using LitJson;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
+using XxSlitFrame.Tools.ConfigData;
 using Object = UnityEngine.Object;
 
 namespace XxSlitFrame.Tools.Editor
 {
-    /// <summary>
-    /// 动画数据
-    /// </summary>
-    public class CustomAnimatorData
-    {
-        /// <summary>
-        /// 当前动画文件
-        /// </summary>
-        public string CurrentFbxPath;
-
-        /// <summary>
-        /// 项目名称
-        /// </summary>
-        public string AnimatorName;
-
-        /// <summary>
-        /// 输出文件夹
-        /// </summary>
-        public string ExportPath;
-
-        /// <summary>
-        /// 输出文件路径
-        /// </summary>
-        public string ProfilePath;
-    }
-
     //自定义动画编辑
     public class CustomAnimator : EditorWindow
     {
@@ -73,12 +47,11 @@ namespace XxSlitFrame.Tools.Editor
         /// </summary>
         private string _profilePath;
 
-        /// <summary>
-        /// 配置文件信息
-        /// </summary>
-        private List<AnimatorClipDataInfo> _animatorClipDataInfos;
+        public AnimatorClipData animatorClipData;
 
         private ModelImporter _modelImporter;
+
+        private CustomAnimatorClipConfig _customAnimatorClipConfig;
 
         private void OnGUI()
         {
@@ -131,16 +104,16 @@ namespace XxSlitFrame.Tools.Editor
             #region 配置文件
 
             EditorGUILayout.BeginHorizontal();
-            //选择打包路径
-            if (GUILayout.Button("选择配置文件", GUILayout.MaxWidth(120)))
-            {
-                this._profilePath = EditorUtility.OpenFilePanel("选择配置文件", "", "");
-            }
-
-            this._profilePath = EditorGUILayout.TextField(this._profilePath, GUILayout.MaxWidth(420), GUILayout.MaxHeight(20));
-            EditorGUILayout.EndHorizontal();
+            //自定义枚举下拉框
+            EditorGUILayout.LabelField("动画配置数据:", GUILayout.MaxWidth(120));
+#pragma warning disable 618
+            animatorClipData = (AnimatorClipData) EditorGUILayout.ObjectField(animatorClipData, typeof(AnimatorClipData), GUILayout.MaxWidth(400));
+#pragma warning restore 618
 
             #endregion
+
+            EditorGUILayout.EndHorizontal();
+
 
             #region 分割动画并配置Animator数据
 
@@ -161,62 +134,59 @@ namespace XxSlitFrame.Tools.Editor
         {
             #region 动画分段
 
-            if (File.Exists(_profilePath))
-            {
-                _animatorClipDataInfos = JsonMapper.ToObject<List<AnimatorClipDataInfo>>(GetTextToLoad(_profilePath));
-            }
-
             _modelImporter = (ModelImporter) AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(_currentFbx));
-            _modelImporter.animationType = ModelImporterAnimationType.Generic;
-            _modelImporter.generateAnimations = ModelImporterGenerateAnimations.GenerateAnimations;
-            ModelImporterClipAnimation[] animations = new ModelImporterClipAnimation[_animatorClipDataInfos.Count];
-
-            for (int i = 0; i < _animatorClipDataInfos.Count; i++)
+            if (_modelImporter != null)
             {
-                animations[i] = SetClipAnimation(_animatorClipDataInfos[i].animatorClipName, _animatorClipDataInfos[i].animatorClipFirstFrame,
-                    _animatorClipDataInfos[i].animatorClipLastFrame,
-                    _animatorClipDataInfos[i].animatorClipIsLoop);
-            }
+                _modelImporter.animationType = ModelImporterAnimationType.Generic;
+                _modelImporter.generateAnimations = ModelImporterGenerateAnimations.GenerateAnimations;
+                ModelImporterClipAnimation[] animations = new ModelImporterClipAnimation[animatorClipData.animatorClipDataInfos.Count];
 
-            _modelImporter.clipAnimations = animations;
-            _modelImporter.SaveAndReimport();
-            //动画文件下的所有文件
-            List<Object> allAnimObject = new List<Object>(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(_currentFbx)));
-            List<string> allAnimClipName = GetAllAnimClipName(_animatorClipDataInfos);
-            Dictionary<string, AnimationClip> animationClipDic = BuildingAnimationClips(allAnimObject, allAnimClipName);
-            //筛选出动画文件
-            for (int i = 0; i < allAnimObject.Count; i++)
-            {
-                Debug.Log(allAnimObject[i].name);
-            }
-
-            #endregion
-
-            #region 动画控制器
-
-            if (Directory.Exists(_exportPath) && _animatorName != "")
-            {
-                AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(_exportPath + "/" + _animatorName + ".controller");
-                AnimatorStateMachine rootStateMachine = animatorController.layers[0].stateMachine;
-
-                for (int i = 0; i < _animatorClipDataInfos.Count; i++)
+                for (int i = 0; i < animatorClipData.animatorClipDataInfos.Count; i++)
                 {
-                    //添加 参数
-                    animatorController.AddParameter(_animatorClipDataInfos[i].animatorClipName, _animatorClipDataInfos[i].animatorClipStatesType);
-                    //添加 片段
-                    AnimatorState state = rootStateMachine.AddState(_animatorClipDataInfos[i].animatorClipName);
-                    //设置动画
-                    state.motion = animationClipDic[_animatorClipDataInfos[i].animatorClipName];
-                    // 关联片段 
-                    AnimatorStateTransition animatorStateTransition = rootStateMachine.AddAnyStateTransition(state);
-                    //设置关联参数
-                    animatorStateTransition.AddCondition(AnimatorConditionMode.If, 0, _animatorClipDataInfos[i].animatorClipName);
-                    //设置持续时间
-                    animatorStateTransition.duration = _animatorClipDataInfos[i].transitionDuration;
+                    animations[i] = SetClipAnimation(animatorClipData.animatorClipDataInfos[i].animatorClipName, animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame,
+                        animatorClipData.animatorClipDataInfos[i].animatorClipLastFrame,
+                        animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop);
                 }
-            }
 
-            #endregion
+                _modelImporter.clipAnimations = animations;
+                _modelImporter.SaveAndReimport();
+                //动画文件下的所有文件
+                List<Object> allAnimObject = new List<Object>(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(_currentFbx)));
+                List<string> allAnimClipName = GetAllAnimClipName();
+                Dictionary<string, AnimationClip> animationClipDic = BuildingAnimationClips(allAnimObject, allAnimClipName);
+
+                #endregion
+
+                #region 动画控制器
+
+                if (Directory.Exists(_exportPath) && _animatorName != "")
+                {
+                    AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(_exportPath + "/" + _animatorName + ".controller");
+                    AnimatorStateMachine rootStateMachine = animatorController.layers[0].stateMachine;
+
+                    for (int i = 0; i < animatorClipData.animatorClipDataInfos.Count; i++)
+                    {
+                        //添加 参数
+                        animatorController.AddParameter(animatorClipData.animatorClipDataInfos[i].animatorClipName, animatorClipData.animatorClipDataInfos[i].animatorControllerParameterType);
+                        //添加 片段
+                        AnimatorState state = rootStateMachine.AddState(animatorClipData.animatorClipDataInfos[i].animatorClipName);
+                        //设置动画
+                        state.motion = animationClipDic[animatorClipData.animatorClipDataInfos[i].animatorClipName];
+                        // 关联片段 
+                        AnimatorStateTransition animatorStateTransition = rootStateMachine.AddAnyStateTransition(state);
+                        //设置关联参数
+                        animatorStateTransition.AddCondition(AnimatorConditionMode.If, 0, animatorClipData.animatorClipDataInfos[i].animatorClipName);
+                        //设置持续时间
+                        animatorStateTransition.duration = animatorClipData.animatorClipDataInfos[i].transitionDuration;
+                    }
+                }
+
+                #endregion
+            }
+            else
+            {
+                Debug.LogError("当前Fbx文件没有选择");
+            }
         }
 
         /// <summary>
@@ -224,14 +194,20 @@ namespace XxSlitFrame.Tools.Editor
         /// </summary>
         private void InitData()
         {
-            if (File.Exists(Application.dataPath + "/Resources/CustomAnimatorData.json"))
+            //配置文件数据
+            _customAnimatorClipConfig =
+                (CustomAnimatorClipConfig) AssetDatabase.LoadAssetAtPath("Assets/XxSlitFrame/Config/CustomAnimatorClipConfig.asset", typeof(CustomAnimatorClipConfig));
+            if (_customAnimatorClipConfig != null)
             {
-                CustomAnimatorData customAnimatorData =
-                    JsonMapper.ToObject<CustomAnimatorData>(GetTextToLoad(Application.dataPath + "/Resources", "CustomAnimatorData.json"));
-                _currentFbx = AssetDatabase.LoadAssetAtPath<GameObject>(customAnimatorData.CurrentFbxPath);
-                _animatorName = customAnimatorData.AnimatorName;
-                _exportPath = customAnimatorData.ExportPath;
-                _profilePath = customAnimatorData.ProfilePath;
+                _currentFbx = _customAnimatorClipConfig.currentFbx;
+                _animatorName = _customAnimatorClipConfig.animatorName;
+                _exportPath = _customAnimatorClipConfig.exportPath;
+                _profilePath = _customAnimatorClipConfig.profilePath;
+            }
+            else
+            {
+                AssetDatabase.CreateAsset(CreateInstance<CustomAnimatorClipConfig>(), "Assets" + "/" + "XxSlitFrame/Config/CustomAnimatorClipConfig.asset");
+                Debug.LogError("当前配置文件不存在,已经创建");
             }
         }
 
@@ -256,7 +232,7 @@ namespace XxSlitFrame.Tools.Editor
 
         #region 构建动画片段键值对
 
-        public Dictionary<string, AnimationClip> BuildingAnimationClips(List<Object> allFbxObject, List<string> animClipNames)
+        private Dictionary<string, AnimationClip> BuildingAnimationClips(List<Object> allFbxObject, List<string> animClipNames)
         {
             Dictionary<string, AnimationClip> animationClipDic = new Dictionary<string, AnimationClip>();
             AnimationClip animationClip;
@@ -279,12 +255,11 @@ namespace XxSlitFrame.Tools.Editor
         /// <summary>
         /// 获得所有动画片段的名字
         /// </summary>
-        /// <param name="animatorClipDataInfos"></param>
         /// <returns></returns>
-        private List<string> GetAllAnimClipName(List<AnimatorClipDataInfo> animatorClipDataInfos)
+        private List<string> GetAllAnimClipName()
         {
             List<string> animNames = new List<string>();
-            foreach (AnimatorClipDataInfo animatorClipDataInfo in animatorClipDataInfos)
+            foreach (AnimatorClipData.AnimatorClipDataInfo animatorClipDataInfo in animatorClipData.animatorClipDataInfos)
             {
                 animNames.Add(animatorClipDataInfo.animatorClipName);
             }
@@ -298,135 +273,12 @@ namespace XxSlitFrame.Tools.Editor
         {
             #region 保存配置数据
 
-            CustomAnimatorData customAnimatorData = new CustomAnimatorData
-            {
-                AnimatorName = _animatorName, ExportPath = _exportPath, ProfilePath = _profilePath, CurrentFbxPath = AssetDatabase.GetAssetPath(_currentFbx)
-            };
-            SaveTextToLoad(Application.dataPath + "/Resources", "CustomAnimatorData.json", EditorJsonUtility.ToJson(customAnimatorData));
+            _customAnimatorClipConfig.currentFbx = _currentFbx;
+            _customAnimatorClipConfig.animatorName = _animatorName;
+            _customAnimatorClipConfig.exportPath = _exportPath;
+            _customAnimatorClipConfig.profilePath = _profilePath;
 
             #endregion
         }
-
-        #region 数据存储
-
-        /// <summary>
-        /// 保存文本信息到本地
-        /// </summary>
-        /// <param name="path">文件路径</param>
-        /// <param name="fileName">文件名称</param>
-        /// <param name="information">保存信息</param>
-        public static void SaveTextToLoad(string path, string fileName, string information)
-        {
-//            UnityEngine.Debug.Log(Path + "/" + FileName);
-
-            if (Directory.Exists(path))
-            {
-            }
-            else
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            FileStream aFile = new FileStream(path + "/" + fileName, FileMode.Create);
-            StreamWriter sw = new StreamWriter(aFile);
-            sw.WriteLine(information);
-            sw.Close();
-#if UNITY_EDITOR
-            AssetDatabase.Refresh();
-#endif
-        }
-
-        /// <summary>
-        /// 读取本地文件信息
-        /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="fileName">文件名</param>
-        /// <returns></returns>
-        public static string GetTextToLoad(string path, string fileName)
-        {
-//            UnityEngine.Debug.Log(Path + "/" + FileName);
-            if (Directory.Exists(path))
-            {
-            }
-            else
-            {
-                Debug.LogError("文件不存在:" + path + "/" + fileName);
-            }
-
-            FileStream aFile = new FileStream(path + "/" + fileName, FileMode.Open);
-            StreamReader sr = new StreamReader(aFile);
-            var textData = sr.ReadToEnd();
-            sr.Close();
-            return textData;
-        }
-
-        /// <summary>
-        /// 读取本地文件信息
-        /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="fileName">文件名</param>
-        /// <returns></returns>
-        public static string GetTextToLoad(string path)
-        {
-//            UnityEngine.Debug.Log(Path + "/" + FileName);
-            if (File.Exists(path))
-            {
-            }
-            else
-            {
-                Debug.LogError("文件不存在:" + path);
-            }
-
-            FileStream aFile = new FileStream(path, FileMode.Open);
-            StreamReader sr = new StreamReader(aFile);
-            var textData = sr.ReadToEnd();
-            sr.Close();
-            return textData;
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// 动画配置文件信息
-    /// </summary>
-    [Serializable]
-    public class AnimatorClipDataInfo
-    {
-        /// <summary>
-        /// 动画配置片段名称
-        /// </summary>
-        public string animatorClipName;
-
-
-        /// <summary>
-        /// 动画配置片段状态类型
-        /// </summary>
-        public AnimatorControllerParameterType animatorClipStatesType;
-
-        /// <summary>
-        /// 固定持续时间开关
-        /// </summary>
-        public bool fixedDuration;
-
-        /// <summary>
-        /// 动画过度时间
-        /// </summary>
-        public int transitionDuration;
-
-        /// <summary>
-        /// 动画配置片段开始帧
-        /// </summary>
-        public int animatorClipFirstFrame;
-
-        /// <summary>
-        /// 动画配置片段结束帧
-        /// </summary>
-        public int animatorClipLastFrame;
-
-        /// <summary>
-        /// 动画配置片段是否循环
-        /// </summary>
-        public bool animatorClipIsLoop;
     }
 }

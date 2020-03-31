@@ -77,6 +77,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3569d13b497bd4bb23ee9f6531e9d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  audioData: {fileID: 11400000, guid: d88ad833527575d49ae5c86a5d6306a8, type: 2}
 --- !u!114 &1949576470881793514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,6 +90,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aecb3a67eb2390440b71fde2ebf431f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sceneIndex: 0
+  sceneName: 
   jump: 0
   jumpSceneName: Start
   audioState: 0
@@ -106,6 +109,8 @@ MonoBehaviour:
   downFileOver: 0
   currentStepBigIndex: 2
   currentStepSmallIndex: 1
+  sceneLoadType: 0
+  serverPath: 
 --- !u!114 &1949576470881793516
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -23,26 +23,7 @@ namespace XxSlitFrame.Tools.Svc
         public override void InitSvc()
         {
             objDic = new Dictionary<string, Object>();
-            GetAudio();
         }
-
-
-        /// <summary>
-        /// 获得音乐
-        /// </summary>
-        /// <returns></returns>
-        private void GetAudio()
-        {
-            /*
-            foreach (KeyValuePair<AudioType, string> pair in General.General.AudioPath)
-            {
-                AudioSvc.Instance.audioDlc[pair.Key] = GetData<AudioClip>(pair.Value);
-            }
-            */
-
-            AudioSvc.Instance.PlayBackgroundAudio();
-        }
-
         /// <summary>
         /// 根据传入的物件路径从Resources文件夹中获得指定类型的文件
         /// 如果有缓存,获得缓存的文件,没有就从本地获取,并加入到缓存文件中

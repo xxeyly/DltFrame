@@ -5,7 +5,6 @@ using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools.Svc
 {
-
     /// <summary>
     /// 音乐服务
     /// </summary>
@@ -14,7 +13,8 @@ namespace XxSlitFrame.Tools.Svc
         private AudioSource _backgroundAudioSource;
         private AudioSource _effectAudioSource;
         private AudioSource _tipAndDialogAudioSource;
-        [Header("音乐列表")] public Dictionary<AudioData.AudioType, AudioClip> audioDlc = new Dictionary<AudioData.AudioType, AudioClip>();
+        public AudioData audioData;
+        private Dictionary<AudioData.AudioType, AudioClip> _audioDlc;
 
         public override void InitSvc()
         {
@@ -37,6 +37,17 @@ namespace XxSlitFrame.Tools.Svc
                 _backgroundAudioSource.volume = 0.5f;
                 _backgroundAudioSource.loop = true;
             }
+
+            _audioDlc = new Dictionary<AudioData.AudioType, AudioClip>();
+            foreach (AudioData.AudioDataInfo audioDataInfo in audioData.audioDataInfos)
+            {
+                if (!_audioDlc.ContainsKey(audioDataInfo.audioType) && audioDataInfo.dialogueAudioClip != null)
+                {
+                    _audioDlc.Add(audioDataInfo.audioType, audioDataInfo.dialogueAudioClip);
+                }
+            }
+
+            PlayBackgroundAudio();
         }
 
         /// <summary>
@@ -45,9 +56,9 @@ namespace XxSlitFrame.Tools.Svc
         /// <param name="audioType"></param>
         public void PlayEffectAudio(AudioData.AudioType audioType)
         {
-            if (audioDlc.ContainsKey(audioType))
+            if (_audioDlc.ContainsKey(audioType))
             {
-                _effectAudioSource.clip = audioDlc[audioType];
+                _effectAudioSource.clip = _audioDlc[audioType];
                 _effectAudioSource.Play();
             }
         }
@@ -136,7 +147,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public void PlayBackgroundAudio()
         {
-            _backgroundAudioSource.clip = audioDlc[AudioData.AudioType.EBackground];
+            _backgroundAudioSource.clip = _audioDlc[AudioData.AudioType.EBackground];
             _backgroundAudioSource.Play();
             PersistentDataSvc.Instance.audioState = true;
         }
