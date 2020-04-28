@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace XxSlitFrame.Tools
@@ -11,7 +12,6 @@ namespace XxSlitFrame.Tools
 #pragma warning disable 649
        [SerializeField]
         private GameObject gameRootCanvas;
-
         private void Start()
         {
             //如果场景中有GameRoot,摧毁当前物体

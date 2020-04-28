@@ -24,6 +24,7 @@ namespace XxSlitFrame.Tools.Svc
         {
             objDic = new Dictionary<string, Object>();
         }
+
         /// <summary>
         /// 根据传入的物件路径从Resources文件夹中获得指定类型的文件
         /// 如果有缓存,获得缓存的文件,没有就从本地获取,并加入到缓存文件中
@@ -106,8 +107,10 @@ namespace XxSlitFrame.Tools.Svc
         {
             //1、使用UnityWebRequest.GetAssetBundle(路径)【服务器 / 本地都可以】 去获取到网页请求
             UnityWebRequest request = UnityWebRequestAssetBundle.GetAssetBundle(serverAssetBundlePath);
+
             //2、等待这个请求进行发送完
             yield return request.SendWebRequest();
+            Debug.Log(request.responseCode);
             //3、发送完请求之后，就要从DownloadHandlerAssetBundle进行获取一个request，得到出来的是一个AssetBundle类对象
             DownloadHandlerAssetBundle.GetContent(request);
             //4、加载完毕后，执行对应的事件

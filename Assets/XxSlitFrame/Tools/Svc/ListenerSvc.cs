@@ -72,7 +72,12 @@ namespace XxSlitFrame.Tools.Svc
             /// <summary>
             /// 增加用物选择
             /// </summary>
-            AddMaterialPreparationItem
+            AddMaterialPreparationItem,
+
+            /// <summary>
+            /// 用物栏关闭提示
+            /// </summary>
+            UseBarCloseSwitchTip
         }
 
         public override void InitSvc()

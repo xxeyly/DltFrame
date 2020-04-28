@@ -22,7 +22,7 @@ public enum Length
     ELong = 2
 }
 
-namespace XxSlitFrame.ConfigData
+namespace XxSlitFrame.Tools.ConfigData
 {
     [Serializable]
     [CreateAssetMenu(fileName = "DialogueData", menuName = "配置文件/对话数据", order = 1)]
@@ -44,6 +44,6 @@ namespace XxSlitFrame.ConfigData
         [Header("对话长度")] public Length length;
         [TextArea] [Header("对话内容")] public string dialogContent;
         [Header("对话音频")] public AudioClip dialogueAudioClip;
-        [Header("对应时长")] public float dialogueLength;
+        // [Header("对应时长")] public float dialogueLength;
     }
 }

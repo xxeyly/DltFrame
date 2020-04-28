@@ -70,6 +70,8 @@ namespace XxSlitFrame.Tools
                         if (_persistentDataSvc.sceneName != SceneManager.GetActiveScene().name)
                         {
                             _persistentDataSvc.sceneName = SceneManager.GetActiveScene().name;
+                            _persistentDataSvc.sceneIndex = SceneManager.GetActiveScene().buildIndex;
+
                             _listenerSvc.InitSvc();
                             _viewSvc.InitSvc();
                         }
@@ -80,6 +82,7 @@ namespace XxSlitFrame.Tools
                         //新场景了
                         if (_persistentDataSvc.sceneIndex != SceneManager.GetActiveScene().buildIndex)
                         {
+                            _persistentDataSvc.sceneName = SceneManager.GetActiveScene().name;
                             _persistentDataSvc.sceneIndex = SceneManager.GetActiveScene().buildIndex;
                             _listenerSvc.InitSvc();
                             _viewSvc.InitSvc();
