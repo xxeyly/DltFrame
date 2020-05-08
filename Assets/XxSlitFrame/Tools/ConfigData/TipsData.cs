@@ -16,8 +16,9 @@ namespace XxSlitFrame.Tools.ConfigData
         public class TipsDataInfo
         {
             [Header("提示索引")] public int tipIndex;
-            [TextArea] [Header("提示内容")] public string tipsContent;
+            [Header("提示内容")] public string tipsContent;
             [Header("对话音频")] public AudioClip tipsAudioClip;
+            [Header("确认操作")] public bool sureOperation;
         }
     }
 }

@@ -85,6 +85,7 @@ namespace XxSlitFrame.Tools.Svc
         public void StopEffectAudio()
         {
             _effectAudioSource.Stop();
+            _effectAudioSource.clip = null;
         }
 
         /// <summary>
@@ -147,9 +148,16 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public void PlayBackgroundAudio()
         {
-            _backgroundAudioSource.clip = _audioDlc[AudioData.AudioType.EBackground];
-            _backgroundAudioSource.Play();
-            PersistentDataSvc.Instance.audioState = true;
+            if (_audioDlc.ContainsKey(AudioData.AudioType.EBackground) && _audioDlc[AudioData.AudioType.EBackground] != null)
+            {
+                _backgroundAudioSource.clip = _audioDlc[AudioData.AudioType.EBackground];
+                _backgroundAudioSource.Play();
+                PersistentDataSvc.Instance.audioState = true;
+            }
+            else
+            {
+                Debug.LogError("没有指定背景音乐");
+            }
         }
     }
 }

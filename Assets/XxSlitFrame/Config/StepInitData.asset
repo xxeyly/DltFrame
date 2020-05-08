@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3a779409864fe442870bb3d7f921dae, type: 3}
+  m_Name: StepInitData
+  m_EditorClassIdentifier: 
+  stepInitDataInfoGroups:
+  - stepInitDataInfos:
+    - tipIndex: -1
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+  - stepInitDataInfos:
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+  - stepInitDataInfos: []
+  - stepInitDataInfos:
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+    - tipIndex: 0
+      propGroupIndex: 0
+      cameraPosType: 0
+      animType: 0
+      animSpeedProgress: 0
+  - stepInitDataInfos: []

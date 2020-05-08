@@ -1,6 +1,8 @@
 ﻿using System;
+using CameraTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools
@@ -56,7 +58,7 @@ namespace XxSlitFrame.Tools
             _mouseSvc.InitSvc();
             DontDestroyOnLoad(this);
             //下载配置文件
-            _resSvc.StartDownProjectConfig();
+            // _resSvc.StartDownProjectConfig();
             //开启场景实时检测
             _timeSvc.AddImmortalTimeTask(() =>
             {
@@ -93,8 +95,19 @@ namespace XxSlitFrame.Tools
                         throw new ArgumentOutOfRangeException();
                 }
             }, "开启场景实时检测", 0.01f, 0);
+
+            //开启场景实时检测
+            _timeSvc.AddImmortalTimeTask(() =>
+            {
+                if (Input.GetKeyDown(KeyCode.F1))
+                {
+                    CameraControl.Instance.SetCurrentCameraPosInfo();
+                }
+            }, "开启相机位置信息实时记录", 0.01f, 0);
             if (_persistentDataSvc.jump)
             {
+                _persistentDataSvc.sceneName = SceneManager.GetActiveScene().name;
+                _persistentDataSvc.sceneIndex = SceneManager.GetActiveScene().buildIndex;
                 _sceneSvc.SceneLoad(_persistentDataSvc.jumpSceneName);
                 Destroy(GetComponent<AudioListener>());
             }
@@ -103,6 +116,7 @@ namespace XxSlitFrame.Tools
                 _viewSvc.InitSvc();
                 _persistentDataSvc.sceneLoadType = SceneLoadType.SceneName;
                 _persistentDataSvc.sceneName = SceneManager.GetActiveScene().name;
+                _persistentDataSvc.sceneIndex = SceneManager.GetActiveScene().buildIndex;
             }
         }
     }

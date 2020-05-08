@@ -50,6 +50,11 @@ namespace XxSlitFrame.Tools.Svc
             PropInit,
 
             /// <summary>
+            /// 显示道具组
+            /// </summary>
+            PropShowGroup,
+
+            /// <summary>
             /// 打开世界操作点
             /// </summary>
             OpenWorldPoint,

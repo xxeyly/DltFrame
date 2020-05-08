@@ -351,6 +351,7 @@ MonoBehaviour:
   viewBindListener: 
   viewStatementListener: 
   ViewShowType: 0
+  stepInitData: {fileID: 11400000, guid: 3599ac6223279e4429e4d5f2e14fd189, type: 2}
 --- !u!1 &444474961
 GameObject:
   m_ObjectHideFlags: 0

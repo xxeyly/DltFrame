@@ -26,6 +26,7 @@ namespace XxSlitFrame.Tools.Svc
         public void SceneLoad(int sceneIndex)
         {
             PersistentDataSvc.Instance.sceneLoadType = SceneLoadType.SceneIndex;
+            SceneLoadBeforeInit();
             SceneManager.LoadScene(sceneIndex);
         }
 
@@ -52,6 +53,7 @@ namespace XxSlitFrame.Tools.Svc
             TimeSvc.Instance.DeleteSwitchTask();
             //音频提示播放
             AudioSvc.Instance.StopEffectAudio();
+            AudioSvc.Instance.StopTipAndDialogAudio();
         }
 
         /// <summary>

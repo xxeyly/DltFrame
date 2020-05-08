@@ -160,7 +160,7 @@ namespace XxSlitFrame.Tools.Svc
         {
             _canvas = FindObjectOfType<Canvas>();
             UiFollowingMouse(targetObj, offset);
-            _objectFollowingMouseTaskTime = TimeSvc.Instance.AddTimeTask(() => { UiFollowingMouse(targetObj, offset); }, "UI拖拽任务", 0.01f, 0);
+            _objectFollowingMouseTaskTime = TimeSvc.Instance.AddTimeTask(() => { UiFollowingMouse(targetObj, offset); }, "UI拖拽任务", 0.00f, 0);
         }
         /// <summary>
         /// UI物体跟随鼠标移动
@@ -186,6 +186,8 @@ namespace XxSlitFrame.Tools.Svc
 
             uiPos += new Vector2(-offset.x, -offset.y);
             targetObj.GetComponent<RectTransform>().localPosition = uiPos;
+            // Debug.Log("拖拽物体的位置:" + targetObj.transform.localPosition);
+
         }
 
         /// <summary>

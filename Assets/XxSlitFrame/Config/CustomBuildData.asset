@@ -12,15 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17a0b8ff9a3748b44a14cf8fd1987c68, type: 3}
   m_Name: CustomBuildData
   m_EditorClassIdentifier: 
-  buildTarget: 0
-  exportPath: 
-  exportProjectName: 
+  buildTarget: 20
+  exportPath: "H:/sltkit/Software/Apache24/htdocs/\u52A8\u8109\u7A7F\u523A"
+  exportProjectName: Arteriopuncture
   projectNameDate: 0
   projectBuildEdition: 0
-  copyFolderPaths: []
-  pasteFolderPaths: []
+  copyFolderPaths:
+  - H:/sltkit/Unity/2018/Arteriopuncture/Assets/XxSlitFrame/Resources/DownFile
+  - H:/sltkit/Unity/2018/Arteriopuncture/Assets/XxSlitFrame/Resources/VersionData
+  pasteFolderPaths:
+  - DownFile
+  - VersionData
   updateToFtp: 0
-  copyFolderCount: 0
+  copyFolderCount: 2
   ftpServerPath: 
   ftpUser: 
   ftpPwd: 

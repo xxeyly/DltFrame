@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using XAnimator.Base;
+using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc;
 using XxSlitFrame.View;
 
@@ -15,6 +18,16 @@ namespace Step
         protected abstract void EditingEvents();
         public abstract void InitEvent();
         protected abstract void FirstInit();
+
+        /// <summary>
+        /// 步骤初始化数据
+        /// </summary>
+        public StepInitData stepInitData;
+
+        /// <summary>
+        /// 当前步骤信息
+        /// </summary>
+        protected StepInitDataInfo currentStepInitDataInfo;
 
         public override void First()
         {
@@ -34,6 +47,7 @@ namespace Step
             if (smallStepActionEvent.ContainsKey(PersistentDataSvc.currentStepBigIndex * 100 + PersistentDataSvc.currentStepSmallIndex))
             {
                 InitEvent();
+                PerformStepInitialization();
                 smallStepActionEvent[PersistentDataSvc.currentStepBigIndex * 100 + PersistentDataSvc.currentStepSmallIndex].Invoke();
             }
             else
@@ -138,6 +152,50 @@ namespace Step
             else
             {
                 Debug.LogError("超出步骤上限");
+            }
+        }
+
+        /// <summary>
+        /// 执行步骤初始化
+        /// </summary>
+        protected void PerformStepInitialization()
+        {
+            if (stepInitData != null)
+            {
+                //获得当前步骤信息 是否越界
+                if (PersistentDataSvc.Instance.currentStepBigIndex < stepInitData.stepInitDataInfoGroups.Count - 1 &&
+                    XxSlitFrame.Tools.Svc.PersistentDataSvc.Instance.currentStepSmallIndex <
+                    stepInitData.stepInitDataInfoGroups[PersistentDataSvc.Instance.currentStepBigIndex]
+                        .stepInitDataInfos.Count - 1)
+                {
+                    currentStepInitDataInfo = stepInitData.stepInitDataInfoGroups[PersistentDataSvc.Instance.currentStepBigIndex]
+                        .stepInitDataInfos[PersistentDataSvc.Instance.currentStepSmallIndex];
+
+                    if (currentStepInitDataInfo.tipIndex != -1)
+                    {
+                        ViewSvc.ShowView(typeof(Tips.Tips));
+                        Tips.Tips.Instance.ShowTips(currentStepInitDataInfo.tipIndex);
+                    }
+
+                    ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.PropShowGroup, currentStepInitDataInfo.propGroupIndex);
+                    switch (currentStepInitDataInfo.animSpeedProgress)
+                    {
+                        case AnimSpeedProgress.None:
+                            AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType);
+                            break;
+                        case AnimSpeedProgress.Start:
+                            AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType, AnimSpeedProgress.Start);
+                            break;
+                        case AnimSpeedProgress.End:
+                            AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType, AnimSpeedProgress.End);
+
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, currentStepInitDataInfo.cameraPosType);
+                }
             }
         }
     }
