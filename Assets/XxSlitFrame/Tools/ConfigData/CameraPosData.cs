@@ -44,9 +44,9 @@ namespace XxSlitFrame.Tools.ConfigData
             return new CameraPosInfo();
         }
 
-        public void SetCameraPosInfo(Vector3 navMeshAgentPos, Vector3 cameraPos, Vector3 cameraRot)
+        public void SetCameraPosInfo(Vector3 navMeshAgentPos, Vector3 cameraPos, Vector3 cameraRot, float cameraFieldView)
         {
-            Debug.Log("记录位置信息");
+            Debug.Log("记录位置信息:" + currentCameraPosType);
             foreach (CameraPosInfo posInfo in cameraPosInfosGroup)
             {
                 if (posInfo.cameraPosType == currentCameraPosType)
@@ -54,6 +54,7 @@ namespace XxSlitFrame.Tools.ConfigData
                     posInfo.navMeshAgentPos = navMeshAgentPos;
                     posInfo.cameraPos = cameraPos;
                     posInfo.cameraRot = cameraRot;
+                    posInfo.cameraFieldView = cameraFieldView;
                     break;
                 }
             }
@@ -79,5 +80,10 @@ namespace XxSlitFrame.Tools.ConfigData
         /// 相机旋转
         /// </summary>
         public Vector3 cameraRot;
+
+        /// <summary>
+        /// 相机对焦距离
+        /// </summary>
+        [Range(40, 60)] public float cameraFieldView;
     }
 }

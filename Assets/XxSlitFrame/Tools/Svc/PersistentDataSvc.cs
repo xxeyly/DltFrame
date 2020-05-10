@@ -89,14 +89,14 @@ namespace XxSlitFrame.Tools.Svc
         }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        [DllImport("__Internal")]
-        private static extern void GetIP();
+        // [DllImport("__Internal")]
+        // private static extern void GetIP();
 #endif
         public override void StartSvc()
         {
             base.StartSvc();
 #if UNITY_WEBGL && !UNITY_EDITOR
-            GetIP();
+            // GetIP();
 #endif
         }
     }

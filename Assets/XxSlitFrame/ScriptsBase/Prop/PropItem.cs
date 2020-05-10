@@ -9,9 +9,9 @@ using XxSlitFrame.Tools.Svc;
 
 namespace Prop
 {
-    public class PropItem : StartSingleton<PropItem>
+    public class PropItem : StartSingleton
     {
-      
+        public static PropItem Instance;
 
         [Header("物品类型")] public PropItemData.PropType propType;
         // [Header("高亮物体")] public HighlightEffect highlightEffect;
@@ -19,9 +19,14 @@ namespace Prop
         [SerializeField] private Dictionary<PropItemData.PropType, UnityAction> actionDic;
         [Header("不隐藏")] public bool hiding;
 
+        public override void StartSvc()
+        {
+            Instance = GetComponent<PropItem>();
+            Init();
+        }
+
         public override void Init()
         {
-            base.Init();
             /*if (GetComponent<HighlightEffect>())
             {
                 highlightEffect = GetComponent<HighlightEffect>();

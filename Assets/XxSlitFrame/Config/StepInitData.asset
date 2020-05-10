@@ -15,65 +15,53 @@ MonoBehaviour:
   stepInitDataInfoGroups:
   - stepInitDataInfos:
     - tipIndex: -1
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
   - stepInitDataInfos:
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
   - stepInitDataInfos: []
   - stepInitDataInfos:
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0
     - tipIndex: 0
-      propGroupIndex: 0
       cameraPosType: 0
       animType: 0
       animSpeedProgress: 0

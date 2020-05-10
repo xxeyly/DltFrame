@@ -25,11 +25,6 @@ namespace XxSlitFrame.Tools.Svc
         private Dictionary<Type, BaseWindow> _activeViewDlc = new Dictionary<Type, BaseWindow>();
 
         /// <summary>
-        /// 所有单例
-        /// </summary>
-        private List<StartSingleton<MonoBehaviour>> _allStartSingleton;
-
-        /// <summary>
         /// 不影响的视图
         /// </summary>
         [Header("不影响的视图")] public List<Type> noInfluenceViewType;

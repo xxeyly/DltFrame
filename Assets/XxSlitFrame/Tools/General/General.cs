@@ -56,8 +56,8 @@ namespace XxSlitFrame.Tools.General
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
 #endif
-                return PersistentDataSvc.Instance.serverPath;
-                /*string url = Application.absoluteURL;
+                // return PersistentDataSvc.Instance.serverPath;
+                string url = Application.absoluteURL;
                 //当前网页的url
                 int index = url.LastIndexOf('/');
                 if (index > 0)
@@ -70,7 +70,7 @@ namespace XxSlitFrame.Tools.General
                 {
                     Debug.LogError("未找到文件");
                     return "";
-                }*/
+                }
             }
             else if (Application.isEditor)
             {

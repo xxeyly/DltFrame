@@ -1,9 +1,6 @@
 {
-  "watermark": true,
-  "assessment": false,
+  "watermark": false,
   "downLoad": true,
   "loadingProgress": false,
-  "timer": 300,
-  "console": true,
   "sceneProgress": false
 }

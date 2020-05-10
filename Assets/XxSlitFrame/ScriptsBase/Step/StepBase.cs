@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using XAnimator.Base;
+using XxSlitFrame.Tools;
 using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc;
 using XxSlitFrame.View;
@@ -18,6 +19,8 @@ namespace Step
         protected abstract void EditingEvents();
         public abstract void InitEvent();
         protected abstract void FirstInit();
+        [Header("当前场景的单例类")] public List<StartSingleton> stepStartSingleton;
+
 
         /// <summary>
         /// 步骤初始化数据
@@ -34,6 +37,7 @@ namespace Step
             base.First();
             FirstInit();
             smallStepActionEvent = new Dictionary<int, UnityAction>();
+            StartSingletonInit();
             EditingEvents();
             OpenCurrentStep();
             InvokeEventByStepIndex();
@@ -164,7 +168,7 @@ namespace Step
             {
                 //获得当前步骤信息 是否越界
                 if (PersistentDataSvc.Instance.currentStepBigIndex < stepInitData.stepInitDataInfoGroups.Count - 1 &&
-                    XxSlitFrame.Tools.Svc.PersistentDataSvc.Instance.currentStepSmallIndex <
+                    PersistentDataSvc.Instance.currentStepSmallIndex <
                     stepInitData.stepInitDataInfoGroups[PersistentDataSvc.Instance.currentStepBigIndex]
                         .stepInitDataInfos.Count - 1)
                 {
@@ -177,7 +181,7 @@ namespace Step
                         Tips.Tips.Instance.ShowTips(currentStepInitDataInfo.tipIndex);
                     }
 
-                    ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.PropShowGroup, currentStepInitDataInfo.propGroupIndex);
+                    ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.PropShowGroup);
                     switch (currentStepInitDataInfo.animSpeedProgress)
                     {
                         case AnimSpeedProgress.None:
@@ -196,6 +200,23 @@ namespace Step
 
                     ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, currentStepInitDataInfo.cameraPosType);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 单例初始化
+        /// </summary>
+        protected void StartSingletonInit()
+        {
+            foreach (StartSingleton startSingleton in stepStartSingleton)
+            {
+                if (startSingleton == null)
+                {
+                    break;
+                }
+
+                Debug.Log("开启功能:" + startSingleton.name);
+                startSingleton.StartSvc();
             }
         }
     }

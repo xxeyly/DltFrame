@@ -10,8 +10,12 @@ namespace Step
         {
             SetSmallStepAction(0, 0, () =>
             {
-               
-                ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos,CameraPosData.CameraPosType.位置1);
+                ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置1);
+                // ViewSvc.ShowView(typeof(GoodsPreparation.GoodsPreparation));
+            });
+            SetSmallStepAction(0, 1, () =>
+            {
+                ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置2);
                 // ViewSvc.ShowView(typeof(GoodsPreparation.GoodsPreparation));
             });
         }
@@ -22,9 +26,6 @@ namespace Step
 
         protected override void FirstInit()
         {
-            FindObjectOfType<CameraTools.CameraControl>().StartSvc();
-            FindObjectOfType<AnimatorControllerManager>().StartSvc();
-
         }
     }
 }

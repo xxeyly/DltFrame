@@ -9,8 +9,10 @@ namespace XAnimator.Base
     /// <summary>
     /// 动画控制管理器
     /// </summary>
-    public class AnimatorControllerManager : StartSingleton<AnimatorControllerManager>
+    public class AnimatorControllerManager : StartSingleton
     {
+        public static AnimatorControllerManager Instance;
+
         [Header("所有动画控制器")] [SerializeField] private List<XAnimatorControllerBase> allAnimController = new List<XAnimatorControllerBase>();
 
         /// <summary>
@@ -20,7 +22,12 @@ namespace XAnimator.Base
 
         public override void StartSvc()
         {
-            base.StartSvc();
+            Instance = GetComponent<AnimatorControllerManager>();
+            Init();
+        }
+
+        public override void Init()
+        {
             allAnimController = new List<XAnimatorControllerBase>(FindObjectsOfType<XAnimatorControllerBase>());
             foreach (XAnimatorControllerBase animatorControllerBase in allAnimController)
             {

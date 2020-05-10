@@ -7,8 +7,10 @@ using XxSlitFrame.Tools.Svc;
 
 namespace Prop
 {
-    public class PropManager : StartSingleton<PropManager>
+    public class PropManager : StartSingleton
     {
+        public static PropManager Instance;
+
         [Header("物品")] private Dictionary<PropItemData.PropType, GameObject> _propDic;
         [Header("物品列表")] private List<PropItem> _propItems;
 
@@ -65,9 +67,14 @@ namespace Prop
             }
         }
 
+        public override void StartSvc()
+        {
+            Instance = GetComponent<PropManager>();
+            Init();
+        }
+
         public override void Init()
         {
-            base.Init();
             _propDic = new Dictionary<PropItemData.PropType, GameObject>();
             _propItems = new List<PropItem>(GameObject.FindObjectsOfType<PropItem>());
             foreach (PropItem propItem in _propItems)
@@ -86,22 +93,15 @@ namespace Prop
                     Debug.Log(propItem.gameObject);
                 }
             }
-
             ListenerSvc.Instance.AddListenerEvent(ListenerSvc.EventType.PropInit, PropInit);
-            ListenerSvc.Instance.AddListenerEvent<int>(ListenerSvc.EventType.PropShowGroup, PropShowGroup);
+            ListenerSvc.Instance.AddListenerEvent(ListenerSvc.EventType.PropShowGroup, PropShowGroup);
         }
 
-        private void PropShowGroup(int groupIndex)
+        private void PropShowGroup()
         {
-            PropItemData.PropItemGroupInfo propItemGroupInfo = new PropItemData.PropItemGroupInfo();
-
-            for (int i = 0; i < propItemData.groupInfos.Count; i++)
-            {
-                if (propItemData.groupInfos[i].@group == groupIndex)
-                {
-                    propItemGroupInfo = propItemData.groupInfos[i];
-                }
-            }
+            //获得当前组
+            PropItemData.PropItemGroupInfo propItemGroupInfo = propItemData.groupInfos[PersistentDataSvc.Instance.currentStepBigIndex]
+                .propItemGroupInfos[PersistentDataSvc.Instance.currentStepSmallIndex];
 
             for (int i = 0; i < propItemGroupInfo.propItemGroupInfo.Count; i++)
             {

@@ -12,8 +12,10 @@ namespace CameraTools
     /// <summary>
     /// 相机控制
     /// </summary>
-    public class CameraControl : StartSingleton<CameraControl>
+    public class CameraControl : StartSingleton
     {
+        public static CameraControl Instance;
+
         private GameObject _cameraParent; //相机父物体,用来寻路
         [Header("相机是否可以移动")] public bool isControl; //相机是否可以移动
         [Header("视图限制")] public bool viewConstraint; //视图限制,某些视图不受移动限制,如对话框,提示框等
@@ -25,7 +27,8 @@ namespace CameraTools
         [SerializeField] [Header("移动速度")] private float moveSpeed = 1; //移动速度
         [SerializeField] [Header("旋转速度")] private float rotationSpeed = 2; //旋转速度
 
-        [SerializeField] [Header("相机下旋转最高值")] private float yMinLimit = -45; //相机上旋转最低值
+        [SerializeField] [Header("相机下旋转最高值")] [Range(0, 90)]
+        private float yMinLimit = 45; //相机上旋转最低值
 
         [SerializeField] [Header("相机上旋转最高值")] [Range(30, 60)]
         private float yMaxLimit = 30; //相机下旋转最高值
@@ -36,11 +39,16 @@ namespace CameraTools
         [SerializeField] [Header("相机高度最大值")] [Range(2f, 5)]
         private float cameraHeightMax = 2; //相机高度最大值
 
-        public Camera currentCamera; //当前相机
+        [HideInInspector] public Camera currentCamera; //当前相机
         private float _x;
         private float _y;
         [Header("当前位置数据")] public CameraPosData cameraPosData;
 
+        public override void StartSvc()
+        {
+            Instance = GetComponent<CameraControl>();
+            Init();
+        }
 
         /// <summary>
         /// 获得当前位置信息
@@ -48,13 +56,11 @@ namespace CameraTools
         /// <returns></returns>
         public void SetCurrentCameraPosInfo()
         {
-            cameraPosData.SetCameraPosInfo(_cameraParent.transform.position, transform.position, transform.localEulerAngles);
+            cameraPosData.SetCameraPosInfo(_cameraParent.transform.position, transform.localPosition, transform.localEulerAngles, currentCamera.fieldOfView);
         }
-
 
         public override void Init()
         {
-            base.Init();
             TryScrollWheel();
             currentCamera = GetComponent<Camera>();
             _cameraParent = gameObject.GetComponentInParent<NavMeshAgent>().gameObject.gameObject;
@@ -149,6 +155,7 @@ namespace CameraTools
 
             transform.localEulerAngles = cameraPosInfo.cameraRot;
             _cameraParent.GetComponent<NavMeshAgent>().enabled = true;
+            currentCamera.fieldOfView = cameraPosInfo.cameraFieldView;
             ResetRot();
         }
 
@@ -168,7 +175,7 @@ namespace CameraTools
         private void ResetRot()
         {
             _x = transform.localEulerAngles.y;
-            if (transform.localEulerAngles.x > Mathf.Abs(yMinLimit))
+            if (transform.localEulerAngles.x > Mathf.Abs(yMinLimit) + 0.1f)
             {
                 _y = transform.localEulerAngles.x - 360;
             }
@@ -205,7 +212,7 @@ namespace CameraTools
             {
                 _x += Input.GetAxis("Mouse X") * rotationSpeed;
                 _y -= Input.GetAxis("Mouse Y") * rotationSpeed;
-                _y = ClampAngle(_y, yMinLimit, yMaxLimit);
+                _y = ClampAngle(_y, -yMinLimit, yMaxLimit);
 //            Quaternion rotation1 = Quaternion.Euler(y, x, 0.0f);
                 transform.localEulerAngles = new Vector3(_y, _x, 0f);
 //            transform.localRotation = rotation1;

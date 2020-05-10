@@ -58,7 +58,7 @@ namespace XxSlitFrame.Tools
             _mouseSvc.InitSvc();
             DontDestroyOnLoad(this);
             //下载配置文件
-            // _resSvc.StartDownProjectConfig();
+            _resSvc.StartDownProjectConfig();
             //开启场景实时检测
             _timeSvc.AddImmortalTimeTask(() =>
             {

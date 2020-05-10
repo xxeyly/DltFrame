@@ -12,8 +12,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 {
     public class CustomBuild : EditorWindow
     {
-        private CustomBuildData _buildData;
-
+        public CustomBuildData buildData;
 
         [MenuItem("xxslit/打包工具")]
         private static void ShowWindow()
@@ -27,29 +26,22 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
         private void InitData()
         {
-            if (File.Exists(Application.dataPath + "/XxSlitFrame/Config/CustomBuildData.asset"))
+            if (buildData == null)
             {
-                _buildData = AssetDatabase.LoadAssetAtPath<CustomBuildData>("Assets/XxSlitFrame/Config/CustomBuildData.asset");
-                _buildTarget = _buildData.buildTarget;
-                _exportPath = _buildData.exportPath;
-                _exportProjectName = _buildData.exportProjectName;
-                _enableProjectNameDate = _buildData.projectNameDate;
-                _copyFolderPaths = _buildData.copyFolderPaths;
-                _pasteFolderPaths = _buildData.pasteFolderPaths;
-                _copyFolderCount = _buildData.copyFolderCount;
-                _updateToFtp = _buildData.updateToFtp;
-                _ftpServerPath = _buildData.ftpServerPath;
-                _ftpUser = _buildData.ftpUser;
-                _ftpPwd = _buildData.ftpPwd;
-                _ftpRoot = _buildData.ftpRoot;
+                buildData = (CustomBuildData) AssetDatabase.LoadAssetAtPath("Assets/XxSlitFrame/Config/CustomBuildData.asset", typeof(CustomBuildData));
             }
-            else
-            {
-                _buildData = ScriptableObject.CreateInstance<CustomBuildData>();
-                AssetDatabase.CreateAsset(_buildData, "Assets/XxSlitFrame/Config/CustomBuildData.asset");
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
+            _buildTarget = buildData.buildTarget;
+            _exportPath = buildData.exportPath;
+            _exportProjectName = buildData.exportProjectName;
+            _enableProjectNameDate = buildData.projectNameDate;
+            _copyFolderPaths = buildData.copyFolderPaths;
+            _pasteFolderPaths = buildData.pasteFolderPaths;
+            _copyFolderCount = buildData.copyFolderCount;
+            _updateToFtp = buildData.updateToFtp;
+            _ftpServerPath = buildData.ftpServerPath;
+            _ftpUser = buildData.ftpUser;
+            _ftpPwd = buildData.ftpPwd;
+            _ftpRoot = buildData.ftpRoot;
         }
 
         /// <summary>
@@ -138,6 +130,20 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             //自定义枚举下拉框
             EditorGUILayout.LabelField("选择当前项目的打包方式:", GUILayout.MaxWidth(130));
             _buildTarget = (BuildTarget) EditorGUILayout.EnumPopup(this._buildTarget, GUILayout.MaxWidth(150));
+
+            #endregion
+
+            #region 数据存储
+
+            EditorGUILayout.LabelField("打包数据:", GUILayout.MaxWidth(60));
+#pragma warning disable 618
+            buildData = (CustomBuildData) EditorGUILayout.ObjectField(buildData, typeof(CustomBuildData), GUILayout.MaxWidth(150));
+#pragma warning restore 618
+
+            if (GUILayout.Button("加载打包数据", GUILayout.MaxWidth(80), GUILayout.MaxHeight(20)))
+            {
+                InitData();
+            }
             EditorGUILayout.EndHorizontal();
 
             #endregion
@@ -288,6 +294,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             //选择打包路径
             if (GUILayout.Button("开始打包", GUILayout.MaxWidth(450), GUILayout.MaxHeight(40)))
             {
+                SaveBuildData();
                 for (int i = 0; i < _copyFolderCount; i++)
                 {
                     if (_copyFolderPaths[i] != string.Empty && _pasteFolderPaths[i] != string.Empty)
@@ -326,30 +333,31 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         {
             //保存打包数据
             SaveBuildData();
+            InitData();
         }
 
         private void SaveBuildData()
         {
-            _buildData.buildTarget = _buildTarget;
+            buildData.buildTarget = _buildTarget;
             if (_exportPath != string.Empty)
             {
-                _buildData.exportPath = _exportPath;
+                buildData.exportPath = _exportPath;
             }
 
             if (_exportProjectName != String.Empty)
             {
-                _buildData.exportProjectName = _exportProjectName;
+                buildData.exportProjectName = _exportProjectName;
             }
 
-            _buildData.projectNameDate = _enableProjectNameDate;
-            _buildData.copyFolderPaths = _copyFolderPaths;
-            _buildData.pasteFolderPaths = _pasteFolderPaths;
-            _buildData.copyFolderCount = _copyFolderCount;
-            _buildData.updateToFtp = _updateToFtp;
-            _buildData.ftpServerPath = _ftpServerPath;
-            _buildData.ftpUser = _ftpUser;
-            _buildData.ftpPwd = _ftpPwd;
-            _buildData.ftpRoot = _ftpRoot;
+            buildData.projectNameDate = _enableProjectNameDate;
+            buildData.copyFolderPaths = _copyFolderPaths;
+            buildData.pasteFolderPaths = _pasteFolderPaths;
+            buildData.copyFolderCount = _copyFolderCount;
+            buildData.updateToFtp = _updateToFtp;
+            buildData.ftpServerPath = _ftpServerPath;
+            buildData.ftpUser = _ftpUser;
+            buildData.ftpPwd = _ftpPwd;
+            buildData.ftpRoot = _ftpRoot;
         }
 
         /// <summary>
@@ -445,7 +453,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             Debug.Log("导出包体的目录 :" + pathToBuiltProject.Substring(0, index));
             _ftpOperation = new FtpOperation
             {
-                FilePath = _exportPath + "/" + _exportProjectName, FtpHost = "ftp://" + _ftpServerPath, FtpUserName = _ftpUser, FtpPassword = _ftpPwd, ProjectName = _exportProjectName,
+                FilePath = _exportPath + "/" + _exportProjectName, FtpHost = "ftp://" + _ftpServerPath, FtpUserName = _ftpUser, FtpPassword = _ftpPwd,
+                ProjectName = _exportProjectName,
                 FileSavePath = _ftpRoot
             };
             if (_updateToFtp)

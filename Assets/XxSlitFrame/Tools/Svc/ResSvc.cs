@@ -166,12 +166,12 @@ namespace XxSlitFrame.Tools.Svc
         {
             //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
             UnityWebRequest request = UnityWebRequest.Get(General.General.GetFileConfigPath(General.General.VersionDataInfoPath));
+
             //2、等待这个请求进行发送完
             yield return request.SendWebRequest();
             //有配置文件
             if (request.responseCode == 200)
             {
-                // Debug.Log("下载项目配置表:VersionInfo:" + Constant.GetFileConfigPath(Constant.VersionDataInfoPath));
                 //获得下载文件配置信息
                 PersistentDataSvc.Instance.versionInfo = JsonUtility.FromJson<VersionInfo>(System.Text.Encoding.UTF8.GetString(request.downloadHandler.data));
             }
@@ -181,7 +181,9 @@ namespace XxSlitFrame.Tools.Svc
                 PersistentDataSvc.Instance.versionInfo =
                     JsonUtility.FromJson<VersionInfo>(System.Text.Encoding.UTF8.GetString(GetData<TextAsset>("VersionData/VersionInfo").bytes));
             }
-
+            Debug.Log("当前版本信息:水印:" + PersistentDataSvc.Instance.versionInfo.watermark);
+            Debug.Log("当前版本信息:下载:" + PersistentDataSvc.Instance.versionInfo.downLoad);
+            Debug.Log("当前版本信息:加读条:" + PersistentDataSvc.Instance.versionInfo.loadingProgress);
             //文件配置下载完毕
             PersistentDataSvc.Instance.downVersionOver = true;
             if (PersistentDataSvc.Instance.versionInfo.downLoad)
@@ -299,16 +301,6 @@ namespace XxSlitFrame.Tools.Svc
             /// 加载进度
             /// </summary>
             [XLabeText("下载进度")] public bool loadingProgress;
-
-            /// <summary>
-            /// 计时系统
-            /// </summary>
-            [XLabeText("计时时间")] public int timer;
-
-            /// <summary>
-            /// 控制台
-            /// </summary>
-            [XLabeText("控制台")] public bool console;
 
             /// <summary>
             /// 场景进度

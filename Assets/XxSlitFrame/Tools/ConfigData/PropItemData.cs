@@ -11,38 +11,26 @@ namespace XxSlitFrame.Tools.ConfigData
         public enum PropType
         {
             Normal,
-            医生静态口罩,
-            医生静态左手套,
-            医生静态右手套,
-            桡动脉被子,
-            口罩,
-            手套,
             拔针注射器,
-            桡动脉穿刺消毒道具,
-            桡动脉穿刺消毒动画道具,
-            道具车,
-            桡动脉穿刺穿刺道具,
             消毒手臂,
-            股动脉穿刺道具,
-            股动脉被子,
-            股动脉棉棒,
-            消毒液,
-            患者上衣,
-            静态患者,
-            患者
         }
 
-        public List<PropItemGroupInfo> groupInfos;
+        public List<PropItemGroupInfoGroup> groupInfos;
 
         [Serializable]
-        public struct PropItemGroupInfo
+        public class PropItemGroupInfoGroup
         {
-            public int group;
+            public List<PropItemGroupInfo> propItemGroupInfos;
+        }
+
+        [Serializable]
+        public class PropItemGroupInfo
+        {
             public List<PropItemInfo> propItemGroupInfo;
         }
 
         [Serializable]
-        public struct PropItemInfo
+        public class PropItemInfo
         {
             /// <summary>
             /// 道具类型
