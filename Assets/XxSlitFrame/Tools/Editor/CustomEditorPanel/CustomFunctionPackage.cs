@@ -38,27 +38,23 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             EditorGUILayout.EndHorizontal();
 
             packageServerScroll = EditorGUILayout.BeginScrollView(packageServerScroll, false, true);
-            EditorGUILayout.BeginHorizontal();
             int a = 4;
-            int b = 2;
+            int b = 4;
             for (int i = 0; i < a; i++)
             {
                 for (int j = 0; j < b; j++)
                 {
-                    EditorGUILayout.BeginHorizontal(GUILayout.MinWidth(280), GUILayout.MaxHeight(200));
                     var tex = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/UI/动脉穿刺-图片/跳步/mmm.png");
-                    EditorGUILayout.LabelField("预览:", GUILayout.MaxWidth(80), GUILayout.MaxHeight(200));
-                    // EditorGUI.DrawPreviewTexture(new Rect(100, 150, tex.width, tex.height), tex);
-                    // EditorGUI.DrawTextureAlpha(new Rect(100, 150, tex.width, tex.height), tex);
-                    EditorGUI.DrawTextureTransparent(new Rect((tex.width) * i + 20, (j * tex.height), tex.width, tex.height), tex);
+                    if (GUI.Button(new Rect((tex.width) * i + 100, (j * tex.height) + 20, 100, 20), "Level 2"))
+                    {
+                    }
 
-                    EditorGUILayout.EndHorizontal();
+                    EditorGUI.DrawTextureTransparent(new Rect((tex.width) * i - 20 + 100, (j * tex.height) + 20 + 20, tex.width - 20, tex.height - 20), tex);
                 }
             }
 
 
             EditorGUILayout.EndScrollView();
-            EditorGUILayout.EndHorizontal();
 
             #endregion
         }
