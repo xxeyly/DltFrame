@@ -12,4 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a80e737b6bd2f114e91ded63402b2b09, type: 3}
   m_Name: AnimatorClipData
   m_EditorClassIdentifier: 
-  animatorClipDataInfos: []
+  animatorClipDataInfos:
+  - animatorClipName: 1
+    animatorControllerParameterType: 9
+    fixedDuration: 0
+    transitionDuration: 0
+    animatorClipFirstFrame: 0
+    animatorClipLastFrame: 100
+    animatorClipIsLoop: 0
+  - animatorClipName: 2
+    animatorControllerParameterType: 4
+    fixedDuration: 0
+    transitionDuration: 0
+    animatorClipFirstFrame: 101
+    animatorClipLastFrame: 200
+    animatorClipIsLoop: 0
+  - animatorClipName: 3
+    animatorControllerParameterType: 9
+    fixedDuration: 0
+    transitionDuration: 0
+    animatorClipFirstFrame: 12
+    animatorClipLastFrame: 13
+    animatorClipIsLoop: 0

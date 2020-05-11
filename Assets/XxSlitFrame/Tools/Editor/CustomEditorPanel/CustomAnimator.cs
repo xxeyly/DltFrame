@@ -16,8 +16,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         private static void ShowWindow()
         {
             EditorWindow window = EditorWindow.GetWindow<CustomAnimator>();
-            window.minSize = new Vector2(500, 100);
-            window.maxSize = new Vector2(500, 100);
+            window.minSize = new Vector2(500, 400);
+            window.maxSize = new Vector2(500, 400);
             window.titleContent = new GUIContent() {image = null, text = "动画工具"};
             window.Show();
         }
@@ -127,6 +127,14 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             EditorGUILayout.EndHorizontal();
 
             #endregion
+
+            /*EditorGUILayout.BeginHorizontal();
+
+            var tex = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/UI/动脉穿刺-图片/跳步/大步骤-2.png");
+            // EditorGUI.DrawPreviewTexture(new Rect(100, 150, tex.width, tex.height), tex);
+            // EditorGUI.DrawTextureAlpha(new Rect(100, 150, tex.width, tex.height), tex);
+            EditorGUI.DrawTextureTransparent(new Rect(100, 150, tex.width, tex.height), tex);
+            EditorGUILayout.EndHorizontal();*/
         }
 
 

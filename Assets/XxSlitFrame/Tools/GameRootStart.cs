@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,8 +11,8 @@ namespace XxSlitFrame.Tools
     public class GameRootStart : MonoBehaviour
     {
 #pragma warning disable 649
-       [SerializeField]
-        private GameObject gameRootCanvas;
+        [SerializeField] private GameObject gameRootCanvas;
+
         private void Start()
         {
             //如果场景中有GameRoot,摧毁当前物体
@@ -35,6 +36,11 @@ namespace XxSlitFrame.Tools
                     Debug.Log("_gameRootCanvas为空");
                 }
             }
+        }
+
+        private void Update()
+        {
+            Debug.Log(Input.mousePosition);
         }
     }
 }
