@@ -48,9 +48,9 @@ namespace XxSlitFrame.Tools.Svc
         {
             //全局禁止响应,不能继续点击
             ViewSvc.Instance.NoAllResponse();
-            //关闭除"不死"类型的所有任务
-            TimeSvc.Instance.DeleteTimeTask();
-            TimeSvc.Instance.DeleteSwitchTask();
+            ViewSvc.Instance.AllViewDestroy();
+            //删除所有计时任务
+            ListenerSvc.Instance.ImplementListenerEvent(ListenerSvc.EventType.DeleteAllTimeTask);
             //音频提示播放
             AudioSvc.Instance.StopEffectAudio();
             AudioSvc.Instance.StopTipAndDialogAudio();

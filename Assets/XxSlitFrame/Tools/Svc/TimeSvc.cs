@@ -29,6 +29,7 @@ namespace XxSlitFrame.Tools.Svc
             _tidTimeList = new List<int>();
             _tidSwitchList = new List<int>();
             _tidTimeImmortalList = new List<int>();
+            ListenerSvc.Instance.AddListenerEvent(ListenerSvc.EventType.DeleteAllTimeTask, DeleteAllTimeTask);
         }
 
         /// <summary>
@@ -163,6 +164,22 @@ namespace XxSlitFrame.Tools.Svc
             return exist;
         }
 
+        public void DeleteImmortalTimeTask()
+        {
+            _clear = true;
+            for (int i = 0; i < timeTaskList.Count; i++)
+            {
+                if (timeTaskList[i].loopType == TimeTaskList.TimeLoopType.Immortal)
+                {
+                    timeTaskList.Remove(timeTaskList[i]);
+                }
+            }
+
+            _taskTimeImmortalList.Clear();
+            _clear = false;
+        }
+
+
         /// <summary>
         /// 删除任务
         /// </summary>
@@ -180,6 +197,16 @@ namespace XxSlitFrame.Tools.Svc
             _taskTimeList.Clear();
             _clear = false;
             return false;
+        }
+
+        /// <summary>
+        /// 删除所有计时任务
+        /// </summary>
+        private void DeleteAllTimeTask()
+        {
+            DeleteTimeTask();
+            DeleteSwitchTask();
+            DeleteImmortalTimeTask();
         }
 
         /// <summary>

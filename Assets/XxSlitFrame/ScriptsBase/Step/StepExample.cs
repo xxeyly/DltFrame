@@ -1,4 +1,5 @@
-﻿using XAnimator.Base;
+﻿using UnityEngine;
+using XAnimator.Base;
 using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc;
 
@@ -10,13 +11,18 @@ namespace Step
         {
             SetSmallStepAction(0, 0, () =>
             {
+                Debug.Log("咚咚的");
                 ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置1);
                 // ViewSvc.ShowView(typeof(GoodsPreparation.GoodsPreparation));
+                // SceneSvc.SceneLoad(0);
             });
             SetSmallStepAction(0, 1, () =>
             {
+                Debug.Log("啊是否达到");
+
                 ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置2);
                 // ViewSvc.ShowView(typeof(GoodsPreparation.GoodsPreparation));
+                // SceneSvc.SceneLoad("End");
             });
         }
 

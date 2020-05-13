@@ -37,10 +37,5 @@ namespace XxSlitFrame.Tools
                 }
             }
         }
-
-        private void Update()
-        {
-            Debug.Log(Input.mousePosition);
-        }
     }
 }

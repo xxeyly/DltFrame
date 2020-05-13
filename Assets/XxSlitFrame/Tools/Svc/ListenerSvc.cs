@@ -82,7 +82,12 @@ namespace XxSlitFrame.Tools.Svc
             /// <summary>
             /// 用物栏关闭提示
             /// </summary>
-            UseBarCloseSwitchTip
+            UseBarCloseSwitchTip,
+
+            /// <summary>
+            /// 删除所有计时任务
+            /// </summary>
+            DeleteAllTimeTask
         }
 
         public override void InitSvc()

@@ -50,11 +50,11 @@ namespace XxSlitFrame.Tools
             _viewSvc.StartSvc();
 
             _persistentDataSvc.InitSvc();
+            _listenerSvc.InitSvc();
             _audioSvc.InitSvc();
             _resSvc.InitSvc();
             _sceneSvc.InitSvc();
             _timeSvc.InitSvc();
-            _listenerSvc.InitSvc();
             _mouseSvc.InitSvc();
             DontDestroyOnLoad(this);
             //下载配置文件
