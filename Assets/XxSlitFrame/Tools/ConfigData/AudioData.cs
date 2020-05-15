@@ -7,7 +7,7 @@ namespace XxSlitFrame.Tools.ConfigData
     [CreateAssetMenu(fileName = "AudioData", menuName = "配置文件/音频数据", order = 1)]
     public class AudioData : ScriptableObject
     {
-        [HideInInspector] [Header("音效")] public List<AudioDataInfo> audioDataInfos;
+        [Header("音效")] public List<AudioDataInfo> audioDataInfos;
 
         /// <summary>
         /// 音乐类型

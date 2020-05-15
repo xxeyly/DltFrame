@@ -10,6 +10,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
     {
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
             serializedObject.Update();
             AnimatorClipData animatorClipData = (AnimatorClipData) target;
             EditorGUILayout.BeginHorizontal();
@@ -43,11 +44,13 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 {
                     animatorClipData.animatorClipDataInfos.Insert(i + 1,
                         new AnimatorClipData.AnimatorClipDataInfo() {animatorControllerParameterType = AnimatorControllerParameterType.Trigger});
+                    serializedObject.ApplyModifiedProperties();
                 }
 
                 if (GUILayout.Button("删除关键帧"))
                 {
                     animatorClipData.animatorClipDataInfos.RemoveAt(i);
+                    serializedObject.ApplyModifiedProperties();
                 }
 
                 EditorGUILayout.EndHorizontal();
@@ -56,7 +59,6 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
 
             }
             
-            base.OnInspectorGUI();
 
         }
     }
