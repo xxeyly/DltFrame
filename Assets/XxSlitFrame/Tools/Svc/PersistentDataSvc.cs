@@ -64,6 +64,11 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         [Header("当前小步骤")] public int currentStepSmallIndex;
 
+        /// <summary>
+        /// 当前小步骤
+        /// </summary>
+        [Header("当前小小步骤")] public int currentStepSmallSmallIndex;
+
         public override void InitSvc()
         {
             audioState = true;

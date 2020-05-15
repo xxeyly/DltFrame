@@ -28,13 +28,13 @@ namespace XxSlitFrame.Tools.ConfigData
     [CreateAssetMenu(fileName = "DialogueData", menuName = "配置文件/对话数据", order = 1)]
     public class DialogueData : ScriptableObject
     {
-        [Header("对话片段")] public List<DialogDataInfoContainer> dataInfos;
+        [HideInInspector][Header("对话片段")] public List<DialogDataInfoContainer> dataInfos;
     }
 
     [Serializable]
     public class DialogDataInfoContainer
     {
-        [Header("对话内容组")] public List<DialogDataInfo> dialogDataInfos;
+        [Header("对话内容组")] public List<DialogDataInfo> dialogDataInfos = new List<DialogDataInfo>();
     }
 
     [Serializable]
@@ -43,6 +43,7 @@ namespace XxSlitFrame.Tools.ConfigData
         [Header("对话角色")] public Role role;
         [Header("对话长度")] public Length length;
         [TextArea] [Header("对话内容")] public string dialogContent;
+
         [Header("对话音频")] public AudioClip dialogueAudioClip;
         // [Header("对应时长")] public float dialogueLength;
     }

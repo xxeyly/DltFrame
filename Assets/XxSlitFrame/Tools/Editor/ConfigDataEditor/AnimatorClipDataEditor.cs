@@ -13,16 +13,10 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
             base.OnInspectorGUI();
             AnimatorClipData animatorClipData = (AnimatorClipData) target;
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("增加", GUILayout.MaxHeight(30)))
+            if (GUILayout.Button("增加关键帧"))
             {
                 animatorClipData.animatorClipDataInfos.Add(new AnimatorClipData.AnimatorClipDataInfo() {animatorControllerParameterType = AnimatorControllerParameterType.Trigger});
             }
-
-            if (GUILayout.Button("删除", GUILayout.MaxHeight(30)))
-            {
-                animatorClipData.animatorClipDataInfos.PopLast();
-            }
-
 
             EditorGUILayout.EndHorizontal();
             for (int i = 0; i < animatorClipData.animatorClipDataInfos.Count; i++)
@@ -36,13 +30,26 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 EditorGUILayout.LabelField("固定过渡持续时间", GUILayout.MaxWidth(100));
                 animatorClipData.animatorClipDataInfos[i].fixedDuration = EditorGUILayout.Toggle(animatorClipData.animatorClipDataInfos[i].fixedDuration, GUILayout.MaxWidth(10));
                 EditorGUILayout.LabelField("持续过度时间", GUILayout.MaxWidth(70));
-                animatorClipData.animatorClipDataInfos[i].transitionDuration = EditorGUILayout.FloatField(animatorClipData.animatorClipDataInfos[i].transitionDuration, GUILayout.MaxWidth(30));
+                animatorClipData.animatorClipDataInfos[i].transitionDuration =
+                    EditorGUILayout.FloatField(animatorClipData.animatorClipDataInfos[i].transitionDuration, GUILayout.MaxWidth(30));
                 EditorGUILayout.LabelField("循环", GUILayout.MaxWidth(30));
-                animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop = EditorGUILayout.Toggle(animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop, GUILayout.MaxWidth(10));
+                animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop =
+                    EditorGUILayout.Toggle(animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop, GUILayout.MaxWidth(10));
                 EditorGUILayout.LabelField("开始帧", GUILayout.MaxWidth(40));
                 animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame = EditorGUILayout.IntField(animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame);
                 EditorGUILayout.LabelField("结束帧", GUILayout.MaxWidth(40));
                 animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame = EditorGUILayout.IntField(animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame);
+                if (GUILayout.Button("增加关键帧"))
+                {
+                    animatorClipData.animatorClipDataInfos.Insert(i + 1,
+                        new AnimatorClipData.AnimatorClipDataInfo() {animatorControllerParameterType = AnimatorControllerParameterType.Trigger});
+                }
+
+                if (GUILayout.Button("删除关键帧"))
+                {
+                    animatorClipData.animatorClipDataInfos.RemoveAt(i);
+                }
+
                 EditorGUILayout.EndHorizontal();
             }
         }

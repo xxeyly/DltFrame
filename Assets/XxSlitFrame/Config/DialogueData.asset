@@ -12,10 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc61f0cb10c2c6f4db8bddd9bad495d5, type: 3}
   m_Name: DialogueData
   m_EditorClassIdentifier: 
-  dataInfos:
-  - dialogDataInfos:
-    - role: 0
-      length: 2
-      dialogContent: "\u4F60\u597D\u738B\u9633,\u54B1\u4EEC\u8981\u505A\u4E2A\u52A8\u8109\u7A7F\u523A\uFF0C\u64CD\u4F5C\u8FC7\u7A0B\u53EF\u80FD\u4F1A\u6709\u70B9\u4E0D\u9002\uFF0C\u8BF7\u60A8\u914D\u5408\u6211\uFF0C\u7A7F\u523A\u7684\u80A2\u4F53\u5C3D\u91CF\u4E0D\u8981\u52A8"
-      dialogueAudioClip: {fileID: 8300000, guid: 28c3a524eb43adf4c9cfea773fd5e702,
-        type: 3}
+  dataInfos: []

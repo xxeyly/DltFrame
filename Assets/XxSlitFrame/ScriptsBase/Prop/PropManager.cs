@@ -93,6 +93,7 @@ namespace Prop
                     Debug.Log(propItem.gameObject);
                 }
             }
+
             ListenerSvc.Instance.AddListenerEvent(ListenerEventType.PropInit, PropInit);
             ListenerSvc.Instance.AddListenerEvent(ListenerEventType.PropShowGroup, PropShowGroup);
         }
@@ -100,8 +101,7 @@ namespace Prop
         private void PropShowGroup()
         {
             //获得当前组
-            PropItemData.PropItemGroupInfo propItemGroupInfo = propItemData.groupInfos[PersistentDataSvc.Instance.currentStepBigIndex]
-                .propItemGroupInfos[PersistentDataSvc.Instance.currentStepSmallIndex];
+            PropItemData.PropItemGroupInfo propItemGroupInfo = propItemData.groupInfos[PersistentDataSvc.Instance.currentStepBigIndex];
 
             for (int i = 0; i < propItemGroupInfo.propItemGroupInfo.Count; i++)
             {

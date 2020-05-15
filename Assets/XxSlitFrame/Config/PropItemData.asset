@@ -13,13 +13,22 @@ MonoBehaviour:
   m_Name: PropItemData
   m_EditorClassIdentifier: 
   groupInfos:
-  - propItemGroupInfos:
-    - propItemGroupInfo:
-      - propTypes: 0
-        display: 0
-    - propItemGroupInfo: []
-    - propItemGroupInfo: []
-  - propItemGroupInfos: []
-  - propItemGroupInfos: []
-  - propItemGroupInfos: []
-  - propItemGroupInfos: []
+  - propItemGroupInfo:
+    - propTypes: 0
+      display: 0
+    - propTypes: 0
+      display: 0
+    - propTypes: 0
+      display: 0
+    - propTypes: 0
+      display: 0
+    - propTypes: 0
+      display: 0
+    - propTypes: 0
+      display: 0
+    - propTypes: 0
+      display: 0
+    - propTypes: 0
+      display: 0
+    - propTypes: 0
+      display: 0

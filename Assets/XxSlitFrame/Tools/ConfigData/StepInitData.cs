@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XAnimator.Base;
+using XxSlitFrame.Tools.Svc;
 using XxSlitFrame.View;
 using XxSlitFrame.View.Button;
 using XxSlitFrame.View.CustomInspector;
@@ -12,19 +13,36 @@ namespace XxSlitFrame.Tools.ConfigData
     [CreateAssetMenu(fileName = "StepInitData", menuName = "配置文件/步骤初始化数据", order = 1)]
     public class StepInitData : ScriptableObject
     {
-        [Header("当前场景的步骤组")] public List<StepInitDataInfoGroup> stepInitDataInfoGroups;
+        [HideInInspector] [Header("当前场景的步骤组")] public List<StepInitDataInfo> stepInitDataInfoGroups;
+
+        public StepInitDataInfo GetCurrentStepIndex()
+        {
+            foreach (StepInitDataInfo stepInitDataInfo in stepInitDataInfoGroups)
+            {
+                if (stepInitDataInfo.bigIndex == PersistentDataSvc.Instance.currentStepBigIndex && stepInitDataInfo.smallIndex == PersistentDataSvc.Instance.currentStepSmallIndex)
+                {
+                    return stepInitDataInfo;
+                }
+            }
+
+            return new StepInitDataInfo();
+        }
     }
 
-    [Serializable]
-    public struct StepInitDataInfoGroup
-    {
-        public string currentBigSmallName;
-        public List<StepInitDataInfo> stepInitDataInfos;
-    }
 
     [Serializable]
-    public struct StepInitDataInfo
+    public class StepInitDataInfo
     {
+        /// <summary>
+        /// 大步骤索引
+        /// </summary>
+        public int bigIndex;
+
+        /// <summary>
+        /// 小步骤索引
+        /// </summary>
+        public int smallIndex;
+
         /// <summary>
         /// 播报的语音索引
         /// </summary>

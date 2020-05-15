@@ -145,7 +145,6 @@ namespace CameraTools
             _cameraParent.GetComponent<NavMeshAgent>().enabled = false;
             if (_cameraParent.transform.position != cameraPosInfo.navMeshAgentPos)
             {
-                
                 _cameraParent.transform.position = cameraPosInfo.navMeshAgentPos;
             }
 

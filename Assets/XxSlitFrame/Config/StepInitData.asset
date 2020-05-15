@@ -13,56 +13,15 @@ MonoBehaviour:
   m_Name: StepInitData
   m_EditorClassIdentifier: 
   stepInitDataInfoGroups:
-  - stepInitDataInfos:
-    - tipIndex: -1
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-  - stepInitDataInfos:
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-  - stepInitDataInfos: []
-  - stepInitDataInfos:
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-    - tipIndex: 0
-      cameraPosType: 0
-      animType: 0
-      animSpeedProgress: 0
-  - stepInitDataInfos: []
+  - bigIndex: 0
+    smallIndex: 2
+    tipIndex: 1
+    cameraPosType: 0
+    animType: 12
+    animSpeedProgress: 0
+  - bigIndex: 0
+    smallIndex: 0
+    tipIndex: 0
+    cameraPosType: 0
+    animType: 0
+    animSpeedProgress: 0

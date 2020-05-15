@@ -14,17 +14,13 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
             CameraPosData cameraPosData
                 = (CameraPosData) target;
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("增加", GUILayout.MaxHeight(30)))
+            if (GUILayout.Button("增加相机位置"))
             {
                 cameraPosData.cameraPosInfosGroup.Add(new CameraPosInfo());
             }
 
-            if (GUILayout.Button("删除", GUILayout.MaxHeight(30)))
-            {
-                cameraPosData.cameraPosInfosGroup.PopLast();
-            }
-
             EditorGUILayout.EndHorizontal();
+
 
             for (int i = 0; i < cameraPosData.cameraPosInfosGroup.Count; i++)
             {
@@ -48,6 +44,11 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 cameraPosData.cameraPosInfosGroup[i].cameraRot.x = EditorGUILayout.FloatField(cameraPosData.cameraPosInfosGroup[i].cameraRot.x, GUILayout.MaxWidth(60));
                 cameraPosData.cameraPosInfosGroup[i].cameraRot.y = EditorGUILayout.FloatField(cameraPosData.cameraPosInfosGroup[i].cameraRot.y, GUILayout.MaxWidth(60));
                 cameraPosData.cameraPosInfosGroup[i].cameraRot.z = EditorGUILayout.FloatField(cameraPosData.cameraPosInfosGroup[i].cameraRot.z, GUILayout.MaxWidth(60));
+
+                if (GUILayout.Button("删除相机位置", GUILayout.MaxWidth(80)))
+                {
+                    cameraPosData.cameraPosInfosGroup.RemoveAt(i);
+                }
 
                 EditorGUILayout.EndHorizontal();
             }

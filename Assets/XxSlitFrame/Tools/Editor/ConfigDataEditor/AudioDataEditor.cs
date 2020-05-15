@@ -14,14 +14,9 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
             base.OnInspectorGUI();
             AudioData audioData = (AudioData) target;
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("增加", GUILayout.MaxHeight(30)))
+            if (GUILayout.Button("增加"))
             {
                 audioData.audioDataInfos.Add(new AudioData.AudioDataInfo());
-            }
-
-            if (GUILayout.Button("删除", GUILayout.MaxHeight(30)))
-            {
-                audioData.audioDataInfos.PopLast();
             }
 
             EditorGUILayout.EndHorizontal();
@@ -32,7 +27,14 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 EditorGUILayout.LabelField("音频类型", GUILayout.MaxWidth(50));
                 audioData.audioDataInfos[i].audioType = (AudioData.AudioType) EditorGUILayout.EnumPopup(audioData.audioDataInfos[i].audioType, GUILayout.MaxWidth(150));
                 EditorGUILayout.LabelField("对应音频", GUILayout.MaxWidth(50));
+#pragma warning disable 618
                 audioData.audioDataInfos[i].dialogueAudioClip = (AudioClip) EditorGUILayout.ObjectField(audioData.audioDataInfos[i].dialogueAudioClip, typeof(AudioClip));
+#pragma warning restore 618
+                if (GUILayout.Button("删除音频", GUILayout.MaxWidth(80)))
+                {
+                    audioData.audioDataInfos.RemoveAt(i);
+                }
+
                 EditorGUILayout.EndHorizontal();
             }
         }

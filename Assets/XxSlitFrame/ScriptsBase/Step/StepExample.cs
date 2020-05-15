@@ -11,7 +11,6 @@ namespace Step
         {
             SetSmallStepAction(0, 0, () =>
             {
-                Debug.Log("咚咚的");
                 ListenerSvc.ExecuteEvent(ListenerEventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置1);
                 // ViewSvc.ShowView(typeof(GoodsPreparation.GoodsPreparation));
                 // SceneSvc.SceneLoad(0);

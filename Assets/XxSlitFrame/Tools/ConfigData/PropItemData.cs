@@ -13,20 +13,39 @@ namespace XxSlitFrame.Tools.ConfigData
             Normal,
             拔针注射器,
             消毒手臂,
+            哈哈哈1,
+            哈哈哈2,
+            哈哈哈3,
+            哈哈哈4,
+            哈哈哈5,
+            哈哈哈6,
+            哈哈哈7,
+            哈哈哈8,
+            哈哈哈9,
+            哈哈哈11,
+            哈哈哈12,
+            哈哈哈13,
+            哈哈哈14,
+            哈哈哈15,
+            哈哈哈16,
+            哈哈哈17,
+            哈哈哈18,
+            哈哈哈19,
+            哈哈哈21,
+            哈哈哈22,
+            哈哈哈23,
+            哈哈哈24,
+            哈哈哈25,
+            哈哈哈26,
         }
 
-        public List<PropItemGroupInfoGroup> groupInfos;
+        public List<PropItemGroupInfo> groupInfos;
 
-        [Serializable]
-        public class PropItemGroupInfoGroup
-        {
-            public List<PropItemGroupInfo> propItemGroupInfos;
-        }
 
         [Serializable]
         public class PropItemGroupInfo
         {
-            public List<PropItemInfo> propItemGroupInfo;
+            public List<PropItemInfo> propItemGroupInfo = new List<PropItemInfo>();
         }
 
         [Serializable]

@@ -167,39 +167,33 @@ namespace Step
             if (stepInitData != null)
             {
                 //获得当前步骤信息 是否越界
-                if (PersistentDataSvc.Instance.currentStepBigIndex < stepInitData.stepInitDataInfoGroups.Count - 1 &&
-                    PersistentDataSvc.Instance.currentStepSmallIndex <
-                    stepInitData.stepInitDataInfoGroups[PersistentDataSvc.Instance.currentStepBigIndex]
-                        .stepInitDataInfos.Count - 1)
+
+                currentStepInitDataInfo = stepInitData.GetCurrentStepIndex();
+
+                if (currentStepInitDataInfo.tipIndex != -1)
                 {
-                    currentStepInitDataInfo = stepInitData.stepInitDataInfoGroups[PersistentDataSvc.Instance.currentStepBigIndex]
-                        .stepInitDataInfos[PersistentDataSvc.Instance.currentStepSmallIndex];
-
-                    if (currentStepInitDataInfo.tipIndex != -1)
-                    {
-                        ViewSvc.ShowView(typeof(Tips.Tips));
-                        Tips.Tips.Instance.ShowTips(currentStepInitDataInfo.tipIndex);
-                    }
-
-                    ListenerSvc.ExecuteEvent(ListenerEventType.PropShowGroup);
-                    switch (currentStepInitDataInfo.animSpeedProgress)
-                    {
-                        case AnimSpeedProgress.None:
-                            AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType);
-                            break;
-                        case AnimSpeedProgress.Start:
-                            AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType, AnimSpeedProgress.Start);
-                            break;
-                        case AnimSpeedProgress.End:
-                            AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType, AnimSpeedProgress.End);
-
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-
-                    ListenerSvc.ExecuteEvent(ListenerEventType.CameraMoveToTargetPos, currentStepInitDataInfo.cameraPosType);
+                    // ViewSvc.ShowView(typeof(Tips.Tips));
+                    // Tips.Tips.Instance.ShowTips(currentStepInitDataInfo.tipIndex);
                 }
+
+                ListenerSvc.ExecuteEvent(ListenerEventType.PropShowGroup);
+                switch (currentStepInitDataInfo.animSpeedProgress)
+                {
+                    case AnimSpeedProgress.None:
+                        AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType);
+                        break;
+                    case AnimSpeedProgress.Start:
+                        AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType, AnimSpeedProgress.Start);
+                        break;
+                    case AnimSpeedProgress.End:
+                        AnimatorControllerManager.Instance.PlayAnim(currentStepInitDataInfo.animType, AnimSpeedProgress.End);
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                ListenerSvc.ExecuteEvent(ListenerEventType.CameraMoveToTargetPos, currentStepInitDataInfo.cameraPosType);
             }
         }
 
