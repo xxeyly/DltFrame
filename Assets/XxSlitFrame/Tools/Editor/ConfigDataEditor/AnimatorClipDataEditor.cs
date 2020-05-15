@@ -1,7 +1,7 @@
 ﻿using SRF;
 using UnityEditor;
 using UnityEngine;
-using XxSlitFrame.Tools.Editor.ConfigData;
+using XxSlitFrame.Tools.ConfigData.Editor;
 
 namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
 {
@@ -51,6 +51,8 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 }
 
                 EditorGUILayout.EndHorizontal();
+                serializedObject.ApplyModifiedProperties();
+
             }
         }
     }

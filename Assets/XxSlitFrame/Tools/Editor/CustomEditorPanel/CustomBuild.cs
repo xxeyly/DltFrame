@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 using XxSlitFrame.Tools.ConfigData;
+using XxSlitFrame.Tools.ConfigData.Editor;
 
 namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 {

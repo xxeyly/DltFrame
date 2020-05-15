@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using XxSlitFrame.Tools.ConfigData;
-using XxSlitFrame.Tools.Editor.ConfigData;
+using XxSlitFrame.Tools.ConfigData.Editor;
 using Object = UnityEngine.Object;
 
 namespace XxSlitFrame.Tools.Editor.CustomEditorPanel

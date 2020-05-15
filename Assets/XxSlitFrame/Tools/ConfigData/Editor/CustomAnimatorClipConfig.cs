@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace XxSlitFrame.Tools.ConfigData
+namespace XxSlitFrame.Tools.ConfigData.Editor
 {
     [Serializable]
     public class CustomAnimatorClipConfig : ScriptableObject

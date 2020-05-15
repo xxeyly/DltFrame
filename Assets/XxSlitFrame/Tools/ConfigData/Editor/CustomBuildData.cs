@@ -1,10 +1,9 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace XxSlitFrame.Tools.ConfigData
+namespace XxSlitFrame.Tools.ConfigData.Editor
 {
     [Serializable]
     [CreateAssetMenu(fileName = "CustomBuildData", menuName = "配置文件/打包数据", order = 1)]

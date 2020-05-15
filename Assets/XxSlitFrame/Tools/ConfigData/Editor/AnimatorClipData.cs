@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace XxSlitFrame.Tools.Editor.ConfigData
+namespace XxSlitFrame.Tools.ConfigData.Editor
 {
     [CreateAssetMenu(fileName = "AnimatorClipData", menuName = "配置文件/动画配置", order = 1)]
     public class AnimatorClipData : ScriptableObject
