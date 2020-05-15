@@ -29,7 +29,7 @@ namespace XxSlitFrame.Tools.Svc
             _tidTimeList = new List<int>();
             _tidSwitchList = new List<int>();
             _tidTimeImmortalList = new List<int>();
-            ListenerSvc.Instance.AddListenerEvent(ListenerSvc.EventType.DeleteAllTimeTask, DeleteAllTimeTask);
+            ListenerSvc.Instance.AddListenerEvent(ListenerEventType.DeleteAllTimeTask, DeleteAllTimeTask);
         }
 
         /// <summary>

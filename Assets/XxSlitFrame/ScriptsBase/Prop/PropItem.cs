@@ -38,7 +38,7 @@ namespace Prop
                     PropItemData.PropType.拔针注射器, () =>
                     {
                         Debug.Log("拔针:注射器");
-                        /*AnimatorControllerManager.Instance.PlayAnim(AnimType.PullOutSyringe, () => { ListenerSvc.Instance.ImplementListenerEvent(ListenerSvc.EventType.SkipToNext); });
+                        /*AnimatorControllerManager.Instance.PlayAnim(AnimType.PullOutSyringe, () => { ListenerSvc.Instance.ImplementListenerEvent(ListenerEventType.SkipToNext); });
                         PropManager.Instance.HideHighlightObjByPropType(PropItemData.PropType.拔针注射器);*/
                     }
                 },

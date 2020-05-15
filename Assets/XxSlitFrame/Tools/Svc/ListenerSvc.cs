@@ -6,6 +6,74 @@ using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools.Svc
 {
+    /// <summary>
+    /// 事件类型
+    /// </summary>
+    public enum ListenerEventType
+    {
+        Normal,
+
+        /// <summary>
+        /// 根据步骤索引执行事件
+        /// </summary>
+        InvokeEventByStepIndex,
+
+        /// <summary>
+        /// 跳转下一步骤
+        /// </summary>
+        SkipToNext,
+
+        /// <summary>
+        /// 相机移动到目标位置
+        /// </summary>
+        CameraMoveToTargetPos,
+
+        /// <summary>
+        /// 道具初始化
+        /// </summary>
+        PropInit,
+
+        /// <summary>
+        /// 显示道具组
+        /// </summary>
+        PropShowGroup,
+
+        /// <summary>
+        /// 打开世界操作点
+        /// </summary>
+        OpenWorldPoint,
+
+        /// <summary>
+        /// 关闭世界操作点
+        /// </summary>
+        CloseWorldPoint,
+
+        /// <summary>
+        /// 小步骤知识点
+        /// </summary>
+        SetSmallKnowledgePointsContent,
+
+        /// <summary>
+        /// 显示深度提示
+        /// </summary>
+        IntermittentNegativePressureBackPumpingShowDepth,
+
+        /// <summary>
+        /// 增加用物选择
+        /// </summary>
+        AddMaterialPreparationItem,
+
+        /// <summary>
+        /// 用物栏关闭提示
+        /// </summary>
+        UseBarCloseSwitchTip,
+
+        /// <summary>
+        /// 删除所有计时任务
+        /// </summary>
+        DeleteAllTimeTask
+    }
+
     public class ListenerSvc : SvcBase<ListenerSvc>
     {
         public delegate void CallBack();
@@ -20,79 +88,12 @@ namespace XxSlitFrame.Tools.Svc
 
         public delegate void CallBack<T, X, Y, Z, W>(T arg1, X arg2, Y arg3, Z arg4, W arg5);
 
-        [Header("事件监听")] [SerializeField] private Dictionary<EventType, Delegate> listenerDic;
+        [Header("事件监听")] [SerializeField] private Dictionary<ListenerEventType, Delegate> listenerDic;
 
-        /// <summary>
-        /// 事件类型
-        /// </summary>
-        public enum EventType
-        {
-            Normal,
-
-            /// <summary>
-            /// 根据步骤索引执行事件
-            /// </summary>
-            InvokeEventByStepIndex,
-
-            /// <summary>
-            /// 跳转下一步骤
-            /// </summary>
-            SkipToNext,
-
-            /// <summary>
-            /// 相机移动到目标位置
-            /// </summary>
-            CameraMoveToTargetPos,
-
-            /// <summary>
-            /// 道具初始化
-            /// </summary>
-            PropInit,
-
-            /// <summary>
-            /// 显示道具组
-            /// </summary>
-            PropShowGroup,
-
-            /// <summary>
-            /// 打开世界操作点
-            /// </summary>
-            OpenWorldPoint,
-
-            /// <summary>
-            /// 关闭世界操作点
-            /// </summary>
-            CloseWorldPoint,
-
-            /// <summary>
-            /// 小步骤知识点
-            /// </summary>
-            SetSmallKnowledgePointsContent,
-
-            /// <summary>
-            /// 显示深度提示
-            /// </summary>
-            IntermittentNegativePressureBackPumpingShowDepth,
-
-            /// <summary>
-            /// 增加用物选择
-            /// </summary>
-            AddMaterialPreparationItem,
-
-            /// <summary>
-            /// 用物栏关闭提示
-            /// </summary>
-            UseBarCloseSwitchTip,
-
-            /// <summary>
-            /// 删除所有计时任务
-            /// </summary>
-            DeleteAllTimeTask
-        }
 
         public override void InitSvc()
         {
-            listenerDic = new Dictionary<EventType, Delegate>();
+            listenerDic = new Dictionary<ListenerEventType, Delegate>();
         }
 
         /// <summary>
@@ -100,7 +101,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="unityAction"></param>
-        public void AddListenerEvent(EventType eventType, CallBack unityAction)
+        public void AddListenerEvent(ListenerEventType eventType, CallBack unityAction)
         {
             if (!listenerDic.ContainsKey(eventType))
             {
@@ -117,7 +118,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T>(EventType eventType, CallBack<T> callBack)
+        public void AddListenerEvent<T>(ListenerEventType eventType, CallBack<T> callBack)
         {
             if (!listenerDic.ContainsKey(eventType))
             {
@@ -134,7 +135,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, TY>(EventType eventType, CallBack<T, TY> callBack)
+        public void AddListenerEvent<T, TY>(ListenerEventType eventType, CallBack<T, TY> callBack)
         {
             if (!listenerDic.ContainsKey(eventType))
             {
@@ -151,7 +152,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, TY, TYX, TYXZ>(EventType eventType, CallBack<T, TY, TYX, TYXZ> callBack)
+        public void AddListenerEvent<T, TY, TYX, TYXZ>(ListenerEventType eventType, CallBack<T, TY, TYX, TYXZ> callBack)
         {
             if (!listenerDic.ContainsKey(eventType))
             {
@@ -169,7 +170,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="unityAction"></param>
-        public void DeleteListenerEvent(EventType eventType, UnityAction unityAction)
+        public void DeleteListenerEvent(ListenerEventType eventType, UnityAction unityAction)
         {
             if (listenerDic.ContainsKey(eventType))
             {
@@ -185,7 +186,7 @@ namespace XxSlitFrame.Tools.Svc
         /// 执行事件
         /// </summary>
         /// <param name="eventType"></param>
-        public void ImplementListenerEvent(EventType eventType)
+        public void ExecuteEvent(ListenerEventType eventType)
         {
             if (listenerDic.ContainsKey(eventType))
             {
@@ -202,7 +203,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="t"></param>
-        public void ImplementListenerEvent<T>(EventType eventType, T t)
+        public void ExecuteEvent<T>(ListenerEventType eventType, T t)
         {
             if (listenerDic.ContainsKey(eventType))
             {
@@ -210,7 +211,7 @@ namespace XxSlitFrame.Tools.Svc
             }
             else
             {
-                Debug.LogError(eventType + "该事件已经没有被绑定过");
+                Debug.LogError(eventType + "该事件没有被绑定过");
             }
         }
 
@@ -220,11 +221,11 @@ namespace XxSlitFrame.Tools.Svc
         /// <param name="eventType"></param>
         /// <param name="t"></param>
         /// <param name="y"></param>
-        public void ImplementListenerEvent<T, Y>(EventType eventType, T t, Y y)
+        public void ExecuteEvent<T, TY>(ListenerEventType eventType, T t, TY y)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                ((CallBack<T, Y>) listenerDic[eventType]).Invoke(t, y);
+                ((CallBack<T, TY>) listenerDic[eventType]).Invoke(t, y);
             }
             else
             {
@@ -238,11 +239,11 @@ namespace XxSlitFrame.Tools.Svc
         /// <param name="eventType"></param>
         /// <param name="t"></param>
         /// <param name="y"></param>
-        public void ImplementListenerEvent<T, Y, X>(EventType eventType, T t, Y y, X x)
+        public void ExecuteEvent<T, TY, TX>(ListenerEventType eventType, T t, TY y, TX x)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                ((CallBack<T, Y, X>) listenerDic[eventType]).Invoke(t, y, x);
+                ((CallBack<T, TY, TX>) listenerDic[eventType]).Invoke(t, y, x);
             }
             else
             {
@@ -253,10 +254,10 @@ namespace XxSlitFrame.Tools.Svc
         /// <summary>
         /// 执行事件
         /// </summary>
-        /// <param name="eventType"></param>
+        /// <param name="eventType"></param>r
         /// <param name="t"></param>
         /// <param name="y"></param>
-        public void ImplementListenerEvent<T, Y, X, Z>(EventType eventType, T t, Y y, X x, Z z)
+        public void ExecuteEvent<T, Y, X, Z>(ListenerEventType eventType, T t, Y y, X x, Z z)
         {
             if (listenerDic.ContainsKey(eventType))
             {
@@ -274,7 +275,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="eventType"></param>
         /// <returns></returns>
-        public CallBack<T> GetEvent<T>(EventType eventType)
+        public CallBack<T> GetEvent<T>(ListenerEventType eventType)
         {
             return (CallBack<T>) listenerDic[eventType];
         }

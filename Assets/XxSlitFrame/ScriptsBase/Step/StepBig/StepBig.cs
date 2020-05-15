@@ -231,7 +231,7 @@ namespace Step.StepBig
                         stepSmall.thisEvent.isOn = true;
                         PersistentDataSvc.Instance.currentStepBigIndex = currentStepIndex;
                         PersistentDataSvc.Instance.currentStepSmallIndex = 0;
-                        ListenerSvc.Instance.ImplementListenerEvent(ListenerSvc.EventType.InvokeEventByStepIndex);
+                        ListenerSvc.Instance.ExecuteEvent(ListenerEventType.InvokeEventByStepIndex);
                     }
                 }
             }

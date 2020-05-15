@@ -7,7 +7,8 @@ namespace XxSlitFrame.Tools.Editor.ConfigData
     [CreateAssetMenu(fileName = "AnimatorClipData", menuName = "配置文件/动画配置", order = 1)]
     public class AnimatorClipData : ScriptableObject
     {
-        public List<AnimatorClipDataInfo> animatorClipDataInfos;
+        [HideInInspector] public List<AnimatorClipDataInfo> animatorClipDataInfos;
+
         [Serializable]
         public class AnimatorClipDataInfo
         {

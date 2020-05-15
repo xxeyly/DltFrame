@@ -39,7 +39,7 @@ namespace Step.StepSmall
             if (!_trigger)
             {
                 _trigger = true;
-                ListenerSvc.Instance.ImplementListenerEvent(ListenerSvc.EventType.InvokeEventByStepIndex);
+                ListenerSvc.Instance.ExecuteEvent(ListenerEventType.InvokeEventByStepIndex);
             }
         }
 

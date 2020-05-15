@@ -52,7 +52,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="assetBundleNetPath"></param>
         /// <param name="eventType"></param>
-        public void AsyncResourcesByNetwork(string assetBundleNetPath, ListenerSvc.EventType eventType)
+        public void AsyncResourcesByNetwork(string assetBundleNetPath, ListenerEventType eventType)
         {
             StartCoroutine(LoadResourcesByNetwork(assetBundleNetPath, eventType));
             //        UnityWebRequest
@@ -63,27 +63,27 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="assetBundleNetPath"></param>
         /// <param name="eventType"></param>
-        public void AsyncResourcesByNetwork<T>(string assetBundleNetPath, ListenerSvc.EventType eventType, T t)
+        public void AsyncResourcesByNetwork<T>(string assetBundleNetPath, ListenerEventType eventType, T t)
         {
             StartCoroutine(LoadResourcesByNetwork(assetBundleNetPath, eventType, t));
         }
 
-        IEnumerator LoadResourcesByNetwork(string serverResourcesPath, ListenerSvc.EventType eventType)
+        IEnumerator LoadResourcesByNetwork(string serverResourcesPath, ListenerEventType eventType)
         {
             //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
             UnityWebRequest request = UnityWebRequest.Get(serverResourcesPath);
             //2、等待这个请求进行发送完
             yield return request.SendWebRequest();
-            ListenerSvc.Instance.ImplementListenerEvent(eventType, request.downloadHandler.data);
+            ListenerSvc.Instance.ExecuteEvent(eventType, request.downloadHandler.data);
         }
 
-        IEnumerator LoadResourcesByNetwork<T>(string serverResourcesPath, ListenerSvc.EventType eventType, T t)
+        IEnumerator LoadResourcesByNetwork<T>(string serverResourcesPath, ListenerEventType eventType, T t)
         {
             //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
             UnityWebRequest request = UnityWebRequest.Get(serverResourcesPath);
             //2、等待这个请求进行发送完
             yield return request.SendWebRequest();
-            ListenerSvc.Instance.ImplementListenerEvent(eventType, request.downloadHandler.data, t);
+            ListenerSvc.Instance.ExecuteEvent(eventType, request.downloadHandler.data, t);
         }
 
         /// <summary>

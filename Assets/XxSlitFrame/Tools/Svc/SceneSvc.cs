@@ -50,7 +50,7 @@ namespace XxSlitFrame.Tools.Svc
             ViewSvc.Instance.NoAllResponse();
             ViewSvc.Instance.AllViewDestroy();
             //删除所有计时任务
-            ListenerSvc.Instance.ImplementListenerEvent(ListenerSvc.EventType.DeleteAllTimeTask);
+            ListenerSvc.Instance.ExecuteEvent(ListenerEventType.DeleteAllTimeTask);
             //音频提示播放
             AudioSvc.Instance.StopEffectAudio();
             AudioSvc.Instance.StopTipAndDialogAudio();

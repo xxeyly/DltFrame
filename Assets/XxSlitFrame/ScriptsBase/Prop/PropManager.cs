@@ -93,8 +93,8 @@ namespace Prop
                     Debug.Log(propItem.gameObject);
                 }
             }
-            ListenerSvc.Instance.AddListenerEvent(ListenerSvc.EventType.PropInit, PropInit);
-            ListenerSvc.Instance.AddListenerEvent(ListenerSvc.EventType.PropShowGroup, PropShowGroup);
+            ListenerSvc.Instance.AddListenerEvent(ListenerEventType.PropInit, PropInit);
+            ListenerSvc.Instance.AddListenerEvent(ListenerEventType.PropShowGroup, PropShowGroup);
         }
 
         private void PropShowGroup()

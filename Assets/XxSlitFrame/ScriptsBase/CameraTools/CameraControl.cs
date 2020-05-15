@@ -67,7 +67,7 @@ namespace CameraTools
             cameraMinField = 40;
             cameraMaxField = 60;
             ResetRot();
-            ListenerSvc.Instance.AddListenerEvent<CameraPosData.CameraPosType>(ListenerSvc.EventType.CameraMoveToTargetPos, ChangePosition);
+            ListenerSvc.Instance.AddListenerEvent<CameraPosData.CameraPosType>(ListenerEventType.CameraMoveToTargetPos, ChangePosition);
         }
 
         void Update()
@@ -145,6 +145,7 @@ namespace CameraTools
             _cameraParent.GetComponent<NavMeshAgent>().enabled = false;
             if (_cameraParent.transform.position != cameraPosInfo.navMeshAgentPos)
             {
+                
                 _cameraParent.transform.position = cameraPosInfo.navMeshAgentPos;
             }
 

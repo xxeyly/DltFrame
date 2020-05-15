@@ -234,7 +234,7 @@ namespace GoodsPreparation
             if (allCorrect)
             {
                 MouseSvc.StopUiFollowingMouse();
-                ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.SkipToNext);
+                ListenerSvc.ExecuteEvent(ListenerEventType.SkipToNext);
             }
             else
             {

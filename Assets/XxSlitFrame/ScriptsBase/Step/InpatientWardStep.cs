@@ -14,7 +14,7 @@ namespace Step
         {
             TimeSvc.DeleteTimeTask();
             ViewSvc.HideView();
-            ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.PropInit);
+            ListenerSvc.ExecuteEvent(ListenerEventType.PropInit);
         }
 
         protected override void FirstInit()

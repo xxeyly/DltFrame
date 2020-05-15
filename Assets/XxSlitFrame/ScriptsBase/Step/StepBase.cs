@@ -91,8 +91,8 @@ namespace Step
 
         protected override void InitListener()
         {
-            ListenerSvc.AddListenerEvent(ListenerSvc.EventType.InvokeEventByStepIndex, InvokeEventByStepIndex);
-            ListenerSvc.AddListenerEvent(ListenerSvc.EventType.SkipToNext, SkipToNext);
+            ListenerSvc.AddListenerEvent(ListenerEventType.InvokeEventByStepIndex, InvokeEventByStepIndex);
+            ListenerSvc.AddListenerEvent(ListenerEventType.SkipToNext, SkipToNext);
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace Step
                         Tips.Tips.Instance.ShowTips(currentStepInitDataInfo.tipIndex);
                     }
 
-                    ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.PropShowGroup);
+                    ListenerSvc.ExecuteEvent(ListenerEventType.PropShowGroup);
                     switch (currentStepInitDataInfo.animSpeedProgress)
                     {
                         case AnimSpeedProgress.None:
@@ -198,7 +198,7 @@ namespace Step
                             throw new ArgumentOutOfRangeException();
                     }
 
-                    ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, currentStepInitDataInfo.cameraPosType);
+                    ListenerSvc.ExecuteEvent(ListenerEventType.CameraMoveToTargetPos, currentStepInitDataInfo.cameraPosType);
                 }
             }
         }

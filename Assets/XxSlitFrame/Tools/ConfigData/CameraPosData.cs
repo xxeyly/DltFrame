@@ -22,9 +22,9 @@ namespace XxSlitFrame.Tools.ConfigData
         /// <summary>
         /// 相机位置信息
         /// </summary>
-        public CameraPosType currentCameraPosType;
+        [HideInInspector] public CameraPosType currentCameraPosType;
 
-        [Header("相机信息组")] public List<CameraPosInfo> cameraPosInfosGroup;
+        [HideInInspector] [Header("相机信息组")] public List<CameraPosInfo> cameraPosInfosGroup;
 
         /// <summary>
         /// 获得当前位置信息

@@ -18,6 +18,7 @@ namespace XxSlitFrame.Tools.ConfigData
     [Serializable]
     public struct StepInitDataInfoGroup
     {
+        public string currentBigSmallName;
         public List<StepInitDataInfo> stepInitDataInfos;
     }
 

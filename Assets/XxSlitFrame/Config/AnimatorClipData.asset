@@ -13,24 +13,45 @@ MonoBehaviour:
   m_Name: AnimatorClipData
   m_EditorClassIdentifier: 
   animatorClipDataInfos:
-  - animatorClipName: 1
+  - animatorClipName: 
     animatorControllerParameterType: 9
     fixedDuration: 0
     transitionDuration: 0
     animatorClipFirstFrame: 0
-    animatorClipLastFrame: 100
+    animatorClipLastFrame: 0
     animatorClipIsLoop: 0
-  - animatorClipName: 2
-    animatorControllerParameterType: 4
-    fixedDuration: 0
-    transitionDuration: 0
-    animatorClipFirstFrame: 101
-    animatorClipLastFrame: 200
-    animatorClipIsLoop: 0
-  - animatorClipName: 3
+  - animatorClipName: 
     animatorControllerParameterType: 9
     fixedDuration: 0
     transitionDuration: 0
-    animatorClipFirstFrame: 12
-    animatorClipLastFrame: 13
+    animatorClipFirstFrame: 0
+    animatorClipLastFrame: 0
+    animatorClipIsLoop: 0
+  - animatorClipName: 
+    animatorControllerParameterType: 9
+    fixedDuration: 0
+    transitionDuration: 0
+    animatorClipFirstFrame: 0
+    animatorClipLastFrame: 0
+    animatorClipIsLoop: 0
+  - animatorClipName: 
+    animatorControllerParameterType: 9
+    fixedDuration: 0
+    transitionDuration: 0
+    animatorClipFirstFrame: 0
+    animatorClipLastFrame: 0
+    animatorClipIsLoop: 0
+  - animatorClipName: 
+    animatorControllerParameterType: 9
+    fixedDuration: 0
+    transitionDuration: 0
+    animatorClipFirstFrame: 0
+    animatorClipLastFrame: 0
+    animatorClipIsLoop: 0
+  - animatorClipName: 
+    animatorControllerParameterType: 9
+    fixedDuration: 0
+    transitionDuration: 0
+    animatorClipFirstFrame: 0
+    animatorClipLastFrame: 0
     animatorClipIsLoop: 0

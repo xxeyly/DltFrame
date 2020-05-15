@@ -10,7 +10,7 @@ namespace XxSlitFrame.Tools.ConfigData
     [CreateAssetMenu(fileName = "TipsData", menuName = "配置文件/提示数据", order = 1)]
     public class TipsData : ScriptableObject
     {
-        public List<TipsDataInfo> tipsDataInfos;
+        [HideInInspector] public List<TipsDataInfo> tipsDataInfos;
 
         [Serializable]
         public class TipsDataInfo

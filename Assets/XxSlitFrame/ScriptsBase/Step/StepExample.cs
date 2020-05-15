@@ -12,7 +12,7 @@ namespace Step
             SetSmallStepAction(0, 0, () =>
             {
                 Debug.Log("咚咚的");
-                ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置1);
+                ListenerSvc.ExecuteEvent(ListenerEventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置1);
                 // ViewSvc.ShowView(typeof(GoodsPreparation.GoodsPreparation));
                 // SceneSvc.SceneLoad(0);
             });
@@ -20,7 +20,7 @@ namespace Step
             {
                 Debug.Log("啊是否达到");
 
-                ListenerSvc.ImplementListenerEvent(ListenerSvc.EventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置2);
+                ListenerSvc.ExecuteEvent(ListenerEventType.CameraMoveToTargetPos, CameraPosData.CameraPosType.位置2);
                 // ViewSvc.ShowView(typeof(GoodsPreparation.GoodsPreparation));
                 // SceneSvc.SceneLoad("End");
             });
