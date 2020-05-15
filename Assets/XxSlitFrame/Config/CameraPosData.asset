@@ -12,25 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9848aeb6ce21f444db53527d73ef9048, type: 3}
   m_Name: CameraPosData
   m_EditorClassIdentifier: 
-  currentCameraPosType: 3
+  currentCameraPosType: 2
   cameraPosInfosGroup:
-  - cameraPosType: 0
-    navMeshAgentPos: {x: 2, y: 0, z: 1.51}
-    cameraPos: {x: 0, y: 0, z: 0}
-    cameraRot: {x: 0, y: 0, z: 0}
-    cameraFieldView: 60
   - cameraPosType: 1
     navMeshAgentPos: {x: 2.5259044, y: 0.083333336, z: -0.95357865}
     cameraPos: {x: -0.17297813, y: 1.024922, z: -0.1498383}
-    cameraRot: {x: 19.899998, y: 145.1, z: -0.00000045399574}
+    cameraRot: {x: 3.0999982, y: 308.50006, z: 0}
     cameraFieldView: 60
   - cameraPosType: 2
     navMeshAgentPos: {x: 0, y: 0.083333336, z: 0.27922216}
     cameraPos: {x: -0.0014898727, y: 2.0012555, z: -0.014391422}
     cameraRot: {x: 26.000008, y: 5.6000004, z: 0.00000011873877}
     cameraFieldView: 60
-  - cameraPosType: 2
+  - cameraPosType: 0
     navMeshAgentPos: {x: 0, y: 0, z: 0}
     cameraPos: {x: 0, y: 0, z: 0}
     cameraRot: {x: 0, y: 0, z: 0}
-    cameraFieldView: 60
+    cameraFieldView: 0

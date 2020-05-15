@@ -37,12 +37,11 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 {
                     EditorGUILayout.EnumPopup(propItemData.groupInfos[i].propItemGroupInfo[j].propTypes, GUILayout.MinWidth(150));
                 }
-
-
                 EditorGUILayout.EndHorizontal();
-                serializedObject.ApplyModifiedProperties();
 
             }
+            EditorUtility.SetDirty(target);
+
         }
     }
 }

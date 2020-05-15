@@ -50,13 +50,10 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 if (GUILayout.Button("删除关键帧"))
                 {
                     animatorClipData.animatorClipDataInfos.RemoveAt(i);
-                    serializedObject.ApplyModifiedProperties();
                 }
 
                 EditorGUILayout.EndHorizontal();
-                serializedObject.ApplyModifiedProperties();
-                
-
+                EditorUtility.SetDirty(target);
             }
             
 

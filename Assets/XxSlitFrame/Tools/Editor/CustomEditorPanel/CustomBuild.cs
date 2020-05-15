@@ -328,6 +328,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             EditorGUILayout.EndHorizontal();
 
             #endregion
+            EditorUtility.SetDirty(buildData);
+
         }
 
         private void OnDestroy()

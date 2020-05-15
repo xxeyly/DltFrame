@@ -81,9 +81,10 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 }
 
                 EditorGUILayout.EndVertical();
-                serializedObject.ApplyModifiedProperties();
 
             }
+            EditorUtility.SetDirty(target);
+
         }
     }
 }

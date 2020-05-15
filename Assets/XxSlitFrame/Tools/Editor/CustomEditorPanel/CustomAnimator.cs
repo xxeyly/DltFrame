@@ -128,13 +128,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
             #endregion
 
-            /*EditorGUILayout.BeginHorizontal();
+            EditorUtility.SetDirty(_customAnimatorClipConfig);
 
-            var tex = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/UI/动脉穿刺-图片/跳步/大步骤-2.png");
-            // EditorGUI.DrawPreviewTexture(new Rect(100, 150, tex.width, tex.height), tex);
-            // EditorGUI.DrawTextureAlpha(new Rect(100, 150, tex.width, tex.height), tex);
-            EditorGUI.DrawTextureTransparent(new Rect(100, 150, tex.width, tex.height), tex);
-            EditorGUILayout.EndHorizontal();*/
         }
 
 

@@ -9,13 +9,11 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
     [CustomEditor(typeof(AudioData))]
     public class AudioDataEditor : UnityEditor.Editor
     {
-        public AudioData audioData;
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-            // AudioData audioData = (AudioData) target;
+            AudioData audioData = (AudioData) target;
             EditorGUILayout.BeginHorizontal();
-            audioData = (AudioData) EditorGUILayout.ObjectField(audioData, typeof(AudioData));
             if (GUILayout.Button("增加"))
             {
                 audioData.audioDataInfos.Add(new AudioData.AudioDataInfo());
@@ -36,9 +34,8 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 {
                     audioData.audioDataInfos.RemoveAt(i);
                 }
-
+                EditorUtility.SetDirty(target);
                 EditorGUILayout.EndHorizontal();
-                serializedObject.ApplyModifiedProperties();
 
             }
         }

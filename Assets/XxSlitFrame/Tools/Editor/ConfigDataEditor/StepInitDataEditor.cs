@@ -42,9 +42,10 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 }
 
                 EditorGUILayout.EndHorizontal();
-                serializedObject.ApplyModifiedProperties();
 
             }
+            EditorUtility.SetDirty(target);
+
         }
     }
 }
