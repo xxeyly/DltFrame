@@ -10,8 +10,8 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
     {
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
             serializedObject.Update();
+            base.OnInspectorGUI();
             AnimatorClipData animatorClipData = (AnimatorClipData) target;
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("增加关键帧"))
@@ -53,7 +53,6 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
 
                 EditorGUILayout.EndHorizontal();
                 serializedObject.ApplyModifiedProperties();
-
             }
         }
     }
