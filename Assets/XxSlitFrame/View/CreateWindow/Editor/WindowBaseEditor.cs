@@ -16,8 +16,9 @@ namespace XxSlitFrame.View.CreateWindow.Editor
             {
                 //View 窗口根目录
                 GameObject windowView = new GameObject("Empty WindowView");
-                windowView.AddComponent<RectTransform>().sizeDelta = new Vector2(1, 1);
-                windowView.AddComponent<GenerationBaseWindow>().Init();
+                windowView.AddComponent<RectTransform>().sizeDelta = new Vector2(10, 10);
+                // windowView.AddComponent<GenerationBaseWindow>().Init();
+                windowView.AddComponent<AutoBindUIData>();
                 //Window目录
                 GameObject window = new GameObject("Window");
                 window.AddComponent<RectTransform>();
@@ -55,7 +56,8 @@ namespace XxSlitFrame.View.CreateWindow.Editor
                 {
                     uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Button;
                 }
-                else if (uiObj.GetComponent<Image>() && !uiObj.GetComponent<UnityEngine.UI.Button>() && !uiObj.GetComponent<Scrollbar>() &&
+                else if (uiObj.GetComponent<Image>() && !uiObj.GetComponent<UnityEngine.UI.Button>() &&
+                         !uiObj.GetComponent<Scrollbar>() &&
                          !uiObj.GetComponent<ScrollRect>())
                 {
                     uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Image;

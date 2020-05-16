@@ -10,8 +10,10 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 鼠标服务
     /// </summary>
-    public class MouseSvc : SvcBase<MouseSvc>
+    public class MouseSvc :  SvcBase
     {
+        public static MouseSvc Instance;
+
         public enum SceneObjectFollowingModel
         {
             Normal,
@@ -46,6 +48,14 @@ namespace XxSlitFrame.Tools.Svc
         private Vector3 _vec3Offset; // 偏移 
         private Canvas _canvas;
 
+        public override void StartSvc()
+        {
+            Instance = GetComponent<MouseSvc>();
+        }
+
+        public override void InitSvc()
+        {
+        }
 
         private void Update()
         {
@@ -162,6 +172,7 @@ namespace XxSlitFrame.Tools.Svc
             UiFollowingMouse(targetObj, offset);
             _objectFollowingMouseTaskTime = TimeSvc.Instance.AddTimeTask(() => { UiFollowingMouse(targetObj, offset); }, "UI拖拽任务", 0.00f, 0);
         }
+
         /// <summary>
         /// UI物体跟随鼠标移动
         /// </summary>
@@ -187,7 +198,6 @@ namespace XxSlitFrame.Tools.Svc
             uiPos += new Vector2(-offset.x, -offset.y);
             targetObj.GetComponent<RectTransform>().localPosition = uiPos;
             // Debug.Log("拖拽物体的位置:" + targetObj.transform.localPosition);
-
         }
 
         /// <summary>
@@ -316,11 +326,6 @@ namespace XxSlitFrame.Tools.Svc
             }
 
             return 0;
-        }
-
-        public override void InitSvc()
-        {
-            
         }
     }
 }

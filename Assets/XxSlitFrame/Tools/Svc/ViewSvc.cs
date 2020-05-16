@@ -11,8 +11,10 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 视图服务
     /// </summary>
-    public class ViewSvc : SvcBase<ViewSvc>
+    public class ViewSvc : SvcBase
     {
+        public static ViewSvc Instance;
+
         /// <summary>
         /// 所有的视图窗口
         /// </summary>
@@ -48,6 +50,33 @@ namespace XxSlitFrame.Tools.Svc
         /// 版本信息加载完毕任务
         /// </summary>
         private int _checkVersionInfoLoadOverTaskTime;
+
+        public override void StartSvc()
+        {
+            Instance = GetComponent<ViewSvc>();
+        }
+
+        public override void InitSvc()
+        {
+            allViewWind = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
+            _activeViewDlc = new Dictionary<Type, BaseWindow>();
+            _allActiveView = new List<Type>();
+            AddView();
+            foreach (BaseWindow window in allViewWind)
+            {
+                window.ViewStartInit();
+            }
+
+            foreach (BaseWindow window in allViewWind)
+            {
+                window.First();
+            }
+
+            //是否开启水印
+            DisPlayWatermark();
+            //关闭全体禁止响应
+            CloseNoAllResponse();
+        }
 
         /// <summary>
         /// 获得视图是否存在
@@ -364,27 +393,6 @@ namespace XxSlitFrame.Tools.Svc
 
         #endregion
 
-        public override void InitSvc()
-        {
-            allViewWind = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
-            _activeViewDlc = new Dictionary<Type, BaseWindow>();
-            _allActiveView = new List<Type>();
-            AddView();
-            foreach (BaseWindow window in allViewWind)
-            {
-                window.ViewStartInit();
-            }
-
-            foreach (BaseWindow window in allViewWind)
-            {
-                window.First();
-            }
-
-            //是否开启水印
-            DisPlayWatermark();
-            //关闭全体禁止响应
-            CloseNoAllResponse();
-        }
 
         public void AllViewDestroy()
         {

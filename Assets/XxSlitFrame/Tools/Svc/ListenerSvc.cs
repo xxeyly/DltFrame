@@ -67,15 +67,12 @@ namespace XxSlitFrame.Tools.Svc
         /// 用物栏关闭提示
         /// </summary>
         UseBarCloseSwitchTip,
-
-        /// <summary>
-        /// 删除所有计时任务
-        /// </summary>
-        DeleteAllTimeTask
     }
 
-    public class ListenerSvc : SvcBase<ListenerSvc>
+    public class ListenerSvc : SvcBase
     {
+        public static ListenerSvc Instance;
+
         public delegate void CallBack();
 
         public delegate void CallBack<T>(T t);
@@ -88,8 +85,13 @@ namespace XxSlitFrame.Tools.Svc
 
         public delegate void CallBack<T, X, Y, Z, W>(T arg1, X arg2, Y arg3, Z arg4, W arg5);
 
-        [Header("事件监听")] [SerializeField] private Dictionary<ListenerEventType, Delegate> listenerDic;
+        [Header("事件监听")] [SerializeField] public Dictionary<ListenerEventType, Delegate> listenerDic;
 
+
+        public override void StartSvc()
+        {
+            Instance = GetComponent<ListenerSvc>();
+        }
 
         public override void InitSvc()
         {

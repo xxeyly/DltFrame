@@ -16,9 +16,16 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 资源加载服务
     /// </summary>
-    public class ResSvc : SvcBase<ResSvc>
+    public class ResSvc : SvcBase
     {
+        public static ResSvc Instance;
+
         [SerializeField] [Header("资源池")] private Dictionary<string, Object> objDic;
+
+        public override void StartSvc()
+        {
+            Instance = GetComponent<ResSvc>();
+        }
 
         public override void InitSvc()
         {
@@ -181,6 +188,7 @@ namespace XxSlitFrame.Tools.Svc
                 PersistentDataSvc.Instance.versionInfo =
                     JsonUtility.FromJson<VersionInfo>(System.Text.Encoding.UTF8.GetString(GetData<TextAsset>("VersionData/VersionInfo").bytes));
             }
+
             Debug.Log("当前版本信息:水印:" + PersistentDataSvc.Instance.versionInfo.watermark);
             Debug.Log("当前版本信息:下载:" + PersistentDataSvc.Instance.versionInfo.downLoad);
             Debug.Log("当前版本信息:加读条:" + PersistentDataSvc.Instance.versionInfo.loadingProgress);

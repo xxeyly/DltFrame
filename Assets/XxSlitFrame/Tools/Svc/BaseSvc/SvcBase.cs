@@ -2,17 +2,10 @@
 
 namespace XxSlitFrame.Tools.Svc.BaseSvc
 {
-    public abstract class SvcBase<T> : MonoBehaviour
+    public abstract class SvcBase : MonoBehaviour, ISvc
     {
-        public static T Instance;
+        public abstract void StartSvc();
 
-        /// <summary>
-        /// 开启服务
-        /// </summary>
-        public virtual void StartSvc()
-        {
-            Instance = gameObject.GetComponent<T>();
-        }
 
         public abstract void InitSvc();
     }

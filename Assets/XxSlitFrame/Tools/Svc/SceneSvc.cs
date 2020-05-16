@@ -11,13 +11,23 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 场景服务--用于场景的加载
     /// </summary>
-    public class SceneSvc : SvcBase<SceneSvc>
+    public class SceneSvc : SvcBase
     {
+        public static SceneSvc Instance;
+
         private AsyncOperation _asyncOperation;
         private int _sceneLoadTimeTask;
         private int _sceneLoadOverTimeTask;
         private int _asyncSceneLoadProgressTimeTask;
 
+        public override void StartSvc()
+        {
+            Instance = GetComponent<SceneSvc>();
+        }
+
+        public override void InitSvc()
+        {
+        }
 
         /// <summary>
         /// 加载场景
@@ -50,10 +60,30 @@ namespace XxSlitFrame.Tools.Svc
             ViewSvc.Instance.NoAllResponse();
             ViewSvc.Instance.AllViewDestroy();
             //删除所有计时任务
-            ListenerSvc.Instance.ExecuteEvent(ListenerEventType.DeleteAllTimeTask);
+            TimeSvc.Instance.DeleteSwitchTask();
+            TimeSvc.Instance.DeleteTimeTask();
             //音频提示播放
             AudioSvc.Instance.StopEffectAudio();
             AudioSvc.Instance.StopTipAndDialogAudio();
+        }
+
+        /// <summary>
+        /// 初始化场景数据
+        /// </summary>
+        public void InitSceneData()
+        {
+            UpdateSceneNameOrIndex();
+            ListenerSvc.Instance.InitSvc();
+            ViewSvc.Instance.InitSvc();
+        }
+
+        /// <summary>
+        /// 更新场景名字或索引
+        /// </summary>
+        public void UpdateSceneNameOrIndex()
+        {
+            PersistentDataSvc.Instance.sceneName = SceneManager.GetActiveScene().name;
+            PersistentDataSvc.Instance.sceneIndex = SceneManager.GetActiveScene().buildIndex;
         }
 
         /// <summary>
@@ -189,9 +219,6 @@ namespace XxSlitFrame.Tools.Svc
             }
         }
 
-        public override void InitSvc()
-        {
-        }
 
         [DllImport("__Internal")]
         private static extern void Close();

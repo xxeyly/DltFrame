@@ -8,13 +8,19 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 音乐服务
     /// </summary>
-    public class AudioSvc : SvcBase<AudioSvc>
+    public class AudioSvc : SvcBase
     {
+        public static AudioSvc Instance;
         private AudioSource _backgroundAudioSource;
         private AudioSource _effectAudioSource;
         private AudioSource _tipAndDialogAudioSource;
         public AudioData audioData;
         private Dictionary<AudioData.AudioType, AudioClip> _audioDlc;
+
+        public override void StartSvc()
+        {
+            Instance = GetComponent<AudioSvc>();
+        }
 
         public override void InitSvc()
         {

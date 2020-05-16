@@ -10,8 +10,10 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 计时系统
     /// </summary>
-    public class TimeSvc : SvcBase<TimeSvc>
+    public class TimeSvc : SvcBase
     {
+        public static TimeSvc Instance;
+
         private List<TimeTask> _taskTimeList;
         private List<TimeTask> _taskTimeImmortalList;
         private List<SwitchTask> _taskSwitchList;
@@ -19,7 +21,14 @@ namespace XxSlitFrame.Tools.Svc
         private List<int> _tidTimeImmortalList;
         private List<int> _tidSwitchList;
         private bool _clear;
-        [Header("所有计时任务")] [SerializeField] public List<TimeTaskList> timeTaskList;
+
+        [HideInInspector] [Header("所有计时任务")] [SerializeField]
+        public List<TimeTaskList> timeTaskList;
+
+        public override void StartSvc()
+        {
+            Instance = GetComponent<TimeSvc>();
+        }
 
         public override void InitSvc()
         {
@@ -29,7 +38,6 @@ namespace XxSlitFrame.Tools.Svc
             _tidTimeList = new List<int>();
             _tidSwitchList = new List<int>();
             _tidTimeImmortalList = new List<int>();
-            ListenerSvc.Instance.AddListenerEvent(ListenerEventType.DeleteAllTimeTask, DeleteAllTimeTask);
         }
 
         /// <summary>
@@ -57,7 +65,9 @@ namespace XxSlitFrame.Tools.Svc
             float destTime = Time.time + delay;
             int tid = GetTimeTaskTid();
             TimeTask timeTask = new TimeTask
-                {Tid = tid, DestTime = destTime, TaskName = taskName, Callback = callback, Count = count, Delay = delay};
+            {
+                Tid = tid, DestTime = destTime, TaskName = taskName, Callback = callback, Count = count, Delay = delay
+            };
             _taskTimeList.Add(timeTask);
             timeTaskList.Add(new TimeTaskList
             {
@@ -76,7 +86,9 @@ namespace XxSlitFrame.Tools.Svc
             float destTime = Time.time + delay;
             int tid = GetImmortalTaskTid();
             TimeTask timeTask = new TimeTask
-                {Tid = tid, DestTime = destTime, TaskName = taskName, Callback = callback, Count = count, Delay = delay};
+            {
+                Tid = tid, DestTime = destTime, TaskName = taskName, Callback = callback, Count = count, Delay = delay
+            };
             _taskTimeImmortalList.Add(timeTask);
             timeTaskList.Add(new TimeTaskList
             {
@@ -200,13 +212,12 @@ namespace XxSlitFrame.Tools.Svc
         }
 
         /// <summary>
-        /// 删除所有计时任务
+        /// 删除所有计时任务,不死任务除外
         /// </summary>
         private void DeleteAllTimeTask()
         {
             DeleteTimeTask();
             DeleteSwitchTask();
-            DeleteImmortalTimeTask();
         }
 
         /// <summary>

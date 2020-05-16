@@ -44,9 +44,12 @@ namespace XxSlitFrame.View
         protected ListenerSvc ListenerSvc;
         protected MouseSvc MouseSvc;
 
-        [SerializeField] [Header("组件事件监听")] protected Dictionary<string, UnityAction<BaseEventData>> uiListener = new Dictionary<string, UnityAction<BaseEventData>>();
+        [SerializeField] [Header("组件事件监听")] protected Dictionary<string, UnityAction<BaseEventData>> uiListener =
+            new Dictionary<string, UnityAction<BaseEventData>>();
 
         [SerializeField] [Header("计时任务列表")] protected List<TimeTaskInfo> timeTaskInfoList = new List<TimeTaskInfo>();
+        [Header("视图类型")] [SerializeField] protected ViewShowType ViewShowType = ViewShowType.Activity;
+        [HideInInspector] public Type viewType;
 
         protected BaseWindow()
         {
@@ -404,7 +407,8 @@ namespace XxSlitFrame.View
         /// <param name="buttonList">当前要操作的UI组件</param>
         /// <param name="eventId">要触发的事件类型</param>
         /// <param name="action">要执行的事件</param>
-        protected void BindListener(List<Selectable> buttonList, EventTriggerType eventId, UnityAction<BaseEventData> action)
+        protected void BindListener(List<Selectable> buttonList, EventTriggerType eventId,
+            UnityAction<BaseEventData> action)
         {
             foreach (Selectable selectable in buttonList)
             {
@@ -453,7 +457,8 @@ namespace XxSlitFrame.View
         protected int AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
             int timeTaskId = TimeSvc.AddTimeTask(callback, taskName, delay, count);
-            timeTaskInfoList.Add(new TimeTaskInfo() {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Once, TimeTaskName = taskName});
+            timeTaskInfoList.Add(new TimeTaskInfo()
+                {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Once, TimeTaskName = taskName});
             return timeTaskId;
         }
 
@@ -468,7 +473,8 @@ namespace XxSlitFrame.View
         protected int AddSwitchTask(List<UnityAction> callbackList, string taskName, float delay, int count = 1)
         {
             int timeTaskId = TimeSvc.AddSwitchTask(callbackList, taskName, delay, count);
-            timeTaskInfoList.Add(new TimeTaskInfo() {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Loop, TimeTaskName = taskName});
+            timeTaskInfoList.Add(new TimeTaskInfo()
+                {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Loop, TimeTaskName = taskName});
             return timeTaskId;
         }
 
@@ -483,7 +489,8 @@ namespace XxSlitFrame.View
         protected int AddImmortalTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
             int timeTaskId = TimeSvc.AddImmortalTimeTask(callback, taskName, delay, count);
-            timeTaskInfoList.Add(new TimeTaskInfo() {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Once, TimeTaskName = taskName});
+            timeTaskInfoList.Add(new TimeTaskInfo()
+                {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Once, TimeTaskName = taskName});
             TimeSvc.DeleteTimeTask();
             return timeTaskId;
         }
@@ -544,290 +551,6 @@ namespace XxSlitFrame.View
         /// </summary>
         public virtual void ViewContinue()
         {
-        }
-
-        #endregion
-    }
-
-    /// <summary>
-    /// UI自动生成部分
-    /// </summary>
-    public abstract partial class BaseWindow : MonoBehaviour
-    {
-        #region 编辑器界面操作
-
-        [XButton("显示界面")]
-        protected virtual void ShowWindow()
-        {
-            Window = transform.Find("Window").gameObject;
-            ShowObj(Window);
-        }
-
-        [XButton("隐藏界面")]
-        protected virtual void HideWindow()
-        {
-            Window = transform.Find("Window").gameObject;
-            HideObj(Window);
-        }
-
-        [XButton("初始化界面")]
-        protected virtual void DeclarationUi()
-        {
-            InitView();
-            Init();
-        }
-
-        [XButton("UI一键生成")]
-        protected void OneGenerateAllView()
-        {
-            ViewDeclarationUi();
-            ViewBindUi();
-            ViewBindListener();
-            ViewStatementListener();
-        }
-
-        #region UI绑定
-
-        protected virtual void ViewDeclarationUi()
-        {
-            viewDeclarationUi = OneClickDeclarationUi();
-        }
-
-        protected virtual void ViewBindUi()
-        {
-            viewBindUi = OneClickBindUi();
-        }
-
-        protected virtual void ViewBindListener()
-        {
-            viewBindListener = OneClickBindListener();
-        }
-
-        protected virtual void ViewStatementListener()
-        {
-            viewStatementListener = OneClickStatementListener();
-        }
-
-        #endregion
-
-        #endregion
-
-        #region UI自动生成属性
-
-        [TextArea(5, 5)] public string viewDeclarationUi;
-
-        [TextArea(5, 5)] public string viewBindUi;
-
-        [TextArea(5, 5)] public string viewBindListener;
-
-        [TextArea(5, 5)] public string viewStatementListener;
-
-        [HideInInspector] public Type viewType;
-
-        [Header("视图类型")] [SerializeField] protected ViewShowType ViewShowType = ViewShowType.Activity;
-
-        #endregion
-
-        #region UI自动生成代码
-
-        /// <summary>
-        /// 一键获得绑定UI
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        private string OneClickDeclarationUi()
-        {
-            Transform window = transform.Find("Window").transform;
-            string allUiName = "";
-            foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
-            {
-                if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
-                {
-                    switch (child.GetComponent<BindUiType>().type)
-                    {
-                        case BindUiType.UiType.GameObject:
-                            allUiName += "private GameObject _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.Button:
-                            allUiName += "private Button _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.Image:
-                            allUiName += "private Image _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.Text:
-                            allUiName += "private Text _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.Toggle:
-                            allUiName += "private Toggle _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.RawImage:
-                            allUiName += "private RawImage _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.Scrollbar:
-                            allUiName += "private Scrollbar _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.ScrollRect:
-                            allUiName += "private ScrollRect _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.InputField:
-                            allUiName += "private InputField _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                        case BindUiType.UiType.Dropdown:
-                            allUiName += "private Dropdown _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            break;
-                    }
-                }
-            }
-
-            return allUiName;
-        }
-
-        /// <summary>
-        /// 一键绑定UI
-        /// </summary>
-        /// <returns></returns>
-        private string OneClickBindUi()
-        {
-            Transform window = transform.Find("Window").transform;
-            string allBindName = "";
-            foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
-            {
-                if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
-                {
-                    allBindName += "BindUi(ref _" + DataSvc.FirstCharToLower(child.name) + ",\"" +
-                                   GetUiComponentPath(child, "") + "\");" + "\n";
-                }
-            }
-
-
-            return allBindName;
-        }
-
-        /// <summary>
-        /// 获得UI路径
-        /// </summary>
-        /// <returns></returns>
-        private static string GetUiComponentPath(Transform uiTr, string uiPath)
-        {
-            Transform defaultUiTr = uiTr;
-            int hierarchy = 0;
-            while (uiTr.parent.name != "Window")
-            {
-                hierarchy++;
-                uiTr = uiTr.parent;
-            }
-
-            for (int i = 1; i <= hierarchy; i++)
-            {
-                uiTr = GetParentByHierarchy(defaultUiTr, i);
-                uiPath = uiTr.name + "/" + uiPath;
-            }
-
-            return uiPath + defaultUiTr.name;
-        }
-
-        /// <summary>
-        /// 获得UI组件是否包含LocalBaseWindnow路径
-        /// </summary>
-        /// <returns></returns>
-        private static bool GetUiComponentContainLocalBaseWindow(Transform uiTr)
-        {
-            bool isContainLocalBaseWindow = false;
-            Transform defaultUiTr = uiTr;
-            int hierarchy = 0;
-            while (uiTr.parent.name != "Window")
-            {
-                hierarchy++;
-                uiTr = uiTr.parent;
-            }
-
-            if (hierarchy == 0)
-            {
-                return false;
-            }
-            else
-            {
-                for (int i = 0; i <= hierarchy; i++)
-                {
-                    if (GetParentByHierarchy(defaultUiTr, i).GetComponent<LocalBaseWindow>())
-                    {
-                        isContainLocalBaseWindow = true;
-                        return isContainLocalBaseWindow;
-                    }
-                }
-            }
-
-
-            return isContainLocalBaseWindow;
-        }
-
-        /// <summary>
-        /// 根据UI层级获得父物体
-        /// </summary>
-        /// <param name="uiTr"></param>
-        /// <param name="hierarchy"></param>
-        /// <returns></returns>
-        private static Transform GetParentByHierarchy(Transform uiTr, int hierarchy)
-        {
-            for (int i = 0; i < hierarchy; i++)
-            {
-                uiTr = uiTr.parent;
-            }
-
-            return uiTr;
-        }
-
-        /// <summary>
-        /// 一键绑定UI事件
-        /// </summary>
-        /// <returns></returns>
-        private string OneClickBindListener()
-        {
-            Transform window = transform.Find("Window").transform;
-            string allBindName = "";
-            foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
-            {
-                if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
-                {
-                    if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Button)
-                    {
-                        allBindName += "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," + "EventTriggerType.PointerClick" + "," + "On" + child.name +
-                                       ");" + "\n";
-                    }
-                }
-            }
-
-
-            return allBindName;
-        }
-
-        /// <summary>
-        /// 一键声明UI事件
-        /// </summary>
-        /// <returns></returns>
-        private string OneClickStatementListener()
-        {
-            Transform window = transform.Find("Window").transform;
-
-            string allBindName = "";
-            foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
-            {
-                if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
-                {
-                    if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Button)
-                    {
-                        allBindName += "private void On" + child.name + "(BaseEventData targetObj)" + "\n" + "{" + "\n" + "}" + "\n";
-                    }
-                }
-            }
-
-            /*TextEditor textEditor = new TextEditor
-            {
-                text = allBindName
-            };
-            textEditor.OnFocus();
-            textEditor.Copy();*/
-            return allBindName;
         }
 
         #endregion

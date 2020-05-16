@@ -18,8 +18,10 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 动态加载数据
     /// </summary>
-    public class PersistentDataSvc : SvcBase<PersistentDataSvc>
+    public class PersistentDataSvc: SvcBase
     {
+        public static PersistentDataSvc Instance;
+
         /// <summary>
         /// 场景索引
         /// </summary>
@@ -99,7 +101,7 @@ namespace XxSlitFrame.Tools.Svc
 #endif
         public override void StartSvc()
         {
-            base.StartSvc();
+            Instance = GetComponent<PersistentDataSvc>();
 #if UNITY_WEBGL && !UNITY_EDITOR
             // GetIP();
 #endif
