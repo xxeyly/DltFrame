@@ -29,6 +29,8 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 stepInitData.stepInitDataInfoGroups[i].smallIndex = EditorGUILayout.IntField(stepInitData.stepInitDataInfoGroups[i].smallIndex);
                 EditorGUILayout.LabelField("语音索引", GUILayout.MaxWidth(50));
                 stepInitData.stepInitDataInfoGroups[i].tipIndex = EditorGUILayout.IntField(stepInitData.stepInitDataInfoGroups[i].tipIndex);
+                EditorGUILayout.LabelField("物品组索引", GUILayout.MaxWidth(60));
+                stepInitData.stepInitDataInfoGroups[i].propGroupIndex = EditorGUILayout.IntField(stepInitData.stepInitDataInfoGroups[i].propGroupIndex);
                 EditorGUILayout.LabelField("相机位置", GUILayout.MaxWidth(50));
                 stepInitData.stepInitDataInfoGroups[i].cameraPosType =
                     (CameraPosData.CameraPosType) EditorGUILayout.EnumPopup(stepInitData.stepInitDataInfoGroups[i].cameraPosType);
@@ -42,10 +44,9 @@ namespace XxSlitFrame.Tools.Editor.ConfigDataEditor
                 }
 
                 EditorGUILayout.EndHorizontal();
-
             }
-            EditorUtility.SetDirty(target);
 
+            EditorUtility.SetDirty(target);
         }
     }
 }

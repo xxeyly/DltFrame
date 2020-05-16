@@ -10,7 +10,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         public Vector2 packageServerScroll = Vector2.zero;
         public int packageCount;
 
-        [MenuItem("xxslit/工具包")]
+        // [MenuItem("xxslit/工具包")]
         private static void ShowWindow()
         {
             EditorWindow window = EditorWindow.GetWindow<CustomFunctionPackage>();

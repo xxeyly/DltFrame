@@ -12,4 +12,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc61f0cb10c2c6f4db8bddd9bad495d5, type: 3}
   m_Name: DialogueData
   m_EditorClassIdentifier: 
-  dataInfos: []
+  dataInfos:
+  - dialogDataInfos:
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+  - dialogDataInfos:
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+  - dialogDataInfos:
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+  - dialogDataInfos:
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+  - dialogDataInfos:
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+  - dialogDataInfos:
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}
+    - role: 0
+      length: 0
+      dialogContent: 
+      dialogueAudioClip: {fileID: 0}

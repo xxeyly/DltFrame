@@ -41,3 +41,10 @@ MonoBehaviour:
     animatorClipFirstFrame: 0
     animatorClipLastFrame: 0
     animatorClipIsLoop: 0
+  - animatorClipName: 
+    animatorControllerParameterType: 9
+    fixedDuration: 0
+    transitionDuration: 0
+    animatorClipFirstFrame: 0
+    animatorClipLastFrame: 0
+    animatorClipIsLoop: 0

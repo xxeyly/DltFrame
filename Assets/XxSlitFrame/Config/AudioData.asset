@@ -35,5 +35,3 @@ MonoBehaviour:
     dialogueAudioClip: {fileID: 8300000, guid: cba9c3c425994ec47a42906a874fdf21, type: 3}
   - audioType: 11
     dialogueAudioClip: {fileID: 8300000, guid: 97e962d33792f1f47af0b97d63be7223, type: 3}
-  - audioType: 0
-    dialogueAudioClip: {fileID: 0}

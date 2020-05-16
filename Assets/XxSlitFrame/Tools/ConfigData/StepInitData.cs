@@ -49,6 +49,11 @@ namespace XxSlitFrame.Tools.ConfigData
         [Header("播报的语音索引")] public int tipIndex;
 
         /// <summary>
+        /// 物品组索引
+        /// </summary>
+        [Header("物品组索引")] public int propGroupIndex;
+
+        /// <summary>
         /// 要移动的位置
         /// </summary>
         [Header("要移动的位置")] public CameraPosData.CameraPosType cameraPosType;

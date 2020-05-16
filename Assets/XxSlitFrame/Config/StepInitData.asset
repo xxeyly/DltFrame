@@ -12,16 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3a779409864fe442870bb3d7f921dae, type: 3}
   m_Name: StepInitData
   m_EditorClassIdentifier: 
-  stepInitDataInfoGroups:
-  - bigIndex: 0
-    smallIndex: 2
-    tipIndex: 1
-    cameraPosType: 0
-    animType: 12
-    animSpeedProgress: 0
-  - bigIndex: 0
-    smallIndex: 0
-    tipIndex: 0
-    cameraPosType: 0
-    animType: 0
-    animSpeedProgress: 0
+  stepInitDataInfoGroups: []
