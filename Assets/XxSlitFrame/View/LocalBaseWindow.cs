@@ -5,8 +5,6 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using XxSlitFrame.Tools.Svc;
-using XxSlitFrame.View.Button;
-
 namespace XxSlitFrame.View
 {
     /// <summary>
@@ -31,7 +29,6 @@ namespace XxSlitFrame.View
 
         #region 编辑器界面操作
 
-        [XButton("一键获得UI")]
         protected void OneGenerateAllView()
         {
             ViewDeclarationUi();

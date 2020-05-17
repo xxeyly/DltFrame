@@ -8,7 +8,6 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc.BaseSvc;
-using XxSlitFrame.View.CustomInspector;
 using Object = System.Object;
 
 namespace XxSlitFrame.Tools.Svc
@@ -298,22 +297,22 @@ namespace XxSlitFrame.Tools.Svc
             /// <summary>
             /// 水印
             /// </summary>
-            [XLabeText("水印")] public bool watermark;
+            [Header("水印")] public bool watermark;
 
             /// <summary>
             /// 下载
             /// </summary>
-            [XLabeText("下载")] public bool downLoad;
+            [Header("下载")] public bool downLoad;
 
             /// <summary>
             /// 加载进度
             /// </summary>
-            [XLabeText("下载进度")] public bool loadingProgress;
+            [Header("下载进度")] public bool loadingProgress;
 
             /// <summary>
             /// 场景进度
             /// </summary>
-            [XLabeText("场景进度")] public bool sceneProgress;
+            [Header("场景进度")] public bool sceneProgress;
         }
 
         /// <summary>

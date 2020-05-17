@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using XAnimator.Base;
 using XxSlitFrame.Tools.Svc;
-using XxSlitFrame.View;
-using XxSlitFrame.View.Button;
-using XxSlitFrame.View.CustomInspector;
 
 namespace XxSlitFrame.Tools.ConfigData
 {

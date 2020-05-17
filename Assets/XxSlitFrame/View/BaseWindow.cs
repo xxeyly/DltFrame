@@ -5,7 +5,6 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using XxSlitFrame.Tools.Svc;
 using UnityEngine.UI;
-using XxSlitFrame.View.Button;
 
 namespace XxSlitFrame.View
 {

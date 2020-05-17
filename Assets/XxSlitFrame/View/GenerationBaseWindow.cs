@@ -5,7 +5,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XxSlitFrame.Tools.Svc;
-using XxSlitFrame.View.Button;
 
 namespace XxSlitFrame.View
 {
@@ -34,7 +33,6 @@ namespace XxSlitFrame.View
         /// <summary>
         /// 生成脚本
         /// </summary>
-        [XButton("生成脚本")]
         public void Generation()
         {
             if (!string.IsNullOrEmpty(this.scriptsName) && !string.IsNullOrEmpty(generationRelativePath))
@@ -83,7 +81,6 @@ namespace XxSlitFrame.View
         /// <summary>
         /// 添加脚本
         /// </summary>
-        [XButton("添加脚本")]
         public void AddComponent()
         {
             GetGenerationBaseWindowType(generationScriptsNamespace + "." + scriptsName);
@@ -111,7 +108,6 @@ namespace XxSlitFrame.View
         /// <summary>
         /// 生成路径
         /// </summary>
-        [XButton("初始化")]
         public void InitData()
         {
             generationRelativePath = "Assets" + "/Scripts/" + SceneManager.GetActiveScene().name;
