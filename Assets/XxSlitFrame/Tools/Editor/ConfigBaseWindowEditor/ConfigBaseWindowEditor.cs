@@ -71,7 +71,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
             {
                 for (int i = 0; i < _autoBindUiData.allUiVariableName.Count; i++)
                 {
-                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.BeginHorizontal(new GUIStyle("ObjectPickerBackground"));
                     EditorGUILayout.LabelField(_autoBindUiData.allUiVariableName[i]);
                     if (GUILayout.Button("复制", GUILayout.MaxWidth(40)))
                     {
@@ -112,7 +112,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
             {
                 for (int i = 0; i < _autoBindUiData.allUiVariableBind.Count; i++)
                 {
-                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.BeginHorizontal(new GUIStyle("ObjectPickerBackground"));
                     EditorGUILayout.LabelField(_autoBindUiData.allUiVariableBind[i]);
                     if (GUILayout.Button("复制", GUILayout.MaxWidth(40)))
                     {
@@ -153,7 +153,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
             {
                 for (int i = 0; i < _autoBindUiData.allUiVariableBindListener.Count; i++)
                 {
-                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.BeginHorizontal(new GUIStyle("ObjectPickerBackground"));
                     EditorGUILayout.LabelField(_autoBindUiData.allUiVariableBindListener[i]);
                     if (GUILayout.Button("复制", GUILayout.MaxWidth(40)))
                     {
@@ -194,7 +194,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
             {
                 for (int i = 0; i < _autoBindUiData.allUiVariableBindListenerEvent.Count; i++)
                 {
-                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.BeginHorizontal(new GUIStyle("ObjectPickerBackground"));
                     EditorGUILayout.LabelField(_autoBindUiData.allUiVariableBindListenerEvent[i]);
                     if (GUILayout.Button("复制", GUILayout.MaxWidth(40)))
                     {

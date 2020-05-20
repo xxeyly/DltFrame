@@ -5,6 +5,7 @@ using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.View
 {
+    // ReSharper disable once InconsistentNaming
     public class AutoBindUIData : MonoBehaviour
     {
         /// <summary>
@@ -160,12 +161,11 @@ namespace XxSlitFrame.View
         }
 
         /// <summary>
-        /// 获得UI组件是否包含LocalBaseWindnow路径
+        /// 获得UI组件是否包含LocalBaseWindow路径
         /// </summary>
         /// <returns></returns>
         private static bool GetUiComponentContainLocalBaseWindow(Transform uiTr)
         {
-            bool isContainLocalBaseWindow = false;
             Transform defaultUiTr = uiTr;
             int hierarchy = 0;
             while (uiTr.parent.name != "Window")
@@ -184,14 +184,13 @@ namespace XxSlitFrame.View
                 {
                     if (GetParentByHierarchy(defaultUiTr, i).GetComponent<LocalBaseWindow>())
                     {
-                        isContainLocalBaseWindow = true;
-                        return isContainLocalBaseWindow;
+                        return true;
                     }
                 }
             }
 
 
-            return isContainLocalBaseWindow;
+            return false;
         }
 
         /// <summary>
