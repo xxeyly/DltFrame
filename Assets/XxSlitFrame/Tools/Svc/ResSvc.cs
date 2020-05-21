@@ -171,6 +171,7 @@ namespace XxSlitFrame.Tools.Svc
         private IEnumerator GetDownLoadProjectConfig()
         {
             //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
+            Debug.Log(General.General.GetFileConfigPath(General.General.VersionDataInfoPath));
             UnityWebRequest request = UnityWebRequest.Get(General.General.GetFileConfigPath(General.General.VersionDataInfoPath));
 
             //2、等待这个请求进行发送完

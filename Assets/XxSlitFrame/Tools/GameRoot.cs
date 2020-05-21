@@ -14,8 +14,9 @@ namespace XxSlitFrame.Tools
         public void GameRootInit()
         {
             DontDestroyOnLoad(this);
-            //下载配置文件
+#if UNITY_EDITOR
             ResSvc.Instance.StartDownProjectConfig();
+#endif
             //跟新场景信息
             SceneSvc.Instance.UpdateSceneNameOrIndex();
             //开启场景实时检测

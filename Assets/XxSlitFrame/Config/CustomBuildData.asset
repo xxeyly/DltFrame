@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: CustomBuildData
   m_EditorClassIdentifier: 
   buildTarget: 20
-  exportPath: F:/Software/Apache24/htdocs/xFrame
+  exportPath: H:/sltkit/Software/Apache24/htdocs
   exportProjectName: xxslitFrame
   projectNameDate: 0
   projectBuildEdition: 0
   copyFolderPaths:
-  - H:/sltkit/Unity/2018/Arteriopuncture/Assets/XxSlitFrame/Resources/DownFile
-  - H:/sltkit/Unity/2018/Arteriopuncture/Assets/XxSlitFrame/Resources/VersionData
+  - H:/sltkit/Unity/Git/xxslitFrame/Assets/XxSlitFrame/Resources/DownFile
+  - H:/sltkit/Unity/Git/xxslitFrame/Assets/XxSlitFrame/Resources/VersionData
   pasteFolderPaths:
   - DownFile
   - VersionData
-  updateToFtp: 0
+  updateToFtp: 1
   copyFolderCount: 2
-  ftpServerPath: 
-  ftpUser: 
-  ftpPwd: 
-  ftpRoot: 
+  ftpServerPath: 192.168.1.100
+  ftpUser: lab
+  ftpPwd: lab
+  ftpRoot: xxslit

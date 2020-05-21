@@ -18,7 +18,7 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 动态加载数据
     /// </summary>
-    public class PersistentDataSvc: SvcBase
+    public class PersistentDataSvc : SvcBase
     {
         public static PersistentDataSvc Instance;
 
@@ -70,10 +70,17 @@ namespace XxSlitFrame.Tools.Svc
         /// 当前小步骤
         /// </summary>
         [Header("当前小小步骤")] public int currentStepSmallSmallIndex;
-
+#if UNITY_WEBGL && !UNITY_EDITOR
+        [DllImport("__Internal")]
+        private static extern void GetIP();
+#endif
         public override void InitSvc()
         {
             audioState = true;
+            gameObject.name = "ServerURL";
+#if UNITY_WEBGL && !UNITY_EDITOR
+            GetIP();
+#endif
         }
 
         /// <summary>
@@ -92,19 +99,19 @@ namespace XxSlitFrame.Tools.Svc
         /// <param name="url"></param>
         private void SetServerURL(string url)
         {
+            Debug.Log("获得服务器地址:" + url);
             serverPath = url;
+#if UNITY_WEBGL
+            //下载配置文件
+            Debug.Log("下载配置文件");
+            ResSvc.Instance.StartDownProjectConfig();
+#endif
         }
 
-#if UNITY_WEBGL && !UNITY_EDITOR
-        // [DllImport("__Internal")]
-        // private static extern void GetIP();
-#endif
+
         public override void StartSvc()
         {
             Instance = GetComponent<PersistentDataSvc>();
-#if UNITY_WEBGL && !UNITY_EDITOR
-            // GetIP();
-#endif
         }
     }
 }

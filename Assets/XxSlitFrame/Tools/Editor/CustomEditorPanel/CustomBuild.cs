@@ -31,6 +31,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             {
                 buildData = (CustomBuildData) AssetDatabase.LoadAssetAtPath("Assets/XxSlitFrame/Config/CustomBuildData.asset", typeof(CustomBuildData));
             }
+
             _buildTarget = buildData.buildTarget;
             _exportPath = buildData.exportPath;
             _exportProjectName = buildData.exportProjectName;
@@ -145,6 +146,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             {
                 InitData();
             }
+
             EditorGUILayout.EndHorizontal();
 
             #endregion
@@ -328,8 +330,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             EditorGUILayout.EndHorizontal();
 
             #endregion
-            EditorUtility.SetDirty(buildData);
 
+            EditorUtility.SetDirty(buildData);
         }
 
         private void OnDestroy()
@@ -361,6 +363,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             buildData.ftpUser = _ftpUser;
             buildData.ftpPwd = _ftpPwd;
             buildData.ftpRoot = _ftpRoot;
+            EditorUtility.SetDirty(buildData);
         }
 
         /// <summary>
