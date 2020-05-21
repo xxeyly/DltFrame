@@ -93,6 +93,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public void OpenType(string jsoninfo)
         {
+            Debug.Log(jsoninfo);
             JsonData Data = JsonMapper.ToObject(jsoninfo);
             JsonData jd = Data["data"];
             string mode = jd["mode"].ToString();
@@ -300,9 +301,23 @@ namespace XxSlitFrame.Tools.Svc
             Instance = GetComponent<ServerManageSvc>();
         }
 
+        /// <summary>
+        /// 接收html函数的回调
+        /// 返回实验信息
+        /// </summary>
+        /// <param name="info">html传回的json格式的数据</param>
+        void init(string info)
+        {
+            InitinfoJson = info;
+            isConnectServer = true;
+
+            debugstr += "init is get \n";
+
+            OpenType(InitinfoJson);
+        }
+
         public override void InitSvc()
         {
-            DontDestroyOnLoad(transform.gameObject);
             GameObject obj = GameObject.Find("Jia");
             if (obj == null)
             {

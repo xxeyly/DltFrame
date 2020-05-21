@@ -3,6 +3,7 @@ using System.Collections;
 using LitJson;
 using System;
 using System.Collections.Generic;
+using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
@@ -426,7 +427,6 @@ public class GreatIdeaSvc : SvcBase
     public void SaveMoreData()
     {
         JsonWriter writer2 = new JsonWriter();
-
         writer2.WriteObjectStart();
 
         writer2.WritePropertyName("pid");
@@ -482,7 +482,7 @@ public class GreatIdeaSvc : SvcBase
         writer2.WriteArrayEnd();
         writer2.WriteObjectEnd();
 
-        //Debug.Log(writer2);
+        Debug.Log(writer2);
         ServerManageSvc.Instance.SendSaveSubject(writer2.ToString()); //向服务器传数据
     }
 

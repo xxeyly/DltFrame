@@ -118,14 +118,14 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
         private static FtpOperation _ftpOperation;
 
+        private void OnEnable()
+        {
+            InitData();
+            // Debug.Log("数据读取");
+        }
+
         public void OnGUI()
         {
-            if (!_initData)
-            {
-                InitData();
-                _initData = true;
-            }
-
             #region 打包方式
 
             EditorGUILayout.BeginHorizontal();
@@ -288,16 +288,9 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             #region 打包
 
             EditorGUILayout.BeginHorizontal();
-
-            if (GUILayout.Button("保存打包数据", GUILayout.MaxWidth(450), GUILayout.MaxHeight(40)))
-            {
-                SaveBuildData();
-            }
-
             //选择打包路径
-            if (GUILayout.Button("开始打包", GUILayout.MaxWidth(450), GUILayout.MaxHeight(40)))
+            if (GUILayout.Button("开始打包", GUILayout.MaxHeight(40)))
             {
-                SaveBuildData();
                 for (int i = 0; i < _copyFolderCount; i++)
                 {
                     if (_copyFolderPaths[i] != string.Empty && _pasteFolderPaths[i] != string.Empty)
@@ -322,7 +315,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
 #if UNITY_2017_1_OR_NEWER
                 BuildPipeline.BuildPlayer(FindEnableEditorScenes(), ProjectPath(), _buildTarget, BuildOptions.CompressWithLz4HC);
-                InitData();
 #endif
             }
 
@@ -338,7 +330,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         {
             //保存打包数据
             SaveBuildData();
-            InitData();
         }
 
         private void SaveBuildData()
@@ -552,7 +543,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
                 string uri = (path + "/" + dirName + "/");
                 if (DirectoryIsExist(uri, user, pwd))
                 {
-                    Debug.Log("已存在");
+                    // Debug.Log("已存在");
                     return true;
                 }
 
