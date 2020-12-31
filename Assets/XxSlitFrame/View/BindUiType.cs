@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace XxSlitFrame.View
@@ -16,10 +17,13 @@ namespace XxSlitFrame.View
             Dropdown,
             InputField,
             ScrollRect,
-            GameObject
+            GameObject,
+            Slider,
+            ChildList,
+            VideoPlayer
         }
 
-        [FormerlySerializedAs("Type")] 
-        public UiType type;
+        [FormerlySerializedAs("Type")] public UiType type;
+        public LocalBaseWindow childType;
     }
 }

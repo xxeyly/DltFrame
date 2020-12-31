@@ -1,8 +1,56 @@
 ﻿using UnityEngine;
+using UnityEngine.Rendering;
 using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools.General
 {
+    /// <summary>
+    /// 事件类型
+    /// </summary>
+    public enum ListenerEventType
+    {
+        Normal,
+        CameraMoveToTargetPos,
+        PropInit,
+        PropShowGroup,
+        PlayDialogueParagraph,
+        PlayTips,
+        StopTips,
+        PlayTipsAndAction,
+        SelectPlayVideoItem,
+        TrainTitleSetSceneName,
+        ShootingSceneInformationSetInfo,
+        SetSceneBackground,
+        ShootingSceneInformationSetBulletRemaining,
+        ShootingSceneInformationSetCountDown,
+        ShootingSceneInformationSetScore,
+        ShootingSceneInformationSetShootingRingNumber,
+        ShowAchievementStatistics
+    }
+
+    public enum AnimType
+    {
+        Normal,
+
+        /// <summary>
+        /// 自检
+        /// </summary>
+        SelfInspectionPage
+    }
+
+    public enum PropType
+    {
+        Normal,
+    }
+
+    /// <summary>
+    /// 相机位置类型
+    /// </summary>
+    public enum CameraPosType
+    {
+        默认位置,
+    }
+
     public static class General
     {
         #region 点击声音
@@ -14,7 +62,7 @@ namespace XxSlitFrame.Tools.General
         /// <summary>
         /// 视图切换时间
         /// </summary>
-        public const float ViewSwitchTime = 0.5f;
+        public const float ViewSwitchTime = 2f;
 
         /// <summary>
         /// 视图错误显示时间
@@ -24,12 +72,14 @@ namespace XxSlitFrame.Tools.General
         /// <summary>
         /// 版本信息位置
         /// </summary>
-        public const string VersionDataInfoPath = "VersionData/VersionInfo.Json";
+        public const string VersionDataInfoLocalPath = "/XxSlitFrame/Resources/VersionData/VersionInfo.Json";
+
+        public const string VersionDataInfoServerPath = "/VersionData/VersionInfo.Json";
 
         /// <summary>
         /// 文件下载路径
         /// </summary>
-        public const string DownFilePath = "DownFile/DownFileInfo.Json";
+        public const string DownFilePath = "/XxSlitFrame/Resources/DownFile/DownFileInfo.Json";
 
         #endregion
 
@@ -44,39 +94,42 @@ namespace XxSlitFrame.Tools.General
         #endregion
 
         /// <summary>
+        /// 获得网页跟目录地址
+        /// </summary>
+        /// <returns></returns>
+        public static string GetUrlRootPath()
+        {
+            Debug.Log("获取文件地址2");
+
+            string url = Application.absoluteURL;
+            //当前网页的url
+            int index = url.LastIndexOf('/');
+            if (index > 0)
+            {
+                var path = url.Substring(0, index);
+                path = path + '/';
+                return path;
+            }
+            else
+            {
+                Debug.LogError("未找到文件");
+                return "";
+            }
+        }
+
+        /// <summary>
         /// 获得版本信息地址
         /// </summary>
         /// <returns></returns>
-        public static string GetFileConfigPath(string relativePath)
+        public static string GetFileConfigPath()
         {
-#if UNITY_5
-            if (Application.isWebPlayer)
-            {
-#endif
-#if UNITY_2017_1_OR_NEWER
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
-#endif
-                return PersistentDataSvc.Instance.serverPath + "/" + relativePath;
-
-                /*string url = Application.absoluteURL;
-                //当前网页的url
-                int index = url.LastIndexOf('/');
-                if (index > 0)
-                {
-                    var path = url.Substring(0, index);
-                    path = path + '/' + relativePath;
-                    return path;
-                }
-                else
-                {
-                    Debug.LogError("未找到文件");
-                    return "";
-                }*/
+                return GetUrlRootPath() + VersionDataInfoServerPath;
             }
             else if (Application.isEditor)
             {
-                return "file://" + Application.dataPath + "/XxSlitFrame/Resources/" + relativePath;
+                return "file://" + Application.dataPath + VersionDataInfoLocalPath;
             }
             else
             {
@@ -90,33 +143,13 @@ namespace XxSlitFrame.Tools.General
         /// <returns></returns>
         public static string GetFileDataPath(string relativePath)
         {
-#if UNITY_5
-            if (Application.isWebPlayer)
-            {
-#endif
-#if UNITY_2017_1_OR_NEWER
             if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
-#endif
-                return PersistentDataSvc.Instance.serverPath;
-                /*string url = Application.absoluteURL;
-                //当前网页的url
-                int index = url.LastIndexOf('/');
-                if (index > 0)
-                {
-                    var path = url.Substring(0, index);
-                    path = path + '/' + relativePath;
-                    return path;
-                }
-                else
-                {
-                    Debug.LogError("未找到文件");
-                    return "";
-                }*/
+                return PersistentDataSvc.Instance.serverPath + relativePath;
             }
             else if (Application.isEditor)
             {
-                return "file://" + Application.dataPath + "/XxSlitFrame/" + relativePath;
+                return "file://" + Application.dataPath + "/" + relativePath;
             }
             else
             {

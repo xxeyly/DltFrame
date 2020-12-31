@@ -11,12 +11,13 @@ namespace XxSlitFrame.Tools
     /// </summary>
     public class GameRoot : MonoBehaviour
     {
-        public void GameRootInit()
+        public void GameRootInit(bool dontDestroyOnLoad)
         {
-            DontDestroyOnLoad(this);
-#if UNITY_EDITOR
-            ResSvc.Instance.StartDownProjectConfig();
-#endif
+            if (dontDestroyOnLoad)
+            {
+                DontDestroyOnLoad(this);
+            }
+
             //跟新场景信息
             SceneSvc.Instance.UpdateSceneNameOrIndex();
             //开启场景实时检测
@@ -31,7 +32,11 @@ namespace XxSlitFrame.Tools
                         //新场景了
                         if (PersistentDataSvc.Instance.sceneName != SceneManager.GetActiveScene().name)
                         {
-                            SceneSvc.Instance.InitSceneData();
+                            while (FindObjectsOfType<GameRootStart>().Length == 1)
+                            {
+                                SceneSvc.Instance.InitSceneData();
+                                return;
+                            }
                         }
 
                         break;
@@ -40,7 +45,11 @@ namespace XxSlitFrame.Tools
                         //新场景了
                         if (PersistentDataSvc.Instance.sceneIndex != SceneManager.GetActiveScene().buildIndex)
                         {
-                            SceneSvc.Instance.InitSceneData();
+                            while (FindObjectsOfType<GameRootStart>().Length == 1)
+                            {
+                                SceneSvc.Instance.InitSceneData();
+                                return;
+                            }
                         }
 
                         break;
@@ -57,6 +66,8 @@ namespace XxSlitFrame.Tools
                     CameraControl.Instance.SetCurrentCameraPosInfo();
                 }
             }, "开启相机位置信息实时记录", 0.01f, 0);
+            TimeSvc.Instance.AddImmortalTimeTask(() => { MouseSvc.Instance.MouseEnterState(); }, "鼠标实时监测", 0.01f, 0);
+
             if (PersistentDataSvc.Instance.jump)
             {
                 SceneSvc.Instance.UpdateSceneNameOrIndex();
@@ -67,6 +78,7 @@ namespace XxSlitFrame.Tools
             {
                 PersistentDataSvc.Instance.sceneLoadType = SceneLoadType.SceneName;
                 SceneSvc.Instance.UpdateSceneNameOrIndex();
+                SceneSvc.Instance.InitSceneStartSingletons();
             }
         }
     }

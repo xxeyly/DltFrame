@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using XxSlitFrame.Tools.General;
+using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools.ConfigData
 {
@@ -17,6 +19,7 @@ namespace XxSlitFrame.Tools.ConfigData
         {
             [Header("提示索引")] public int tipIndex;
             [Header("提示内容")] public string tipsContent;
+            [Header("执行事件")] public ListenerEventType endEvent;
             [Header("对话音频")] public AudioClip tipsAudioClip;
             [Header("确认操作")] public bool sureOperation;
         }

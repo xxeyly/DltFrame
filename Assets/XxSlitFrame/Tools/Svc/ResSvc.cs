@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using LitJson;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -171,8 +174,8 @@ namespace XxSlitFrame.Tools.Svc
         private IEnumerator GetDownLoadProjectConfig()
         {
             //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
-            Debug.Log(General.General.GetFileConfigPath(General.General.VersionDataInfoPath));
-            UnityWebRequest request = UnityWebRequest.Get(General.General.GetFileConfigPath(General.General.VersionDataInfoPath));
+            UnityWebRequest request =
+                UnityWebRequest.Get(General.General.GetFileConfigPath());
 
             //2、等待这个请求进行发送完
             yield return request.SendWebRequest();
@@ -180,18 +183,24 @@ namespace XxSlitFrame.Tools.Svc
             if (request.responseCode == 200)
             {
                 //获得下载文件配置信息
-                PersistentDataSvc.Instance.versionInfo = JsonUtility.FromJson<VersionInfo>(System.Text.Encoding.UTF8.GetString(request.downloadHandler.data));
+                // Debug.Log("从服务器拉取下载信息:VersionInfo");
+                /*PersistentDataSvc.Instance.versionInfo =
+                    JsonMapper.ToObject<VersionInfo>(Encoding.UTF8.GetString(request.downloadHandler.data));*/
             }
             else
             {
                 // Debug.Log("从本地拉取下载信息:VersionInfo");
                 PersistentDataSvc.Instance.versionInfo =
-                    JsonUtility.FromJson<VersionInfo>(System.Text.Encoding.UTF8.GetString(GetData<TextAsset>("VersionData/VersionInfo").bytes));
+                    JsonMapper.ToObject<VersionInfo>(
+                        Encoding.UTF8.GetString(GetData<TextAsset>("VersionData/VersionInfo").bytes));
             }
 
-            Debug.Log("当前版本信息:水印:" + PersistentDataSvc.Instance.versionInfo.watermark);
+#pragma warning disable 162
+            /*Debug.Log("当前版本信息:水印:" + PersistentDataSvc.Instance.versionInfo.watermark);
             Debug.Log("当前版本信息:下载:" + PersistentDataSvc.Instance.versionInfo.downLoad);
-            Debug.Log("当前版本信息:加读条:" + PersistentDataSvc.Instance.versionInfo.loadingProgress);
+            Debug.Log("当前版本信息:加读条:" + PersistentDataSvc.Instance.versionInfo.loadingProgress);*/
+#pragma warning restore 162
+
             //文件配置下载完毕
             PersistentDataSvc.Instance.downVersionOver = true;
             if (PersistentDataSvc.Instance.versionInfo.downLoad)
@@ -210,20 +219,23 @@ namespace XxSlitFrame.Tools.Svc
         private IEnumerator GetDownLoadFileInfo()
         {
             //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
-            UnityWebRequest request = UnityWebRequest.Get(General.General.GetFileConfigPath(General.General.DownFilePath));
+            UnityWebRequest request =
+                UnityWebRequest.Get(General.General.GetFileDataPath(General.General.DownFilePath));
             //2、等待这个请求进行发送完
             yield return request.SendWebRequest();
             if (request.responseCode == 200)
             {
-                // Debug.Log("下载文件配置信息:DownFileInfo:" + Constant.GetFileConfigPath(Constant.DownFilePath));
+                Debug.Log("下载文件配置信息:DownFileInfo:" + General.General.GetFileDataPath(General.General.DownFilePath));
                 //获得下载文件配置信息
-                PersistentDataSvc.Instance.downFileInfo = JsonUtility.FromJson<DownFile>(System.Text.Encoding.UTF8.GetString(request.downloadHandler.data));
+                PersistentDataSvc.Instance.downFileInfo =
+                    JsonUtility.FromJson<DownFile>(System.Text.Encoding.UTF8.GetString(request.downloadHandler.data));
             }
             else
             {
-                // Debug.Log("从本地拉取下载信息:DownFileInfo");
+                Debug.Log("从本地拉取下载信息:DownFileInfo");
                 PersistentDataSvc.Instance.downFileInfo =
-                    JsonUtility.FromJson<DownFile>(System.Text.Encoding.UTF8.GetString(GetData<TextAsset>("DownFile/DownFileInfo").bytes));
+                    JsonUtility.FromJson<DownFile>(
+                        System.Text.Encoding.UTF8.GetString(GetData<TextAsset>("DownFile/DownFileInfo").bytes));
             }
 
             //文件配置下载完毕
@@ -240,10 +252,12 @@ namespace XxSlitFrame.Tools.Svc
         private IEnumerator DownFileData()
         {
             //未下载完毕
-            if (PersistentDataSvc.Instance.downFileData.Count < PersistentDataSvc.Instance.downFileInfo.fileInfoList.Count)
+            if (PersistentDataSvc.Instance.downFileData.Count <
+                PersistentDataSvc.Instance.downFileInfo.fileInfoList.Count)
             {
                 //文件地址
-                string filePath = PersistentDataSvc.Instance.downFileInfo.fileInfoList[PersistentDataSvc.Instance.downFileData.Count].filePath;
+                string filePath = PersistentDataSvc.Instance.downFileInfo
+                    .fileInfoList[PersistentDataSvc.Instance.downFileData.Count].filePath;
                 //下载文件
                 UnityWebRequest request = UnityWebRequest.Get(General.General.GetFileDataPath(filePath));
                 Debug.Log("开始下载数据:" + General.General.GetFileDataPath(filePath));
@@ -255,14 +269,16 @@ namespace XxSlitFrame.Tools.Svc
 
                 //2、等待这个请求进行发送完
                 //初始化下载数据
-                PersistentDataSvc.Instance.downFileData.Add(PersistentDataSvc.Instance.downFileInfo.fileInfoList[PersistentDataSvc.Instance.downFileData.Count].fileName,
+                PersistentDataSvc.Instance.downFileData.Add(
+                    PersistentDataSvc.Instance.downFileInfo.fileInfoList[PersistentDataSvc.Instance.downFileData.Count]
+                        .fileName,
                     request.downloadHandler.data);
                 StartCoroutine(DownFileData());
             }
             else
             {
                 PersistentDataSvc.Instance.downFileOver = true;
-                // Debug.Log("所有文件下载完毕");
+                Debug.Log("所有文件下载完毕");
             }
         }
 
@@ -314,6 +330,11 @@ namespace XxSlitFrame.Tools.Svc
             /// 场景进度
             /// </summary>
             [Header("场景进度")] public bool sceneProgress;
+
+            /// <summary>
+            /// 考核时间
+            /// </summary>
+            [Header("考核时间")] public int assessmentTime;
         }
 
         /// <summary>
@@ -338,7 +359,26 @@ namespace XxSlitFrame.Tools.Svc
                 }
 
                 FileStream aFile = new FileStream(path + "/" + fileName, FileMode.Create);
-                StreamWriter sw = new StreamWriter(aFile);
+                StreamWriter sw = new StreamWriter(aFile, Encoding.UTF8);
+                sw.WriteLine(information);
+                sw.Close();
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+#endif
+            }
+
+            public static void SaveTextToLoad(string path, string information)
+            {
+                if (File.Exists(path))
+                {
+                }
+                else
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                FileStream aFile = new FileStream(path, FileMode.Create);
+                StreamWriter sw = new StreamWriter(aFile, Encoding.UTF8);
                 sw.WriteLine(information);
                 sw.Close();
 #if UNITY_EDITOR
@@ -368,6 +408,48 @@ namespace XxSlitFrame.Tools.Svc
                 var textData = sr.ReadToEnd();
                 sr.Close();
                 return textData;
+            }
+
+            /// <summary>
+            /// 读取本地文件信息
+            /// </summary>
+            /// <param name="path">路径</param>
+            /// <param name="fileName">文件名</param>
+            /// <returns></returns>
+            public static string GetTextToLoad(string path)
+            {
+//            UnityEngine.Debug.Log(Path + "/" + FileName);
+                if (File.Exists(path))
+                {
+                }
+                else
+                {
+                    Debug.LogError("文件不存在:" + path);
+                }
+
+                FileStream aFile = new FileStream(path, FileMode.Open);
+                StreamReader sr = new StreamReader(aFile);
+                var textData = sr.ReadToEnd();
+                sr.Close();
+                return textData;
+            }
+
+            /// <summary>获取文件的md5校验码</summary>
+            public static string GetMD5HashFromFile(string fileName)
+            {
+                if (File.Exists(fileName))
+                {
+                    FileStream file = new FileStream(fileName, FileMode.Open);
+                    MD5 md5 = new MD5CryptoServiceProvider();
+                    byte[] retVal = md5.ComputeHash(file);
+                    file.Close();
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < retVal.Length; i++)
+                        sb.Append(retVal[i].ToString("x2"));
+                    return sb.ToString();
+                }
+
+                return null;
             }
         }
     }

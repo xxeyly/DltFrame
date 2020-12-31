@@ -13,19 +13,25 @@ MonoBehaviour:
   m_Name: CustomBuildData
   m_EditorClassIdentifier: 
   buildTarget: 20
-  exportPath: H:/sltkit/Software/Apache24/htdocs
-  exportProjectName: xxslitFrame
+  exportPath: D:/sltkit/Software/Xampp/htdocs
+  exportEnProjectName: IntrinsicTechnology
+  exportCnProjectName: "\u672C\u5B89\u79D1\u6280"
   projectNameDate: 0
-  projectBuildEdition: 0
-  copyFolderPaths:
-  - H:/sltkit/Unity/Git/xxslitFrame/Assets/XxSlitFrame/Resources/DownFile
-  - H:/sltkit/Unity/Git/xxslitFrame/Assets/XxSlitFrame/Resources/VersionData
-  pasteFolderPaths:
-  - DownFile
-  - VersionData
-  updateToFtp: 1
-  copyFolderCount: 2
+  chineseShell: 1
+  learningModel: 0
+  assessmentMode: 0
+  watermark: 0
+  folderCopies:
+  - copyFolderPath: D:/sltkit/Svn/4/IntrinsicTechnology/Assets/XxSlitFrame/Resources/VersionData
+    pasteFolderPath: VersionData
+  updateToFtp: 0
   ftpServerPath: 192.168.1.100
   ftpUser: lab
   ftpPwd: lab
   ftpRoot: xxslit
+  versionSet: 0
+  versionWatermark: 0
+  versionDownLoad: 0
+  versionLoadingProgress: 0
+  versionSceneProgress: 0
+  versionAssessmentTime: 300

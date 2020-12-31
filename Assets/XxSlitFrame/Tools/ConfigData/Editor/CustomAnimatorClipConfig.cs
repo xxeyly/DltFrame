@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace XxSlitFrame.Tools.ConfigData.Editor
 {
-    [Serializable]
+    [CreateAssetMenu(fileName = "CustomAnimatorClipConfig", menuName = "配置文件/动画文件关联配置", order = 1)]
     public class CustomAnimatorClipConfig : ScriptableObject
     {
         /// <summary>
-        /// 当前动画文件
+        /// 动画控制器名称
         /// </summary>
-        [Header("当前动画文件路径")] public GameObject currentFbx;
+        [Header("场景控制器")] public Animator animatorController;
 
         /// <summary>
         /// 动画控制器名称
@@ -21,9 +22,13 @@ namespace XxSlitFrame.Tools.ConfigData.Editor
         /// </summary>
         [Header("输出文件夹")] public string exportPath;
 
-        /// <summary>
-        /// 输出文件路径
-        /// </summary>
-        [Header("输出文件路径")] public string profilePath;
+        public List<AnimFbxAndAnimClipData> animFbxAndAnimClipDatas = new List<AnimFbxAndAnimClipData>();
+    }
+
+    [Serializable]
+    public class AnimFbxAndAnimClipData
+    {
+        public GameObject animFbx;
+        public AnimatorClipData animatorClipData;
     }
 }

@@ -56,6 +56,20 @@ namespace XxSlitFrame.Tools.Svc
             Instance = GetComponent<ViewSvc>();
         }
 
+        /// <summary>
+        /// 冻结视图初始化
+        /// </summary>
+        public void FrozenInit()
+        {
+            foreach (BaseWindow window in allViewWind)
+            {
+                if (window.GetViewShowType() == ViewShowType.Frozen)
+                {
+                    window.Init();
+                }
+            }
+        }
+
         public override void InitSvc()
         {
             allViewWind = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
@@ -65,11 +79,6 @@ namespace XxSlitFrame.Tools.Svc
             foreach (BaseWindow window in allViewWind)
             {
                 window.ViewStartInit();
-            }
-
-            foreach (BaseWindow window in allViewWind)
-            {
-                window.First();
             }
 
             //是否开启水印
@@ -224,14 +233,11 @@ namespace XxSlitFrame.Tools.Svc
         /// <param name="type"></param>
         public void ShowView(Type type)
         {
-            if (!_activeViewDlc[type].GetDisplay())
+            _activeViewDlc[type].DisPlay(true);
+            _activeViewDlc[type].Init();
+            if (!_allActiveView.Contains(type))
             {
-                _activeViewDlc[type].DisPlay(true);
-                _activeViewDlc[type].Init();
-                if (!_allActiveView.Contains(type))
-                {
-                    _allActiveView.Add(type);
-                }
+                _allActiveView.Add(type);
             }
         }
 
@@ -287,8 +293,8 @@ namespace XxSlitFrame.Tools.Svc
         /// <param name="type"></param>
         public void HideView(Type type)
         {
-            _activeViewDlc.TryGetValue(type, out var tempView);
-            if (tempView != null) tempView.DisPlay(false);
+            BaseWindow baseWindow = _activeViewDlc[type];
+            if (baseWindow != null) baseWindow.DisPlay(false);
             if (_allActiveView.Contains(type))
             {
                 _allActiveView.Remove(type);
@@ -393,7 +399,9 @@ namespace XxSlitFrame.Tools.Svc
 
         #endregion
 
-
+        /// <summary>
+        /// 所有视图的隐藏摧毁任务
+        /// </summary>
         public void AllViewDestroy()
         {
             foreach (BaseWindow window in allViewWind)

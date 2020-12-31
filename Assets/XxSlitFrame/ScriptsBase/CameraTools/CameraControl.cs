@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using XxSlitFrame.Tools;
 using XxSlitFrame.Tools.ConfigData;
+using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc;
 
 namespace CameraTools
@@ -27,17 +29,17 @@ namespace CameraTools
         [SerializeField] [Header("移动速度")] private float moveSpeed = 1; //移动速度
         [SerializeField] [Header("旋转速度")] private float rotationSpeed = 2; //旋转速度
 
-        [SerializeField] [Header("相机下旋转最高值")] [Range(0, 90)]
-        private float yMinLimit = 45; //相机上旋转最低值
+        [SerializeField] [Header("相机上旋转最高值")] [Range(0, 90)]
+        private float downRange = 45; //相机上旋转最低值
 
-        [SerializeField] [Header("相机上旋转最高值")] [Range(30, 60)]
-        private float yMaxLimit = 30; //相机下旋转最高值
+        [SerializeField] [Header("相机下旋转最高值")] [Range(0, -30)]
+        private float topRange = 30; //相机下旋转最高值
 
         [SerializeField] [Header("相机高度最小值")] [Range(0.5f, 2)]
         private float cameraHeightMin = 0.5f; //相机高度最小值
 
         [SerializeField] [Header("相机高度最大值")] [Range(2f, 5)]
-        private float cameraHeightMax = 2; //相机高度最大值
+        private float cameraHeightMax = 20; //相机高度最大值
 
         [HideInInspector] public Camera currentCamera; //当前相机
         private float _x;
@@ -57,6 +59,11 @@ namespace CameraTools
         public void SetCurrentCameraPosInfo()
         {
             cameraPosData.SetCameraPosInfo(_cameraParent.transform.position, transform.localPosition, transform.localEulerAngles, currentCamera.fieldOfView);
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(cameraPosData);
+            // 保存所有修改
+            AssetDatabase.SaveAssets();
+#endif
         }
 
         public override void Init()
@@ -67,7 +74,7 @@ namespace CameraTools
             cameraMinField = 40;
             cameraMaxField = 60;
             ResetRot();
-            ListenerSvc.Instance.AddListenerEvent<CameraPosData.CameraPosType>(ListenerEventType.CameraMoveToTargetPos, ChangePosition);
+            ListenerSvc.Instance.AddListenerEvent<CameraPosType>(ListenerEventType.CameraMoveToTargetPos, ChangePosition);
         }
 
         void Update()
@@ -98,11 +105,11 @@ namespace CameraTools
             float height;
             if (Input.GetKey(KeyCode.Q))
             {
-                height = -1;
+                height = -1 * PersistentDataSvc.Instance.cameraSpeed;
             }
             else if (Input.GetKey(KeyCode.E))
             {
-                height = 1;
+                height = 1 * PersistentDataSvc.Instance.cameraSpeed;
             }
             else
             {
@@ -114,7 +121,7 @@ namespace CameraTools
             if (Math.Abs(v) > 0 || Math.Abs(h) > 0)
             {
                 _cameraParent.GetComponent<NavMeshAgent>()
-                    .Move(transform.TransformDirection(moveSpeed * Time.deltaTime * new Vector3(h, 0, v)));
+                    .Move(transform.TransformDirection(moveSpeed * Time.deltaTime * new Vector3(h, 0, v) * PersistentDataSvc.Instance.cameraSpeed));
             }
 
             if (height < 0)
@@ -138,7 +145,7 @@ namespace CameraTools
         /// <summary>
         /// 更改位置
         /// </summary>
-        public void ChangePosition(CameraPosData.CameraPosType cameraPosType)
+        public void ChangePosition(CameraPosType cameraPosType)
         {
             CameraPosInfo cameraPosInfo = cameraPosData.GetCameraPosInfoByCameraPosType(cameraPosType);
             cameraPosData.currentCameraPosType = cameraPosType;
@@ -175,7 +182,7 @@ namespace CameraTools
         private void ResetRot()
         {
             _x = transform.localEulerAngles.y;
-            if (transform.localEulerAngles.x > Mathf.Abs(yMinLimit) + 0.1f)
+            if (transform.localEulerAngles.x > Mathf.Abs(downRange) + 0.1f)
             {
                 _y = transform.localEulerAngles.x - 360;
             }
@@ -193,13 +200,13 @@ namespace CameraTools
             if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
                 if (currentCamera.fieldOfView < cameraMaxField)
-                    currentCamera.fieldOfView += 2;
+                    currentCamera.fieldOfView += 2 * PersistentDataSvc.Instance.cameraSpeed;
             }
 
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
                 if (currentCamera.fieldOfView > cameraMinField)
-                    currentCamera.fieldOfView -= 2;
+                    currentCamera.fieldOfView -= 2 * PersistentDataSvc.Instance.cameraSpeed;
             }
         }
 
@@ -210,9 +217,9 @@ namespace CameraTools
         {
             if (Input.GetMouseButton(1))
             {
-                _x += Input.GetAxis("Mouse X") * rotationSpeed;
-                _y -= Input.GetAxis("Mouse Y") * rotationSpeed;
-                _y = ClampAngle(_y, -yMinLimit, yMaxLimit);
+                _x += Input.GetAxis("Mouse X") * rotationSpeed * PersistentDataSvc.Instance.cameraSpeed;
+                _y -= Input.GetAxis("Mouse Y") * rotationSpeed * PersistentDataSvc.Instance.cameraSpeed;
+                _y = ClampAngle(_y, downRange, topRange);
 //            Quaternion rotation1 = Quaternion.Euler(y, x, 0.0f);
                 transform.localEulerAngles = new Vector3(_y, _x, 0f);
 //            transform.localRotation = rotation1;
@@ -223,29 +230,29 @@ namespace CameraTools
         /// 修正夹角
         /// </summary>
         /// <param name="angle"></param>
-        /// <param name="min"></param>
-        /// <param name="max"></param>
+        /// <param name="down"></param>
+        /// <param name="top"></param>
         /// <returns></returns>
-        private float ClampAngle(float angle, float min, float max)
+        private float ClampAngle(float angle, float down, float top)
         {
             if (angle > 0)
             {
-                if (angle < max)
+                if (angle < down)
                 {
                     return angle;
                 }
 
-                return max;
+                return down;
             }
 
             if (angle < 0)
             {
-                if (angle > min)
+                if (angle > top)
                 {
                     return angle;
                 }
 
-                return min;
+                return top;
             }
 
             return angle;

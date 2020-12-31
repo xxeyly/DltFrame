@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
+using XxSlitFrame.Tools.Svc;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools
@@ -11,11 +13,13 @@ namespace XxSlitFrame.Tools
     /// </summary>
     public class GameRootStart : MonoBehaviour
     {
+        public static GameRootStart Instance;
 #pragma warning disable 649
-        [SerializeField] private GameObject gameRootCanvas;
         public List<SvcBase> activeSvcBase;
+        public List<StartSingleton> sceneStartSingletons;
+        [Header("是否保留")] public bool dontDestroyOnLoad;
 
-        private void Start()
+        private void OnEnable()
         {
             //如果场景中有GameRoot,摧毁当前物体
             if (FindObjectOfType<GameRoot>())
@@ -24,26 +28,19 @@ namespace XxSlitFrame.Tools
             }
             else
             {
-                if (gameRootCanvas != null)
-                {
-                    //服务开启
-                    SvcStart();
-                    //服务初始化
-                    SvcInit();
-                    Debug.Log("服务开启");
-                    //开启
-                    GameObject cloneGameRootCanvas = Instantiate(this.gameRootCanvas, transform, true);
-                    cloneGameRootCanvas.transform.localPosition = Vector3.zero;
-                    cloneGameRootCanvas.transform.localScale = Vector3.one;
-                    cloneGameRootCanvas.name = "RootCanvas(" + SceneManager.GetActiveScene().name + ")";
-                    GameRoot gameRoot = gameObject.AddComponent<GameRoot>();
-                    gameRoot.GameRootInit();
-                }
-                else
-                {
-                    Debug.Log("_gameRootCanvas为空");
-                }
+                Instance = GetComponent<GameRootStart>();
+                //服务开启
+                SvcStart();
+                //服务初始化
+                SvcInit();
+                // Debug.Log("服务开启");
+                GameRoot gameRoot = gameObject.AddComponent<GameRoot>();
+                gameRoot.GameRootInit(dontDestroyOnLoad);
             }
+        }
+
+        protected void Awake()
+        {
         }
 
         private void SvcStart()
@@ -58,7 +55,10 @@ namespace XxSlitFrame.Tools
         {
             foreach (SvcBase svcBase in activeSvcBase)
             {
-                svcBase.InitSvc();
+                if (svcBase.init)
+                {
+                    svcBase.InitSvc();
+                }
             }
         }
     }

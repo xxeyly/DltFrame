@@ -2,73 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools.Svc
 {
-    /// <summary>
-    /// 事件类型
-    /// </summary>
-    public enum ListenerEventType
-    {
-        Normal,
-
-        /// <summary>
-        /// 根据步骤索引执行事件
-        /// </summary>
-        InvokeEventByStepIndex,
-
-        /// <summary>
-        /// 跳转下一步骤
-        /// </summary>
-        SkipToNext,
-
-        /// <summary>
-        /// 相机移动到目标位置
-        /// </summary>
-        CameraMoveToTargetPos,
-
-        /// <summary>
-        /// 道具初始化
-        /// </summary>
-        PropInit,
-
-        /// <summary>
-        /// 显示道具组
-        /// </summary>
-        PropShowGroup,
-
-        /// <summary>
-        /// 打开世界操作点
-        /// </summary>
-        OpenWorldPoint,
-
-        /// <summary>
-        /// 关闭世界操作点
-        /// </summary>
-        CloseWorldPoint,
-
-        /// <summary>
-        /// 小步骤知识点
-        /// </summary>
-        SetSmallKnowledgePointsContent,
-
-        /// <summary>
-        /// 显示深度提示
-        /// </summary>
-        IntermittentNegativePressureBackPumpingShowDepth,
-
-        /// <summary>
-        /// 增加用物选择
-        /// </summary>
-        AddMaterialPreparationItem,
-
-        /// <summary>
-        /// 用物栏关闭提示
-        /// </summary>
-        UseBarCloseSwitchTip,
-    }
-
     public class ListenerSvc : SvcBase
     {
         public static ListenerSvc Instance;
@@ -111,7 +49,10 @@ namespace XxSlitFrame.Tools.Svc
             }
             else
             {
-                Debug.LogError(eventType + "该事件已经被绑定了");
+                if (eventType != ListenerEventType.Normal)
+                {
+                    Debug.LogError(eventType + "该事件已经被绑定了");
+                }
             }
         }
 
@@ -154,7 +95,42 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
+        public void AddListenerEvent<T, TY, TYX>(ListenerEventType eventType, CallBack<T, TY, TYX> callBack)
+        {
+            if (!listenerDic.ContainsKey(eventType))
+            {
+                listenerDic.Add(eventType, callBack);
+            }
+            else
+            {
+                Debug.LogError("该事件已经被绑定了");
+            }
+        }
+
+        /// <summary>
+        /// 添加事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="callBack"></param>
         public void AddListenerEvent<T, TY, TYX, TYXZ>(ListenerEventType eventType, CallBack<T, TY, TYX, TYXZ> callBack)
+        {
+            if (!listenerDic.ContainsKey(eventType))
+            {
+                listenerDic.Add(eventType, callBack);
+            }
+            else
+            {
+                Debug.LogError("该事件已经被绑定了");
+            }
+        }
+
+        /// <summary>
+        /// 添加事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="callBack"></param>
+        public void AddListenerEvent<T, TY, TYX, TYXZ, TYXZW>(ListenerEventType eventType,
+            CallBack<T, TY, TYX, TYXZ, TYXZW> callBack)
         {
             if (!listenerDic.ContainsKey(eventType))
             {
@@ -196,7 +172,10 @@ namespace XxSlitFrame.Tools.Svc
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                if (eventType != ListenerEventType.Normal)
+                {
+                    Debug.LogError("该事件没有被绑定过:" + eventType);
+                }
             }
         }
 
@@ -264,6 +243,24 @@ namespace XxSlitFrame.Tools.Svc
             if (listenerDic.ContainsKey(eventType))
             {
                 ((CallBack<T, Y, X, Z>) listenerDic[eventType]).Invoke(t, y, x, z);
+            }
+            else
+            {
+                Debug.LogError("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        /// <summary>
+        /// 执行事件
+        /// </summary>
+        /// <param name="eventType"></param>r
+        /// <param name="t"></param>
+        /// <param name="y"></param>
+        public void ExecuteEvent<T, Y, X, Z, W>(ListenerEventType eventType, T t, Y y, X x, Z z, W w)
+        {
+            if (listenerDic.ContainsKey(eventType))
+            {
+                ((CallBack<T, Y, X, Z, W>) listenerDic[eventType]).Invoke(t, y, x, z, w);
             }
             else
             {

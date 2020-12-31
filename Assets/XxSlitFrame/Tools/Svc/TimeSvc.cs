@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 using Random = UnityEngine.Random;
+
+// ReSharper disable Unity.InefficientPropertyAccess
 
 namespace XxSlitFrame.Tools.Svc
 {
@@ -21,6 +24,8 @@ namespace XxSlitFrame.Tools.Svc
         private List<int> _tidTimeImmortalList;
         private List<int> _tidSwitchList;
         private bool _clear;
+        public List<string> currentTime;
+        public DayOfWeek currentWeek;
 
         [HideInInspector] [Header("所有计时任务")] [SerializeField]
         public List<TimeTaskList> timeTaskList;
@@ -38,6 +43,63 @@ namespace XxSlitFrame.Tools.Svc
             _tidTimeList = new List<int>();
             _tidSwitchList = new List<int>();
             _tidTimeImmortalList = new List<int>();
+            currentTime = new List<string>() {"", "", "", "", "", ""};
+            UpdateCurrentSystemTime();
+        }
+
+        /// <summary>
+        /// 返回当前系统时间
+        /// </summary>
+        /// <returns></returns>
+        public void UpdateCurrentSystemTime()
+        {
+            currentTime[0] = DateTime.Now.Year.ToString();
+            if (DateTime.Now.Month < 10)
+            {
+                currentTime[1] = "0" + DateTime.Now.Month;
+            }
+            else
+            {
+                currentTime[1] = DateTime.Now.Month.ToString();
+            }
+
+            if (DateTime.Now.Day < 10)
+            {
+                currentTime[2] = "0" + DateTime.Now.Day;
+            }
+            else
+            {
+                currentTime[2] = DateTime.Now.Day.ToString();
+            }
+
+            if (DateTime.Now.Hour < 10)
+            {
+                currentTime[3] = "0" + DateTime.Now.Hour;
+            }
+            else
+            {
+                currentTime[3] = DateTime.Now.Hour.ToString();
+            }
+
+            if (DateTime.Now.Minute < 10)
+            {
+                currentTime[4] = "0" + DateTime.Now.Minute;
+            }
+            else
+            {
+                currentTime[4] = DateTime.Now.Minute.ToString();
+            }
+
+            if (DateTime.Now.Second < 10)
+            {
+                currentTime[5] = "0" + DateTime.Now.Second;
+            }
+            else
+            {
+                currentTime[5] = DateTime.Now.Second.ToString();
+            }
+
+            currentWeek = DateTime.Now.DayOfWeek;
         }
 
         /// <summary>
@@ -360,8 +422,9 @@ namespace XxSlitFrame.Tools.Svc
 
         #endregion
 
-        private void Update()
+        private void FixedUpdate()
         {
+            UpdateCurrentSystemTime();
             if (!_clear)
             {
                 if (_taskTimeList != null)
@@ -576,6 +639,7 @@ namespace XxSlitFrame.Tools.Svc
             return _timeList;
         }
 
+
         /// <summary>
         /// 时间转换秒数
         /// </summary>
@@ -584,6 +648,61 @@ namespace XxSlitFrame.Tools.Svc
         public int TimeConversion(List<int> time)
         {
             return time[0] * 600 + time[1] * 60 + time[2] * 10 + time[3];
+        }
+
+        /// <summary>
+        /// 图片闪烁
+        /// </summary>
+        /// <param name="twinkleImage"></param>
+        /// <param name="twinkleInterval"></param>
+        /// <returns></returns>
+        public int ImageTwinkle(Image twinkleImage, float twinkleInterval)
+        {
+            int twinkleTimeTask = 0;
+            float apache = 1f;
+            bool _enhance = true;
+            twinkleTimeTask = Instance.AddTimeTask(() =>
+            {
+                if (_enhance)
+                {
+                    apache -= twinkleInterval;
+                    if (apache <= 0.2)
+                    {
+                        _enhance = false;
+                    }
+                }
+                else
+                {
+                    apache += twinkleInterval;
+                    if (apache >= 1)
+                    {
+                        _enhance = true;
+                    }
+                }
+
+                twinkleImage.color =
+                    new Color(twinkleImage.color.r, twinkleImage.color.g, twinkleImage.color.b, apache);
+            }, "提示", twinkleInterval, 0);
+            return twinkleTimeTask;
+        }
+
+        /// <summary>
+        /// 显示错误提示
+        /// </summary>
+        /// <param name="errorTips">错误提示面板</param>
+        /// <param name="errorTipContent">错误提示内容文本</param>
+        /// <param name="content">错误提示内容</param>
+        /// <param name="action">错误提示完毕后执行事件</param>
+        /// <returns></returns>
+        public int ShowErrorTip(GameObject errorTips, Text errorTipContent, string content, UnityAction action = null)
+        {
+            int errorTipsTimeTask = 0;
+            errorTips.SetActive(true);
+            errorTipContent.text = content;
+            action?.Invoke();
+            errorTipsTimeTask = AddTimeTask(() => { errorTips.SetActive(false); }, "错误提示内容",
+                General.General.ViewErrorTime);
+            return errorTipsTimeTask;
         }
     }
 

@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace XxSlitFrame.Tools.ConfigData.Editor
 {
-    [CreateAssetMenu(fileName = "AnimatorClipData", menuName = "配置文件/动画配置", order = 1)]
+    [CreateAssetMenu(fileName = "AnimatorClipData", menuName = "配置文件/动画片段配置", order = 1)]
     public class AnimatorClipData : ScriptableObject
     {
-        [HideInInspector] public List<AnimatorClipDataInfo> animatorClipDataInfos;
+        [HideInInspector] public List<AnimatorClipDataInfo> animatorClipDataInfos = new List<AnimatorClipDataInfo>();
 
         [Serializable]
         public class AnimatorClipDataInfo
@@ -46,6 +46,11 @@ namespace XxSlitFrame.Tools.ConfigData.Editor
             /// 是否循环
             /// </summary>
             [Header("是否循环")] public bool animatorClipIsLoop;
+
+            /// <summary>
+            /// 是否倒放
+            /// </summary>
+            [Header("是否循环")] public bool animatorClipIsRewind;
         }
     }
 }

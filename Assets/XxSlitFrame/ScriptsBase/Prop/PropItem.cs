@@ -1,56 +1,127 @@
-﻿using System.Collections.Generic;
-// using HighlightPlus;
+﻿using System;
+using System.Collections.Generic;
+#if HighlightEffect
+using HighlightPlus;
+#endif
 using UnityEngine;
 using UnityEngine.Events;
-using XAnimator.Base;
-using XxSlitFrame.Tools;
-using XxSlitFrame.Tools.ConfigData;
+using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc;
 
 namespace Prop
 {
-    public class PropItem : StartSingleton
+    public class PropItem : MonoBehaviour
     {
-        public static PropItem Instance;
+        private Collider _collider;
 
-        [Header("物品类型")] public PropItemData.PropType propType;
-        // [Header("高亮物体")] public HighlightEffect highlightEffect;
+        [Header("物品类型")] public PropType propType;
+#if HighlightEffect
+        [Header("高亮物体")] public HighlightEffect highlightEffect;
+#endif
 
-        [SerializeField] private Dictionary<PropItemData.PropType, UnityAction> actionDic;
-        [Header("不隐藏")] public bool hiding;
+        [SerializeField] private Dictionary<PropType, UnityAction> actionDic;
 
-        public override void StartSvc()
+        /// <summary>
+        /// 初始触发
+        /// </summary>
+        public bool initCollider;
+
+        public void Init()
         {
-            Instance = GetComponent<PropItem>();
-            Init();
-        }
-
-        public override void Init()
-        {
-            /*if (GetComponent<HighlightEffect>())
+            _collider = GetComponent<Collider>();
+            if (_collider != null)
             {
-                highlightEffect = GetComponent<HighlightEffect>();
-            }*/
-
-            actionDic = new Dictionary<PropItemData.PropType, UnityAction>
+                _collider.enabled = initCollider;
+            }
+#if HighlightEffect
+            if (highlightEffect != null)
+            {
+                highlightEffect.highlighted = false;
+            }
+#endif
+            actionDic = new Dictionary<PropType, UnityAction>
             {
                 {
-                    PropItemData.PropType.拔针注射器, () =>
-                    {
-                        Debug.Log("拔针:注射器");
-                        /*AnimatorControllerManager.Instance.PlayAnim(AnimType.PullOutSyringe, () => { ListenerSvc.Instance.ImplementListenerEvent(ListenerEventType.SkipToNext); });
-                        PropManager.Instance.HideHighlightObjByPropType(PropItemData.PropType.拔针注射器);*/
-                    }
-                },
-                {
-                    PropItemData.PropType.消毒手臂, () => { Debug.Log("消毒手臂"); }
+                    PropType.Normal, () => { Debug.Log("Normal"); }
                 }
             };
+        }
+
+        /// <summary>
+        /// 显示高亮
+        /// </summary>
+        public void ShowHigh()
+        {
+#if HighlightEffect
+            if (highlightEffect != null)
+            {
+                highlightEffect.highlighted = true;
+            }
+#endif
+        }
+
+        /// <summary>
+        /// 隐藏高亮
+        /// </summary>
+        public void HideHigh()
+        {
+#if HighlightEffect
+            if (highlightEffect != null)
+            {
+                highlightEffect.highlighted = false;
+            }
+#endif
+        }
+
+        /// <summary>
+        /// 显示物体
+        /// </summary>
+        public void ShowObj()
+        {
+            gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// 隐藏物体
+        /// </summary>
+        public void HideObj()
+        {
+            gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// 打开触发
+        /// </summary>
+        public void OpenTrigger()
+        {
+            if (_collider != null)
+            {
+                _collider.enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// 关闭触发
+        /// </summary>
+        public void CloseTrigger()
+        {
+            if (_collider != null)
+            {
+                _collider.enabled = false;
+            }
         }
 
         private void OnMouseDown()
         {
             actionDic[propType]?.Invoke();
+        }
+
+        private void OnMouseEnter()
+        {
+        }
+
+        private void OnMouseExit()
+        {
         }
     }
 }

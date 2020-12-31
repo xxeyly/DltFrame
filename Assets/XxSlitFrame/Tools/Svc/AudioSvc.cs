@@ -24,18 +24,19 @@ namespace XxSlitFrame.Tools.Svc
 
         public override void InitSvc()
         {
+            //创建音效组件
             if (_effectAudioSource == null)
             {
                 _effectAudioSource = gameObject.AddComponent<AudioSource>();
                 _effectAudioSource.playOnAwake = false;
             }
-
+            //创建提示与对话组件
             if (_tipAndDialogAudioSource == null)
             {
                 _tipAndDialogAudioSource = gameObject.AddComponent<AudioSource>();
                 _tipAndDialogAudioSource.playOnAwake = false;
             }
-
+            //创建背景音乐组件
             if (_backgroundAudioSource == null)
             {
                 _backgroundAudioSource = gameObject.AddComponent<AudioSource>();
@@ -43,7 +44,7 @@ namespace XxSlitFrame.Tools.Svc
                 _backgroundAudioSource.volume = 0.5f;
                 _backgroundAudioSource.loop = true;
             }
-
+            //音效初始化
             _audioDlc = new Dictionary<AudioData.AudioType, AudioClip>();
             foreach (AudioData.AudioDataInfo audioDataInfo in audioData.audioDataInfos)
             {
@@ -52,7 +53,7 @@ namespace XxSlitFrame.Tools.Svc
                     _audioDlc.Add(audioDataInfo.audioType, audioDataInfo.dialogueAudioClip);
                 }
             }
-
+            //播放背景音乐
             PlayBackgroundAudio();
         }
 
@@ -162,7 +163,7 @@ namespace XxSlitFrame.Tools.Svc
             }
             else
             {
-                Debug.LogError("没有指定背景音乐");
+                // Debug.LogError("没有指定背景音乐");
             }
         }
     }

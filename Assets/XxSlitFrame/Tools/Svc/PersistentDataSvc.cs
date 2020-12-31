@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using XxSlitFrame.Tools.Svc.BaseSvc;
+using Random = UnityEngine.Random;
 
 namespace XxSlitFrame.Tools.Svc
 {
@@ -13,6 +15,13 @@ namespace XxSlitFrame.Tools.Svc
         Normal,
         SceneName,
         SceneIndex
+    }
+
+    public enum QualitySettingType
+    {
+        Low,
+        Center,
+        High
     }
 
     /// <summary>
@@ -52,9 +61,9 @@ namespace XxSlitFrame.Tools.Svc
         [Header("下载文件配置数据完毕")] public bool downFileInfoOver;
         [Header("下载项目配置数据完毕")] public bool downVersionOver;
         [Header("下载数据完毕")] public bool downFileOver;
-
         [Header("下载文件数据")] [SerializeField] public Dictionary<string, byte[]> downFileData;
-
+        [Header("相机速度值")] public float cameraSpeed = 1;
+        [Header("自动播放模式")] public bool autoPlay = false;
 
         /// <summary>
         /// 当前大步骤
@@ -70,17 +79,16 @@ namespace XxSlitFrame.Tools.Svc
         /// 当前小步骤
         /// </summary>
         [Header("当前小小步骤")] public int currentStepSmallSmallIndex;
-#if UNITY_WEBGL && !UNITY_EDITOR
-        [DllImport("__Internal")]
-        private static extern void GetIP();
-#endif
+
+        [Header("当前质量")] public QualitySettingType qualitySettingType = QualitySettingType.High;
+        [Header("鼠标状态")] public bool mouseState;
+
         public override void InitSvc()
         {
             audioState = true;
-            gameObject.name = "ServerURL";
-#if UNITY_WEBGL && !UNITY_EDITOR
-            GetIP();
-#endif
+            // gameObject.name = "ServerURL";
+            // Debug.Log("下载配置文件");
+            ResSvc.Instance.StartDownProjectConfig();
         }
 
         /// <summary>
@@ -94,24 +102,21 @@ namespace XxSlitFrame.Tools.Svc
         [Header("服务器地址")] public string serverPath;
 
         /// <summary>
-        /// 设置服务器地址
+        /// 平台加载
         /// </summary>
-        /// <param name="url"></param>
-        private void SetServerURL(string url)
-        {
-            Debug.Log("获得服务器地址:" + url);
-            serverPath = url;
-#if UNITY_WEBGL
-            //下载配置文件
-            Debug.Log("下载配置文件");
-            ResSvc.Instance.StartDownProjectConfig();
-#endif
-        }
+        [Header("平台加载")] public bool platformLoad;
 
+        [Header("场景资源加载完毕")] public bool sceneResLoad;
 
         public override void StartSvc()
         {
             Instance = GetComponent<PersistentDataSvc>();
+            // Debug.Log("获取文件地址");
+
+            if (Application.platform == RuntimePlatform.WindowsPlayer)
+            {
+                serverPath = General.General.GetUrlRootPath();
+            }
         }
     }
 }

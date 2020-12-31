@@ -3,7 +3,6 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.ConfigData.Editor;
 using Object = UnityEngine.Object;
 
@@ -12,93 +11,130 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
     //自定义动画编辑
     public class CustomAnimator : EditorWindow
     {
-        [MenuItem("xxslit/动画工具")]
+        private static bool _display;
+
+        [MenuItem("XFrame/动画工具 #A", false, 1)]
         private static void ShowWindow()
         {
             EditorWindow window = EditorWindow.GetWindow<CustomAnimator>();
-            window.minSize = new Vector2(900, 300);
-            window.maxSize = new Vector2(900, 900);
+            window.minSize = new Vector2(1600, 900);
+            window.maxSize = new Vector2(1600, 900);
             window.titleContent = new GUIContent() {image = null, text = "动画工具"};
-            window.Show();
+            if (!_display)
+            {
+                window.Show();
+            }
+            else
+            {
+                window.Close();
+            }
+
+            _display = !_display;
+        }
+
+        private void OnEnable()
+        {
+            _display = false;
+        }
+
+        private void OnDestroy()
+        {
+            SaveData();
         }
 
         /// <summary>
-        /// 初始化
+        /// 保存数据
         /// </summary>
-        private bool _initData;
+        private void SaveData()
+        {
+            if (customAnimatorClipConfig != null)
+            {
+                EditorUtility.SetDirty(customAnimatorClipConfig);
 
-        /// <summary>
-        /// 当前动画文件
-        /// </summary>
-        private GameObject _currentFbx;
+                for (int i = 0; i < customAnimatorClipConfig.animFbxAndAnimClipDatas.Count; i++)
+                {
+                    if (customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData != null)
+                    {
+                        EditorUtility.SetDirty(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData);
+                    }
+                }
 
-        /// <summary>
-        /// 项目名称
-        /// </summary>
-        private string _animatorName;
-
-        /// <summary>
-        /// 输出文件夹
-        /// </summary>
-        private string _exportPath;
-
-        /// <summary>
-        /// 配置文件路径
-        /// </summary>
-        private string _profilePath;
-
-        public AnimatorClipData animatorClipData;
+                // 保存所有修改
+                AssetDatabase.SaveAssets();
+            }
+        }
 
         private ModelImporter _modelImporter;
+        public Vector2 scrollPos = Vector2.zero;
 
-        private CustomAnimatorClipConfig _customAnimatorClipConfig;
-        Vector2 _scrollPos = Vector2.zero;
+        public CustomAnimatorClipConfig customAnimatorClipConfig;
 
+        public Animator game;
 
         private void OnGUI()
         {
-            if (!_initData)
-            {
-                InitData();
-                _initData = true;
-            }
-
             #region 动画Fbx源文件
 
             EditorGUILayout.BeginHorizontal();
-            //自定义枚举下拉框
-            EditorGUILayout.LabelField("动画Fbx源文件:", GUILayout.MaxWidth(100));
+
+            #endregion
+
+            #region 动画配置文件
+
+            EditorGUILayout.LabelField("动画配置数据:", GUILayout.MaxWidth(80));
+
 #pragma warning disable 618
-            _currentFbx = (GameObject) EditorGUILayout.ObjectField(_currentFbx, typeof(GameObject), GUILayout.MaxWidth(250));
+            customAnimatorClipConfig = (CustomAnimatorClipConfig) EditorGUILayout.ObjectField(customAnimatorClipConfig, typeof(CustomAnimatorClipConfig));
 #pragma warning restore 618
+            if (customAnimatorClipConfig != null)
+            {
+                EditorGUILayout.LabelField("当前控制器文件", GUILayout.MaxWidth(80));
+
+#pragma warning disable 618
+                customAnimatorClipConfig.animatorController = (Animator) EditorGUILayout.ObjectField(customAnimatorClipConfig.animatorController, typeof(Animator), GUILayout.MaxWidth(300));
+#pragma warning restore 618
+            }
 
             #endregion
 
             #region 项目名称
 
-            EditorGUILayout.LabelField("Animator名称:", GUILayout.MaxWidth(80));
-            _animatorName = EditorGUILayout.TextField(_animatorName, GUILayout.MaxWidth(470));
-            EditorGUILayout.EndHorizontal();
+            if (customAnimatorClipConfig != null)
+            {
+                EditorGUILayout.LabelField("Animator名称:", GUILayout.MaxWidth(80));
+                customAnimatorClipConfig.animatorName = EditorGUILayout.TextField(customAnimatorClipConfig.animatorName, GUILayout.MaxWidth(470));
+            }
 
             #endregion
 
-            #region 打包路径
+            #region 动画存放路径
 
-            EditorGUILayout.BeginHorizontal();
-            //选择打包路径
-            if (GUILayout.Button("选择动画存放路径", GUILayout.MaxWidth(120)))
+            if (customAnimatorClipConfig != null)
             {
-                string projectPath = Application.dataPath;
-                string openFolderPath = EditorUtility.OpenFolderPanel("选择打包路径", "", "");
-                if (openFolderPath.Contains(projectPath))
+                if (GUILayout.Button("选择动画存放路径", GUILayout.MaxWidth(120)))
                 {
-                    //转换为相对路径
-                    openFolderPath = openFolderPath.Remove(0, projectPath.Length - 6);
-                    this._exportPath = openFolderPath;
+                    string projectPath = Application.dataPath;
+                    string openFolderPath = EditorUtility.OpenFolderPanel("选择打包路径", "", "");
+                    if (openFolderPath.Contains(projectPath))
+                    {
+                        //转换为相对路径
+                        openFolderPath = openFolderPath.Remove(0, projectPath.Length - 6);
+                        customAnimatorClipConfig.exportPath = openFolderPath;
+                    }
+                }
+
+                customAnimatorClipConfig.exportPath = EditorGUILayout.TextField(customAnimatorClipConfig.exportPath, GUILayout.MaxWidth(580));
+            }
+
+            if (customAnimatorClipConfig != null)
+            {
+                if (GUILayout.Button("保存当前动画配置文件"))
+                {
+                    SaveData();
                 }
             }
 
-            this._exportPath = EditorGUILayout.TextField(this._exportPath, GUILayout.MaxWidth(780));
+
             EditorGUILayout.EndHorizontal();
 
             #endregion
@@ -106,15 +142,27 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             #region 配置文件
 
             EditorGUILayout.BeginHorizontal();
-            //自定义枚举下拉框
-            EditorGUILayout.LabelField("动画配置数据:", GUILayout.MaxWidth(120));
-#pragma warning disable 618
-            animatorClipData = (AnimatorClipData) EditorGUILayout.ObjectField(animatorClipData, typeof(AnimatorClipData), GUILayout.MaxWidth(400));
-#pragma warning restore 618
 
-            if (GUILayout.Button("分割动画并配置Animator数据", GUILayout.MaxWidth(500)))
+            if (customAnimatorClipConfig != null)
             {
-                BuildAnim();
+                if (GUILayout.Button("增加动画配置文件"))
+                {
+                    if (customAnimatorClipConfig != null)
+                    {
+                        customAnimatorClipConfig.animFbxAndAnimClipDatas.Add(new AnimFbxAndAnimClipData());
+                    }
+
+                    return;
+                }
+            }
+
+
+            if (customAnimatorClipConfig != null)
+            {
+                if (GUILayout.Button("分割动画并配置Animator数据"))
+                {
+                    BuildAnim();
+                }
             }
 
             #endregion
@@ -123,153 +171,214 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
             #region 动画帧
 
-            EditorGUILayout.BeginHorizontal();
-            if (animatorClipData == null)
-            {
-                return;
-            }
+            #region 动画配置文件
 
-            if (GUILayout.Button("增加关键帧"))
-            {
-                animatorClipData.animatorClipDataInfos.Add(new AnimatorClipData.AnimatorClipDataInfo() {animatorControllerParameterType = AnimatorControllerParameterType.Trigger});
-            }
+            EditorGUILayout.BeginVertical();
 
-            EditorGUILayout.EndHorizontal();
-            _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
+            #region 单个动画配置文件
 
-            for (int i = 0; i < animatorClipData.animatorClipDataInfos.Count; i++)
+            EditorGUILayout.BeginVertical();
+
+            #region 头文件
+
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
+            if (customAnimatorClipConfig != null)
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField("动画属性名称", GUILayout.MaxWidth(70));
-                animatorClipData.animatorClipDataInfos[i].animatorClipName = EditorGUILayout.TextField(animatorClipData.animatorClipDataInfos[i].animatorClipName);
-                EditorGUILayout.LabelField("属性类型", GUILayout.MaxWidth(50));
-                animatorClipData.animatorClipDataInfos[i].animatorControllerParameterType =
-                    (AnimatorControllerParameterType) EditorGUILayout.EnumPopup(animatorClipData.animatorClipDataInfos[i].animatorControllerParameterType, GUILayout.MaxWidth(100));
-                EditorGUILayout.LabelField("固定过渡持续时间", GUILayout.MaxWidth(100));
-                animatorClipData.animatorClipDataInfos[i].fixedDuration = EditorGUILayout.Toggle(animatorClipData.animatorClipDataInfos[i].fixedDuration, GUILayout.MaxWidth(10));
-                EditorGUILayout.LabelField("持续过度时间", GUILayout.MaxWidth(70));
-                animatorClipData.animatorClipDataInfos[i].transitionDuration =
-                    EditorGUILayout.FloatField(animatorClipData.animatorClipDataInfos[i].transitionDuration, GUILayout.MaxWidth(30));
-                EditorGUILayout.LabelField("循环", GUILayout.MaxWidth(30));
-                animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop =
-                    EditorGUILayout.Toggle(animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop, GUILayout.MaxWidth(10));
-                EditorGUILayout.LabelField("开始帧", GUILayout.MaxWidth(40));
-                animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame = EditorGUILayout.IntField(animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame);
-                EditorGUILayout.LabelField("结束帧", GUILayout.MaxWidth(40));
-                animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame = EditorGUILayout.IntField(animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame);
-                if (GUILayout.Button("增加关键帧"))
+                for (int i = 0; i < customAnimatorClipConfig.animFbxAndAnimClipDatas.Count; i++)
                 {
-                    animatorClipData.animatorClipDataInfos.Insert(i + 1,
-                        new AnimatorClipData.AnimatorClipDataInfo() {animatorControllerParameterType = AnimatorControllerParameterType.Trigger});
-                }
+                    EditorGUILayout.BeginVertical();
 
-                if (GUILayout.Button("删除关键帧"))
-                {
-                    animatorClipData.animatorClipDataInfos.RemoveAt(i);
-                }
+                    EditorGUILayout.BeginHorizontal(); //1
+                    EditorGUILayout.LabelField("动画Fbx源文件:", GUILayout.MaxWidth(100));
+#pragma warning disable 618
+                    customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animFbx =
+                        (GameObject) EditorGUILayout.ObjectField(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animFbx, typeof(GameObject), GUILayout.MaxWidth(400));
+#pragma warning restore 618
 
-                EditorGUILayout.EndHorizontal();
+                    EditorGUILayout.LabelField("动画配置数据:", GUILayout.MaxWidth(80));
+
+#pragma warning disable 618
+                    customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData =
+                        (AnimatorClipData) EditorGUILayout.ObjectField(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData, typeof(AnimatorClipData), GUILayout.MaxWidth(400));
+#pragma warning restore 618
+
+                    if (GUILayout.Button("增加关键帧", GUILayout.MaxWidth(100)))
+                    {
+                        if (customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData != null)
+                        {
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos.Add(new AnimatorClipData.AnimatorClipDataInfo()
+                                {animatorControllerParameterType = AnimatorControllerParameterType.Trigger});
+                        }
+
+                        return;
+                    }
+
+                    if (GUILayout.Button("删除动画配置", GUILayout.MaxWidth(110)))
+                    {
+                        customAnimatorClipConfig.animFbxAndAnimClipDatas.RemoveAt(i);
+                        return;
+                    }
+
+                    EditorGUILayout.EndHorizontal(); //1
+
+                    EditorGUILayout.BeginHorizontal(); //2
+
+                    EditorGUILayout.EndHorizontal(); //2
+                    if (customAnimatorClipConfig != null && customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData != null)
+                    {
+                        for (int j = 0; j < customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos.Count; j++)
+                        {
+                            EditorGUILayout.BeginHorizontal();
+                            EditorGUILayout.LabelField("动画属性名称", GUILayout.MaxWidth(70));
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipName =
+                                EditorGUILayout.TextField(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipName);
+                            EditorGUILayout.LabelField("属性类型", GUILayout.MaxWidth(50));
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorControllerParameterType =
+                                (AnimatorControllerParameterType) EditorGUILayout.EnumPopup(
+                                    customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorControllerParameterType,
+                                    GUILayout.MaxWidth(100));
+                            EditorGUILayout.LabelField("固定过渡持续时间", GUILayout.MaxWidth(100));
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].fixedDuration =
+                                EditorGUILayout.Toggle(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].fixedDuration, GUILayout.MaxWidth(10));
+                            EditorGUILayout.LabelField("持续过度时间", GUILayout.MaxWidth(70));
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].transitionDuration =
+                                EditorGUILayout.FloatField(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].transitionDuration, GUILayout.MaxWidth(30));
+                            EditorGUILayout.LabelField("循环", GUILayout.MaxWidth(30));
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipIsLoop =
+                                EditorGUILayout.Toggle(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipIsLoop, GUILayout.MaxWidth(10));
+                            EditorGUILayout.LabelField("倒放", GUILayout.MaxWidth(30));
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipIsRewind =
+                                EditorGUILayout.Toggle(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipIsRewind, GUILayout.MaxWidth(10));
+                            EditorGUILayout.LabelField("开始帧", GUILayout.MaxWidth(40));
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipFirstFrame =
+                                EditorGUILayout.IntField(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipFirstFrame, GUILayout.MaxWidth(40));
+                            EditorGUILayout.LabelField("结束帧", GUILayout.MaxWidth(40));
+                            customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipLastFrame =
+                                EditorGUILayout.IntField(customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos[j].animatorClipLastFrame, GUILayout.MaxWidth(40));
+                            if (GUILayout.Button("增加关键帧"))
+                            {
+                                customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos.Insert(j + 1,
+                                    new AnimatorClipData.AnimatorClipDataInfo() {animatorControllerParameterType = AnimatorControllerParameterType.Trigger});
+                            }
+
+                            if (GUILayout.Button("删除关键帧"))
+                            {
+                                customAnimatorClipConfig.animFbxAndAnimClipDatas[i].animatorClipData.animatorClipDataInfos.RemoveAt(j);
+                            }
+
+                            EditorGUILayout.EndHorizontal();
+                        }
+                    }
+                }
             }
+
+
+            EditorGUILayout.BeginVertical();
 
             EditorGUILayout.EndScrollView();
 
             #endregion
 
-            EditorUtility.SetDirty(_customAnimatorClipConfig);
-        }
 
+            EditorGUILayout.BeginVertical();
 
-        private void BuildAnim()
-        {
-            #region 动画分段
+            #endregion
 
-            if (_currentFbx != null)
+            EditorGUILayout.EndVertical();
+
+            #endregion
+
+            #endregion
+
+            #region 配置表更新
+
+            if (customAnimatorClipConfig != null)
             {
-                _modelImporter = (ModelImporter) AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(_currentFbx));
-                if (_modelImporter != null)
-                {
-                    _modelImporter.animationType = ModelImporterAnimationType.Generic;
-                    _modelImporter.generateAnimations = ModelImporterGenerateAnimations.GenerateAnimations;
-                    ModelImporterClipAnimation[] animations = new ModelImporterClipAnimation[animatorClipData.animatorClipDataInfos.Count];
-
-                    for (int i = 0; i < animatorClipData.animatorClipDataInfos.Count; i++)
-                    {
-                        animations[i] = SetClipAnimation(animatorClipData.animatorClipDataInfos[i].animatorClipName,
-                            animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame,
-                            animatorClipData.animatorClipDataInfos[i].animatorClipLastFrame,
-                            animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop);
-                    }
-
-                    _modelImporter.clipAnimations = animations;
-                    _modelImporter.SaveAndReimport();
-                    //动画文件下的所有文件
-                    List<Object> allAnimObject = new List<Object>(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(_currentFbx)));
-                    List<string> allAnimClipName = GetAllAnimClipName();
-                    Dictionary<string, AnimationClip> animationClipDic = BuildingAnimationClips(allAnimObject, allAnimClipName);
-
-                    #endregion
-
-                    #region 动画控制器
-
-                    if (Directory.Exists(_exportPath) && _animatorName != "")
-                    {
-                        AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(_exportPath + "/" + _animatorName + ".controller");
-                        AnimatorStateMachine rootStateMachine = animatorController.layers[0].stateMachine;
-
-                        for (int i = 0; i < animatorClipData.animatorClipDataInfos.Count; i++)
-                        {
-                            //添加 参数
-                            animatorController.AddParameter(animatorClipData.animatorClipDataInfos[i].animatorClipName,
-                                animatorClipData.animatorClipDataInfos[i].animatorControllerParameterType);
-                            //添加 片段
-                            AnimatorState state = rootStateMachine.AddState(animatorClipData.animatorClipDataInfos[i].animatorClipName);
-                            //设置动画
-                            state.motion = animationClipDic[animatorClipData.animatorClipDataInfos[i].animatorClipName];
-                            // 关联片段 
-                            AnimatorStateTransition animatorStateTransition = rootStateMachine.AddAnyStateTransition(state);
-                            //设置关联参数
-                            animatorStateTransition.AddCondition(AnimatorConditionMode.If, 0, animatorClipData.animatorClipDataInfos[i].animatorClipName);
-                            //设置持续时间
-                            animatorStateTransition.duration = animatorClipData.animatorClipDataInfos[i].transitionDuration;
-                        }
-                    }
-
-                    #endregion
-                }
+                EditorUtility.SetDirty(customAnimatorClipConfig);
             }
-            else
-            {
-                Debug.LogError("当前Fbx文件没有选择");
-            }
+
+            #endregion
         }
 
         /// <summary>
-        /// 初始化工具
+        /// 分割并配置动画数据
         /// </summary>
-        private void InitData()
+        private void BuildAnim()
         {
-            //配置文件数据
-            _customAnimatorClipConfig =
-                (CustomAnimatorClipConfig) AssetDatabase.LoadAssetAtPath("Assets/XxSlitFrame/Config/CustomAnimatorClipConfig.asset", typeof(CustomAnimatorClipConfig));
-            if (_customAnimatorClipConfig != null)
+            if (Directory.Exists(customAnimatorClipConfig.exportPath) && customAnimatorClipConfig.animatorName != "")
             {
-                _currentFbx = _customAnimatorClipConfig.currentFbx;
-                _animatorName = _customAnimatorClipConfig.animatorName;
-                _exportPath = _customAnimatorClipConfig.exportPath;
-                _profilePath = _customAnimatorClipConfig.profilePath;
-            }
-            else
-            {
-                AssetDatabase.CreateAsset(CreateInstance<CustomAnimatorClipConfig>(), "Assets" + "/" + "XxSlitFrame/Config/CustomAnimatorClipConfig.asset");
-                Debug.LogError("当前配置文件不存在,已经创建");
+                AnimatorController animatorController =
+                    AnimatorController.CreateAnimatorControllerAtPath(customAnimatorClipConfig.exportPath + "/" + customAnimatorClipConfig.animatorName + ".controller");
+                AnimatorStateMachine rootStateMachine = animatorController.layers[0].stateMachine;
+
+
+                foreach (AnimFbxAndAnimClipData animFbxAndAnimClipData in customAnimatorClipConfig.animFbxAndAnimClipDatas)
+                {
+                    if (animFbxAndAnimClipData.animatorClipData != null)
+                    {
+                        _modelImporter = (ModelImporter) AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx));
+                        if (_modelImporter != null)
+                        {
+                            _modelImporter.animationType = ModelImporterAnimationType.Generic;
+                            _modelImporter.generateAnimations = ModelImporterGenerateAnimations.GenerateAnimations;
+                            ModelImporterClipAnimation[] animations = new ModelImporterClipAnimation[animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos.Count];
+
+
+                            for (int i = 0; i < animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos.Count; i++)
+                            {
+                                animations[i] = SetClipAnimation(animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipName,
+                                    animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipFirstFrame,
+                                    animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipLastFrame,
+                                    animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipIsLoop);
+                            }
+
+                            _modelImporter.clipAnimations = animations;
+                            _modelImporter.SaveAndReimport();
+                            //该动画文件下的所有文件
+                            List<Object> allAnimObject = new List<Object>(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx)));
+                            List<string> allAnimClipName = GetAllAnimClipName();
+                            Dictionary<string, AnimationClip> animationClipDic = BuildingAnimationClips(allAnimObject, allAnimClipName);
+
+                            for (int i = 0; i < animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos.Count; i++)
+                            {
+                                //添加 参数
+                                animatorController.AddParameter(animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipName,
+                                    animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorControllerParameterType);
+                                //添加 片段
+                                AnimatorState state = rootStateMachine.AddState(animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipName);
+                                //动画是否倒放
+                                state.speed = animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipIsRewind ? -1 : 1;
+                                //设置动画
+                                state.motion = animationClipDic[animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipName];
+                                // 关联片段 
+                                AnimatorStateTransition animatorStateTransition = rootStateMachine.AddAnyStateTransition(state);
+                                //设置关联参数
+                                animatorStateTransition.AddCondition(AnimatorConditionMode.If, 0, animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].animatorClipName);
+                                //设置持续时间
+                                animatorStateTransition.duration = animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos[i].transitionDuration;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("当前Fbx文件没有选择");
+                    }
+                }
+
+                if (customAnimatorClipConfig.animatorController != null)
+                {
+                    customAnimatorClipConfig.animatorController.runtimeAnimatorController = animatorController;
+                }
             }
         }
+
 
         #region 设置动画片段
 
         private ModelImporterClipAnimation SetClipAnimation(string clipName, int firstFrame, int lastFrame, bool isLoop)
         {
-            ModelImporterClipAnimation clip = new ModelImporterClipAnimation {name = clipName, firstFrame = firstFrame, lastFrame = lastFrame, loop = isLoop};
+            ModelImporterClipAnimation clip = new ModelImporterClipAnimation {name = clipName, firstFrame = firstFrame, lastFrame = lastFrame, loopTime = isLoop};
+
             if (isLoop)
             {
                 clip.wrapMode = WrapMode.Loop;
@@ -313,26 +422,17 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         private List<string> GetAllAnimClipName()
         {
             List<string> animNames = new List<string>();
-            foreach (AnimatorClipData.AnimatorClipDataInfo animatorClipDataInfo in animatorClipData.animatorClipDataInfos)
+            foreach (AnimFbxAndAnimClipData animFbxAndAnimClipData in customAnimatorClipConfig.animFbxAndAnimClipDatas)
             {
-                animNames.Add(animatorClipDataInfo.animatorClipName);
+                foreach (AnimatorClipData.AnimatorClipDataInfo animatorClipDataInfo in animFbxAndAnimClipData.animatorClipData.animatorClipDataInfos)
+                {
+                    animNames.Add(animatorClipDataInfo.animatorClipName);
+                }
             }
 
             return animNames;
         }
 
         #endregion
-
-        private void OnDestroy()
-        {
-            #region 保存配置数据
-
-            _customAnimatorClipConfig.currentFbx = _currentFbx;
-            _customAnimatorClipConfig.animatorName = _animatorName;
-            _customAnimatorClipConfig.exportPath = _exportPath;
-            _customAnimatorClipConfig.profilePath = _profilePath;
-
-            #endregion
-        }
     }
 }

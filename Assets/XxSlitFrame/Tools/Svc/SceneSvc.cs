@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XxSlitFrame.Tools.Svc.BaseSvc;
@@ -74,7 +76,25 @@ namespace XxSlitFrame.Tools.Svc
         {
             UpdateSceneNameOrIndex();
             ListenerSvc.Instance.InitSvc();
+            InitSceneStartSingletons();
+        }
+
+        /// <summary>
+        /// 加载场景初始化单例
+        /// </summary>
+        public void InitSceneStartSingletons()
+        {
+            GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
+
+            for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
+            {
+                GameRootStart.Instance.sceneStartSingletons[i].StartSvc();
+                GameRootStart.Instance.sceneStartSingletons[i].Init();
+            }
+
+            //所有条件都加载完毕后,开始视图的初始化
             ViewSvc.Instance.InitSvc();
+            ViewSvc.Instance.FrozenInit();
         }
 
         /// <summary>
@@ -215,6 +235,9 @@ namespace XxSlitFrame.Tools.Svc
             }
             else if (Application.platform == RuntimePlatform.WindowsEditor)
             {
+#if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+#endif
                 Debug.Log("Quit");
             }
         }

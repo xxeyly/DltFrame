@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using XxSlitFrame.Tools.Svc;
 using UnityEngine.UI;
+using XxSlitFrame.Tools.ConfigData;
 
 namespace XxSlitFrame.View
 {
@@ -21,6 +22,15 @@ namespace XxSlitFrame.View
         Frozen
     }
 
+    public enum ShowType
+    {
+        //直接
+        Direct,
+
+        //渐隐
+        Curve
+    }
+
     public struct TimeTaskInfo
     {
         [Header("任务ID")] public int TimeTaskId;
@@ -34,21 +44,32 @@ namespace XxSlitFrame.View
     public abstract partial class BaseWindow : MonoBehaviour
     {
         protected GameObject Window;
-        protected AudioSvc AudioSvc;
-        protected ResSvc ResSvc;
-        protected ViewSvc ViewSvc;
-        protected SceneSvc SceneSvc;
-        protected PersistentDataSvc PersistentDataSvc;
-        protected TimeSvc TimeSvc;
-        protected ListenerSvc ListenerSvc;
-        protected MouseSvc MouseSvc;
+        protected CanvasGroup _canvasGroup;
+        protected AudioSvc audioSvc;
+        protected ResSvc resSvc;
+        protected ViewSvc viewSvc;
+        protected SceneSvc sceneSvc;
+        protected PersistentDataSvc persistentDataSvc;
+        protected TimeSvc timeSvc;
+        protected ListenerSvc listenerSvc;
+        protected MouseSvc mouseSvc;
 
         [SerializeField] [Header("组件事件监听")] protected Dictionary<string, UnityAction<BaseEventData>> uiListener =
             new Dictionary<string, UnityAction<BaseEventData>>();
 
         [SerializeField] [Header("计时任务列表")] protected List<TimeTaskInfo> timeTaskInfoList = new List<TimeTaskInfo>();
         [Header("视图类型")] [SerializeField] protected ViewShowType ViewShowType = ViewShowType.Activity;
+        [Header("显示类型")] [SerializeField] protected ShowType ShowType = ShowType.Direct;
+
+        [Header("显示时间")] [Range(0.1f, 9)] [SerializeField]
+        protected float ShowTime = 1;
+
         [HideInInspector] public Type viewType;
+
+        /// <summary>
+        /// 视图显示任务
+        /// </summary>
+        private int viewShowTimeTask;
 
         protected BaseWindow()
         {
@@ -65,7 +86,7 @@ namespace XxSlitFrame.View
             {
                 foreach (TimeTaskInfo timeTaskInfo in timeTaskInfoList)
                 {
-                    if (!TimeSvc.GetAllTimeTaskId().Contains(timeTaskInfo.TimeTaskId))
+                    if (!timeSvc.GetAllTimeTaskId().Contains(timeTaskInfo.TimeTaskId))
                     {
                         timeTaskInfoList.Remove(timeTaskInfo);
                         return;
@@ -90,14 +111,15 @@ namespace XxSlitFrame.View
         public void ViewStartInit()
         {
             Window = transform.Find("Window").gameObject;
-            AudioSvc = AudioSvc.Instance;
-            ResSvc = ResSvc.Instance;
-            ViewSvc = ViewSvc.Instance;
-            SceneSvc = SceneSvc.Instance;
-            TimeSvc = TimeSvc.Instance;
-            PersistentDataSvc = PersistentDataSvc.Instance;
-            ListenerSvc = ListenerSvc.Instance;
-            MouseSvc = MouseSvc.Instance;
+            _canvasGroup = Window.GetComponent<CanvasGroup>();
+            audioSvc = AudioSvc.Instance;
+            resSvc = ResSvc.Instance;
+            viewSvc = ViewSvc.Instance;
+            sceneSvc = SceneSvc.Instance;
+            timeSvc = TimeSvc.Instance;
+            persistentDataSvc = PersistentDataSvc.Instance;
+            listenerSvc = ListenerSvc.Instance;
+            mouseSvc = MouseSvc.Instance;
             InitView();
             InitListener();
             OnlyOnceInit();
@@ -105,13 +127,6 @@ namespace XxSlitFrame.View
 
 
         public abstract void Init();
-
-        /// <summary>
-        /// 首先加载的步骤
-        /// </summary>
-        public virtual void First()
-        {
-        }
 
         /// <summary>
         /// 初始化视图的显示类型
@@ -161,6 +176,18 @@ namespace XxSlitFrame.View
         /// 隐藏元素
         /// </summary>
         /// <param name="hideObjArray">需要隐藏的元素</param>
+        protected void HideObj(params MaskableGraphic[] hideObjArray)
+        {
+            foreach (MaskableGraphic hideObj in hideObjArray)
+            {
+                hideObj.gameObject.SetActive(false);
+            }
+        }
+
+        /// <summary>
+        /// 隐藏元素
+        /// </summary>
+        /// <param name="hideObjArray">需要隐藏的元素</param>
         protected void HideObj(params Selectable[] hideObjArray)
         {
             foreach (Selectable hideObj in hideObjArray)
@@ -182,6 +209,18 @@ namespace XxSlitFrame.View
         }
 
         /// <summary>
+        /// 显示元素
+        /// </summary>
+        /// <param name="showObjArray">需要显示的元素</param>
+        protected void ShowObj(params MaskableGraphic[] showObjArray)
+        {
+            foreach (MaskableGraphic showObj in showObjArray)
+            {
+                showObj.gameObject.SetActive(true);
+            }
+        }
+
+        /// <summary>
         /// 显示或隐藏物体
         /// </summary>
         /// <param name="display"></param>
@@ -192,6 +231,53 @@ namespace XxSlitFrame.View
             {
                 showObj.SetActive(display);
             }
+        }
+
+        /// <summary>
+        /// 显示或隐藏物体
+        /// </summary>
+        /// <param name="display"></param>
+        /// <param name="showObjArray"></param>
+        protected void DisPlayObj(bool display, params MaskableGraphic[] showObjArray)
+        {
+            foreach (MaskableGraphic showObj in showObjArray)
+            {
+                showObj.gameObject.SetActive(display);
+            }
+        }
+
+        /// <summary>
+        /// 显示错误提示
+        /// </summary>
+        /// <param name="errorTips">错误提示面板</param>
+        /// <param name="errorTipContent">错误提示内容文本</param>
+        /// <param name="content">错误提示内容</param>
+        /// <param name="action">错误提示完毕后执行事件</param>
+        /// <returns></returns>
+        protected int ShowErrorTip(GameObject errorTips, Text errorTipContent, string content,
+            UnityAction action = null)
+        {
+            audioSvc.PlayEffectAudio(AudioData.AudioType.EErrorPopup);
+
+            int errorTimeTask = timeSvc.ShowErrorTip(errorTips, errorTipContent, content, action);
+            timeTaskInfoList.Add(new TimeTaskInfo()
+                {TimeTaskId = errorTimeTask, TimeLoopType = TimeTaskList.TimeLoopType.Once, TimeTaskName = "错误提示"});
+
+            return errorTimeTask;
+        }
+
+        /// <summary>
+        /// 图片闪烁
+        /// </summary>
+        /// <param name="twinkleImage"></param>
+        /// <param name="twinkleInterval"></param>
+        /// <returns></returns>
+        protected int ImageTwinkle(Image twinkleImage, float twinkleInterval)
+        {
+            int twinkleTimeTask = timeSvc.ImageTwinkle(twinkleImage, twinkleInterval);
+            timeTaskInfoList.Add(new TimeTaskInfo()
+                {TimeTaskId = twinkleTimeTask, TimeLoopType = TimeTaskList.TimeLoopType.Once, TimeTaskName = "图片闪烁"});
+            return twinkleTimeTask;
         }
 
         /// <summary>
@@ -242,6 +328,9 @@ namespace XxSlitFrame.View
                     case TimeTaskList.TimeLoopType.Loop:
                         DeleteSwitchTask(timeTaskInfoList[i].TimeTaskId);
                         break;
+                    case TimeTaskList.TimeLoopType.Immortal:
+                        DeleteImmortalTimeTask(timeTaskInfoList[i].TimeTaskId);
+                        break;
                 }
             }
 
@@ -253,7 +342,7 @@ namespace XxSlitFrame.View
         /// </summary>
         protected void HideView()
         {
-            ViewSvc.HideView(viewType);
+            viewSvc.HideView(viewType);
         }
 
         /// <summary>
@@ -261,7 +350,7 @@ namespace XxSlitFrame.View
         /// </summary>
         protected void ShowView()
         {
-            ViewSvc.ShowView(viewType);
+            viewSvc.ShowView(viewType);
         }
 
         /// <summary>
@@ -274,6 +363,27 @@ namespace XxSlitFrame.View
         }
 
         /// <summary>
+        /// 更改透明度
+        /// </summary>
+        /// <param name="apache"></param>
+        private void ChangeApache(float apache)
+        {
+            if (apache <= 0)
+            {
+                apache = 0;
+            }
+            else if (apache >= 1)
+            {
+                apache = 1;
+            }
+
+            if (_canvasGroup != null)
+            {
+                _canvasGroup.alpha = apache;
+            }
+        }
+
+        /// <summary>
         /// 设置当前视图关闭或者隐藏
         /// </summary>
         /// <param name="display"></param>
@@ -281,14 +391,64 @@ namespace XxSlitFrame.View
         {
             if (display)
             {
+                switch (ShowType)
+                {
+                    case ShowType.Direct:
+                        ChangeApache(1);
+                        break;
+                    case ShowType.Curve:
+                        float apache = (float) Math.Round(_canvasGroup.alpha, 3);
+                        DeleteImmortalTimeTask(viewShowTimeTask);
+                        viewShowTimeTask = AddImmortalTimeTask(() =>
+                        {
+                            apache = (float) Math.Round(apache += 0.01f / ShowTime, 3);
+                            ChangeApache(apache);
+                            if (apache >= 1)
+                            {
+                                DeleteImmortalTimeTask(viewShowTimeTask);
+                            }
+                        }, "视图显示任务", 0.01f, (int) (100 * ShowTime));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
                 ShowObj(Window);
             }
             else
             {
-                HideObj(Window);
+                switch (ShowType)
+                {
+                    case ShowType.Direct:
+                        ChangeApache(0);
+                        HideObj(Window);
+                        break;
+                    case ShowType.Curve:
+                        DeleteImmortalTimeTask(viewShowTimeTask);
+                        float apache = (float) Math.Round(_canvasGroup.alpha, 3);
+                        viewShowTimeTask = AddImmortalTimeTask(() =>
+                        {
+                            apache = (float) Math.Round(apache -= 0.01f / ShowTime, 3);
+                            ChangeApache(apache);
+                            if (apache <= 0)
+                            {
+                                if (Window != null)
+                                {
+                                    HideObj(Window);
+                                }
+
+                                DeleteImmortalTimeTask(viewShowTimeTask);
+                            }
+                        }, "视图隐藏任务", 0.01f, (int) (100 * ShowTime));
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
                 ViewDestroy();
             }
         }
+
 
         #region UI 绑定
 
@@ -434,6 +594,12 @@ namespace XxSlitFrame.View
             }
         }
 
+        /// <summary>
+        /// 绑定事件
+        /// </summary>
+        /// <param name="selectableList"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         protected List<Selectable> SelectableConverter<T>(List<T> selectableList) where T : Selectable
         {
             List<Selectable> returnSelectableList = new List<Selectable>();
@@ -455,7 +621,7 @@ namespace XxSlitFrame.View
         /// <returns></returns>
         protected int AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
-            int timeTaskId = TimeSvc.AddTimeTask(callback, taskName, delay, count);
+            int timeTaskId = timeSvc.AddTimeTask(callback, taskName, delay, count);
             timeTaskInfoList.Add(new TimeTaskInfo()
                 {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Once, TimeTaskName = taskName});
             return timeTaskId;
@@ -471,7 +637,7 @@ namespace XxSlitFrame.View
         /// <returns></returns>
         protected int AddSwitchTask(List<UnityAction> callbackList, string taskName, float delay, int count = 1)
         {
-            int timeTaskId = TimeSvc.AddSwitchTask(callbackList, taskName, delay, count);
+            int timeTaskId = timeSvc.AddSwitchTask(callbackList, taskName, delay, count);
             timeTaskInfoList.Add(new TimeTaskInfo()
                 {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Loop, TimeTaskName = taskName});
             return timeTaskId;
@@ -487,10 +653,10 @@ namespace XxSlitFrame.View
         /// <returns></returns>
         protected int AddImmortalTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
-            int timeTaskId = TimeSvc.AddImmortalTimeTask(callback, taskName, delay, count);
+            int timeTaskId = timeSvc.AddImmortalTimeTask(callback, taskName, delay, count);
             timeTaskInfoList.Add(new TimeTaskInfo()
                 {TimeTaskId = timeTaskId, TimeLoopType = TimeTaskList.TimeLoopType.Once, TimeTaskName = taskName});
-            TimeSvc.DeleteTimeTask();
+            // TimeSvc.DeleteTimeTask();
             return timeTaskId;
         }
 
@@ -500,7 +666,7 @@ namespace XxSlitFrame.View
         /// <param name="timeTaskId"></param>
         protected void DeleteTimeTask(int timeTaskId)
         {
-            TimeSvc.DeleteTimeTask(timeTaskId);
+            timeSvc.DeleteTimeTask(timeTaskId);
         }
 
         /// <summary>
@@ -509,7 +675,7 @@ namespace XxSlitFrame.View
         /// <param name="timeTaskId"></param>
         protected void DeleteSwitchTask(int timeTaskId)
         {
-            TimeSvc.DeleteSwitchTask(timeTaskId);
+            timeSvc.DeleteSwitchTask(timeTaskId);
         }
 
         /// <summary>
@@ -518,7 +684,7 @@ namespace XxSlitFrame.View
         /// <param name="timeTaskId"></param>
         protected void DeleteImmortalTimeTask(int timeTaskId)
         {
-            TimeSvc.DeleteImmortalTimeTask(timeTaskId);
+            timeSvc.DeleteImmortalTimeTask(timeTaskId);
             DeleteTimeTaskById(timeTaskId);
         }
 

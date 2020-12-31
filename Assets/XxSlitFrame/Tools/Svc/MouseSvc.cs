@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
@@ -10,7 +13,7 @@ namespace XxSlitFrame.Tools.Svc
     /// <summary>
     /// 鼠标服务
     /// </summary>
-    public class MouseSvc :  SvcBase
+    public class MouseSvc : SvcBase
     {
         public static MouseSvc Instance;
 
@@ -46,7 +49,13 @@ namespace XxSlitFrame.Tools.Svc
         private Transform _trans; //目标物体的空间变换组件  
         private Vector3 _vec3MouseScreenSpace; // 鼠标的屏幕空间坐标  
         private Vector3 _vec3Offset; // 偏移 
+#pragma warning disable 649
+        [SerializeField] private Texture2D _mouseNormal; // 鼠标常态
+        [SerializeField] private Texture2D _mouseEnter; // 鼠标移入
+#pragma warning restore
         private Canvas _canvas;
+        private GameObject _mouseEnterUI;
+        public bool mouseDown;
 
         public override void StartSvc()
         {
@@ -61,7 +70,13 @@ namespace XxSlitFrame.Tools.Svc
         {
             if (Input.GetMouseButtonDown(0) && !GetMouseOverUI())
             {
+                mouseDown = true;
                 AudioSvc.Instance.PlayEffectAudio(AudioData.AudioType.EClick);
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                mouseDown = false;
             }
         }
 
@@ -69,6 +84,16 @@ namespace XxSlitFrame.Tools.Svc
         /// 目标物体
         /// </summary>
         private Transform _targetObj;
+
+        public void SetMouseArrow(Texture2D spr, Vector2 offset)
+        {
+            Cursor.SetCursor(spr, offset, CursorMode.Auto);
+        }
+
+        public void SetMouseArrow()
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
 
         /// <summary>
         /// 开始物品跟随相机
@@ -121,6 +146,33 @@ namespace XxSlitFrame.Tools.Svc
                     //}
                 }
             }
+
+            if (_sceneObjectFollowingModel == SceneObjectFollowingModel.Normal && _isSceneFollow)
+            {
+                // 把目标物体的世界空间坐标转换到它自身的屏幕空间坐标   
+
+                var position = _trans.position;
+                _vec3TargetScreenSpace = _sceneCamera.WorldToScreenPoint(position);
+
+                // 存储鼠标的屏幕空间坐标（Z值使用目标物体的屏幕空间坐标）   
+
+                _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
+
+                // 计算目标物体与鼠标物体在世界空间中的偏移量   
+
+                _vec3Offset = position - _sceneCamera.ScreenToWorldPoint(_vec3MouseScreenSpace);
+
+                // 存储鼠标的屏幕空间坐标（Z值使用目标物体的屏幕空间坐标）  
+
+                _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
+
+                // 把鼠标的屏幕空间坐标转换到世界空间坐标（Z值使用目标物体的屏幕空间坐标），加上偏移量，以此作为目标物体的世界空间坐标  
+
+                _vec3TargetWorldSpace = _sceneCamera.ScreenToWorldPoint(_vec3MouseScreenSpace) /* + mVec3Offset*/;
+                Debug.Log(_vec3TargetWorldSpace);
+                _targetObj.position = _vec3TargetWorldSpace;
+                //}
+            }
         }
 
         IEnumerator OnMouseDown()
@@ -168,7 +220,7 @@ namespace XxSlitFrame.Tools.Svc
         /// <param name="offset">偏差</param>
         public void StartUiFollowingMouse(GameObject targetObj, Vector2 offset = new Vector2())
         {
-            _canvas = FindObjectOfType<Canvas>();
+            _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
             UiFollowingMouse(targetObj, offset);
             _objectFollowingMouseTaskTime = TimeSvc.Instance.AddTimeTask(() => { UiFollowingMouse(targetObj, offset); }, "UI拖拽任务", 0.00f, 0);
         }
@@ -209,6 +261,39 @@ namespace XxSlitFrame.Tools.Svc
         }
 
 
+        public void MouseEnterState()
+        {
+            #region UI
+
+            if (PersistentDataSvc.Instance.mouseState)
+            {
+                _mouseEnterUI = GetMouseEnterUi();
+                if (_mouseEnterUI != null)
+                {
+                    if (_mouseEnterUI.GetComponent<Button>() || _mouseEnterUI.GetComponent<Toggle>() || _mouseEnterUI.GetComponent<Slider>())
+                    {
+                        SetMouseArrow(_mouseEnter, new Vector2(0, 0));
+                    }
+                    else if (_mouseEnterUI.GetComponent<Image>() && _mouseEnterUI.GetComponent<Image>().raycastTarget)
+                    {
+                        SetMouseArrow(_mouseEnter, new Vector2(0, 0));
+                    }
+                    else
+                    {
+                        // Debug.Log(_mouseEnterUI);
+                    }
+                }
+                else
+                {
+                    SetMouseArrow(_mouseNormal, new Vector2(0, 0));
+                }
+
+                // Debug.Log(_mouseEnterUI);
+            }
+
+            #endregion
+        }
+
         /// <summary>
         /// 鼠标停留在UI上
         /// </summary>
@@ -243,7 +328,7 @@ namespace XxSlitFrame.Tools.Svc
         /// 获得鼠标点击的UI
         /// </summary>
         /// <returns></returns>
-        public GameObject GetMouseClickUi()
+        public GameObject GetMouseEnterUi()
         {
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current) {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
             //鼠标位置
@@ -326,6 +411,84 @@ namespace XxSlitFrame.Tools.Svc
             }
 
             return 0;
+        }
+
+        private int _drag3DObjectInUIPanelTimeTask;
+
+        /// <summary>
+        /// 拖动3D物体在UI面板上
+        /// </summary>
+        public bool Drag3DObjectInUIPanel(Camera _currentCamera, Transform _target, Vector3 centerPos, float leftDirection, float rightDirection, float topDirection, float downDirection,
+            float frontDirection, float backDirection)
+        {
+            Ray ray = _currentCamera.ScreenPointToRay(Input.mousePosition * (1920f / Screen.width));
+            bool isHit = Physics.Raycast(ray, out var hit, LayerMask.NameToLayer("CheckItem"), 10000);
+            if (isHit)
+            {
+                // Debug.Log(hit.collider.gameObject);
+            }
+            else
+            {
+                // Debug.Log("未找到物体");
+            }
+
+            if (isHit && _target.gameObject == hit.collider.gameObject)
+            {
+                Debug.Log(hit.collider.gameObject);
+                TimeSvc.Instance.DeleteTimeTask(_drag3DObjectInUIPanelTimeTask);
+                _drag3DObjectInUIPanelTimeTask = TimeSvc.Instance.AddTimeTask(() =>
+                {
+                    Transform cameraTransform = _currentCamera.transform;
+                    Vector3 CO_Direction = _target.position - cameraTransform.position;
+                    float cPlane = Vector3.Dot(CO_Direction, cameraTransform.forward);
+                    Vector3 currentMousePos = _currentCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x  * (1920f / Screen.width), Input.mousePosition.y * (1920f / Screen.width), cPlane));
+
+                    if (currentMousePos.x <= centerPos.x - leftDirection)
+                    {
+                        currentMousePos.x = centerPos.x - leftDirection;
+                    }
+
+                    if (currentMousePos.x >= centerPos.x + rightDirection)
+                    {
+                        currentMousePos.x = centerPos.x + rightDirection;
+                    }
+
+                    if (currentMousePos.y <= centerPos.y - downDirection)
+                    {
+                        currentMousePos.y = centerPos.y - downDirection;
+                    }
+
+                    if (currentMousePos.y >= centerPos.y + topDirection)
+                    {
+                        currentMousePos.y = centerPos.y + downDirection;
+                    }
+
+                    if (currentMousePos.z <= centerPos.z - frontDirection)
+                    {
+                        currentMousePos.z = centerPos.z - frontDirection;
+                    }
+
+                    if (currentMousePos.z >= centerPos.z + backDirection)
+                    {
+                        currentMousePos.z = centerPos.z + backDirection;
+                    }
+
+                    _target.position = currentMousePos;
+                }, "拖动3D物体在UI面板上", 0.001f, 0);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 停止拖动3D物体在UI面板上
+        /// </summary>
+        public void StopDrag3DObjectInUIPanel()
+        {
+            TimeSvc.Instance.DeleteTimeTask(_drag3DObjectInUIPanelTimeTask);
         }
     }
 }

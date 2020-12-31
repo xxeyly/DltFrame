@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioDataInfos:
   - audioType: 1
-    dialogueAudioClip: {fileID: 8300000, guid: 93e3f73a153048b4e922431e5dfd1253, type: 3}
+    dialogueAudioClip: {fileID: 0}
   - audioType: 2
     dialogueAudioClip: {fileID: 8300000, guid: 76c8432c28ffbbc45a7f4824490fbd47, type: 3}
   - audioType: 3
@@ -32,6 +32,14 @@ MonoBehaviour:
   - audioType: 9
     dialogueAudioClip: {fileID: 8300000, guid: 159eae052ddf4b04f90f67196c561a02, type: 3}
   - audioType: 10
-    dialogueAudioClip: {fileID: 8300000, guid: cba9c3c425994ec47a42906a874fdf21, type: 3}
+    dialogueAudioClip: {fileID: 8300000, guid: bde35e935aa1dbf4a82b6620a7f15274, type: 3}
   - audioType: 11
     dialogueAudioClip: {fileID: 8300000, guid: 97e962d33792f1f47af0b97d63be7223, type: 3}
+  - audioType: 12
+    dialogueAudioClip: {fileID: 8300000, guid: a7814d3375dde394f877f41f161ceac7, type: 3}
+  - audioType: 13
+    dialogueAudioClip: {fileID: 8300000, guid: 1c270c42f9debe8489dc35b0d8807af9, type: 3}
+  - audioType: 14
+    dialogueAudioClip: {fileID: 8300000, guid: af3b9a180a3b19b4fa35202ac041fe48, type: 3}
+  - audioType: 15
+    dialogueAudioClip: {fileID: 8300000, guid: 769a4b93757617b4db312f2fc50fea5b, type: 3}

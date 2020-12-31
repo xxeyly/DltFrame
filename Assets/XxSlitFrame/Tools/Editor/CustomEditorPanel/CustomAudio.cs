@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 using XxSlitFrame.Tools.ConfigData;
 
@@ -6,18 +7,43 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 {
     public class CustomAudio : EditorWindow
     {
-        [MenuItem("xxslit/音频工具")]
+        [MenuItem("XFrame/音频工具")]
         private static void ShowWindow()
         {
             EditorWindow window = EditorWindow.GetWindow<CustomAudio>();
             window.minSize = new Vector2(900, 300);
-            window.maxSize = new Vector2(900, 900);
+            window.maxSize = new Vector2(1600, 900);
             window.titleContent = new GUIContent() {image = null, text = "音频工具"};
             window.Show();
         }
 
+
         AudioData _audioData;
         Vector2 _scrollPos = Vector2.zero;
+
+        private void OnEnable()
+        {
+            if (_audioData == null)
+            {
+                _audioData = (AudioData) AssetDatabase.LoadAssetAtPath("Assets/XxSlitFrame/Config/AudioData.asset", typeof(AudioData));
+            }
+        }
+
+        private void OnDestroy()
+        {
+            SaveData();
+        }
+
+        /// <summary>
+        /// 保存数据
+        /// </summary>
+        private void SaveData()
+        {
+            //标记脏区
+            EditorUtility.SetDirty(_audioData);
+            // 保存所有修改
+            AssetDatabase.SaveAssets();
+        }
 
         public void OnGUI()
         {
@@ -29,6 +55,15 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 #pragma warning disable 618
             _audioData = (AudioData) EditorGUILayout.ObjectField(_audioData, typeof(AudioData));
 #pragma warning restore 618
+            if (_audioData != null)
+            {
+                if (GUILayout.Button("保存数据", GUILayout.MaxWidth(60)))
+                {
+                    SaveData();
+                }
+            }
+
+
             EditorGUILayout.EndHorizontal();
 
             #endregion

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools.ConfigData.Editor
 {
@@ -20,9 +21,14 @@ namespace XxSlitFrame.Tools.ConfigData.Editor
         [Header("输出文件夹")] public string exportPath;
 
         /// <summary>
-        /// 项目名称
+        /// 项目英文名称
         /// </summary>
-        [Header("项目名称")] public string exportProjectName;
+        [Header("项目英文名称")] public string exportEnProjectName;
+
+        /// <summary>
+        /// 项目中文名称
+        /// </summary>
+        [Header("项目英文名称")] public string exportCnProjectName;
 
         /// <summary>
         /// 项目日期
@@ -30,29 +36,35 @@ namespace XxSlitFrame.Tools.ConfigData.Editor
         [Header("项目日期")] public bool projectNameDate;
 
         /// <summary>
-        /// 项目类型
+        /// 中文外壳
         /// </summary>
-        [Header("项目类型")] public bool projectBuildEdition;
+        [Header("学习模式")] public bool chineseShell;
+
+        /// <summary>
+        /// 学习模式
+        /// </summary>
+        [Header("学习模式")] public bool learningModel;
+
+        /// <summary>
+        /// 考核模式
+        /// </summary>
+        [Header("考核模式")] public bool assessmentMode;
+
+        /// <summary>
+        /// 水印
+        /// </summary>
+        [Header("水印")] public bool watermark;
 
         /// <summary>
         /// 拷贝文件夹
         /// </summary>
-        [Header("拷贝文件夹")] public List<string> copyFolderPaths = new List<string>();
-
-        /// <summary>
-        ///粘贴文件夹
-        /// </summary>
-        [Header("粘贴文件夹")] public List<string> pasteFolderPaths = new List<string>();
+        [Header("拷贝文件夹")] public List<FolderCopy> folderCopies = new List<FolderCopy>();
 
         /// <summary>
         /// 更新到服务器
         /// </summary>
         [Header("更新到服务器")] public bool updateToFtp;
 
-        /// <summary>
-        /// 拷贝文件夹数量
-        /// </summary>
-        [Header("拷贝文件夹数量")] public int copyFolderCount;
 
         /// <summary>
         /// 服务器地址
@@ -73,5 +85,52 @@ namespace XxSlitFrame.Tools.ConfigData.Editor
         /// Ftp根目录
         /// </summary>
         [Header("Ftp根目录")] public string ftpRoot;
+
+        /// <summary>
+        /// 版本设置
+        /// </summary>
+        [Header("版本设置")] public bool versionSet;
+
+        /// <summary>
+        /// 版本水印
+        /// </summary>
+        [Header("版本水印")] public bool versionWatermark;
+
+        /// <summary>
+        /// 下载
+        /// </summary>
+        [Header("版本下载")] public bool versionDownLoad;
+
+        /// <summary>
+        /// 加载进度
+        /// </summary>
+        [Header("版本下载进度")] public bool versionLoadingProgress;
+
+        /// <summary>
+        /// 场景进度
+        /// </summary>
+        [Header("版本场景进度")] public bool versionSceneProgress;
+
+        /// <summary>
+        /// 版本考核时间
+        /// </summary>
+        [Header("版本考核时间")] public int versionAssessmentTime;
+    }
+
+    /// <summary>
+    /// 文件夹拷贝
+    /// </summary>
+    [Serializable]
+    public class FolderCopy
+    {
+        /// <summary>
+        /// 拷贝文件夹路径
+        /// </summary>
+        public string copyFolderPath;
+
+        /// <summary>
+        /// 粘贴文件夹根路径
+        /// </summary>
+        public string pasteFolderPath;
     }
 }

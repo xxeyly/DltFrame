@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools.Editor.ConfigSvcEditor

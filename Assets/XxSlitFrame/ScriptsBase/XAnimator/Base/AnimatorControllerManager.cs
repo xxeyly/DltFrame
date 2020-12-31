@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using XxSlitFrame.Tools;
+using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc;
 
 namespace XAnimator.Base
@@ -23,7 +24,6 @@ namespace XAnimator.Base
         public override void StartSvc()
         {
             Instance = GetComponent<AnimatorControllerManager>();
-            Init();
         }
 
         public override void Init()
@@ -91,7 +91,31 @@ namespace XAnimator.Base
             }
         }
 
+        /// <summary>
+        /// 播放动画
+        /// </summary>
+        /// <param name="animType"></param>
+        /// <param name="listenerEventType"></param>
+        public void PlayAnim(AnimType animType, ListenerEventType listenerEventType)
+        {
+            TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
+            _animatorTimeTask = TimeSvc.Instance.AddTimeTask(() => { ListenerSvc.Instance.ExecuteEvent(listenerEventType); }, "动画播放时间", GetPlayAnimLength(animType));
+            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            {
+                controllerBase.PlayAnim(animType);
+            }
+        }
+
         public void StopAnimAction()
+        {
+            TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
+            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            {
+                controllerBase.StopAnim();
+            }
+        }
+
+        public void StopAllAnimAction()
         {
             foreach (XAnimatorControllerBase controllerBase in allAnimController)
             {

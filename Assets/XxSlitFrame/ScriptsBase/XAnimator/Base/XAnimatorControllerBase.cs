@@ -1,162 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc;
 
 namespace XAnimator.Base
 {
-    public enum AnimType
-    {
-        /// <summary>
-        /// 洗手
-        /// </summary>
-        WashBasin,
-
-        /// <summary>
-        /// 向患者解说
-        /// </summary>
-        ExplainToPatient,
-
-        /// <summary>
-        /// 戴口罩
-        /// </summary>
-        WearMask,
-
-        /// <summary>
-        /// 戴手套
-        /// </summary>
-        WearGloves,
-
-        /// <summary>
-        /// 仰卧
-        /// </summary>
-        LieSupine,
-
-        /// <summary>
-        /// 俯卧
-        /// </summary>
-        Prostrate,
-
-        /// <summary>
-        /// 坐卧
-        /// </summary>
-        SitDown,
-
-        /// <summary>
-        /// 消毒棉球
-        /// </summary>
-        DisinfectionCottonBall,
-
-        /// <summary>
-        /// 消毒碘酊
-        /// </summary>
-        DisinfectionTinctureIodine,
-
-        /// <summary>
-        /// 消毒酒精
-        /// </summary>
-        DisinfectionAlcohol,
-
-        /// <summary>
-        /// 铺巾
-        /// </summary>
-        Scarf,
-
-        /// <summary>
-        /// 抽取利多卡因开始
-        /// </summary>
-        LidocaineExtractionStart,
-
-        /// <summary>
-        /// 抽取利多卡因
-        /// </summary>
-        LidocaineExtraction,
-
-        /// <summary>
-        /// 抽取利多卡因结束
-        /// </summary>
-        LidocaineExtractionEnd,
-
-        /// <summary>
-        /// 注射起皮丘
-        /// </summary>
-        PimpleInjection,
-
-        /// <summary>
-        /// 间歇性回抽开始
-        /// </summary>
-        BackPumpingStart,
-
-        /// <summary>
-        /// 间歇性回抽结束
-        /// </summary>
-        BackPumpingEnd,
-
-        /// <summary>
-        /// 穿刺-垂直刺入
-        /// </summary>
-        PunctureVerticalPuncture,
-
-        /// <summary>
-        /// 穿刺-旋转刺入
-        /// </summary>
-        PunctureRotaryPuncture,
-
-        /// <summary>
-        /// 穿刺-完成刺入
-        /// </summary>
-        PunctureCompletePuncture,
-
-        /// <summary>
-        /// 抽取骨髓液
-        /// </summary>
-        ExtractMarrowFluid,
-
-        /// <summary>
-        /// 取下注射器,插入针芯
-        /// </summary>
-        RemoveSyringeInsertPinCore,
-
-        /// <summary>
-        /// 拔针-拔出针
-        /// </summary>
-        NeedlePullingNeedlePulling,
-
-        /// <summary>
-        /// 拔针-盖纱布
-        /// </summary>
-        NeedlePullingCoverGauze,
-
-        /// <summary>
-        /// 拔针-撤洞巾 
-        /// </summary>
-        NeedlePullingHoleRemovingTowel,
-
-        /// <summary>
-        /// 拔针-粘胶布
-        /// </summary>
-        NeedlePullingAdhesiveTape,
-
-        /// <summary>
-        /// 涂片
-        /// </summary>
-        Smear,
-
-        /// <summary>
-        /// 抽取穿刺针
-        /// </summary>
-        PullOutPunctureNeedle,
-
-        /// <summary>
-        /// 连接注射器
-        /// </summary>
-        ConnectSyringe,
-        /// <summary>
-        /// 洗手
-        /// </summary>
-        WashBasinTwo,
-    }
-
     /// <summary>
     /// 播放动画进化
     /// </summary>
@@ -172,14 +21,14 @@ namespace XAnimator.Base
     /// </summary>
     public abstract class XAnimatorControllerBase : MonoBehaviour
     {
-        private UnityEngine.Animator _animator;
+        protected UnityEngine.Animator animator;
         private List<string> _animationClips;
 
-        public void StartSvc()
+        public virtual void StartSvc()
         {
-            _animator = GetComponent<UnityEngine.Animator>();
+            animator = GetComponent<UnityEngine.Animator>();
             _animationClips = new List<string>();
-            foreach (AnimationClip animationClip in _animator.runtimeAnimatorController.animationClips)
+            foreach (AnimationClip animationClip in animator.runtimeAnimatorController.animationClips)
             {
                 _animationClips.Add(animationClip.name);
             }
@@ -189,8 +38,13 @@ namespace XAnimator.Base
         {
             if (_animationClips.Contains(animationType.ToString()))
             {
-                _animator.speed = 0;
-                _animator.Play(animationType.ToString(), 0, animProgress);
+                animator.speed = 0;
+                if (animProgress >= 1f)
+                {
+                    animProgress = 0.99f;
+                }
+
+                animator.Play(animationType.ToString(), 0, animProgress);
             }
         }
 
@@ -198,14 +52,14 @@ namespace XAnimator.Base
         {
             if (_animationClips.Contains(animationType.ToString()))
             {
-                _animator.speed = 0;
+                animator.speed = 0;
                 if (animSpeedProgress == AnimSpeedProgress.End)
                 {
-                    _animator.Play(animationType.ToString(), 0, 1);
+                    animator.Play(animationType.ToString(), 0, 0.99f);
                 }
                 else if (animSpeedProgress == AnimSpeedProgress.Start)
                 {
-                    _animator.Play(animationType.ToString(), 0, normalizedTime: 0.01f);
+                    animator.Play(animationType.ToString(), 0, normalizedTime: 0.01f);
                 }
             }
         }
@@ -236,9 +90,17 @@ namespace XAnimator.Base
         {
             if (_animationClips.Contains(animationType.ToString()))
             {
-                _animator.speed = 1;
-                _animator.SetTrigger(animationType.ToString());
+                animator.speed = 1;
+                animator.SetTrigger(animationType.ToString());
             }
+        }
+
+        /// <summary>
+        /// 停止播放动画
+        /// </summary>
+        public void StopAnim()
+        {
+            animator.speed = 0;
         }
 
         /// <summary>
@@ -248,28 +110,21 @@ namespace XAnimator.Base
         /// <returns></returns>
         public float GetPlayAnimLength(AnimType animType)
         {
-            AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
+            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
             foreach (AnimationClip item in clips)
             {
                 if (item.name == animType.ToString())
                 {
-                    return item.length ;
+                    return item.length;
                 }
             }
 
             return -1;
         }
 
-        /// <summary>
-        /// 停止动画计时任务
-        /// </summary>
-        public void StopAnimatorTimeTask()
-        {
-            TimeSvc.Instance.DeleteTimeTask(_playAnimTimeTask);
-        }
-
         public void StopAnimTaskTime()
         {
+            StopAnim();
             TimeSvc.Instance.DeleteTimeTask(_playAnimTimeTask);
         }
     }

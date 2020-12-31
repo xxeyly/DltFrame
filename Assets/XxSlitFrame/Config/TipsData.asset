@@ -12,4 +12,59 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52c79eaa7ba15574983c247aa03559cf, type: 3}
   m_Name: TipsData
   m_EditorClassIdentifier: 
-  tipsDataInfos: []
+  tipsDataInfos:
+  - tipIndex: 0
+    tipsContent: 
+    endEvent: 1
+    tipsAudioClip: {fileID: 8300000, guid: 76c8432c28ffbbc45a7f4824490fbd47, type: 3}
+    sureOperation: 0
+  - tipIndex: 1
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 2
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 3
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 4
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 5
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 6
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 7
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 8
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 9
+    tipsContent: 
+    endEvent: 0
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0
+  - tipIndex: 10
+    tipsContent: 
+    endEvent: 14
+    tipsAudioClip: {fileID: 0}
+    sureOperation: 0

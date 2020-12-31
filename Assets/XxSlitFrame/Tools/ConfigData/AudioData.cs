@@ -72,7 +72,27 @@ namespace XxSlitFrame.Tools.ConfigData
             /// <summary>
             /// 显示物品
             /// </summary>
-            DisplayObjects
+            DisplayObjects,
+
+            /// <summary>
+            /// 提示音
+            /// </summary>
+            Tip,
+
+            /// <summary>
+            /// 警告
+            /// </summary>
+            Warning,
+
+            /// <summary>
+            /// 消防广播
+            /// </summary>
+            FireBroadcast,
+
+            /// <summary>
+            /// 自检
+            /// </summary>
+            SelfInspection,
         }
 
         [Serializable]

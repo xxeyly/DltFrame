@@ -80,5 +80,45 @@ namespace XxSlitFrame.Tools.Svc
 
             return angle;
         }
+
+        /// <summary>
+        /// 集合合并
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> MergeList<T>(params List<T>[] needMergeList)
+        {
+            List<T> mergeList = new List<T>();
+
+            foreach (List<T> list in needMergeList)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    mergeList.Add(list[i]);
+                }
+            }
+
+            return mergeList;
+        }
+
+        /// <summary>
+        /// 集合删除重复项
+        /// </summary>
+        /// <param name="currentList"></param>
+        /// <param name="targetList"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> RemoveRepeat<T>(List<T> currentList, List<T> targetList)
+        {
+            for (int i = 0; i < targetList.Count; i++)
+            {
+                if (currentList.Contains(targetList[i]))
+                {
+                    currentList.Remove(targetList[i]);
+                }
+            }
+
+            return currentList;
+        }
     }
 }
