@@ -6,6 +6,8 @@ using UnityEngine;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject;
+using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot;
+using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc;
 
 public class OdinMenu : OdinMenuEditorWindow
 {
@@ -20,8 +22,10 @@ public class OdinMenu : OdinMenuEditorWindow
         var tree = new OdinMenuTree();
         tree.Selection.SupportsMultiSelect = false;
         CustomScriptableObject customScriptableObject = new CustomScriptableObject();
-
+        CustomAudioSvc customAudioSvc = new CustomAudioSvc(customScriptableObject);
         tree.Add("打包工具", new OdinCustomBuild(customScriptableObject));
+        tree.Add("游戏根目录", new CustomGameRoot(customScriptableObject, customAudioSvc));
+        tree.Add("音频配置", customAudioSvc);
         tree.Add("配置文件", customScriptableObject);
         return tree;
     }

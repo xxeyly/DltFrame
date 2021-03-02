@@ -4,7 +4,10 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptable
 {
     public class CustomScriptableObject
     {
-        [HorizontalGroup("打包数据")] [FilePath] [LabelText("自动打包存放路径")] [LabelWidth(100)]
+        [FilePath] [LabelText("自动打包配置存放路径")] [LabelWidth(120)]
         public string customBuildDataPath = "Assets/XxSlitFrame/Config/CustomBuildData.asset";
+
+        [FilePath] [LabelText("音频配置存放路径")] [LabelWidth(120)]
+        public string customAudioDataPath = "Assets/XxSlitFrame/Config/CustomAudioData.asset";
     }
 }
