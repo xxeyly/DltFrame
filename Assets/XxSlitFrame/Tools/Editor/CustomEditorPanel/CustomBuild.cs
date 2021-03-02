@@ -491,6 +491,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         [PostProcessBuild(1)]
         public static void AfterBuild(BuildTarget target, string pathToBuiltProject)
         {
+            return;
             Debug.Log("Build Success  输出平台: " + target + "  输出路径: " + pathToBuiltProject);
 
             //打开文件或文件夹
@@ -706,8 +707,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
                 WebResponse response = reqFtp.GetResponse();
                 StreamReader reader =
-                    new StreamReader(response.GetResponseStream() ?? throw new InvalidOperationException(),
-                        Encoding.UTF8);
+                    new StreamReader(response.GetResponseStream(),Encoding.UTF8);
                 string line = reader.ReadLine();
                 while (line != null)
                 {

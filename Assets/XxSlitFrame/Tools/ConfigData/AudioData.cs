@@ -7,7 +7,7 @@ namespace XxSlitFrame.Tools.ConfigData
     [CreateAssetMenu(fileName = "AudioData", menuName = "配置文件/音频数据", order = 1)]
     public class AudioData : ScriptableObject
     {
-        [HideInInspector] [Header("音效")] public List<AudioDataInfo> audioDataInfos;
+        [Header("音效")] public List<AudioDataInfo> audioDataInfos;
 
         /// <summary>
         /// 音乐类型
@@ -55,16 +55,6 @@ namespace XxSlitFrame.Tools.ConfigData
             [Header("确定")] ESure,
 
             /// <summary>
-            /// 跳步骤
-            /// </summary>
-            [Header("跳步骤")] ENextStep,
-
-            /// <summary>
-            /// 重做,下一步
-            /// </summary>
-            [Header("重做")] ERedo,
-
-            /// <summary>
             /// 鼠标点击
             /// </summary>
             [Header("鼠标点击")] EClick,
@@ -73,26 +63,6 @@ namespace XxSlitFrame.Tools.ConfigData
             /// 显示物品
             /// </summary>
             DisplayObjects,
-
-            /// <summary>
-            /// 提示音
-            /// </summary>
-            Tip,
-
-            /// <summary>
-            /// 警告
-            /// </summary>
-            Warning,
-
-            /// <summary>
-            /// 消防广播
-            /// </summary>
-            FireBroadcast,
-
-            /// <summary>
-            /// 自检
-            /// </summary>
-            SelfInspection,
         }
 
         [Serializable]

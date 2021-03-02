@@ -12,7 +12,7 @@ namespace XxSlitFrame.Tools.Editor
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.WebGL) return;
 #if !UNITY_2019
             EditorApplication.delayCall =
- () => { EditorApplication.ExecuteMenuItem("Edit/Graphics Emulation/WebGL 2.0"); };
+                () => { EditorApplication.ExecuteMenuItem("Edit/Graphics Emulation/WebGL 2.0"); };
 #endif
         }
 
@@ -25,7 +25,7 @@ namespace XxSlitFrame.Tools.Editor
             if (EditorUserBuildSettings.activeBuildTarget != BuildTarget.WebGL) return;
 #if !UNITY_2019
             EditorApplication.delayCall =
- () => { EditorApplication.ExecuteMenuItem("Edit/Graphics Emulation/WebGL 2.0"); };
+                () => { EditorApplication.ExecuteMenuItem("Edit/Graphics Emulation/WebGL 2.0"); };
 #endif
         }
     }

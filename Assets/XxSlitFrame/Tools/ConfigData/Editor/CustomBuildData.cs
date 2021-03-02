@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using XxSlitFrame.Tools.Svc;
@@ -126,11 +127,11 @@ namespace XxSlitFrame.Tools.ConfigData.Editor
         /// <summary>
         /// 拷贝文件夹路径
         /// </summary>
-        public string copyFolderPath;
+        [LabelText("拷贝文件夹路径")] [FolderPath] public string copyFolderPath;
 
         /// <summary>
         /// 粘贴文件夹根路径
         /// </summary>
-        public string pasteFolderPath;
+        [LabelText("粘贴文件夹路径")] public string pasteFolderPath;
     }
 }

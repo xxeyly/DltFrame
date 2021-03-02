@@ -98,7 +98,8 @@ namespace XxSlitFrame.Tools.Svc
         /// <summary>
         /// 开始物品跟随相机
         /// </summary>
-        public void StartObjectFollowingMouse(Camera sceneCamera, GameObject targetObject, SceneObjectFollowingModel sceneObjectFollowingModel)
+        public void StartObjectFollowingMouse(Camera sceneCamera, GameObject targetObject,
+            SceneObjectFollowingModel sceneObjectFollowingModel)
         {
             _isSceneFollow = true;
             _sceneCamera = sceneCamera;
@@ -127,7 +128,8 @@ namespace XxSlitFrame.Tools.Svc
 
                 // 存储鼠标的屏幕空间坐标（Z值使用目标物体的屏幕空间坐标）   
 
-                _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
+                _vec3MouseScreenSpace =
+                    new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
 
                 // 计算目标物体与鼠标物体在世界空间中的偏移量   
 
@@ -136,7 +138,8 @@ namespace XxSlitFrame.Tools.Svc
                 {
                     // 存储鼠标的屏幕空间坐标（Z值使用目标物体的屏幕空间坐标）  
 
-                    _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
+                    _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y,
+                        _vec3TargetScreenSpace.z);
 
                     // 把鼠标的屏幕空间坐标转换到世界空间坐标（Z值使用目标物体的屏幕空间坐标），加上偏移量，以此作为目标物体的世界空间坐标  
 
@@ -156,7 +159,8 @@ namespace XxSlitFrame.Tools.Svc
 
                 // 存储鼠标的屏幕空间坐标（Z值使用目标物体的屏幕空间坐标）   
 
-                _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
+                _vec3MouseScreenSpace =
+                    new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
 
                 // 计算目标物体与鼠标物体在世界空间中的偏移量   
 
@@ -164,7 +168,8 @@ namespace XxSlitFrame.Tools.Svc
 
                 // 存储鼠标的屏幕空间坐标（Z值使用目标物体的屏幕空间坐标）  
 
-                _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
+                _vec3MouseScreenSpace =
+                    new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
 
                 // 把鼠标的屏幕空间坐标转换到世界空间坐标（Z值使用目标物体的屏幕空间坐标），加上偏移量，以此作为目标物体的世界空间坐标  
 
@@ -186,7 +191,8 @@ namespace XxSlitFrame.Tools.Svc
 
                 // 存储鼠标的屏幕空间坐标（Z值使用目标物体的屏幕空间坐标）   
 
-                _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
+                _vec3MouseScreenSpace =
+                    new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
 
                 // 计算目标物体与鼠标物体在世界空间中的偏移量   
 
@@ -195,7 +201,8 @@ namespace XxSlitFrame.Tools.Svc
                 {
                     // 存储鼠标的屏幕空间坐标（Z值使用目标物体的屏幕空间坐标）  
 
-                    _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y, _vec3TargetScreenSpace.z);
+                    _vec3MouseScreenSpace = new Vector3(Input.mousePosition.x, Input.mousePosition.y,
+                        _vec3TargetScreenSpace.z);
 
                     // 把鼠标的屏幕空间坐标转换到世界空间坐标（Z值使用目标物体的屏幕空间坐标），加上偏移量，以此作为目标物体的世界空间坐标  
 
@@ -222,7 +229,8 @@ namespace XxSlitFrame.Tools.Svc
         {
             _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
             UiFollowingMouse(targetObj, offset);
-            _objectFollowingMouseTaskTime = TimeSvc.Instance.AddTimeTask(() => { UiFollowingMouse(targetObj, offset); }, "UI拖拽任务", 0.00f, 0);
+            _objectFollowingMouseTaskTime =
+                TimeSvc.Instance.AddTimeTask(() => { UiFollowingMouse(targetObj, offset); }, "UI拖拽任务", 0.00f, 0);
         }
 
         /// <summary>
@@ -237,10 +245,12 @@ namespace XxSlitFrame.Tools.Svc
             switch (_canvas.renderMode)
             {
                 case RenderMode.ScreenSpaceOverlay:
-                    RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, null, out uiPos);
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform,
+                        Input.mousePosition, null, out uiPos);
                     break;
                 case RenderMode.ScreenSpaceCamera:
-                    RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out uiPos);
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform,
+                        Input.mousePosition, _canvas.worldCamera, out uiPos);
 
                     break;
                 case RenderMode.WorldSpace:
@@ -270,7 +280,8 @@ namespace XxSlitFrame.Tools.Svc
                 _mouseEnterUI = GetMouseEnterUi();
                 if (_mouseEnterUI != null)
                 {
-                    if (_mouseEnterUI.GetComponent<Button>() || _mouseEnterUI.GetComponent<Toggle>() || _mouseEnterUI.GetComponent<Slider>())
+                    if (_mouseEnterUI.GetComponent<Button>() || _mouseEnterUI.GetComponent<Toggle>() ||
+                        _mouseEnterUI.GetComponent<Slider>())
                     {
                         SetMouseArrow(_mouseEnter, new Vector2(0, 0));
                     }
@@ -302,7 +313,8 @@ namespace XxSlitFrame.Tools.Svc
         {
             if (EventSystem.current != null)
             {
-                PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current) {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
+                PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current)
+                    {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
                 //鼠标位置
                 //一个由光线射到的物体的List
                 List<RaycastResult> results = new List<RaycastResult>();
@@ -330,7 +342,8 @@ namespace XxSlitFrame.Tools.Svc
         /// <returns></returns>
         public GameObject GetMouseEnterUi()
         {
-            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current) {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
+            PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current)
+                {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
             //鼠标位置
             //一个由光线射到的物体的List
             List<RaycastResult> results = new List<RaycastResult>();
@@ -359,7 +372,8 @@ namespace XxSlitFrame.Tools.Svc
             if (distanceGrowth)
             {
                 target.GetComponent<RectTransform>().sizeDelta =
-                    new Vector2(Vector3.Distance(target.position, Input.mousePosition) * (1920f / Screen.width), target.GetComponent<RectTransform>().sizeDelta.y);
+                    new Vector2(Vector3.Distance(target.position, Input.mousePosition) * (1920f / Screen.width),
+                        target.GetComponent<RectTransform>().sizeDelta.y);
             }
         }
 
@@ -418,11 +432,13 @@ namespace XxSlitFrame.Tools.Svc
         /// <summary>
         /// 拖动3D物体在UI面板上
         /// </summary>
-        public bool Drag3DObjectInUIPanel(Camera _currentCamera, Transform _target, Vector3 centerPos, float leftDirection, float rightDirection, float topDirection, float downDirection,
+        public bool Drag3DObjectInUIPanel(Camera _currentCamera, Transform _target, Vector3 centerPos,
+            float leftDirection, float rightDirection, float topDirection, float downDirection,
             float frontDirection, float backDirection)
         {
             Ray ray = _currentCamera.ScreenPointToRay(Input.mousePosition * (1920f / Screen.width));
-            bool isHit = Physics.Raycast(ray, out var hit, LayerMask.NameToLayer("CheckItem"), 10000);
+            RaycastHit hit;
+            bool isHit = Physics.Raycast(ray, out hit, LayerMask.NameToLayer("CheckItem"), 10000);
             if (isHit)
             {
                 // Debug.Log(hit.collider.gameObject);
@@ -441,7 +457,9 @@ namespace XxSlitFrame.Tools.Svc
                     Transform cameraTransform = _currentCamera.transform;
                     Vector3 CO_Direction = _target.position - cameraTransform.position;
                     float cPlane = Vector3.Dot(CO_Direction, cameraTransform.forward);
-                    Vector3 currentMousePos = _currentCamera.ScreenToWorldPoint(new Vector3(Input.mousePosition.x  * (1920f / Screen.width), Input.mousePosition.y * (1920f / Screen.width), cPlane));
+                    Vector3 currentMousePos = _currentCamera.ScreenToWorldPoint(new Vector3(
+                        Input.mousePosition.x * (1920f / Screen.width), Input.mousePosition.y * (1920f / Screen.width),
+                        cPlane));
 
                     if (currentMousePos.x <= centerPos.x - leftDirection)
                     {
