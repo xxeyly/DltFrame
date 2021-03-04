@@ -1,5 +1,4 @@
 ﻿using System;
-using CameraTools;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XxSlitFrame.Tools.Svc;
@@ -58,14 +57,6 @@ namespace XxSlitFrame.Tools
                 }
             }, "开启场景实时检测", 0.01f, 0);
 
-            //开启场景实时检测
-            TimeSvc.Instance.AddImmortalTimeTask(() =>
-            {
-                if (Input.GetKeyDown(KeyCode.F1))
-                {
-                    CameraControl.Instance.SetCurrentCameraPosInfo();
-                }
-            }, "开启相机位置信息实时记录", 0.01f, 0);
             TimeSvc.Instance.AddImmortalTimeTask(() => { MouseSvc.Instance.MouseEnterState(); }, "鼠标实时监测", 0.01f, 0);
 
             if (PersistentDataSvc.Instance.jump)

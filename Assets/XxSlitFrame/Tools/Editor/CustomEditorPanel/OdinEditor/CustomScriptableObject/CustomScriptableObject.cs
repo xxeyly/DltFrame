@@ -9,5 +9,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptable
 
         [FilePath] [LabelText("音频配置存放路径")] [LabelWidth(120)]
         public string customAudioDataPath = "Assets/XxSlitFrame/Config/CustomAudioData.asset";
+
+        [FilePath] [LabelText("框架配置存放路径")] [LabelWidth(120)]
+        public string customFrameDataPath = "Assets/XxSlitFrame/Config/CustomFrameData.asset";
     }
 }

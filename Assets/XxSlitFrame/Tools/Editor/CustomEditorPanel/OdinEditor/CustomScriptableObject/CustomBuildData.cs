@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -6,6 +7,7 @@ using XxSlitFrame.Tools.ConfigData.Editor;
 
 namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject
 {
+    [Serializable]
     public class CustomBuildData : ScriptableObject
     {
         [LabelText("当前打包方式:")] public BuildTarget buildTarget;

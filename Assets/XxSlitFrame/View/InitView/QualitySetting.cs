@@ -79,21 +79,21 @@ namespace XxSlitFrame.View.InitView
 
         private void OnLow(BaseEventData targetObj)
         {
-            audioSvc.PlayEffectAudio(AudioData.AudioType.EClick);
+            audioSvc.PlayEffectAudio("点击");
 
             ShowQuality(0);
         }
 
         private void OnCenter(BaseEventData targetObj)
         {
-            audioSvc.PlayEffectAudio(AudioData.AudioType.EClick);
+            audioSvc.PlayEffectAudio("点击");
 
             ShowQuality(1);
         }
 
         private void OnHigh(BaseEventData targetObj)
         {
-            audioSvc.PlayEffectAudio(AudioData.AudioType.EClick);
+            audioSvc.PlayEffectAudio("点击");
 
             ShowQuality(2);
         }

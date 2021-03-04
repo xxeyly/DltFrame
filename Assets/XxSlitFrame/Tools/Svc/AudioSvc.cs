@@ -14,8 +14,8 @@ namespace XxSlitFrame.Tools.Svc
         private AudioSource _backgroundAudioSource;
         private AudioSource _effectAudioSource;
         private AudioSource _tipAndDialogAudioSource;
-        public AudioData audioData;
-        private Dictionary<AudioData.AudioType, AudioClip> _audioDlc;
+        public AudioSvcData audioData;
+        private Dictionary<string, AudioClip> _audioDlc;
 
         public override void StartSvc()
         {
@@ -30,12 +30,14 @@ namespace XxSlitFrame.Tools.Svc
                 _effectAudioSource = gameObject.AddComponent<AudioSource>();
                 _effectAudioSource.playOnAwake = false;
             }
+
             //创建提示与对话组件
             if (_tipAndDialogAudioSource == null)
             {
                 _tipAndDialogAudioSource = gameObject.AddComponent<AudioSource>();
                 _tipAndDialogAudioSource.playOnAwake = false;
             }
+
             //创建背景音乐组件
             if (_backgroundAudioSource == null)
             {
@@ -44,15 +46,17 @@ namespace XxSlitFrame.Tools.Svc
                 _backgroundAudioSource.volume = 0.5f;
                 _backgroundAudioSource.loop = true;
             }
+
             //音效初始化
-            _audioDlc = new Dictionary<AudioData.AudioType, AudioClip>();
-            foreach (AudioData.AudioDataInfo audioDataInfo in audioData.audioDataInfos)
+            _audioDlc = new Dictionary<string, AudioClip>();
+            foreach (AudioSvcData.AudioInfo audioDataInfo in audioData.audioInfos)
             {
-                if (!_audioDlc.ContainsKey(audioDataInfo.audioType) && audioDataInfo.dialogueAudioClip != null)
+                if (!_audioDlc.ContainsKey(audioDataInfo.audioName) && audioDataInfo.audioClip != null)
                 {
-                    _audioDlc.Add(audioDataInfo.audioType, audioDataInfo.dialogueAudioClip);
+                    _audioDlc.Add(audioDataInfo.audioName, audioDataInfo.audioClip);
                 }
             }
+
             //播放背景音乐
             PlayBackgroundAudio();
         }
@@ -61,11 +65,11 @@ namespace XxSlitFrame.Tools.Svc
         /// 播放音效
         /// </summary>
         /// <param name="audioType"></param>
-        public void PlayEffectAudio(AudioData.AudioType audioType)
+        public void PlayEffectAudio(string audioName)
         {
-            if (_audioDlc.ContainsKey(audioType))
+            if (_audioDlc.ContainsKey(audioName))
             {
-                _effectAudioSource.clip = _audioDlc[audioType];
+                _effectAudioSource.clip = _audioDlc[audioName];
                 _effectAudioSource.Play();
             }
         }
@@ -145,7 +149,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public void PauseBackgroundAudio()
         {
-            PlayEffectAudio(AudioData.AudioType.ECloseBackground);
+            PlayEffectAudio("背景音乐");
             _backgroundAudioSource.Pause();
             PersistentDataSvc.Instance.audioState = false;
         }
@@ -155,9 +159,9 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public void PlayBackgroundAudio()
         {
-            if (_audioDlc.ContainsKey(AudioData.AudioType.EBackground) && _audioDlc[AudioData.AudioType.EBackground] != null)
+            if (_audioDlc.ContainsKey("背景音乐") && _audioDlc["背景音乐"] != null)
             {
-                _backgroundAudioSource.clip = _audioDlc[AudioData.AudioType.EBackground];
+                _backgroundAudioSource.clip = _audioDlc["背景音乐"];
                 _backgroundAudioSource.Play();
                 PersistentDataSvc.Instance.audioState = true;
             }

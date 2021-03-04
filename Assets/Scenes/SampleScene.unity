@@ -112,3 +112,89 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 348b5e601556add40b3b223fa43be1a8, type: 2}
+--- !u!1 &47493071
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 47493074}
+  - component: {fileID: 47493073}
+  - component: {fileID: 47493072}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &47493072
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47493071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f3569d13b497bd4bb23ee9f6531e9d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  init: 0
+  audioData: {fileID: 0}
+--- !u!114 &47493073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47493071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aecb3a67eb2390440b71fde2ebf431f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  init: 0
+  sceneIndex: 0
+  sceneName: 
+  jump: 0
+  jumpSceneName: 
+  audioState: 0
+  versionInfo:
+    watermark: 0
+    downLoad: 0
+    loadingProgress: 0
+    sceneProgress: 0
+    assessmentTime: 0
+  downFileInfo:
+    fileInfoList: []
+  downFileInfoOver: 0
+  downVersionOver: 0
+  downFileOver: 0
+  cameraSpeed: 1
+  autoPlay: 0
+  currentStepBigIndex: 0
+  currentStepSmallIndex: 0
+  currentStepSmallSmallIndex: 0
+  qualitySettingType: 2
+  mouseState: 0
+  sceneLoadType: 0
+  serverPath: 
+  platformLoad: 0
+  sceneResLoad: 0
+--- !u!4 &47493074
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47493071}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16941cfd9e574aa6a17e7cdc8165b3b8, type: 3}
+  m_Name: CustomFrameData
+  m_EditorClassIdentifier: 
+  resSvcEditor: 1
+  audioSvcEditor: 1
+  listenerSvcEditorSvc: 1
+  customSceneSvc: 1
+  timeSvcEditorSvc: 1
+  viewSvcEditorSvc: 1
+  resSvcEditorInit: 1
+  audioSvcEditorInit: 1
+  listenerSvcEditorSvcInit: 1
+  customSceneSvcInit: 1
+  timeSvcEditorSvcInit: 1
+  viewSvcEditorSvcInit: 1

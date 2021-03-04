@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -15,9 +16,9 @@ namespace XxSlitFrame.Tools
     {
         public static GameRootStart Instance;
 #pragma warning disable 649
-        public List<SvcBase> activeSvcBase;
-        public List<StartSingleton> sceneStartSingletons;
-        [Header("是否保留")] public bool dontDestroyOnLoad;
+        [LabelText("激活的服务")] public List<SvcBase> activeSvcBase;
+        [LabelText("场景服务")] public List<StartSingleton> sceneStartSingletons;
+        [LabelText("是否摧毁")][BoxGroup] public bool dontDestroyOnLoad;
 
         private void OnEnable()
         {

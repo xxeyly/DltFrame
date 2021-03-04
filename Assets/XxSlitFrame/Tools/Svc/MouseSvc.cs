@@ -71,7 +71,7 @@ namespace XxSlitFrame.Tools.Svc
             if (Input.GetMouseButtonDown(0) && !GetMouseOverUI())
             {
                 mouseDown = true;
-                AudioSvc.Instance.PlayEffectAudio(AudioData.AudioType.EClick);
+                AudioSvc.Instance.PlayEffectAudio("点击");
             }
 
             if (Input.GetMouseButtonUp(0))

@@ -16,8 +16,6 @@ MonoBehaviour:
   buildCompressType: 0
   buildPackagePath: D:/Soft/Xampp/htdocs
   exportCnProjectName: "X\u6846\u67B6"
-  exportEnProjectName: xxslitFrameBuild
+  exportEnProjectName: XFrame
   chineseShell: 1
-  folderCopy:
-  - copyFolderPath: Assets/WebGLTemplates
-    pasteFolderPath: WebGLTemplates
+  folderCopy: []

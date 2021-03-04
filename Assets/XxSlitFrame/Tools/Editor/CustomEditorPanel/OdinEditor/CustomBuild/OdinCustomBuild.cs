@@ -10,7 +10,7 @@ using CustomBuildData = XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Cu
 
 namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
 {
-    public class OdinCustomBuild
+    public class OdinCustomBuild : BaseEditor
     {
         private CustomScriptableObject.CustomScriptableObject _customScriptableObject;
         [LabelText("当前打包方式:")] public BuildTarget buildTarget;
@@ -27,6 +27,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
         [LabelText("使用中文输出外壳")] public bool chineseShell;
         [LabelText("文件拷贝输出路径")] public List<FolderCopy> folderCopy;
 
+        [LabelText("自定义打包数据")] private CustomBuildData _customBuildData;
+
         [LabelText("开始打包")]
         [Button(ButtonSizes.Large)]
         public void StartBuild()
@@ -35,72 +37,25 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
             Build();
         }
 
-        public OdinCustomBuild()
-        {
-            Debug.Log("加载配置");
-            LoadConfig();
-        }
-
         public OdinCustomBuild(CustomScriptableObject.CustomScriptableObject customScriptableObject)
         {
             _customScriptableObject = customScriptableObject;
-            LoadConfig();
+            OnCreateConfig();
+            OnLoadConfig();
         }
-
 
         /// <summary>
         /// 打包
         /// </summary>
         private void Build()
         {
-            CustomBuildData customBuildData =
-                AssetDatabase.LoadAssetAtPath<CustomBuildData>(_customScriptableObject
-                    .customBuildDataPath);
-            if (customBuildData == null)
-            {
-                CustomBuildData tempCustomBuildData =
-                    ScriptableObject.CreateInstance<CustomBuildData>();
-                tempCustomBuildData.buildTarget = buildTarget;
-                tempCustomBuildData.buildCompressType = buildCompressType;
-                tempCustomBuildData.buildPackagePath = buildPackagePath;
-                tempCustomBuildData.exportCnProjectName = exportCnProjectName;
-                tempCustomBuildData.exportEnProjectName = exportEnProjectName;
-                tempCustomBuildData.chineseShell = chineseShell;
-                tempCustomBuildData.folderCopy = folderCopy;
-                AssetDatabase.CreateAsset(tempCustomBuildData, _customScriptableObject.customBuildDataPath);
-                customBuildData =
-                    AssetDatabase.LoadAssetAtPath<CustomBuildData>(_customScriptableObject
-                        .customBuildDataPath);
-            }
-
-            //标记脏区
-            EditorUtility.SetDirty(customBuildData);
-            // 保存所有修改
-            AssetDatabase.SaveAssets();
-
-
+            OnSaveConfig();
             BuildPipeline.BuildPlayer(CustomBuildTools.FindEnableEditorScenes(),
                 CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName,
                     exportEnProjectName), buildTarget,
                 buildCompressType);
         }
 
-        private void LoadConfig()
-        {
-            CustomBuildData customBuildData =
-                AssetDatabase.LoadAssetAtPath<CustomBuildData>(_customScriptableObject
-                    .customBuildDataPath);
-            if (customBuildData != null)
-            {
-                buildTarget = customBuildData.buildTarget;
-                buildCompressType = customBuildData.buildCompressType;
-                buildPackagePath = customBuildData.buildPackagePath;
-                exportCnProjectName = customBuildData.exportCnProjectName;
-                exportEnProjectName = customBuildData.exportEnProjectName;
-                chineseShell = customBuildData.chineseShell;
-                folderCopy = customBuildData.folderCopy;
-            }
-        }
 
         /// <summary>
         /// 拷贝文件
@@ -132,6 +87,52 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
             System.Diagnostics.Process.Start(pathToBuiltProject);
             int index = pathToBuiltProject.LastIndexOf("/", StringComparison.Ordinal);
             Debug.Log("导出包体的目录 :" + pathToBuiltProject.Substring(0, index));
+        }
+
+        public override void OnDisable()
+        {
+            OnSaveConfig();
+        }
+
+        public override void OnCreateConfig()
+        {
+            _customBuildData = AssetDatabase.LoadAssetAtPath<CustomBuildData>(_customScriptableObject
+                .customBuildDataPath);
+            if (_customBuildData == null)
+            {
+                //创建数据
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<CustomBuildData>(),
+                    _customScriptableObject.customBuildDataPath);
+                //读取数据
+                _customBuildData = AssetDatabase.LoadAssetAtPath<CustomBuildData>(_customScriptableObject
+                    .customBuildDataPath);
+            }
+        }
+
+        public override void OnSaveConfig()
+        {
+            _customBuildData.buildTarget = buildTarget;
+            _customBuildData.buildCompressType = buildCompressType;
+            _customBuildData.buildPackagePath = buildPackagePath;
+            _customBuildData.exportCnProjectName = exportCnProjectName;
+            _customBuildData.exportEnProjectName = exportEnProjectName;
+            _customBuildData.chineseShell = chineseShell;
+            _customBuildData.folderCopy = folderCopy;
+            //标记脏区
+            EditorUtility.SetDirty(_customBuildData);
+            // 保存所有修改
+            AssetDatabase.SaveAssets();
+        }
+
+        public override void OnLoadConfig()
+        {
+            buildTarget = _customBuildData.buildTarget;
+            buildCompressType = _customBuildData.buildCompressType;
+            buildPackagePath = _customBuildData.buildPackagePath;
+            exportCnProjectName = _customBuildData.exportCnProjectName;
+            exportEnProjectName = _customBuildData.exportEnProjectName;
+            chineseShell = _customBuildData.chineseShell;
+            folderCopy = _customBuildData.folderCopy;
         }
     }
 }

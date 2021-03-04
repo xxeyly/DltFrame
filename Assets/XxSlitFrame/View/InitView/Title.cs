@@ -66,19 +66,19 @@ namespace XxSlitFrame.View.InitView
         private void OnClose(BaseEventData targetObj)
         {
             ShowObj(_closePanel, _mask);
-            audioSvc.PlayEffectAudio(AudioData.AudioType.DisplayObjects);
+            audioSvc.PlayEffectAudio("");
         }
 
         private void OnExit(BaseEventData targetObj)
         {
-            audioSvc.PlayEffectAudio(AudioData.AudioType.DisplayObjects);
+            audioSvc.PlayEffectAudio("");
 
             sceneSvc.SceneEsc();
         }
 
         private void OnNo(BaseEventData targetObj)
         {
-            audioSvc.PlayEffectAudio(AudioData.AudioType.DisplayObjects);
+            audioSvc.PlayEffectAudio("");
 
             HideObj(_closePanel, _mask);
         }

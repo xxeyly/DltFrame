@@ -257,7 +257,7 @@ namespace XxSlitFrame.View
         protected int ShowErrorTip(GameObject errorTips, Text errorTipContent, string content,
             UnityAction action = null)
         {
-            audioSvc.PlayEffectAudio(AudioData.AudioType.EErrorPopup);
+            audioSvc.PlayEffectAudio("");
 
             int errorTimeTask = timeSvc.ShowErrorTip(errorTips, errorTipContent, content, action);
             timeTaskInfoList.Add(new TimeTaskInfo()
