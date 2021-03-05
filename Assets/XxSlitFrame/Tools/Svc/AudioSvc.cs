@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc.BaseSvc;
@@ -14,7 +15,7 @@ namespace XxSlitFrame.Tools.Svc
         private AudioSource _backgroundAudioSource;
         private AudioSource _effectAudioSource;
         private AudioSource _tipAndDialogAudioSource;
-        public AudioSvcData audioData;
+        [LabelText("音频数据")] public AudioSvcData audioData;
         private Dictionary<string, AudioClip> _audioDlc;
 
         public override void StartSvc()

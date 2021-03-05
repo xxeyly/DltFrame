@@ -18,4 +18,6 @@ MonoBehaviour:
   exportCnProjectName: "X\u6846\u67B6"
   exportEnProjectName: XFrame
   chineseShell: 1
-  folderCopy: []
+  folderCopy:
+  - copyFolderPath: Assets/XxSlitFrame/Resources/DownFile
+    pasteFolderPath: DownFile

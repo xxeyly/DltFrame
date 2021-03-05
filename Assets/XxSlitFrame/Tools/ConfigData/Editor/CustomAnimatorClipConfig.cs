@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace XxSlitFrame.Tools.ConfigData.Editor
 {
-    [CreateAssetMenu(fileName = "CustomAnimatorClipConfig", menuName = "配置文件/动画文件关联配置", order = 1)]
+    // [CreateAssetMenu(fileName = "CustomAnimatorClipConfig", menuName = "配置文件/动画文件关联配置", order = 1)]
     public class CustomAnimatorClipConfig : ScriptableObject
     {
         /// <summary>

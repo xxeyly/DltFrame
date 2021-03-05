@@ -78,22 +78,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
 
             return path;
         }
-
-        /// <summary>
-        /// 保存版本数据
-        /// </summary>
-        public void SaveBuildData(CustomBuildData _buildData)
-        {
-            ResSvc.VersionInfo version = new ResSvc.VersionInfo
-            {
-                watermark = _buildData.versionWatermark, downLoad = _buildData.versionDownLoad,
-                loadingProgress = _buildData.versionLoadingProgress, sceneProgress = _buildData.versionSceneProgress,
-                assessmentTime = _buildData.versionAssessmentTime
-            };
-            string versionData = Encoding.UTF8.GetString(Encoding.Default.GetBytes(JsonMapper.ToJson(version)));
-
-            ResSvc.FileOperation.SaveTextToLoad(Application.dataPath + "/XxSlitFrame/Resources/VersionData",
-                "VersionInfo.Json", versionData);
-        }
+       
     }
 }

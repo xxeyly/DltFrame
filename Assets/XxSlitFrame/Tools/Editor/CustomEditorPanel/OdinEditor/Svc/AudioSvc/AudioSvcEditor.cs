@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using XxSlitFrame.Tools.ConfigData;
 
 namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc
 {

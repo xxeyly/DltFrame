@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using XxSlitFrame.Tools.General;
@@ -23,7 +24,7 @@ namespace XxSlitFrame.Tools.Svc
 
         public delegate void CallBack<T, X, Y, Z, W>(T arg1, X arg2, Y arg3, Z arg4, W arg5);
 
-        [Header("事件监听")] [SerializeField] public Dictionary<ListenerEventType, Delegate> listenerDic;
+        [LabelText("事件监听")] [SerializeField] public Dictionary<ListenerEventType, Delegate> listenerDic;
 
 
         public override void StartSvc()

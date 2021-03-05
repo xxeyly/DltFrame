@@ -8,7 +8,7 @@ using XxSlitFrame.Tools.Svc;
 namespace XxSlitFrame.Tools.ConfigData.Editor
 {
     [Serializable]
-    [CreateAssetMenu(fileName = "CustomBuildData", menuName = "配置文件/打包数据", order = 1)]
+    // [CreateAssetMenu(fileName = "CustomBuildData", menuName = "配置文件/打包数据", order = 1)]
     public class CustomBuildData : ScriptableObject
     {
         /// <summary>

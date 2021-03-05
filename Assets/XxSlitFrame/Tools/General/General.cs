@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using Sirenix.OdinInspector;
+using UnityEngine;
 using UnityEngine.Rendering;
 using XxSlitFrame.Tools.Svc;
 
@@ -10,22 +12,6 @@ namespace XxSlitFrame.Tools.General
     public enum ListenerEventType
     {
         Normal,
-        CameraMoveToTargetPos,
-        PropInit,
-        PropShowGroup,
-        PlayDialogueParagraph,
-        PlayTips,
-        StopTips,
-        PlayTipsAndAction,
-        SelectPlayVideoItem,
-        TrainTitleSetSceneName,
-        ShootingSceneInformationSetInfo,
-        SetSceneBackground,
-        ShootingSceneInformationSetBulletRemaining,
-        ShootingSceneInformationSetCountDown,
-        ShootingSceneInformationSetScore,
-        ShootingSceneInformationSetShootingRingNumber,
-        ShowAchievementStatistics
     }
 
     public enum AnimType
@@ -38,17 +24,35 @@ namespace XxSlitFrame.Tools.General
         SelfInspectionPage
     }
 
-    public enum PropType
+    [LabelText("场景加载方式")]
+    public enum SceneLoadType
     {
         Normal,
+        [LabelText("场景名称")] SceneName,
+        [LabelText("场景索引")] SceneIndex
     }
 
-    /// <summary>
-    /// 相机位置类型
-    /// </summary>
-    public enum CameraPosType
+    [LabelText("场景质量")]
+    public enum QualitySettingType
     {
-        默认位置,
+        [LabelText("低")] Low,
+        [LabelText("中")] Center,
+        [LabelText("高")] High
+    }
+
+    [Serializable]
+    public struct TimeTaskList
+    {
+        public enum TimeLoopType
+        {
+            [Header("一次")] Once,
+            [Header("循环")] Loop,
+            [Header("不死")] Immortal,
+        }
+
+        [Header("任务ID")] public int tid;
+        [Header("任务名称")] public string tidName;
+        [Header("任务类型")] public TimeLoopType loopType;
     }
 
     public static class General
@@ -59,48 +63,17 @@ namespace XxSlitFrame.Tools.General
 
         #region 视图时间
 
-        /// <summary>
-        /// 视图切换时间
-        /// </summary>
-        public const float ViewSwitchTime = 2f;
+        [LabelText("视图切换时间")] public const float ViewSwitchTime = 2f;
 
-        /// <summary>
-        /// 视图错误显示时间
-        /// </summary>
-        public const float ViewErrorTime = 1f;
+        [LabelText("视图错误时间")] public const float ViewErrorTime = 1f;
 
-        /// <summary>
-        /// 版本信息位置
-        /// </summary>
-        public const string VersionDataInfoLocalPath = "/XxSlitFrame/Resources/VersionData/VersionInfo.Json";
-
-        public const string VersionDataInfoServerPath = "/VersionData/VersionInfo.Json";
-
-        /// <summary>
-        /// 文件下载路径
-        /// </summary>
-        public const string DownFilePath = "/XxSlitFrame/Resources/DownFile/DownFileInfo.Json";
+        [LabelText("文件下载路径")] public const string DownFilePath = "/XxSlitFrame/Resources/DownFile/DownFileInfo.Json";
 
         #endregion
 
-        #region 对话声音
-
-        #endregion
-
-        #region 网络地址
-
-        public const string ServerAssetBundle = "http://127.0.0.1/AssetBundle/";
-
-        #endregion
-
-        /// <summary>
-        /// 获得网页跟目录地址
-        /// </summary>
-        /// <returns></returns>
+        [LabelText("获得网页跟目录地址")]
         public static string GetUrlRootPath()
         {
-            Debug.Log("获取文件地址2");
-
             string url = Application.absoluteURL;
             //当前网页的url
             int index = url.LastIndexOf('/');
@@ -113,46 +86,6 @@ namespace XxSlitFrame.Tools.General
             else
             {
                 Debug.LogError("未找到文件");
-                return "";
-            }
-        }
-
-        /// <summary>
-        /// 获得版本信息地址
-        /// </summary>
-        /// <returns></returns>
-        public static string GetFileConfigPath()
-        {
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-            {
-                return GetUrlRootPath() + VersionDataInfoServerPath;
-            }
-            else if (Application.isEditor)
-            {
-                return "file://" + Application.dataPath + VersionDataInfoLocalPath;
-            }
-            else
-            {
-                return "";
-            }
-        }
-
-        /// <summary>
-        /// 获得文件数据地址
-        /// </summary>
-        /// <returns></returns>
-        public static string GetFileDataPath(string relativePath)
-        {
-            if (Application.platform == RuntimePlatform.WebGLPlayer)
-            {
-                return PersistentDataSvc.Instance.serverPath + relativePath;
-            }
-            else if (Application.isEditor)
-            {
-                return "file://" + Application.dataPath + "/" + relativePath;
-            }
-            else
-            {
                 return "";
             }
         }

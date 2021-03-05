@@ -310,8 +310,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             {
                 //保存打包数据
                 SaveData();
-                //保存打包版本数据
-                SaveBuildData();
                 //拷贝打包文件
                 for (int i = 0; i < _buildData.folderCopies.Count; i++)
                 {
@@ -330,24 +328,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             // EditorGUILayout.EndHorizontal();
 
             #endregion
-        }
-
-
-        /// <summary>
-        /// 保存版本数据
-        /// </summary>
-        private void SaveBuildData()
-        {
-            ResSvc.VersionInfo version = new ResSvc.VersionInfo
-            {
-                watermark = _buildData.versionWatermark, downLoad = _buildData.versionDownLoad,
-                loadingProgress = _buildData.versionLoadingProgress, sceneProgress = _buildData.versionSceneProgress,
-                assessmentTime = _buildData.versionAssessmentTime
-            };
-            string versionData = Encoding.UTF8.GetString(Encoding.Default.GetBytes(JsonMapper.ToJson(version)));
-
-            ResSvc.FileOperation.SaveTextToLoad(Application.dataPath + "/XxSlitFrame/Resources/VersionData",
-                "VersionInfo.Json", versionData);
         }
 
 
@@ -491,6 +471,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         [PostProcessBuild(1)]
         public static void AfterBuild(BuildTarget target, string pathToBuiltProject)
         {
+            #pragma warning disable 0162
             return;
             Debug.Log("Build Success  输出平台: " + target + "  输出路径: " + pathToBuiltProject);
 
@@ -509,6 +490,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             }
 #endif
             GetWindow<CustomBuild>().Close();
+            #pragma warning disable
         }
     }
 

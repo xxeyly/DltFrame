@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools
@@ -17,7 +18,7 @@ namespace XxSlitFrame.Tools
                 DontDestroyOnLoad(this);
             }
 
-            //跟新场景信息
+            //更新场景信息
             SceneSvc.Instance.UpdateSceneNameOrIndex();
             //开启场景实时检测
             TimeSvc.Instance.AddImmortalTimeTask(() =>

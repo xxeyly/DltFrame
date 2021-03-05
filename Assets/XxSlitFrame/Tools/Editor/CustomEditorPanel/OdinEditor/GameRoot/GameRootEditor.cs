@@ -2,10 +2,12 @@
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.ConfigData.Editor;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.Listener;
+using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.PersistentDataSvc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.ResSvc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.SceneSvc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.TimeSvc;
@@ -19,6 +21,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
 
     {
         private CustomScriptableObject.CustomScriptableObject _customScriptableObject;
+
+        [Toggle("Enabled")] [LabelText("持久化")] public PersistentDataSvcEditor persistentDataSvcEditor;
 
         [Toggle("Enabled")] [LabelText("资源服务")]
         public ResSvcEditor resSvcEditor;
@@ -41,10 +45,12 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
         private GameRootEditorData _gameRootEditorData;
 
         public GameRootEditor(CustomScriptableObject.CustomScriptableObject customScriptableObject,
-            ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor, ListenerSvcEditor listenerSvcEditorSvc,
+            PersistentDataSvcEditor persistentDataSvcEditor, ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor,
+            ListenerSvcEditor listenerSvcEditorSvc,
             SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, ViewSvcEditor viewSvcEditorSvc)
         {
             _customScriptableObject = customScriptableObject;
+            this.persistentDataSvcEditor = persistentDataSvcEditor;
             this.resSvcEditor = resSvcEditor;
             this.audioSvcEditor = audioSvcEditor;
             this.listenerSvcEditorSvc = listenerSvcEditorSvc;
@@ -62,60 +68,69 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
             GameObject gameRootStart = new GameObject("GameRootStart");
             GameRootStart tempGameRootStart = gameRootStart.AddComponent<GameRootStart>();
             tempGameRootStart.activeSvcBase = new List<SvcBase>();
+            if (persistentDataSvcEditor.Enabled)
+            {
+                GameObject resSvcObj = new GameObject("PersistentDataSvc");
+                PersistentDataSvc resSvc = resSvcObj.AddComponent<PersistentDataSvc>();
+                resSvcObj.transform.SetParent(gameRootStart.transform);
+                resSvc.init = resSvcEditor.isInit;
+                tempGameRootStart.activeSvcBase.Add(resSvc);
+            }
+
             if (resSvcEditor.Enabled)
             {
-                GameObject customResSvcObj = new GameObject("CustomResSvc");
-                ResSvc tempCustomResSvc = customResSvcObj.AddComponent<ResSvc>();
-                customResSvcObj.transform.SetParent(gameRootStart.transform);
-                tempCustomResSvc.init = resSvcEditor.isInit;
-                tempGameRootStart.activeSvcBase.Add(tempCustomResSvc);
+                GameObject resSvcObj = new GameObject("ResSvc");
+                ResSvc resSvc = resSvcObj.AddComponent<ResSvc>();
+                resSvcObj.transform.SetParent(gameRootStart.transform);
+                resSvc.init = resSvcEditor.isInit;
+                tempGameRootStart.activeSvcBase.Add(resSvc);
             }
 
             if (audioSvcEditor.Enabled)
             {
-                GameObject customAudioSvcObj = new GameObject("AudioSvc");
-                AudioSvc tempCustomAudioSvc = customAudioSvcObj.AddComponent<AudioSvc>();
-                tempCustomAudioSvc.init = audioSvcEditor.isInit;
-                tempCustomAudioSvc.audioData =
+                GameObject resSvcObj = new GameObject("AudioSvc");
+                AudioSvc resSvc = resSvcObj.AddComponent<AudioSvc>();
+                resSvc.init = audioSvcEditor.isInit;
+                resSvc.audioData =
                     AssetDatabase.LoadAssetAtPath<AudioSvcData>(_customScriptableObject.customAudioDataPath);
-                customAudioSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempCustomAudioSvc);
+                resSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(resSvc);
             }
 
             if (listenerSvcEditorSvc.Enabled)
             {
-                GameObject customListenerSvcObj = new GameObject("CustomListenerSvc");
-                ListenerSvc tempCustomListenerSvc = customListenerSvcObj.AddComponent<ListenerSvc>();
-                tempCustomListenerSvc.init = listenerSvcEditorSvc.isInit;
-                customListenerSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempCustomListenerSvc);
+                GameObject resSvcObj = new GameObject("ListenerSvc");
+                ListenerSvc resSvc = resSvcObj.AddComponent<ListenerSvc>();
+                resSvc.init = listenerSvcEditorSvc.isInit;
+                resSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(resSvc);
             }
 
             if (customSceneSvc.Enabled)
             {
-                GameObject customResSceneObj = new GameObject("CustomSceneSvc");
-                SceneSvc tempCustomSceneSvc = customResSceneObj.AddComponent<SceneSvc>();
-                tempCustomSceneSvc.init = customSceneSvc.isInit;
-                customResSceneObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempCustomSceneSvc);
+                GameObject resSvcObj = new GameObject("SceneSvc");
+                SceneSvc resSvc = resSvcObj.AddComponent<SceneSvc>();
+                resSvc.init = customSceneSvc.isInit;
+                resSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(resSvc);
             }
 
             if (timeSvcEditorSvc.Enabled)
             {
-                GameObject customResTimeObj = new GameObject("CustomTimeSvc");
-                TimeSvc tempCustomTimeSvc = customResTimeObj.AddComponent<TimeSvc>();
-                tempCustomTimeSvc.init = timeSvcEditorSvc.isInit;
-                customResTimeObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempCustomTimeSvc);
+                GameObject resSvcObj = new GameObject("TimeSvc");
+                TimeSvc resSvc = resSvcObj.AddComponent<TimeSvc>();
+                resSvc.init = timeSvcEditorSvc.isInit;
+                resSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(resSvc);
             }
 
             if (viewSvcEditorSvc.Enabled)
             {
-                GameObject customViewSvcObj = new GameObject("CustomViewSvc");
-                ViewSvc tempCustomViewSvc = customViewSvcObj.AddComponent<ViewSvc>();
-                tempCustomViewSvc.init = viewSvcEditorSvc.isInit;
-                customViewSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempCustomViewSvc);
+                GameObject resSvcObj = new GameObject("ViewSvc");
+                ViewSvc resSvc = resSvcObj.AddComponent<ViewSvc>();
+                resSvc.init = viewSvcEditorSvc.isInit;
+                resSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(resSvc);
             }
         }
 
@@ -137,6 +152,9 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
 
         public override void OnSaveConfig()
         {
+            _gameRootEditorData.persistentDataSvcEditor = persistentDataSvcEditor.Enabled;
+            _gameRootEditorData.persistentDataSvcEditorInit = persistentDataSvcEditor.isInit;
+
             _gameRootEditorData.resSvcEditor = resSvcEditor.Enabled;
             _gameRootEditorData.resSvcEditorInit = resSvcEditor.isInit;
 
@@ -164,6 +182,10 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
         {
             _gameRootEditorData =
                 AssetDatabase.LoadAssetAtPath<GameRootEditorData>(_customScriptableObject.customFrameDataPath);
+
+            persistentDataSvcEditor.Enabled = _gameRootEditorData.persistentDataSvcEditor;
+            persistentDataSvcEditor.isInit = _gameRootEditorData.persistentDataSvcEditorInit;
+
             resSvcEditor.Enabled = _gameRootEditorData.resSvcEditor;
             resSvcEditor.isInit = _gameRootEditorData.resSvcEditorInit;
 

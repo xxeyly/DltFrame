@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 using Random = UnityEngine.Random;
 
@@ -24,11 +26,10 @@ namespace XxSlitFrame.Tools.Svc
         private List<int> _tidTimeImmortalList;
         private List<int> _tidSwitchList;
         private bool _clear;
-        public List<string> currentTime;
+        [LabelText("当前时间")] public List<string> currentTime;
         public DayOfWeek currentWeek;
 
-        [HideInInspector] [Header("所有计时任务")] [SerializeField]
-        public List<TimeTaskList> timeTaskList;
+        [LabelText("所有计时任务")] public List<TimeTaskList> timeTaskList;
 
         public override void StartSvc()
         {
@@ -728,20 +729,5 @@ namespace XxSlitFrame.Tools.Svc
         public int CurrentTaskNumber; //当前执行的任务索引
         public int Count; //执行次数
         public float Delay; //执行间隔
-    }
-
-    [Serializable]
-    public struct TimeTaskList
-    {
-        public enum TimeLoopType
-        {
-            [Header("一次")] Once,
-            [Header("循环")] Loop,
-            [Header("不死")] Immortal,
-        }
-
-        [Header("任务ID")] public int tid;
-        [Header("任务名称")] public string tidName;
-        [Header("任务类型")] public TimeLoopType loopType;
     }
 }

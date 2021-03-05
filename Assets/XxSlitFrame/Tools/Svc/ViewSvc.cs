@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 using XxSlitFrame.View;
-using XxSlitFrame.View.InitView;
 
 namespace XxSlitFrame.Tools.Svc
 {
@@ -18,7 +18,8 @@ namespace XxSlitFrame.Tools.Svc
         /// <summary>
         /// 所有的视图窗口
         /// </summary>
-        [Header("所有的视图窗口")] [SerializeField] private List<BaseWindow> allViewWind;
+        [LabelText("所有的视图窗口")] [SerializeField]
+        private List<BaseWindow> allViewWind;
 
 
         /// <summary>
@@ -27,14 +28,9 @@ namespace XxSlitFrame.Tools.Svc
         private Dictionary<Type, BaseWindow> _activeViewDlc = new Dictionary<Type, BaseWindow>();
 
         /// <summary>
-        /// 不影响的视图
-        /// </summary>
-        [Header("不影响的视图")] public List<Type> noInfluenceViewType;
-
-        /// <summary>
         /// 所有活动的视图
         /// </summary>
-        private List<Type> _allActiveView = new List<Type>();
+        [LabelText("所有活动的视图")] private List<Type> _allActiveView = new List<Type>();
 
         /// <summary>
         /// 视图计时任务ID
@@ -81,8 +77,6 @@ namespace XxSlitFrame.Tools.Svc
                 window.ViewStartInit();
             }
 
-            //是否开启水印
-            DisPlayWatermark();
             //关闭全体禁止响应
             CloseNoAllResponse();
         }
@@ -186,31 +180,7 @@ namespace XxSlitFrame.Tools.Svc
                 }
                 else
                 {
-                    if (baseWindow.viewType != typeof(Watermark) || baseWindow.viewType != typeof(SceneJumpMask))
-                    {
-                        Debug.LogError("当前视图:" + baseWindow.viewType + "场景中存在多个");
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// 显示水印
-        /// </summary>
-        public void DisPlayWatermark()
-        {
-            if (PersistentDataSvc.Instance.versionInfo.watermark)
-            {
-                if (GetViewExistence(typeof(Watermark)))
-                {
-                    ShowView(typeof(Watermark));
-                }
-            }
-            else
-            {
-                if (GetViewExistence(typeof(Watermark)))
-                {
-                    HideView(typeof(Watermark));
+                    Debug.LogError("当前视图:" + baseWindow.viewType + "场景中存在多个");
                 }
             }
         }
@@ -351,10 +321,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public void NoAllResponse()
         {
-            if (_activeViewDlc.ContainsKey(typeof(SceneJumpMask)))
-            {
-                ShowView(typeof(SceneJumpMask));
-            }
+            //TODO 未开发
         }
 
         /// <summary>
@@ -362,7 +329,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public void CloseNoAllResponse()
         {
-            HideView(typeof(SceneJumpMask));
+            //TODO 未开发
         }
 
         /// <summary>

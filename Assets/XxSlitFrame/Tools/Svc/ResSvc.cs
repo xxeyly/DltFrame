@@ -5,6 +5,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using LitJson;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -22,7 +23,7 @@ namespace XxSlitFrame.Tools.Svc
     {
         public static ResSvc Instance;
 
-        [SerializeField] [Header("资源池")] private Dictionary<string, Object> objDic;
+        [SerializeField] [LabelText("资源池")] private Dictionary<string, Object> objDic;
 
         public override void StartSvc()
         {
@@ -152,137 +153,6 @@ namespace XxSlitFrame.Tools.Svc
         }
 
         /// <summary>
-        /// 开始下载项目配置
-        /// </summary>
-        public void StartDownProjectConfig()
-        {
-            StartCoroutine(GetDownLoadProjectConfig());
-        }
-
-        /// <summary>
-        /// 开始从网上下载文件
-        /// </summary>
-        private void StartDownFileByNetWork()
-        {
-            StartCoroutine(GetDownLoadFileInfo());
-        }
-
-        /// <summary>
-        /// 获得项目配置信息
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator GetDownLoadProjectConfig()
-        {
-            //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
-            UnityWebRequest request =
-                UnityWebRequest.Get(General.General.GetFileConfigPath());
-
-            //2、等待这个请求进行发送完
-            yield return request.SendWebRequest();
-            //有配置文件
-            if (request.responseCode == 200)
-            {
-                //获得下载文件配置信息
-                // Debug.Log("从服务器拉取下载信息:VersionInfo");
-                /*PersistentDataSvc.Instance.versionInfo =
-                    JsonMapper.ToObject<VersionInfo>(Encoding.UTF8.GetString(request.downloadHandler.data));*/
-            }
-            else
-            {
-                // Debug.Log("从本地拉取下载信息:VersionInfo");
-                PersistentDataSvc.Instance.versionInfo =
-                    JsonMapper.ToObject<VersionInfo>(
-                        Encoding.UTF8.GetString(GetData<TextAsset>("VersionData/VersionInfo").bytes));
-            }
-
-#pragma warning disable 162
-            /*Debug.Log("当前版本信息:水印:" + PersistentDataSvc.Instance.versionInfo.watermark);
-            Debug.Log("当前版本信息:下载:" + PersistentDataSvc.Instance.versionInfo.downLoad);
-            Debug.Log("当前版本信息:加读条:" + PersistentDataSvc.Instance.versionInfo.loadingProgress);*/
-#pragma warning restore 162
-
-            //文件配置下载完毕
-            PersistentDataSvc.Instance.downVersionOver = true;
-            if (PersistentDataSvc.Instance.versionInfo.downLoad)
-            {
-                //下载文件
-                StartDownFileByNetWork();
-            }
-
-            ViewSvc.Instance.DisPlayWatermark();
-        }
-
-        /// <summary>
-        /// 获得下载文件配置信息
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator GetDownLoadFileInfo()
-        {
-            //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
-            UnityWebRequest request =
-                UnityWebRequest.Get(General.General.GetFileDataPath(General.General.DownFilePath));
-            //2、等待这个请求进行发送完
-            yield return request.SendWebRequest();
-            if (request.responseCode == 200)
-            {
-                Debug.Log("下载文件配置信息:DownFileInfo:" + General.General.GetFileDataPath(General.General.DownFilePath));
-                //获得下载文件配置信息
-                PersistentDataSvc.Instance.downFileInfo =
-                    JsonUtility.FromJson<DownFile>(System.Text.Encoding.UTF8.GetString(request.downloadHandler.data));
-            }
-            else
-            {
-                Debug.Log("从本地拉取下载信息:DownFileInfo");
-                PersistentDataSvc.Instance.downFileInfo =
-                    JsonUtility.FromJson<DownFile>(
-                        System.Text.Encoding.UTF8.GetString(GetData<TextAsset>("DownFile/DownFileInfo").bytes));
-            }
-
-            //文件配置下载完毕
-            PersistentDataSvc.Instance.downFileInfoOver = true;
-            //开启下载数据列表
-            PersistentDataSvc.Instance.downFileData = new Dictionary<string, byte[]>();
-            StartCoroutine(DownFileData());
-        }
-
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator DownFileData()
-        {
-            //未下载完毕
-            if (PersistentDataSvc.Instance.downFileData.Count <
-                PersistentDataSvc.Instance.downFileInfo.fileInfoList.Count)
-            {
-                //文件地址
-                string filePath = PersistentDataSvc.Instance.downFileInfo
-                    .fileInfoList[PersistentDataSvc.Instance.downFileData.Count].filePath;
-                //下载文件
-                UnityWebRequest request = UnityWebRequest.Get(General.General.GetFileDataPath(filePath));
-                Debug.Log("开始下载数据:" + General.General.GetFileDataPath(filePath));
-                yield return request.SendWebRequest();
-                if (request.responseCode != 200)
-                {
-                    Debug.Log("文件下载错误路径不存在:" + General.General.GetFileDataPath(filePath));
-                }
-
-                //2、等待这个请求进行发送完
-                //初始化下载数据
-                PersistentDataSvc.Instance.downFileData.Add(
-                    PersistentDataSvc.Instance.downFileInfo.fileInfoList[PersistentDataSvc.Instance.downFileData.Count]
-                        .fileName,
-                    request.downloadHandler.data);
-                StartCoroutine(DownFileData());
-            }
-            else
-            {
-                PersistentDataSvc.Instance.downFileOver = true;
-                Debug.Log("所有文件下载完毕");
-            }
-        }
-
-        /// <summary>
         /// 下载文件
         /// </summary>
         [Serializable]
@@ -303,38 +173,6 @@ namespace XxSlitFrame.Tools.Svc
 
                 [Header("文件路径")] public string filePath;
             }
-        }
-
-        /// <summary>
-        /// 版本信息
-        /// </summary>
-        [Serializable]
-        public class VersionInfo
-        {
-            /// <summary>
-            /// 水印
-            /// </summary>
-            [Header("水印")] public bool watermark;
-
-            /// <summary>
-            /// 下载
-            /// </summary>
-            [Header("下载")] public bool downLoad;
-
-            /// <summary>
-            /// 加载进度
-            /// </summary>
-            [Header("下载进度")] public bool loadingProgress;
-
-            /// <summary>
-            /// 场景进度
-            /// </summary>
-            [Header("场景进度")] public bool sceneProgress;
-
-            /// <summary>
-            /// 考核时间
-            /// </summary>
-            [Header("考核时间")] public int assessmentTime;
         }
 
         /// <summary>
@@ -418,7 +256,6 @@ namespace XxSlitFrame.Tools.Svc
             /// <returns></returns>
             public static string GetTextToLoad(string path)
             {
-//            UnityEngine.Debug.Log(Path + "/" + FileName);
                 if (File.Exists(path))
                 {
                 }

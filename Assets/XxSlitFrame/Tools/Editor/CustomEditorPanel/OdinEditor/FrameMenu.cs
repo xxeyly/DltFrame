@@ -6,6 +6,7 @@ using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.Listener;
+using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.PersistentDataSvc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.ResSvc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.SceneSvc;
 using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.TimeSvc;
@@ -29,6 +30,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
 
         //框架配置
         private GameRootEditor gameRootEditor;
+        private GenerateBaseWindowEditor generateBaseWindowEditor;
 
         protected override OdinMenuTree BuildMenuTree()
         {
@@ -39,6 +41,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
                 new CustomScriptableObject.CustomScriptableObject();
             //打包
             customBuild = new OdinCustomBuild(customScriptableObject);
+            //可持久化
+            PersistentDataSvcEditor persistentDataSvcEditor = new PersistentDataSvcEditor();
             //资源服务
             ResSvcEditor resSvcEditor = new ResSvcEditor();
             //音频服务
@@ -51,13 +55,17 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
             TimeSvcEditor timeSvcEditor = new TimeSvcEditor();
             //视图服务
             ViewSvcEditor viewSvcEditor = new ViewSvcEditor();
+            //生成配置
+            generateBaseWindowEditor = new GenerateBaseWindowEditor(customScriptableObject);
             //框架配置
-            gameRootEditor = new GameRootEditor(customScriptableObject, resSvcEditor, audioSvcEditor,
+            gameRootEditor = new GameRootEditor(customScriptableObject, persistentDataSvcEditor, resSvcEditor,
+                audioSvcEditor,
                 listenerSvcEditor, sceneSvcEditor,
                 timeSvcEditor, viewSvcEditor);
             tree.Add("打包工具", customBuild);
             tree.Add("框架服务", gameRootEditor);
             tree.Add("音频配置", audioSvcEditor);
+            tree.Add("生成配置", generateBaseWindowEditor);
             tree.Add("配置文件", customScriptableObject);
             return tree;
         }
@@ -67,6 +75,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
             customBuild.OnDisable();
             audioSvcEditor.OnDisable();
             gameRootEditor.OnDisable();
+            generateBaseWindowEditor.OnDisable();
         }
     }
 }

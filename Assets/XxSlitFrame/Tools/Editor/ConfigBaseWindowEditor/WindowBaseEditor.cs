@@ -55,7 +55,6 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
         public static void BindComponent()
         {
             GameObject uiObj = Selection.objects.First() as GameObject;
-            Debug.Log(uiObj.GetComponent<VideoPlayer>());
             if (uiObj != null)
             {
                 if (!uiObj.GetComponent<BindUiType>())

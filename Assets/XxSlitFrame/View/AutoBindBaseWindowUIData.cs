@@ -192,8 +192,10 @@ namespace XxSlitFrame.View
 
                             break;
                         case BindUiType.UiType.VideoPlayer:
-                            allUiName += "        private VideoPlayer _" + DataSvc.FirstCharToLower(child.name) + ";" + "\n";
-                            allUiVariableName.Add("        private VideoPlayer _" + DataSvc.FirstCharToLower(child.name) +
+                            allUiName += "        private VideoPlayer _" + DataSvc.FirstCharToLower(child.name) + ";" +
+                                         "\n";
+                            allUiVariableName.Add("        private VideoPlayer _" +
+                                                  DataSvc.FirstCharToLower(child.name) +
                                                   ";" +
                                                   "\n");
                             if (!allUiVariableUsing.Contains("using UnityEngine.UI;\n"))
