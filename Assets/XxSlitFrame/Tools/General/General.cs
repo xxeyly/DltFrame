@@ -6,14 +6,6 @@ using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools.General
 {
-    /// <summary>
-    /// 事件类型
-    /// </summary>
-    public enum ListenerEventType
-    {
-        Normal,
-    }
-
     public enum AnimType
     {
         Normal,
@@ -45,14 +37,14 @@ namespace XxSlitFrame.Tools.General
     {
         public enum TimeLoopType
         {
-            [Header("一次")] Once,
-            [Header("循环")] Loop,
-            [Header("不死")] Immortal,
+            [LabelText("一次")] Once,
+            [LabelText("循环")] Loop,
+            [LabelText("不死")] Immortal,
         }
 
-        [Header("任务ID")] public int tid;
-        [Header("任务名称")] public string tidName;
-        [Header("任务类型")] public TimeLoopType loopType;
+        [LabelText("任务ID")] public int tid;
+        [LabelText("任务名称")] public string tidName;
+        [LabelText("任务类型")] public TimeLoopType loopType;
     }
 
     public static class General

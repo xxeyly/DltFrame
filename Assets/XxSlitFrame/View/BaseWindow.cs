@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -12,24 +13,14 @@ namespace XxSlitFrame.View
 {
     public enum ViewShowType
     {
-        /// <summary>
-        /// 活动
-        /// </summary>
-        Activity,
-
-        /// <summary>
-        /// 冻结
-        /// </summary>
-        Frozen
+        [LabelText("活动")] Activity,
+        [LabelText("冻结")] Frozen
     }
 
     public enum ShowType
     {
-        //直接
-        Direct,
-
-        //渐隐
-        Curve
+        [LabelText("直接")] Direct,
+        [LabelText("渐隐")] Curve
     }
 
     public struct TimeTaskInfo
@@ -55,14 +46,14 @@ namespace XxSlitFrame.View
         protected ListenerSvc listenerSvc;
         protected MouseSvc mouseSvc;
 
-        [SerializeField] [Header("组件事件监听")] protected Dictionary<string, UnityAction<BaseEventData>> uiListener =
+        [SerializeField] [LabelText("组件事件监听")] protected Dictionary<string, UnityAction<BaseEventData>> uiListener =
             new Dictionary<string, UnityAction<BaseEventData>>();
 
-        [SerializeField] [Header("计时任务列表")] protected List<TimeTaskInfo> timeTaskInfoList = new List<TimeTaskInfo>();
-        [Header("视图类型")] [SerializeField] protected ViewShowType ViewShowType = ViewShowType.Activity;
-        [Header("显示类型")] [SerializeField] protected ShowType ShowType = ShowType.Direct;
+        [SerializeField] [LabelText("计时任务列表")] protected List<TimeTaskInfo> timeTaskInfoList = new List<TimeTaskInfo>();
+        [LabelText("视图类型")] [SerializeField] protected ViewShowType ViewShowType = ViewShowType.Activity;
+        [LabelText("显示类型")] [SerializeField] protected ShowType ShowType = ShowType.Direct;
 
-        [Header("显示时间")] [Range(0.1f, 9)] [SerializeField]
+        [LabelText("显示时间")] [Range(0.1f, 9)] [SerializeField]
         protected float ShowTime = 1;
 
         [HideInInspector] public Type viewType;

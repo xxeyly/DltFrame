@@ -27,8 +27,6 @@ namespace XxSlitFrame.Tools.Svc
         private List<int> _tidSwitchList;
         private bool _clear;
         [LabelText("当前时间")] public List<string> currentTime;
-        public DayOfWeek currentWeek;
-
         [LabelText("所有计时任务")] public List<TimeTaskList> timeTaskList;
 
         public override void StartSvc()
@@ -99,8 +97,6 @@ namespace XxSlitFrame.Tools.Svc
             {
                 currentTime[5] = DateTime.Now.Second.ToString();
             }
-
-            currentWeek = DateTime.Now.DayOfWeek;
         }
 
         /// <summary>

@@ -38,6 +38,11 @@ namespace XxSlitFrame.View
         [LabelText("代码生成")]
         public void Generate()
         {
+            if (gameObject.GetComponent<BaseWindow>() == null)
+            {
+                return;
+            }
+
             //清除空格
             if (_customScriptableObject == null)
             {

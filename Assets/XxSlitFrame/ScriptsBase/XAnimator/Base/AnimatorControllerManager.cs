@@ -96,7 +96,7 @@ namespace XAnimator.Base
         /// </summary>
         /// <param name="animType"></param>
         /// <param name="listenerEventType"></param>
-        public void PlayAnim(AnimType animType, ListenerEventType listenerEventType)
+        public void PlayAnim(AnimType animType, string listenerEventType)
         {
             TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
             _animatorTimeTask = TimeSvc.Instance.AddTimeTask(() => { ListenerSvc.Instance.ExecuteEvent(listenerEventType); }, "动画播放时间", GetPlayAnimLength(animType));

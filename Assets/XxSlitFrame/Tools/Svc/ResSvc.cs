@@ -62,7 +62,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="assetBundleNetPath"></param>
         /// <param name="eventType"></param>
-        public void AsyncResourcesByNetwork(string assetBundleNetPath, ListenerEventType eventType)
+        public void AsyncResourcesByNetwork(string assetBundleNetPath, string eventType)
         {
             StartCoroutine(LoadResourcesByNetwork(assetBundleNetPath, eventType));
             //        UnityWebRequest
@@ -73,12 +73,12 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="assetBundleNetPath"></param>
         /// <param name="eventType"></param>
-        public void AsyncResourcesByNetwork<T>(string assetBundleNetPath, ListenerEventType eventType, T t)
+        public void AsyncResourcesByNetwork<T>(string assetBundleNetPath, string eventType, T t)
         {
             StartCoroutine(LoadResourcesByNetwork(assetBundleNetPath, eventType, t));
         }
 
-        IEnumerator LoadResourcesByNetwork(string serverResourcesPath, ListenerEventType eventType)
+        IEnumerator LoadResourcesByNetwork(string serverResourcesPath, string eventType)
         {
             //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
             UnityWebRequest request = UnityWebRequest.Get(serverResourcesPath);
@@ -87,7 +87,7 @@ namespace XxSlitFrame.Tools.Svc
             ListenerSvc.Instance.ExecuteEvent(eventType, request.downloadHandler.data);
         }
 
-        IEnumerator LoadResourcesByNetwork<T>(string serverResourcesPath, ListenerEventType eventType, T t)
+        IEnumerator LoadResourcesByNetwork<T>(string serverResourcesPath, string eventType, T t)
         {
             //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
             UnityWebRequest request = UnityWebRequest.Get(serverResourcesPath);

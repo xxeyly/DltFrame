@@ -58,8 +58,6 @@ namespace XxSlitFrame.Tools
                 }
             }, "开启场景实时检测", 0.01f, 0);
 
-            TimeSvc.Instance.AddImmortalTimeTask(() => { MouseSvc.Instance.MouseEnterState(); }, "鼠标实时监测", 0.01f, 0);
-
             if (PersistentDataSvc.Instance.jump)
             {
                 SceneSvc.Instance.UpdateSceneNameOrIndex();

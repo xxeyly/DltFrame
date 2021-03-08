@@ -51,7 +51,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
             }
         }
 
-        [MenuItem("GameObject/绑定UI /@(Alt+T) 绑定UI类型  &t", false, 0)]
+        [MenuItem("GameObject/生成 /@(Alt+T) 绑定UI类型  &t", false, 0)]
         public static void BindComponent()
         {
             GameObject uiObj = Selection.objects.First() as GameObject;
@@ -123,6 +123,16 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
                 {
                     uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.GameObject;
                 }
+            }
+        }
+
+        [MenuItem("GameObject/生成 /@(Alt+G) 生成代码 &g", false, 0)]
+        public static void Generate()
+        {
+            GameObject uiObj = Selection.objects.First() as GameObject;
+            if (uiObj != null && uiObj.GetComponent<BaseWindow>() && uiObj.GetComponent<BaseWindowGenerateScripts>())
+            {
+                uiObj.GetComponent<BaseWindowGenerateScripts>().Generate();
             }
         }
     }
