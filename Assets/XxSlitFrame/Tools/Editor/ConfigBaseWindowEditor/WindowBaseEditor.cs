@@ -20,7 +20,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
                 Vector2 windowSize = Object.FindObjectOfType<CanvasScaler>().referenceResolution;
                 windowView.AddComponent<RectTransform>().sizeDelta = windowSize;
                 // windowView.AddComponent<GenerationBaseWindow>().Init();
-                windowView.AddComponent<AutoBindBaseWindowUIData>();
+                windowView.AddComponent<BaseWindowGenerateScripts>();
                 //Window目录
                 GameObject window = new GameObject("Window");
                 window.AddComponent<RectTransform>().sizeDelta = windowSize;

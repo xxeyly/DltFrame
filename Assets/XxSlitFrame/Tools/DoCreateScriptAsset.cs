@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
+using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.ConfigData.Editor;
-using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject;
 
 namespace XxSlitFrame.Tools.Editor
 {

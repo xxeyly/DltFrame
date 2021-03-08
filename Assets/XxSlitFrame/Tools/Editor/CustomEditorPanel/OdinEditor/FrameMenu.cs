@@ -37,8 +37,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
             var tree = new OdinMenuTree();
             tree.Selection.SupportsMultiSelect = false;
             //数据配置
-            CustomScriptableObject.CustomScriptableObject customScriptableObject =
-                new CustomScriptableObject.CustomScriptableObject();
+            ConfigData.CustomScriptableObject customScriptableObject =
+                new ConfigData.CustomScriptableObject();
             //打包
             customBuild = new OdinCustomBuild(customScriptableObject);
             //可持久化

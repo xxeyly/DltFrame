@@ -26,14 +26,14 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
         [LabelText("变量方法结束")] public string endVariableBindEvent;
 
         private GenerateBaseWindowData _generateBaseWindowData;
-        private CustomScriptableObject.CustomScriptableObject _customScriptableObject;
+        private ConfigData.CustomScriptableObject _customScriptableObject;
 
         public override void OnDisable()
         {
             OnSaveConfig();
         }
 
-        public GenerateBaseWindowEditor(CustomScriptableObject.CustomScriptableObject customScriptableObject)
+        public GenerateBaseWindowEditor(ConfigData.CustomScriptableObject customScriptableObject)
         {
             _customScriptableObject = customScriptableObject;
             OnCreateConfig();

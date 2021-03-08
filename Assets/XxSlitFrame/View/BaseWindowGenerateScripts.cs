@@ -3,22 +3,32 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.ConfigData.Editor;
-using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject;
 using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.View
 {
     public class BaseWindowGenerateScripts : MonoBehaviour
     {
-        [LabelText("所有UI变量引用")] public List<string> allUiVariableUsing;
-        [LabelText("所有UI变量名称")] public List<string> allUiVariableName;
-        [LabelText("所有UI变量绑定")] public List<string> allUiVariableBind;
-        [LabelText("所有UI变量绑定事件")] public List<string> allUiVariableBindListener;
-        [LabelText("所有UI变量绑定事件声明")] public List<string> allUiVariableBindListenerEvent;
+        [TabGroup("UI", "引用")] [LabelText("UI变量引用")] [ReadOnly]
+        public List<string> allUiVariableUsing;
+
+        [TabGroup("UI", "名称")] [LabelText("UI变量名称")] [ReadOnly]
+        public List<string> allUiVariableName;
+
+        [TabGroup("UI", "查找")] [LabelText("UI变量绑定")] [ReadOnly]
+        public List<string> allUiVariableBind;
+
+        [TabGroup("UI", "绑定")] [LabelText("UI变量绑定事件")] [ReadOnly]
+        public List<string> allUiVariableBindListener;
+
+        [TabGroup("UI", "事件")] [LabelText("UI变量绑定事件声明")] [ReadOnly]
+        public List<string> allUiVariableBindListenerEvent;
+
         private GenerateBaseWindowData _generateBaseWindowData;
         private CustomScriptableObject _customScriptableObject;
-        public string currentScriptsContent;
+        private string _currentScriptsContent;
         [LabelText("分号")] private string _semicolon = ";";
         [LabelText("换行")] private string _lineFeed = "\n";
 
@@ -70,23 +80,23 @@ namespace XxSlitFrame.View
                 allUiVariableBindListenerEvent[i] += _lineFeed;
             }
 
-            currentScriptsContent = GetOldScriptsContent();
-            currentScriptsContent = ReplaceScriptContent(currentScriptsContent, allUiVariableUsing,
-                "//" + _generateBaseWindowData.startUsing, "//" + _generateBaseWindowData.endUsing);
-            currentScriptsContent = ReplaceScriptContent(currentScriptsContent, allUiVariableName,
-                "//" + _generateBaseWindowData.startUiVariable, "//" + _generateBaseWindowData.endUiVariable);
-            currentScriptsContent = ReplaceScriptContent(currentScriptsContent, allUiVariableBind,
+            _currentScriptsContent = GetOldScriptsContent();
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableUsing,
+                "//" + _generateBaseWindowData.startUsing, 
+                "//" + _generateBaseWindowData.endUsing);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableName,
+                "//" + _generateBaseWindowData.startUiVariable, 
+                "//" + _generateBaseWindowData.endUiVariable);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBind,
                 "//" + _generateBaseWindowData.startVariableBindPath,
                 "//" + _generateBaseWindowData.endVariableBindPath);
-            currentScriptsContent = ReplaceScriptContent(currentScriptsContent, allUiVariableBindListener,
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListener,
                 "//" + _generateBaseWindowData.startVariableBindListener,
                 "//" + _generateBaseWindowData.endVariableBindListener);
-            currentScriptsContent = ReplaceScriptContent(currentScriptsContent, allUiVariableBindListenerEvent,
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListenerEvent,
                 "//" + _generateBaseWindowData.startVariableBindEvent,
                 "//" + _generateBaseWindowData.endVariableBindEvent);
-
-            ResSvc.FileOperation.SaveTextToLoad(GetScriptsPath(), currentScriptsContent);
-            Debug.Log(currentScriptsContent);
+            ResSvc.FileOperation.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
         }
 
         /// <summary>
@@ -418,7 +428,6 @@ namespace XxSlitFrame.View
         {
             Transform window = GetWindow();
             allUiVariableBind = new List<string>();
-            string allBindName = "";
             foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
             {
                 if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
@@ -465,7 +474,6 @@ namespace XxSlitFrame.View
         {
             Transform window = GetWindow();
 
-            string allBindName = "";
             allUiVariableBindListenerEvent = new List<string>();
             foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
             {
@@ -483,13 +491,6 @@ namespace XxSlitFrame.View
                     }
                 }
             }
-
-            /*TextEditor textEditor = new TextEditor
-            {
-                text = allBindName
-            };
-            textEditor.OnFocus();
-            textEditor.Copy();*/
         }
     }
 }

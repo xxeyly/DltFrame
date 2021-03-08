@@ -12,7 +12,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
 {
     public class OdinCustomBuild : BaseEditor
     {
-        private CustomScriptableObject.CustomScriptableObject _customScriptableObject;
+        private ConfigData.CustomScriptableObject _customScriptableObject;
         [LabelText("当前打包方式:")] public BuildTarget buildTarget;
         [LabelText("压缩类型")] public BuildOptions buildCompressType;
 
@@ -37,7 +37,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
             Build();
         }
 
-        public OdinCustomBuild(CustomScriptableObject.CustomScriptableObject customScriptableObject)
+        public OdinCustomBuild(ConfigData.CustomScriptableObject customScriptableObject)
         {
             _customScriptableObject = customScriptableObject;
             OnCreateConfig();

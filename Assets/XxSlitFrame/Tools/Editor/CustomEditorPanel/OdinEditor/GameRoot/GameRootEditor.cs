@@ -20,7 +20,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
     public class GameRootEditor : BaseEditor
 
     {
-        private CustomScriptableObject.CustomScriptableObject _customScriptableObject;
+        private ConfigData.CustomScriptableObject _customScriptableObject;
 
         [Toggle("Enabled")] [LabelText("持久化")] public PersistentDataSvcEditor persistentDataSvcEditor;
 
@@ -44,7 +44,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
 
         private GameRootEditorData _gameRootEditorData;
 
-        public GameRootEditor(CustomScriptableObject.CustomScriptableObject customScriptableObject,
+        public GameRootEditor(ConfigData.CustomScriptableObject customScriptableObject,
             PersistentDataSvcEditor persistentDataSvcEditor, ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor,
             ListenerSvcEditor listenerSvcEditorSvc,
             SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, ViewSvcEditor viewSvcEditorSvc)

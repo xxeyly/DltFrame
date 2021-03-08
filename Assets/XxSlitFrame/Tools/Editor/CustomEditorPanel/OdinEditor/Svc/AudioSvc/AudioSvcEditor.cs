@@ -10,9 +10,9 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc
     [Serializable]
     public class AudioSvcEditor : BaseEditor
     {
-        private CustomScriptableObject.CustomScriptableObject _customScriptableObject;
+        private ConfigData.CustomScriptableObject _customScriptableObject;
 
-        public AudioSvcEditor(CustomScriptableObject.CustomScriptableObject customScriptableObject)
+        public AudioSvcEditor(ConfigData.CustomScriptableObject customScriptableObject)
         {
             _customScriptableObject = customScriptableObject;
             OnCreateConfig();

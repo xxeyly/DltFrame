@@ -1,6 +1,6 @@
 ﻿using Sirenix.OdinInspector;
 
-namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject
+namespace XxSlitFrame.Tools.ConfigData
 {
     public class CustomScriptableObject
     {
