@@ -13,7 +13,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
     {
         private static bool _display;
 
-        [MenuItem("XFrame/动画工具 #A", false, 1)]
+        // [MenuItem("XFrame/动画工具 #A", false, 1)]
         private static void ShowWindow()
         {
             EditorWindow window = EditorWindow.GetWindow<CustomAnimator>();

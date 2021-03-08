@@ -51,7 +51,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
             }
         }
 
-        [MenuItem("GameObject/绑定UI /@(Alt+T) 绑定Button  &t", false, 0)]
+        [MenuItem("GameObject/绑定UI /@(Alt+T) 绑定UI类型  &t", false, 0)]
         public static void BindComponent()
         {
             GameObject uiObj = Selection.objects.First() as GameObject;
@@ -65,6 +65,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
                 if (uiObj.GetComponent<Button>())
                 {
                     uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Button;
+                    uiObj.GetComponent<BindUiType>().eventTriggerType = BindUiType.UIEventTriggerType.PointerClick;
                 }
                 else if (uiObj.GetComponent<Image>() &&
                          !uiObj.GetComponent<Button>() &&

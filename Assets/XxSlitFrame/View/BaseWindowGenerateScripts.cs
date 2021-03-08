@@ -31,6 +31,7 @@ namespace XxSlitFrame.View
         private string _currentScriptsContent;
         [LabelText("分号")] private string _semicolon = ";";
         [LabelText("换行")] private string _lineFeed = "\n";
+        [LabelText("监听事件列表")] private Dictionary<string, string> _listenerActionList;
 
         [Button(ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
@@ -50,9 +51,12 @@ namespace XxSlitFrame.View
                         _customScriptableObject.generateBaseWindowPath);
             }
 
+            _listenerActionList = new Dictionary<string, string>();
+
             OneClickDeclarationUi();
             OneClickBindUi();
             OneClickBindListener();
+            OneClickGetOldAction();
             OneClickStatementListener();
 
             for (int i = 0; i < allUiVariableUsing.Count - 1; i++)
@@ -82,10 +86,10 @@ namespace XxSlitFrame.View
 
             _currentScriptsContent = GetOldScriptsContent();
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableUsing,
-                "//" + _generateBaseWindowData.startUsing, 
+                "//" + _generateBaseWindowData.startUsing,
                 "//" + _generateBaseWindowData.endUsing);
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableName,
-                "//" + _generateBaseWindowData.startUiVariable, 
+                "//" + _generateBaseWindowData.startUiVariable,
                 "//" + _generateBaseWindowData.endUiVariable);
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBind,
                 "//" + _generateBaseWindowData.startVariableBindPath,
@@ -305,9 +309,10 @@ namespace XxSlitFrame.View
             //首行缩进
             foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
             {
-                if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
+                BindUiType bindUiType = child.GetComponent<BindUiType>();
+                if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
                 {
-                    switch (child.GetComponent<BindUiType>().type)
+                    switch (bindUiType.type)
                     {
                         case BindUiType.UiType.GameObject:
 
@@ -394,9 +399,9 @@ namespace XxSlitFrame.View
 
                             string childTypeName;
                             Type childType;
-                            if (child.GetComponent<BindUiType>().childType != null)
+                            if (bindUiType.childType != null)
                             {
-                                childType = child.GetComponent<BindUiType>().childType.GetType();
+                                childType = bindUiType.childType.GetType();
                                 if (childType == typeof(LocalUIBaseWindow))
                                 {
                                     childTypeName = child.GetComponentInChildren<LocalUIBaseWindow>().uiType.ToString();
@@ -404,7 +409,7 @@ namespace XxSlitFrame.View
                                 }
                                 else
                                 {
-                                    childTypeName = child.GetComponent<BindUiType>().childType.GetType().ToString();
+                                    childTypeName = bindUiType.childType.GetType().ToString();
                                     AddUsing("using System.Collections.Generic;");
                                 }
 
@@ -448,22 +453,212 @@ namespace XxSlitFrame.View
             allUiVariableBindListener = new List<string>();
             foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
             {
-                if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
+                BindUiType bindUiType = child.GetComponent<BindUiType>();
+
+                if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
                 {
-                    if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Button)
+                    string bindStr = string.Empty;
+                    if (bindUiType.type == BindUiType.UiType.Button)
                     {
-                        allUiVariableBindListener.Add(Indents(8) + "BindListener(_" +
-                                                      DataSvc.FirstCharToLower(child.name) + "," +
-                                                      "EventTriggerType.PointerClick" + "," + "On" + child.name +
-                                                      ");");
+                        BindUiType.UIEventTriggerType uiEventTriggerType =
+                            child.GetComponent<BindUiType>().eventTriggerType;
+
+                        if ((BindUiType.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerClick)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.PointerClick" + "," + "On" + child.name + "Click" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerEnter)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.PointerEnter" + "," + "On" + child.name + "Enter" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerExit)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.PointerExit" + "," + "On" + child.name + "Exit" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerDown)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.PointerDown" + "," + "On" + child.name + "Down" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.Drag)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.Drag" + "," + "On" + child.name + "Drag" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
                         AddUsing("using UnityEngine.EventSystems;");
                     }
-                    else
+                    else if (bindUiType.type == BindUiType.UiType.Toggle)
                     {
-                        // allUiVariableBindListener.Add(string.Empty);
+                        bindStr = Indents(8) + "_" + DataSvc.FirstCharToLower(child.name) +
+                                  ".onValueChanged.AddListener(" +
+                                  "On" +
+                                  child.name + ");";
+                        allUiVariableBindListener.Add(bindStr);
+                        AddUsing("using UnityEngine.EventSystems;");
                     }
                 }
             }
+        }
+
+
+        public void OneClickGetOldAction()
+        {
+            string insertStartMark = "//" + _generateBaseWindowData.startVariableBindEvent;
+            string insertEndMark = "//" + _generateBaseWindowData.endVariableBindEvent;
+            string currentScript = GetOldScriptsContent();
+            //开始位置 
+            int usingStartIndex =
+                currentScript.IndexOf(insertStartMark, StringComparison.Ordinal) + insertStartMark.Length;
+            //结束位置
+            int usingEndIndex = currentScript.IndexOf(insertEndMark, StringComparison.Ordinal);
+            //移除多余空格
+            while (currentScript[usingEndIndex - 1] == ' ')
+            {
+                usingEndIndex -= 1;
+            }
+
+            //查找要被替换的内容
+            string scriptContent = String.Empty;
+            for (int i = 0; i < currentScript.Length; i++)
+            {
+                if (i >= usingStartIndex && i < usingEndIndex)
+                {
+                    scriptContent += currentScript[i];
+                }
+            }
+
+            List<string> actionNameList = new List<string>();
+
+            Transform window = GetWindow();
+            foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
+            {
+                BindUiType bindUiType = child.GetComponent<BindUiType>();
+
+                if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
+                {
+                    if (bindUiType.type == BindUiType.UiType.Button)
+                    {
+                        BindUiType.UIEventTriggerType uiEventTriggerType =
+                            child.GetComponent<BindUiType>().eventTriggerType;
+
+                        if ((BindUiType.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerClick)
+                        {
+                            actionNameList.Add("On" + child.name + "Click" + "(BaseEventData targetObj)" + "\n" +
+                                               Indents(4) + "{");
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerEnter)
+                        {
+                            actionNameList.Add("On" + child.name + "Enter" + "(BaseEventData targetObj)" + "\n" +
+                                               Indents(4) + "{");
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerExit)
+                        {
+                            actionNameList.Add("On" + child.name + "Exit" + "(BaseEventData targetObj)" + "\n" +
+                                               Indents(4) + "{");
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerDown)
+                        {
+                            actionNameList.Add("On" + child.name + "Down" + "(BaseEventData targetObj)" + "\n" +
+                                               Indents(4) + "{");
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.Drag)
+                        {
+                            actionNameList.Add("On" + child.name + "Drag" + "(BaseEventData targetObj)" + "\n" +
+                                               Indents(4) + "{");
+                        }
+                    }
+                    else if (bindUiType.type == BindUiType.UiType.Toggle)
+                    {
+                        actionNameList.Add("On" + child.name + "(bool isOn)" + "\n" + Indents(4) + "{");
+                    }
+                }
+            }
+
+            foreach (string actionName in actionNameList)
+            {
+                if (scriptContent.Contains(actionName))
+                {
+                    _listenerActionList.Add(actionName, FindActionContent(actionName, scriptContent));
+                }
+            }
+        }
+
+        private string FindActionContent(string startMark, string scriptContent)
+        {
+            string action = String.Empty;
+            //开始位置 
+            int startIndex =
+                scriptContent.IndexOf(startMark, StringComparison.Ordinal) + startMark.Length;
+
+            int endIndex = 0;
+            int leftBrackets = 0;
+            for (int i = startIndex; i < scriptContent.Length; i++)
+            {
+                if (scriptContent[i] == '{')
+                {
+                    leftBrackets += 1;
+                }
+
+                if (scriptContent[i] == '}')
+                {
+                    if (leftBrackets == 0)
+                    {
+                        endIndex = i;
+                        break;
+                    }
+
+                    leftBrackets -= 1;
+                }
+            }
+
+            for (int i = startIndex; i < endIndex; i++)
+            {
+                action += scriptContent[i];
+            }
+
+            return action;
+        }
+
+        /// <summary>
+        /// 查找旧的函数内容
+        /// </summary>
+        /// <param name="actionName"></param>
+        /// <returns></returns>
+        private string FindOldActionContent(string actionName)
+        {
+            if (_listenerActionList.ContainsKey(actionName))
+            {
+                return _listenerActionList[actionName];
+            }
+
+            return "\n";
         }
 
         /// <summary>
@@ -481,13 +676,71 @@ namespace XxSlitFrame.View
                 {
                     if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Button)
                     {
-                        allUiVariableBindListenerEvent.Add(Indents(4) + "private void On" + child.name +
-                                                           "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" +
-                                                           "\n" + Indents(4) + "}");
+                        string bindStr = String.Empty;
+                        BindUiType.UIEventTriggerType uiEventTriggerType =
+                            child.GetComponent<BindUiType>().eventTriggerType;
+                        if ((BindUiType.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerClick)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "Click" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                            bindStr = Indents(4) + "private void On" + child.name + "Click" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerEnter)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "Enter" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+
+                            bindStr = Indents(4) + "private void On" + child.name + "Enter" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerExit)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "Exit" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                            bindStr = Indents(4) + "private void On" + child.name + "Exit" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerDown)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "Down" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                            bindStr = Indents(4) + "private void On" + child.name + "Down" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.Drag)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "Drag" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                            bindStr = Indents(4) + "private void On" + child.name + "Drag" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
                     }
-                    else
+                    else if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Toggle)
                     {
-                        // allUiVariableBindListenerEvent.Add(string.Empty);
+                        string oldContent = FindOldActionContent(
+                            "On" + child.name + "(bool isOn)" + "\n" + Indents(4) + "{");
+                        allUiVariableBindListenerEvent.Add(Indents(4) + "private void On" + child.name +
+                                                           "(bool isOn)" + "\n" + Indents(4) + "{" + oldContent + "}");
                     }
                 }
             }

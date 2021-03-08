@@ -16,7 +16,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
 {
     public class FrameMenu : OdinMenuEditorWindow
     {
-        [MenuItem("My Game/My Editor")]
+        [MenuItem("Xframe/框架")]
         private static void OpenWindow()
         {
             GetWindow<FrameMenu>().Show();

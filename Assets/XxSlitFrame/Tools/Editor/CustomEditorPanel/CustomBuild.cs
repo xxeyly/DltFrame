@@ -19,7 +19,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
     {
         private static CustomBuildData _buildData;
 
-        [MenuItem("XFrame/打包工具", false, 0)]
+        // [MenuItem("XFrame/打包工具", false, 0)]
         private static void ShowWindow()
         {
             EditorWindow window = EditorWindow.GetWindow<CustomBuild>();
