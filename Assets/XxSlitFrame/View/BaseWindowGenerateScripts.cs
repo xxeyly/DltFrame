@@ -100,6 +100,7 @@ namespace XxSlitFrame.View
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListenerEvent,
                 "//" + _generateBaseWindowData.startVariableBindEvent,
                 "//" + _generateBaseWindowData.endVariableBindEvent);
+            
             ResSvc.FileOperation.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
         }
 
@@ -495,6 +496,14 @@ namespace XxSlitFrame.View
                             allUiVariableBindListener.Add(bindStr);
                         }
 
+                        if ((BindUiType.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerUp)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.PointerUp" + "," + "On" + child.name + "Up" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
                         if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
                             BindUiType.UIEventTriggerType.Drag)
                         {
@@ -589,11 +598,17 @@ namespace XxSlitFrame.View
                                     scriptContent));
                         }
 
+                        if ((BindUiType.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerUp)
+                        {
+                            actionNameList.Add(
+                                FindActionNameKey("On" + child.name + "Up",
+                                    scriptContent));
+                        }
+
                         if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
                             BindUiType.UIEventTriggerType.Drag)
                         {
-                            /*actionNameList.Add("On" + child.name + "Drag" + "(BaseEventData targetObj)" + "\n" +
-                                               Indents(4) + "{");*/
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "Drag",
                                     scriptContent));
@@ -612,7 +627,14 @@ namespace XxSlitFrame.View
             {
                 if (scriptContent.Contains(actionName))
                 {
-                    _listenerActionList.Add(actionName, FindActionContent(actionName, scriptContent));
+                    if (_listenerActionList.ContainsKey(actionName))
+                    {
+                        _listenerActionList[actionName] = FindActionContent(actionName, scriptContent);
+                    }
+                    else
+                    {
+                        _listenerActionList.Add(actionName, FindActionContent(actionName, scriptContent));
+                    }
                 }
             }
         }
@@ -688,6 +710,7 @@ namespace XxSlitFrame.View
             {
                 action += scriptContent[i];
             }
+
             return action;
         }
 
@@ -764,6 +787,17 @@ namespace XxSlitFrame.View
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "Down");
                             bindStr = Indents(4) + "private void On" + child.name + "Down" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.PointerUp)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "Up");
+                            bindStr = Indents(4) + "private void On" + child.name + "Up" +
                                       "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
                                       "}";
                             allUiVariableBindListenerEvent.Add(bindStr);

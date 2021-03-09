@@ -216,9 +216,22 @@ namespace XxSlitFrame.Tools.Svc
                 }
 
                 FileStream aFile = new FileStream(path, FileMode.Create);
-                StreamWriter sw = new StreamWriter(aFile, Encoding.UTF8);
-                sw.WriteLine(information);
-                sw.Close();
+                //得到字符串的UTF8 数据流
+                byte[] bts = System.Text.Encoding.UTF8.GetBytes(information);
+                // StreamWriter sw = new StreamWriter(aFile, Encoding.UTF8);
+                // sw.WriteLine(information);
+                // sw.Close();
+                aFile.Write(bts, 0, bts.Length);
+                if (aFile != null)
+                {
+                    //清空缓存
+                    aFile.Flush();
+                    // 关闭流
+                    aFile.Close();
+                    //销毁资源
+                    aFile.Dispose();
+                }
+                
 #if UNITY_EDITOR
                 AssetDatabase.Refresh();
 #endif
