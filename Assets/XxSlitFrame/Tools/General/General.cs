@@ -81,5 +81,10 @@ namespace XxSlitFrame.Tools.General
                 return "";
             }
         }
+
+        public static string BaseWindowTemplatePath = "Assets/XxSlitFrame/Tools/General/BaseWindowTemplate.cs";
+
+        public static string ChildBaseWindowTemplatePath =
+            "Assets/XxSlitFrame/Tools/General/ChildBaseWindowTemplate.cs";
     }
 }

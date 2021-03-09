@@ -1,15 +1,13 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using System.Text;
+using UnityEditor;
+using UnityEditor.ProjectWindowCallback;
+using UnityEngine;
 using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.ConfigData.Editor;
 
-namespace XxSlitFrame.Tools.Editor
+namespace XxSlitFrame.Tools
 {
-    using System.IO;
-    using System.Text;
-    using UnityEditor;
-    using UnityEditor.ProjectWindowCallback;
-    using System;
-
     public class DoCreateScriptAsset : EndNameEditAction
     {
         private GenerateBaseWindowData _generateBaseWindowData;
@@ -25,7 +23,16 @@ namespace XxSlitFrame.Tools.Editor
                 AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(customScriptableObject.generateBaseWindowPath);
             className = className.Replace(" ", "");
 
-            text = text.Replace("BaseWindowTemplate", className);
+            if (resourceFile == General.General.BaseWindowTemplatePath)
+            {
+                text = text.Replace("BaseWindowTemplate", className);
+            }
+
+            if (resourceFile == General.General.ChildBaseWindowTemplatePath)
+            {
+                text = text.Replace("ChildBaseWindowTemplate", className);
+            }
+
             text = text.Replace("StartUsing", _generateBaseWindowData.startUsing);
             text = text.Replace("EndUsing", _generateBaseWindowData.endUsing);
             text = text.Replace("StartUIVariable", _generateBaseWindowData.startUiVariable);

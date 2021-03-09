@@ -114,10 +114,10 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
                 {
                     uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Slider;
                 }
-                else if (uiObj.GetComponentInChildren<LocalBaseWindow>())
+                else if (uiObj.GetComponentInChildren<ChildBaseWindow>())
                 {
                     uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.ChildList;
-                    uiObj.GetComponent<BindUiType>().childType = uiObj.GetComponentInChildren<LocalBaseWindow>();
+                    uiObj.GetComponent<BindUiType>().childType = uiObj.GetComponentInChildren<ChildBaseWindow>();
                 }
                 else
                 {

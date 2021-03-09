@@ -38,11 +38,6 @@ namespace XxSlitFrame.View
         [LabelText("代码生成")]
         public void Generate()
         {
-            if (gameObject.GetComponent<BaseWindow>() == null)
-            {
-                return;
-            }
-
             //清除空格
             if (_customScriptableObject == null)
             {
@@ -136,7 +131,7 @@ namespace XxSlitFrame.View
         /// 获得UI组件是否包含LocalBaseWindow路径
         /// </summary>
         /// <returns></returns>
-        private bool GetUiComponentContainLocalBaseWindow(Transform uiTr)
+        protected bool GetUiComponentContainLocalBaseWindow(Transform uiTr)
         {
             Transform defaultUiTr = uiTr;
             int hierarchy = 0;
@@ -154,7 +149,7 @@ namespace XxSlitFrame.View
             {
                 for (int i = 0; i <= hierarchy; i++)
                 {
-                    if (GetParentByHierarchy(defaultUiTr, i).GetComponent<LocalBaseWindow>())
+                    if (GetParentByHierarchy(defaultUiTr, i).GetComponent<ChildBaseWindow>())
                     {
                         return true;
                     }
@@ -250,7 +245,7 @@ namespace XxSlitFrame.View
         /// 获得脚本路径
         /// </summary>
         /// <returns></returns>
-        private string GetScriptsPath()
+        protected virtual string GetScriptsPath()
         {
             Type scriptType = GetComponent<BaseWindow>().GetType();
             string[] scriptNameSplit = scriptType.ToString().Split(new char[] {'.'});
@@ -285,7 +280,7 @@ namespace XxSlitFrame.View
         /// </summary>
         /// <param name="_scriptName"></param>
         /// <returns></returns>
-        static string GetPath(string _scriptName)
+        protected static string GetPath(string _scriptName)
         {
             string[] path = UnityEditor.AssetDatabase.FindAssets(_scriptName);
 
@@ -407,9 +402,9 @@ namespace XxSlitFrame.View
                             if (bindUiType.childType != null)
                             {
                                 childType = bindUiType.childType.GetType();
-                                if (childType == typeof(LocalUIBaseWindow))
+                                if (childType == typeof(ChildUiBaseWindow))
                                 {
-                                    childTypeName = child.GetComponentInChildren<LocalUIBaseWindow>().uiType.ToString();
+                                    childTypeName = child.GetComponentInChildren<ChildUiBaseWindow>().uiType.ToString();
                                     AddUsing("using System.Collections.Generic;");
                                 }
                                 else
@@ -567,41 +562,48 @@ namespace XxSlitFrame.View
                         if ((BindUiType.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
                             BindUiType.UIEventTriggerType.PointerClick)
                         {
-                            actionNameList.Add("On" + child.name + "Click" + "(BaseEventData targetObj)" + "\n" +
-                                               Indents(4) + "{");
+                            actionNameList.Add(FindActionNameKey(
+                                "On" + child.name + "Click", scriptContent));
                         }
 
                         if ((BindUiType.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
                             BindUiType.UIEventTriggerType.PointerEnter)
                         {
-                            actionNameList.Add("On" + child.name + "Enter" + "(BaseEventData targetObj)" + "\n" +
-                                               Indents(4) + "{");
+                            actionNameList.Add(FindActionNameKey(
+                                "On" + child.name + "Enter", scriptContent));
                         }
 
                         if ((BindUiType.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
                             BindUiType.UIEventTriggerType.PointerExit)
                         {
-                            actionNameList.Add("On" + child.name + "Exit" + "(BaseEventData targetObj)" + "\n" +
-                                               Indents(4) + "{");
+                            actionNameList.Add(
+                                FindActionNameKey("On" + child.name + "Exit",
+                                    scriptContent));
                         }
 
                         if ((BindUiType.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
                             BindUiType.UIEventTriggerType.PointerDown)
                         {
-                            actionNameList.Add("On" + child.name + "Down" + "(BaseEventData targetObj)" + "\n" +
-                                               Indents(4) + "{");
+                            actionNameList.Add(
+                                FindActionNameKey("On" + child.name + "Down",
+                                    scriptContent));
                         }
 
                         if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
                             BindUiType.UIEventTriggerType.Drag)
                         {
-                            actionNameList.Add("On" + child.name + "Drag" + "(BaseEventData targetObj)" + "\n" +
-                                               Indents(4) + "{");
+                            /*actionNameList.Add("On" + child.name + "Drag" + "(BaseEventData targetObj)" + "\n" +
+                                               Indents(4) + "{");*/
+                            actionNameList.Add(
+                                FindActionNameKey("On" + child.name + "Drag",
+                                    scriptContent));
                         }
                     }
                     else if (bindUiType.type == BindUiType.UiType.Toggle)
                     {
-                        actionNameList.Add("On" + child.name + "(bool isOn)" + "\n" + Indents(4) + "{");
+                        // actionNameList.Add("On" + child.name + "(bool isOn)" + "\n" + Indents(4) + "{");
+                        actionNameList.Add(FindActionNameKey("On" + child.name + "(bool isOn)",
+                            scriptContent));
                     }
                 }
             }
@@ -615,12 +617,51 @@ namespace XxSlitFrame.View
             }
         }
 
+        /// <summary>
+        /// 查找方法关键Key
+        /// </summary>
+        /// <param name="actionName"></param>
+        /// <returns></returns>
+        private string FindActionNameKey(string actionName, string scriptsContent)
+        {
+            string actionContent = "";
+            //开始位置 
+            int startIndex =
+                scriptsContent.IndexOf(actionName, StringComparison.Ordinal) + actionName.Length;
+            int endIndex = 0;
+
+            for (int i = startIndex; i < scriptsContent.Length; i++)
+            {
+                if (scriptsContent[i] != '(')
+                {
+                    endIndex += 1;
+                    break;
+                }
+            }
+
+            for (int i = startIndex; i < endIndex; i++)
+            {
+                actionContent += scriptsContent[startIndex + i];
+            }
+
+            return actionName + actionContent;
+        }
+
         private string FindActionContent(string startMark, string scriptContent)
         {
             string action = String.Empty;
             //开始位置 
             int startIndex =
                 scriptContent.IndexOf(startMark, StringComparison.Ordinal) + startMark.Length;
+            for (int i = startIndex; i < scriptContent.Length; i++)
+            {
+                // Debug.Log(scriptContent[i]);
+                startIndex += 1;
+                if (scriptContent[i] == '{')
+                {
+                    break;
+                }
+            }
 
             int endIndex = 0;
             int leftBrackets = 0;
@@ -647,7 +688,6 @@ namespace XxSlitFrame.View
             {
                 action += scriptContent[i];
             }
-
             return action;
         }
 
@@ -663,7 +703,7 @@ namespace XxSlitFrame.View
                 return _listenerActionList[actionName];
             }
 
-            return "\n";
+            return "\n" + Indents(4);
         }
 
         /// <summary>
@@ -688,7 +728,7 @@ namespace XxSlitFrame.View
                             BindUiType.UIEventTriggerType.PointerClick)
                         {
                             string oldContent = FindOldActionContent(
-                                "On" + child.name + "Click" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                                "On" + child.name + "Click");
                             bindStr = Indents(4) + "private void On" + child.name + "Click" +
                                       "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
                                       "}";
@@ -699,7 +739,7 @@ namespace XxSlitFrame.View
                             BindUiType.UIEventTriggerType.PointerEnter)
                         {
                             string oldContent = FindOldActionContent(
-                                "On" + child.name + "Enter" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                                "On" + child.name + "Enter");
 
                             bindStr = Indents(4) + "private void On" + child.name + "Enter" +
                                       "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
@@ -711,7 +751,7 @@ namespace XxSlitFrame.View
                             BindUiType.UIEventTriggerType.PointerExit)
                         {
                             string oldContent = FindOldActionContent(
-                                "On" + child.name + "Exit" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                                "On" + child.name + "Exit");
                             bindStr = Indents(4) + "private void On" + child.name + "Exit" +
                                       "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
                                       "}";
@@ -722,7 +762,7 @@ namespace XxSlitFrame.View
                             BindUiType.UIEventTriggerType.PointerDown)
                         {
                             string oldContent = FindOldActionContent(
-                                "On" + child.name + "Down" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                                "On" + child.name + "Down");
                             bindStr = Indents(4) + "private void On" + child.name + "Down" +
                                       "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
                                       "}";
@@ -733,7 +773,7 @@ namespace XxSlitFrame.View
                             BindUiType.UIEventTriggerType.Drag)
                         {
                             string oldContent = FindOldActionContent(
-                                "On" + child.name + "Drag" + "(BaseEventData targetObj)" + "\n" + Indents(4) + "{");
+                                "On" + child.name + "Drag");
                             bindStr = Indents(4) + "private void On" + child.name + "Drag" +
                                       "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
                                       "}";

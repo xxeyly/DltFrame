@@ -10,7 +10,7 @@ namespace XxSlitFrame.View
     /// <summary>
     /// 局部UI界面
     /// </summary>
-    public abstract class LocalBaseWindow : MonoBehaviour
+    public abstract class ChildBaseWindow : MonoBehaviour
     {
        
         public void Init()

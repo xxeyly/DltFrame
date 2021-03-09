@@ -54,7 +54,7 @@ namespace XxSlitFrame.View
         [LabelText("UI组件类型")] public UiType type;
 
         // [EnableIf("@type == UiType.ChildList")]
-        [ShowIf("@type == UiType.ChildList")] public LocalBaseWindow childType;
+        [ShowIf("@type == UiType.ChildList")] public ChildBaseWindow childType;
 
         [ShowIf("@type == UiType.Button")] [LabelText("UI触发事件类型")]
         public UIEventTriggerType eventTriggerType;

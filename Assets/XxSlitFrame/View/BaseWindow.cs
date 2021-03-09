@@ -11,6 +11,7 @@ using XxSlitFrame.Tools.General;
 
 namespace XxSlitFrame.View
 {
+    [Serializable]
     public enum ViewShowType
     {
         [LabelText("活动")] Activity,
@@ -50,8 +51,12 @@ namespace XxSlitFrame.View
             new Dictionary<string, UnityAction<BaseEventData>>();
 
         [SerializeField] [LabelText("计时任务列表")] protected List<TimeTaskInfo> timeTaskInfoList = new List<TimeTaskInfo>();
-        [LabelText("视图类型")] [SerializeField] protected ViewShowType ViewShowType = ViewShowType.Activity;
-        [LabelText("显示类型")] [SerializeField] protected ShowType ShowType = ShowType.Direct;
+
+        [LabelText("视图类型")] [SerializeField] [EnumToggleButtons]
+        protected ViewShowType ViewShowType = ViewShowType.Activity;
+
+        [LabelText("显示类型")] [SerializeField] [EnumToggleButtons]
+        protected ShowType ShowType = ShowType.Direct;
 
         [LabelText("显示时间")] [Range(0.1f, 9)] [SerializeField]
         protected float ShowTime = 1;
