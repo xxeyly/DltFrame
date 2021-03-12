@@ -4,7 +4,6 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 using Random = UnityEngine.Random;
 
@@ -698,7 +697,7 @@ namespace XxSlitFrame.Tools.Svc
             errorTipContent.text = content;
             action?.Invoke();
             errorTipsTimeTask = AddTimeTask(() => { errorTips.SetActive(false); }, "错误提示内容",
-                General.General.ViewErrorTime);
+                General.ViewErrorTime);
             return errorTipsTimeTask;
         }
     }

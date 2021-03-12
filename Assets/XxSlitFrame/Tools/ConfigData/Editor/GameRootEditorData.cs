@@ -1,8 +1,11 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace XxSlitFrame.Tools.ConfigData.Editor
 {
+    [Serializable]
     public class GameRootEditorData : ScriptableObject
     {
         [LabelText("持久化服务")] public bool persistentDataSvcEditor;

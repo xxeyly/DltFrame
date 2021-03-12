@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using XxSlitFrame.Tools.General;
+using XxSlitFrame.Tools;
 using XxSlitFrame.Tools.Svc;
 
 namespace XAnimator.Base

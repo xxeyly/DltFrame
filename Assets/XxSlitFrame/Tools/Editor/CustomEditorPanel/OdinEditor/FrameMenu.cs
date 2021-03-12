@@ -31,22 +31,20 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
         //框架配置
         private GameRootEditor gameRootEditor;
         private GenerateBaseWindowEditor generateBaseWindowEditor;
+        private SceneLoad.SceneLoad sceneLoad;
 
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
             tree.Selection.SupportsMultiSelect = false;
-            //数据配置
-            ConfigData.CustomScriptableObject customScriptableObject =
-                new ConfigData.CustomScriptableObject();
             //打包
-            customBuild = new OdinCustomBuild(customScriptableObject);
+            customBuild = new OdinCustomBuild();
             //可持久化
             PersistentDataSvcEditor persistentDataSvcEditor = new PersistentDataSvcEditor();
             //资源服务
             ResSvcEditor resSvcEditor = new ResSvcEditor();
             //音频服务
-            audioSvcEditor = new AudioSvcEditor(customScriptableObject);
+            audioSvcEditor = new AudioSvcEditor();
             //监听服务
             ListenerSvcEditor listenerSvcEditor = new ListenerSvcEditor();
             //场景服务
@@ -56,17 +54,21 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
             //视图服务
             ViewSvcEditor viewSvcEditor = new ViewSvcEditor();
             //生成配置
-            generateBaseWindowEditor = new GenerateBaseWindowEditor(customScriptableObject);
+            generateBaseWindowEditor = new GenerateBaseWindowEditor();
             //框架配置
-            gameRootEditor = new GameRootEditor(customScriptableObject, persistentDataSvcEditor, resSvcEditor,
+            gameRootEditor = new GameRootEditor(persistentDataSvcEditor, resSvcEditor,
                 audioSvcEditor,
                 listenerSvcEditor, sceneSvcEditor,
                 timeSvcEditor, viewSvcEditor);
+            ResourceUnification resourceUnification = new ResourceUnification();
+
+            sceneLoad = new SceneLoad.SceneLoad();
+            tree.Add("场景编辑", sceneLoad);
             tree.Add("打包工具", customBuild);
             tree.Add("框架服务", gameRootEditor);
             tree.Add("音频配置", audioSvcEditor);
             tree.Add("生成配置", generateBaseWindowEditor);
-            tree.Add("配置文件", customScriptableObject);
+            tree.Add("资源统一化", resourceUnification);
             return tree;
         }
 
@@ -76,6 +78,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
             audioSvcEditor.OnDisable();
             gameRootEditor.OnDisable();
             generateBaseWindowEditor.OnDisable();
+            sceneLoad.OnDisable();
         }
     }
 }

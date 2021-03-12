@@ -10,7 +10,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 using Object = System.Object;
 

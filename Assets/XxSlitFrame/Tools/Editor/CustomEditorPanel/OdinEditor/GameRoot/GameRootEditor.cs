@@ -20,8 +20,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
     public class GameRootEditor : BaseEditor
 
     {
-        private ConfigData.CustomScriptableObject _customScriptableObject;
-
         [Toggle("Enabled")] [LabelText("持久化")] public PersistentDataSvcEditor persistentDataSvcEditor;
 
         [Toggle("Enabled")] [LabelText("资源服务")]
@@ -44,12 +42,11 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
 
         private GameRootEditorData _gameRootEditorData;
 
-        public GameRootEditor(ConfigData.CustomScriptableObject customScriptableObject,
-            PersistentDataSvcEditor persistentDataSvcEditor, ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor,
+        public GameRootEditor(PersistentDataSvcEditor persistentDataSvcEditor, ResSvcEditor resSvcEditor,
+            AudioSvcEditor audioSvcEditor,
             ListenerSvcEditor listenerSvcEditorSvc,
             SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, ViewSvcEditor viewSvcEditorSvc)
         {
-            _customScriptableObject = customScriptableObject;
             this.persistentDataSvcEditor = persistentDataSvcEditor;
             this.resSvcEditor = resSvcEditor;
             this.audioSvcEditor = audioSvcEditor;
@@ -92,7 +89,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
                 AudioSvc resSvc = resSvcObj.AddComponent<AudioSvc>();
                 resSvc.init = audioSvcEditor.isInit;
                 resSvc.audioData =
-                    AssetDatabase.LoadAssetAtPath<AudioSvcData>(_customScriptableObject.customAudioDataPath);
+                    AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
                 resSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(resSvc);
             }
@@ -142,11 +139,11 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
         public override void OnCreateConfig()
         {
             _gameRootEditorData =
-                AssetDatabase.LoadAssetAtPath<GameRootEditorData>(_customScriptableObject.customFrameDataPath);
+                AssetDatabase.LoadAssetAtPath<GameRootEditorData>(General.customFrameDataPath);
             if (_gameRootEditorData == null)
             {
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GameRootEditorData>(),
-                    _customScriptableObject.customFrameDataPath);
+                    General.customFrameDataPath);
             }
         }
 
@@ -181,7 +178,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
         public override void OnLoadConfig()
         {
             _gameRootEditorData =
-                AssetDatabase.LoadAssetAtPath<GameRootEditorData>(_customScriptableObject.customFrameDataPath);
+                AssetDatabase.LoadAssetAtPath<GameRootEditorData>(General.customFrameDataPath);
 
             persistentDataSvcEditor.Enabled = _gameRootEditorData.persistentDataSvcEditor;
             persistentDataSvcEditor.isInit = _gameRootEditorData.persistentDataSvcEditorInit;

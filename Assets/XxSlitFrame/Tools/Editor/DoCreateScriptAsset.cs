@@ -17,18 +17,16 @@ namespace XxSlitFrame.Tools
             var text = File.ReadAllText(resourceFile);
 
             var className = Path.GetFileNameWithoutExtension(pathName);
-            //清除空格
-            CustomScriptableObject customScriptableObject = new CustomScriptableObject();
             _generateBaseWindowData =
-                AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(customScriptableObject.generateBaseWindowPath);
+                AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(General.generateBaseWindowPath);
             className = className.Replace(" ", "");
 
-            if (resourceFile == General.General.BaseWindowTemplatePath)
+            if (resourceFile == General.BaseWindowTemplatePath)
             {
                 text = text.Replace("BaseWindowTemplate", className);
             }
 
-            if (resourceFile == General.General.ChildBaseWindowTemplatePath)
+            if (resourceFile == General.ChildBaseWindowTemplatePath)
             {
                 text = text.Replace("ChildBaseWindowTemplate", className);
             }

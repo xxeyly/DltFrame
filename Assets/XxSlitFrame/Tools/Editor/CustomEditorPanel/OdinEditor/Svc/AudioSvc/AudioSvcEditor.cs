@@ -7,14 +7,13 @@ using XxSlitFrame.Tools.ConfigData;
 
 namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc
 {
+#if UNITY_EDITOR
+
     [Serializable]
     public class AudioSvcEditor : BaseEditor
     {
-        private ConfigData.CustomScriptableObject _customScriptableObject;
-
-        public AudioSvcEditor(ConfigData.CustomScriptableObject customScriptableObject)
+        public AudioSvcEditor()
         {
-            _customScriptableObject = customScriptableObject;
             OnCreateConfig();
             OnLoadConfig();
         }
@@ -37,15 +36,15 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc
 
         public override void OnCreateConfig()
         {
-            _customAudioData = AssetDatabase.LoadAssetAtPath<AudioSvcData>(_customScriptableObject.customAudioDataPath);
+            _customAudioData = AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
             if (_customAudioData == null)
             {
                 //创建数据
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AudioSvcData>(),
-                    _customScriptableObject.customAudioDataPath);
+                    General.customAudioDataPath);
                 //读取数据
                 _customAudioData =
-                    AssetDatabase.LoadAssetAtPath<AudioSvcData>(_customScriptableObject.customAudioDataPath);
+                    AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
             }
         }
 
@@ -63,4 +62,5 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc
             audioInfos = _customAudioData.audioInfos;
         }
     }
+#endif
 }

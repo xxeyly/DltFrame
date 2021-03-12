@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using XxSlitFrame.Tools.General;
+using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools.Svc
@@ -19,6 +20,7 @@ namespace XxSlitFrame.Tools.Svc
         private int _sceneLoadTimeTask;
         private int _sceneLoadOverTimeTask;
         private int _asyncSceneLoadProgressTimeTask;
+        public SceneLoadData sceneLoadData;
 
         public override void StartSvc()
         {
@@ -48,7 +50,24 @@ namespace XxSlitFrame.Tools.Svc
         {
             PersistentDataSvc.Instance.sceneLoadType = SceneLoadType.SceneName;
             SceneLoadBeforeInit();
-            SceneManager.LoadScene(sceneName);
+            foreach (SceneLoadData.SceneInfo sceneInfo in sceneLoadData.sceneInfos)
+            {
+                if (sceneInfo.sceneAsset.name == sceneName)
+                {
+                    switch (sceneInfo.sceneLoadType)
+                    {
+                        case SceneLoadData.SceneLoadType.不加载:
+                            break;
+                        case SceneLoadData.SceneLoadType.同步:
+                            SceneManager.LoadScene(sceneName);
+                            break;
+                        case SceneLoadData.SceneLoadType.异步:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+            }
         }
 
         /// <summary>

@@ -1,10 +1,8 @@
 ﻿using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Rendering;
-using XxSlitFrame.Tools.Svc;
 
-namespace XxSlitFrame.Tools.General
+namespace XxSlitFrame.Tools
 {
     public enum AnimType
     {
@@ -86,5 +84,24 @@ namespace XxSlitFrame.Tools.General
 
         public static string ChildBaseWindowTemplatePath =
             "Assets/XxSlitFrame/Tools/General/ChildBaseWindowTemplate.cs";
+        
+        [FilePath] [LabelText("自动打包配置存放路径")] [LabelWidth(120)]
+        public static string customBuildDataPath = "Assets/XxSlitFrame/Config/CustomBuildData.asset";
+
+        [FilePath] [LabelText("音频配置存放路径")] [LabelWidth(120)]
+        public  static string customAudioDataPath = "Assets/XxSlitFrame/Config/CustomAudioData.asset";
+
+        [FilePath] [LabelText("框架配置存放路径")] [LabelWidth(120)]
+        public  static string customFrameDataPath = "Assets/XxSlitFrame/Config/CustomFrameData.asset";
+
+        [FilePath] [LabelText("生成配置存放路径")] [LabelWidth(120)]
+        public static string generateBaseWindowPath = "Assets/XxSlitFrame/Config/GenerateBaseWindowData.asset";
+
+        [FilePath] [LabelText("场景配置存放路径")] [LabelWidth(120)]
+        public static string sceneLoadPath = "Assets/XxSlitFrame/Config/SceneLoadData.asset";
+
+        [FilePath] [LabelText("场景配置存放路径")] [LabelWidth(120)]
+        public static string buildSceneAssetBundleDataPath =
+            "Assets/XxSlitFrame/Config/BuildSceneAssetBundleData.asset";
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
+using XxSlitFrame.Tools;
 
-namespace XxSlitFrame.Tools.ConfigData
+namespace Sirenix.OdinInspector
 {
-    public class CreateBaseWindowTemplate 
+    public class CreateChildBaseWindowTemplate
     {
-        [MenuItem("Assets/Create/C# BaseWindow", false, 70)]
+        [MenuItem("Assets/Create/C# ChildBaseWindow", false, 71)]
         public static void OnCreateBaseWindowTemplate()
         {
             string path = GetSelectedPath();
@@ -16,8 +17,8 @@ namespace XxSlitFrame.Tools.ConfigData
             }
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewBaseWindow.cs", null,
-                General.General.BaseWindowTemplatePath);
+                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewChildBaseWindow.cs", null,
+                General.ChildBaseWindowTemplatePath);
         }
 
         private static string GetSelectedPath()

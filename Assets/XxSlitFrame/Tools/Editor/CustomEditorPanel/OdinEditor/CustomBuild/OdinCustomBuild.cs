@@ -5,14 +5,14 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 using XxSlitFrame.Tools.ConfigData.Editor;
-using XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject;
 using CustomBuildData = XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject.CustomBuildData;
 
 namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
 {
+#if UNITY_EDITOR
+
     public class OdinCustomBuild : BaseEditor
     {
-        private ConfigData.CustomScriptableObject _customScriptableObject;
         [LabelText("当前打包方式:")] public BuildTarget buildTarget;
         [LabelText("压缩类型")] public BuildOptions buildCompressType;
 
@@ -37,9 +37,8 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
             Build();
         }
 
-        public OdinCustomBuild(ConfigData.CustomScriptableObject customScriptableObject)
+        public OdinCustomBuild()
         {
-            _customScriptableObject = customScriptableObject;
             OnCreateConfig();
             OnLoadConfig();
         }
@@ -96,15 +95,14 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
 
         public override void OnCreateConfig()
         {
-            _customBuildData = AssetDatabase.LoadAssetAtPath<CustomBuildData>(_customScriptableObject
-                .customBuildDataPath);
+            _customBuildData = AssetDatabase.LoadAssetAtPath<CustomBuildData>(General.customBuildDataPath);
             if (_customBuildData == null)
             {
                 //创建数据
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<CustomBuildData>(),
-                    _customScriptableObject.customBuildDataPath);
+                    General.customBuildDataPath);
                 //读取数据
-                _customBuildData = AssetDatabase.LoadAssetAtPath<CustomBuildData>(_customScriptableObject
+                _customBuildData = AssetDatabase.LoadAssetAtPath<CustomBuildData>(General
                     .customBuildDataPath);
             }
         }
@@ -135,4 +133,5 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
             folderCopy = _customBuildData.folderCopy;
         }
     }
+#endif
 }

@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using XxSlitFrame.Tools;
 using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.ConfigData.Editor;
 using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.View
 {
+#if UNITY_EDITOR
+
     public class BaseWindowGenerateScripts : MonoBehaviour
     {
         [TabGroup("UI", "引用")] [LabelText("UI变量引用")] [ReadOnly]
@@ -27,7 +30,6 @@ namespace XxSlitFrame.View
         public List<string> allUiVariableBindListenerEvent;
 
         private GenerateBaseWindowData _generateBaseWindowData;
-        private CustomScriptableObject _customScriptableObject;
         private string _currentScriptsContent;
         [LabelText("分号")] private string _semicolon = ";";
         [LabelText("换行")] private string _lineFeed = "\n";
@@ -38,17 +40,15 @@ namespace XxSlitFrame.View
         [LabelText("代码生成")]
         public void Generate()
         {
-            //清除空格
-            if (_customScriptableObject == null)
-            {
-                _customScriptableObject = new CustomScriptableObject();
-            }
 
             if (_generateBaseWindowData == null)
             {
+#if UNITY_EDITOR
+
                 _generateBaseWindowData =
                     AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(
-                        _customScriptableObject.generateBaseWindowPath);
+                        General.generateBaseWindowPath);
+#endif
             }
 
             _listenerActionList = new Dictionary<string, string>();
@@ -100,7 +100,7 @@ namespace XxSlitFrame.View
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListenerEvent,
                 "//" + _generateBaseWindowData.startVariableBindEvent,
                 "//" + _generateBaseWindowData.endVariableBindEvent);
-            
+
             ResSvc.FileOperation.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
         }
 
@@ -825,4 +825,5 @@ namespace XxSlitFrame.View
             }
         }
     }
+#endif
 }

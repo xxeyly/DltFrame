@@ -6,8 +6,8 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using XxSlitFrame.Tools.Svc;
 using UnityEngine.UI;
+using XxSlitFrame.Tools;
 using XxSlitFrame.Tools.ConfigData;
-using XxSlitFrame.Tools.General;
 
 namespace XxSlitFrame.View
 {

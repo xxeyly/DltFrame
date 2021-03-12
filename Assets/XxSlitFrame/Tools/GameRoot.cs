@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using XxSlitFrame.Tools.General;
 using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.Tools

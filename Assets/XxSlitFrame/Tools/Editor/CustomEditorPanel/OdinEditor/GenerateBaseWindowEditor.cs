@@ -26,16 +26,14 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
         [LabelText("变量方法结束")] public string endVariableBindEvent;
 
         private GenerateBaseWindowData _generateBaseWindowData;
-        private ConfigData.CustomScriptableObject _customScriptableObject;
 
         public override void OnDisable()
         {
             OnSaveConfig();
         }
 
-        public GenerateBaseWindowEditor(ConfigData.CustomScriptableObject customScriptableObject)
+        public GenerateBaseWindowEditor()
         {
-            _customScriptableObject = customScriptableObject;
             OnCreateConfig();
             OnLoadConfig();
         }
@@ -43,16 +41,16 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
         public override void OnCreateConfig()
         {
             _generateBaseWindowData =
-                AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(_customScriptableObject.generateBaseWindowPath);
+                AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(General.generateBaseWindowPath);
             if (_generateBaseWindowData == null)
             {
                 //创建数据
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GenerateBaseWindowData>(),
-                    _customScriptableObject.generateBaseWindowPath);
+                    General.generateBaseWindowPath);
                 //读取数据
                 _generateBaseWindowData =
                     AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(
-                        _customScriptableObject.generateBaseWindowPath);
+                        General.generateBaseWindowPath);
             }
         }
 
