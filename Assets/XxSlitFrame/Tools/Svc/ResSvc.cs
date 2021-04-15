@@ -171,6 +171,7 @@ namespace XxSlitFrame.Tools.Svc
                 [Header("文件名称")] public string fileName;
 
                 [Header("文件路径")] public string filePath;
+                [Header("文件大小")] public long fileSize;
             }
         }
 
@@ -230,7 +231,7 @@ namespace XxSlitFrame.Tools.Svc
                     //销毁资源
                     aFile.Dispose();
                 }
-                
+
 #if UNITY_EDITOR
                 AssetDatabase.Refresh();
 #endif

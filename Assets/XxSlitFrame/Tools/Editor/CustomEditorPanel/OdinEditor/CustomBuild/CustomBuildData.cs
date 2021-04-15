@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using XxSlitFrame.Tools.ConfigData.Editor;
 
-namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject
+namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
 {
     [Serializable]
     public class CustomBuildData : ScriptableObject

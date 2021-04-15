@@ -52,7 +52,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
         }
 
         /// <summary>
-        /// 
+        /// 获得项目地址
         /// </summary>
         /// <param name="exportPath">输出路径</param>
         /// <param name="chineseShell">中文外壳</param>

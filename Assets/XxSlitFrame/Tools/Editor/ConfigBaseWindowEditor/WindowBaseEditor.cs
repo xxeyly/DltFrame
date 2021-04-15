@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿#if UNITY_EDITOR
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,11 +14,23 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
         [MenuItem("GameObject/Create Empty WindowView", false, 0)]
         public static void OnCreateEmptyWindowView()
         {
-            if (Object.FindObjectOfType<Canvas>())
+            Canvas[] allCanvas = Object.FindObjectsOfType<Canvas>();
+
+            Canvas uiCanvas = null;
+            foreach (Canvas canvas in allCanvas)
+            {
+                if (canvas.sortingOrder == 0)
+                {
+                    uiCanvas = canvas;
+                    break;
+                }
+            }
+
+            if (uiCanvas != null)
             {
                 //View 窗口根目录
                 GameObject windowView = new GameObject("Empty WindowView");
-                Vector2 windowSize = Object.FindObjectOfType<CanvasScaler>().referenceResolution;
+                Vector2 windowSize = uiCanvas.GetComponent<CanvasScaler>().referenceResolution;
                 windowView.AddComponent<RectTransform>().sizeDelta = windowSize;
                 // windowView.AddComponent<GenerationBaseWindow>().Init();
                 windowView.AddComponent<BaseWindowGenerateScripts>();
@@ -28,26 +41,20 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
                 //背景
                 GameObject background = new GameObject("Background");
                 background.AddComponent<Image>().rectTransform.sizeDelta = windowSize;
-
-                //调整层级
-                GameObject canvas = Object.FindObjectOfType<Canvas>().gameObject;
-                if (canvas != null)
-                {
-                    windowView.transform.SetParent(canvas.transform);
-                    window.transform.SetParent(windowView.transform);
-                    background.transform.SetParent(window.transform);
-                    //Transform 调整
-                    windowView.transform.localPosition = Vector3.zero;
-                    windowView.transform.localScale = Vector3.one;
-                    window.transform.localPosition = Vector3.zero;
-                    window.transform.localScale = Vector3.one;
-                    background.transform.localPosition = Vector3.zero;
-                    background.transform.localScale = Vector3.one;
-                }
-                else
-                {
-                    Debug.LogError("场景中没有Canvas");
-                }
+                windowView.transform.SetParent(uiCanvas.transform);
+                window.transform.SetParent(windowView.transform);
+                background.transform.SetParent(window.transform);
+                //Transform 调整
+                windowView.transform.localPosition = Vector3.zero;
+                windowView.transform.localScale = Vector3.one;
+                window.transform.localPosition = Vector3.zero;
+                window.transform.localScale = Vector3.one;
+                background.transform.localPosition = Vector3.zero;
+                background.transform.localScale = Vector3.one;
+            }
+            else
+            {
+                Debug.LogError("场景中没有合适的Canvas");
             }
         }
 
@@ -79,7 +86,6 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
                 }
                 else if (uiObj.GetComponent<Text>())
                 {
-                    Debug.Log("VAR");
                     uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Text;
                 }
                 else if (uiObj.GetComponent<Toggle>())
@@ -137,3 +143,4 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
         }
     }
 }
+#endif

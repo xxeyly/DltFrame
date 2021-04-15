@@ -20,7 +20,6 @@ namespace XxSlitFrame.Tools.Svc
         private int _sceneLoadTimeTask;
         private int _sceneLoadOverTimeTask;
         private int _asyncSceneLoadProgressTimeTask;
-        public SceneLoadData sceneLoadData;
 
         public override void StartSvc()
         {
@@ -50,21 +49,29 @@ namespace XxSlitFrame.Tools.Svc
         {
             PersistentDataSvc.Instance.sceneLoadType = SceneLoadType.SceneName;
             SceneLoadBeforeInit();
-            foreach (SceneLoadData.SceneInfo sceneInfo in sceneLoadData.sceneInfos)
+            if (Application.CanStreamedLevelBeLoaded(sceneName))
             {
-                if (sceneInfo.sceneAsset.name == sceneName)
+                SceneManager.LoadScene(sceneName);
+            }
+            else
+            {
+                DownSvc.DownData currentSceneDownData = DownSvc.Instance.GetDownSvcDataByFileName(sceneName);
+                if (currentSceneDownData != null)
                 {
-                    switch (sceneInfo.sceneLoadType)
+                    if (currentSceneDownData.downOver)
                     {
-                        case SceneLoadData.SceneLoadType.不加载:
-                            break;
-                        case SceneLoadData.SceneLoadType.同步:
+                        AssetBundle.LoadFromMemory(currentSceneDownData.downContent);
+                        while (Application.CanStreamedLevelBeLoaded(sceneName))
+                        {
                             SceneManager.LoadScene(sceneName);
-                            break;
-                        case SceneLoadData.SceneLoadType.异步:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        DownSvc.Instance.InsertDownTask(sceneName);
+                        ViewSvc.Instance.ShowView(typeof(DownProgress));
+                        ListenerSvc.Instance.ExecuteEvent("OnShowDownLoadProgress", sceneName);
                     }
                 }
             }
@@ -134,8 +141,9 @@ namespace XxSlitFrame.Tools.Svc
             }
             else if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
-                // Application.ExternalCall("close", "close");
-                Close();
+                #pragma warning disable 0618
+                Application.ExternalCall("close", "close");
+                #pragma warning restore 0618
             }
             else if (Application.platform == RuntimePlatform.WindowsEditor)
             {
@@ -145,9 +153,5 @@ namespace XxSlitFrame.Tools.Svc
                 Debug.Log("Quit");
             }
         }
-
-
-        [DllImport("__Internal")]
-        private static extern void Close();
     }
 }

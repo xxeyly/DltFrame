@@ -6,7 +6,9 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
 {
     public class ResourceUnification : BaseEditor
     {
+#pragma warning disable 414
         private int max = 1000;
+#pragma warning restore 414
         [ProgressBar(0, "max")] public int progressBar = 0;
 
         [Button(ButtonSizes.Medium)]
@@ -31,6 +33,11 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
 
         public override void OnLoadConfig()
         {
+        }
+
+        public override void OnInit()
+        {
+            
         }
     }
 }

@@ -40,7 +40,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
         [Toggle("Enabled")] [LabelText("视图服务")]
         public ViewSvcEditor viewSvcEditorSvc;
 
-        private GameRootEditorData _gameRootEditorData;
+        private GameRootEditorEditorData _gameRootEditorEditorData;
 
         public GameRootEditor(PersistentDataSvcEditor persistentDataSvcEditor, ResSvcEditor resSvcEditor,
             AudioSvcEditor audioSvcEditor,
@@ -54,8 +54,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
             this.customSceneSvc = customSceneSvc;
             this.timeSvcEditorSvc = timeSvcEditorSvc;
             this.viewSvcEditorSvc = viewSvcEditorSvc;
-            OnCreateConfig();
-            OnLoadConfig();
         }
 
         [Button(ButtonSizes.Large), GUIColor(0, 1, 0)]
@@ -138,68 +136,74 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.GameRoot
 
         public override void OnCreateConfig()
         {
-            _gameRootEditorData =
-                AssetDatabase.LoadAssetAtPath<GameRootEditorData>(General.customFrameDataPath);
-            if (_gameRootEditorData == null)
+            _gameRootEditorEditorData =
+                AssetDatabase.LoadAssetAtPath<GameRootEditorEditorData>(General.customFrameDataPath);
+            if (_gameRootEditorEditorData == null)
             {
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GameRootEditorData>(),
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GameRootEditorEditorData>(),
                     General.customFrameDataPath);
             }
         }
 
         public override void OnSaveConfig()
         {
-            _gameRootEditorData.persistentDataSvcEditor = persistentDataSvcEditor.Enabled;
-            _gameRootEditorData.persistentDataSvcEditorInit = persistentDataSvcEditor.isInit;
+            _gameRootEditorEditorData.persistentDataSvcEditor = persistentDataSvcEditor.Enabled;
+            _gameRootEditorEditorData.persistentDataSvcEditorInit = persistentDataSvcEditor.isInit;
 
-            _gameRootEditorData.resSvcEditor = resSvcEditor.Enabled;
-            _gameRootEditorData.resSvcEditorInit = resSvcEditor.isInit;
+            _gameRootEditorEditorData.resSvcEditor = resSvcEditor.Enabled;
+            _gameRootEditorEditorData.resSvcEditorInit = resSvcEditor.isInit;
 
-            _gameRootEditorData.audioSvcEditor = audioSvcEditor.Enabled;
-            _gameRootEditorData.audioSvcEditorInit = audioSvcEditor.isInit;
+            _gameRootEditorEditorData.audioSvcEditor = audioSvcEditor.Enabled;
+            _gameRootEditorEditorData.audioSvcEditorInit = audioSvcEditor.isInit;
 
-            _gameRootEditorData.listenerSvcEditorSvc = listenerSvcEditorSvc.Enabled;
-            _gameRootEditorData.listenerSvcEditorSvcInit = listenerSvcEditorSvc.isInit;
+            _gameRootEditorEditorData.listenerSvcEditorSvc = listenerSvcEditorSvc.Enabled;
+            _gameRootEditorEditorData.listenerSvcEditorSvcInit = listenerSvcEditorSvc.isInit;
 
-            _gameRootEditorData.customSceneSvc = customSceneSvc.Enabled;
-            _gameRootEditorData.customSceneSvcInit = customSceneSvc.isInit;
+            _gameRootEditorEditorData.customSceneSvc = customSceneSvc.Enabled;
+            _gameRootEditorEditorData.customSceneSvcInit = customSceneSvc.isInit;
 
-            _gameRootEditorData.timeSvcEditorSvc = timeSvcEditorSvc.Enabled;
-            _gameRootEditorData.timeSvcEditorSvcInit = timeSvcEditorSvc.isInit;
+            _gameRootEditorEditorData.timeSvcEditorSvc = timeSvcEditorSvc.Enabled;
+            _gameRootEditorEditorData.timeSvcEditorSvcInit = timeSvcEditorSvc.isInit;
 
-            _gameRootEditorData.viewSvcEditorSvc = viewSvcEditorSvc.Enabled;
-            _gameRootEditorData.viewSvcEditorSvcInit = viewSvcEditorSvc.isInit;
+            _gameRootEditorEditorData.viewSvcEditorSvc = viewSvcEditorSvc.Enabled;
+            _gameRootEditorEditorData.viewSvcEditorSvcInit = viewSvcEditorSvc.isInit;
             //标记脏区
-            EditorUtility.SetDirty(_gameRootEditorData);
+            EditorUtility.SetDirty(_gameRootEditorEditorData);
             // 保存所有修改
             AssetDatabase.SaveAssets();
         }
 
         public override void OnLoadConfig()
         {
-            _gameRootEditorData =
-                AssetDatabase.LoadAssetAtPath<GameRootEditorData>(General.customFrameDataPath);
+            _gameRootEditorEditorData =
+                AssetDatabase.LoadAssetAtPath<GameRootEditorEditorData>(General.customFrameDataPath);
 
-            persistentDataSvcEditor.Enabled = _gameRootEditorData.persistentDataSvcEditor;
-            persistentDataSvcEditor.isInit = _gameRootEditorData.persistentDataSvcEditorInit;
+            persistentDataSvcEditor.Enabled = _gameRootEditorEditorData.persistentDataSvcEditor;
+            persistentDataSvcEditor.isInit = _gameRootEditorEditorData.persistentDataSvcEditorInit;
 
-            resSvcEditor.Enabled = _gameRootEditorData.resSvcEditor;
-            resSvcEditor.isInit = _gameRootEditorData.resSvcEditorInit;
+            resSvcEditor.Enabled = _gameRootEditorEditorData.resSvcEditor;
+            resSvcEditor.isInit = _gameRootEditorEditorData.resSvcEditorInit;
 
-            audioSvcEditor.Enabled = _gameRootEditorData.audioSvcEditor;
-            audioSvcEditor.isInit = _gameRootEditorData.audioSvcEditorInit;
+            audioSvcEditor.Enabled = _gameRootEditorEditorData.audioSvcEditor;
+            audioSvcEditor.isInit = _gameRootEditorEditorData.audioSvcEditorInit;
 
-            listenerSvcEditorSvc.Enabled = _gameRootEditorData.listenerSvcEditorSvc;
-            listenerSvcEditorSvc.isInit = _gameRootEditorData.listenerSvcEditorSvcInit;
+            listenerSvcEditorSvc.Enabled = _gameRootEditorEditorData.listenerSvcEditorSvc;
+            listenerSvcEditorSvc.isInit = _gameRootEditorEditorData.listenerSvcEditorSvcInit;
 
-            customSceneSvc.Enabled = _gameRootEditorData.customSceneSvc;
-            customSceneSvc.isInit = _gameRootEditorData.customSceneSvcInit;
+            customSceneSvc.Enabled = _gameRootEditorEditorData.customSceneSvc;
+            customSceneSvc.isInit = _gameRootEditorEditorData.customSceneSvcInit;
 
-            timeSvcEditorSvc.Enabled = _gameRootEditorData.timeSvcEditorSvc;
-            timeSvcEditorSvc.isInit = _gameRootEditorData.timeSvcEditorSvcInit;
+            timeSvcEditorSvc.Enabled = _gameRootEditorEditorData.timeSvcEditorSvc;
+            timeSvcEditorSvc.isInit = _gameRootEditorEditorData.timeSvcEditorSvcInit;
 
-            viewSvcEditorSvc.Enabled = _gameRootEditorData.viewSvcEditorSvc;
-            viewSvcEditorSvc.isInit = _gameRootEditorData.viewSvcEditorSvcInit;
+            viewSvcEditorSvc.Enabled = _gameRootEditorEditorData.viewSvcEditorSvc;
+            viewSvcEditorSvc.isInit = _gameRootEditorEditorData.viewSvcEditorSvcInit;
+        }
+
+        public override void OnInit()
+        {
+            OnCreateConfig();
+            OnLoadConfig();
         }
     }
 }

@@ -23,7 +23,7 @@ namespace XxSlitFrame.Tools.Svc
 
         public delegate void CallBack<T, X, Y, Z, W>(T arg1, X arg2, Y arg3, Z arg4, W arg5);
 
-        [LabelText("事件监听")] [SerializeField] public Dictionary<string, Delegate> listenerDic;
+        [LabelText("事件监听")] [SerializeField] private Dictionary<string, Delegate> listenerDic;
 
 
         public override void StartSvc()

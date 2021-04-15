@@ -18,7 +18,7 @@ namespace XxSlitFrame.Tools
 #pragma warning disable 649
         [LabelText("激活的服务")] public List<SvcBase> activeSvcBase;
         [LabelText("场景服务")] public List<StartSingleton> sceneStartSingletons;
-        [LabelText("是否摧毁")][BoxGroup] public bool dontDestroyOnLoad;
+        [LabelText("禁止摧毁")][BoxGroup] public bool dontDestroyOnLoad;
 
         private void OnEnable()
         {

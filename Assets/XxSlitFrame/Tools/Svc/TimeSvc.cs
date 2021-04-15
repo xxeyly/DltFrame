@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -31,6 +32,17 @@ namespace XxSlitFrame.Tools.Svc
         public override void StartSvc()
         {
             Instance = GetComponent<TimeSvc>();
+            StartCoroutine(Timer());
+        }
+
+        IEnumerator Timer()
+        {
+            while (true)
+            {
+                yield return new WaitForSeconds(0.01f);
+                UpdateCurrentSystemTime();
+                UpdateTimer();
+            }
         }
 
         public override void InitSvc()
@@ -135,6 +147,29 @@ namespace XxSlitFrame.Tools.Svc
             });
             return tid;
         }
+
+        /// <summary>
+        /// 增加持续调用时间定时任务
+        /// </summary>
+        /// <param name="callback">任务</param>
+        /// <param name="taskName">任务名称</param>
+        /// <param name="delay">间隔时间</param>
+        /// <param name="time"></param>
+        public int AddContinuedTimeTask(UnityAction callback, string taskName, float delay, float time)
+        {
+            int count = 0;
+            if (delay >= time)
+            {
+                count = 1;
+            }
+            else
+            {
+                count = (int) (time / delay);
+            }
+
+            return AddTimeTask(callback, taskName, delay, count);
+        }
+
 
         /// <summary>
         /// 增加不摧毁定时任务
@@ -420,7 +455,12 @@ namespace XxSlitFrame.Tools.Svc
 
         private void FixedUpdate()
         {
-            UpdateCurrentSystemTime();
+            /*UpdateCurrentSystemTime();
+            UpdateTimer();*/
+        }
+
+        private void UpdateTimer()
+        {
             if (!_clear)
             {
                 if (_taskTimeList != null)
@@ -699,6 +739,66 @@ namespace XxSlitFrame.Tools.Svc
             errorTipsTimeTask = AddTimeTask(() => { errorTips.SetActive(false); }, "错误提示内容",
                 General.ViewErrorTime);
             return errorTipsTimeTask;
+        }
+
+        public int MoveTargetPos(Transform targetTri, Vector3 startPos, Vector3 targetPos, float time,
+            bool world = true)
+        {
+            float t = 0;
+            return AddContinuedTimeTask(
+                () =>
+                {
+                    t += Time.deltaTime;
+                    if (t >= time)
+                    {
+                        t = 1;
+                    }
+
+                    if (world)
+                    {
+                        targetTri.position = Vector3.Lerp(startPos, targetPos, t / time);
+                    }
+                    else
+                    {
+                        targetTri.localPosition = Vector3.Lerp(startPos, targetPos, t / time);
+                    }
+                }, "移动到指定位置", 0.02f, time);
+        }
+
+
+        public int MoveTargetPos(GameObject targetObj, Vector3 startPos, Vector3 targetPos, float time,
+            bool world = true)
+        {
+            return MoveTargetPos(targetObj.transform, startPos, targetPos, time, world);
+        }
+
+        public int RotateTargetPos(GameObject targetObj, Vector3 targetPos, float time)
+        {
+            return RotateTargetPos(targetObj.transform, targetPos, time);
+        }
+
+        public int RotateTargetPos(Transform targetTri, Vector3 targetPos, float time, bool world = true)
+        {
+            float t = 0;
+            Vector3 startPos = targetTri.localEulerAngles;
+            return AddContinuedTimeTask(
+                () =>
+                {
+                    t += Time.deltaTime;
+                    if (t >= time)
+                    {
+                        t = 1;
+                    }
+
+                    if (world)
+                    {
+                        targetTri.eulerAngles = Vector3.Lerp(startPos, targetPos, t / time);
+                    }
+                    else
+                    {
+                        targetTri.localEulerAngles = Vector3.Lerp(startPos, targetPos, t / time);
+                    }
+                }, "移动到指定位置", 0.02f, time);
         }
     }
 

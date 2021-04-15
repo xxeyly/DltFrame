@@ -52,6 +52,19 @@ namespace XxSlitFrame.Tools.Svc
             return str;
         }
 
+        public static string AllCharToLower(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+                return input;
+            string str = "";
+            foreach (char c in input)
+            {
+                str += c.ToString().ToLower();
+            }
+
+            return str;
+        }
+
         /// <summary>
         /// 获得两点之间的角度360
         /// </summary>

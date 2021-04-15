@@ -61,8 +61,14 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
                 listenerSvcEditor, sceneSvcEditor,
                 timeSvcEditor, viewSvcEditor);
             ResourceUnification resourceUnification = new ResourceUnification();
-
             sceneLoad = new SceneLoad.SceneLoad();
+            sceneLoad.OnInit();
+            customBuild.OnInit();
+            gameRootEditor.OnInit();
+            audioSvcEditor.OnInit();
+            generateBaseWindowEditor.OnInit();
+            resourceUnification.OnInit();
+            customBuild.AfferentSceneLoad(sceneLoad);
             tree.Add("场景编辑", sceneLoad);
             tree.Add("打包工具", customBuild);
             tree.Add("框架服务", gameRootEditor);

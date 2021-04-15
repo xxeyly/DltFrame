@@ -80,19 +80,39 @@ namespace XxSlitFrame.Tools
             }
         }
 
+        /// <summary>
+        /// 获得文件数据地址
+        /// </summary>
+        /// <returns></returns>
+        public static string GetFileDataPath(string relativePath)
+        {
+            if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+                return GetUrlRootPath() + relativePath;
+            }
+            else if (Application.isEditor)
+            {
+                return "file://" + Application.dataPath + "/" + relativePath;
+            }
+            else
+            {
+                return "";
+            }
+        }
+
         public static string BaseWindowTemplatePath = "Assets/XxSlitFrame/Tools/General/BaseWindowTemplate.cs";
 
         public static string ChildBaseWindowTemplatePath =
             "Assets/XxSlitFrame/Tools/General/ChildBaseWindowTemplate.cs";
-        
+
         [FilePath] [LabelText("自动打包配置存放路径")] [LabelWidth(120)]
         public static string customBuildDataPath = "Assets/XxSlitFrame/Config/CustomBuildData.asset";
 
         [FilePath] [LabelText("音频配置存放路径")] [LabelWidth(120)]
-        public  static string customAudioDataPath = "Assets/XxSlitFrame/Config/CustomAudioData.asset";
+        public static string customAudioDataPath = "Assets/XxSlitFrame/Config/CustomAudioData.asset";
 
         [FilePath] [LabelText("框架配置存放路径")] [LabelWidth(120)]
-        public  static string customFrameDataPath = "Assets/XxSlitFrame/Config/CustomFrameData.asset";
+        public static string customFrameDataPath = "Assets/XxSlitFrame/Config/CustomFrameData.asset";
 
         [FilePath] [LabelText("生成配置存放路径")] [LabelWidth(120)]
         public static string generateBaseWindowPath = "Assets/XxSlitFrame/Config/GenerateBaseWindowData.asset";

@@ -7,5 +7,7 @@
         public abstract void OnSaveConfig();
 
         public abstract void OnLoadConfig();
+
+        public abstract void OnInit();
     }
 }

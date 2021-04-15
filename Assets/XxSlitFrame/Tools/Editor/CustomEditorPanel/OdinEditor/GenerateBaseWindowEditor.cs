@@ -32,12 +32,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
             OnSaveConfig();
         }
 
-        public GenerateBaseWindowEditor()
-        {
-            OnCreateConfig();
-            OnLoadConfig();
-        }
-
         public override void OnCreateConfig()
         {
             _generateBaseWindowData =
@@ -84,6 +78,12 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor
             endVariableBindListener = _generateBaseWindowData.endVariableBindListener;
             startVariableBindEvent = _generateBaseWindowData.startVariableBindEvent;
             endVariableBindEvent = _generateBaseWindowData.endVariableBindEvent;
+        }
+
+        public override void OnInit()
+        {
+            OnCreateConfig();
+            OnLoadConfig();
         }
     }
 }

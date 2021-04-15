@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 using XxSlitFrame.Tools;
 using XxSlitFrame.Tools.ConfigData;
-using XxSlitFrame.Tools.ConfigData.Editor;
 using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.View
 {
-#if UNITY_EDITOR
-
     public class BaseWindowGenerateScripts : MonoBehaviour
     {
         [TabGroup("UI", "引用")] [LabelText("UI变量引用")] [ReadOnly]
@@ -40,15 +36,13 @@ namespace XxSlitFrame.View
         [LabelText("代码生成")]
         public void Generate()
         {
+#if UNITY_EDITOR
 
             if (_generateBaseWindowData == null)
             {
-#if UNITY_EDITOR
-
                 _generateBaseWindowData =
-                    AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(
+                    UnityEditor.AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(
                         General.generateBaseWindowPath);
-#endif
             }
 
             _listenerActionList = new Dictionary<string, string>();
@@ -102,6 +96,7 @@ namespace XxSlitFrame.View
                 "//" + _generateBaseWindowData.endVariableBindEvent);
 
             ResSvc.FileOperation.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
+#endif
         }
 
         /// <summary>
@@ -283,17 +278,20 @@ namespace XxSlitFrame.View
         /// <returns></returns>
         protected static string GetPath(string _scriptName)
         {
+#if UNITY_EDITOR
+
             string[] path = UnityEditor.AssetDatabase.FindAssets(_scriptName);
 
             for (int i = 0; i < path.Length; i++)
             {
-                if (AssetDatabase.GUIDToAssetPath(path[i]).Contains("Assets") &&
-                    AssetDatabase.GUIDToAssetPath(path[i]).Contains(_scriptName + ".cs"))
+                if (UnityEditor.AssetDatabase.GUIDToAssetPath(path[i]).Contains("Assets") &&
+                    UnityEditor.AssetDatabase.GUIDToAssetPath(path[i]).Contains(_scriptName + ".cs"))
                 {
-                    return AssetDatabase.GUIDToAssetPath(path[i]);
+                    return UnityEditor.AssetDatabase.GUIDToAssetPath(path[i]);
                 }
             }
 
+#endif
             return null;
         }
 
@@ -512,6 +510,30 @@ namespace XxSlitFrame.View
                             allUiVariableBindListener.Add(bindStr);
                         }
 
+                        if ((BindUiType.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.BeginDrag)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.BeginDrag" + "," + "On" + child.name + "BeginDrag" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.EndDrag)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.EndDrag" + "," + "On" + child.name + "EndDrag" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.Scroll & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.Scroll)
+                        {
+                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                                      "EventTriggerType.Scroll" + "," + "On" + child.name + "Scroll" + ");";
+                            allUiVariableBindListener.Add(bindStr);
+                        }
+
                         AddUsing("using UnityEngine.EventSystems;");
                     }
                     else if (bindUiType.type == BindUiType.UiType.Toggle)
@@ -611,6 +633,30 @@ namespace XxSlitFrame.View
                         {
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "Drag",
+                                    scriptContent));
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.BeginDrag)
+                        {
+                            actionNameList.Add(
+                                FindActionNameKey("On" + child.name + "BeginDrag",
+                                    scriptContent));
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.EndDrag)
+                        {
+                            actionNameList.Add(
+                                FindActionNameKey("On" + child.name + "EndDrag",
+                                    scriptContent));
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.Scroll & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.Scroll)
+                        {
+                            actionNameList.Add(
+                                FindActionNameKey("On" + child.name + "Scroll",
                                     scriptContent));
                         }
                     }
@@ -813,6 +859,39 @@ namespace XxSlitFrame.View
                                       "}";
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
+
+                        if ((BindUiType.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.BeginDrag)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "BeginDrag");
+                            bindStr = Indents(4) + "private void On" + child.name + "BeginDrag" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.EndDrag)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "EndDrag");
+                            bindStr = Indents(4) + "private void On" + child.name + "EndDrag" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
+
+                        if ((BindUiType.UIEventTriggerType.Scroll & uiEventTriggerType) ==
+                            BindUiType.UIEventTriggerType.Scroll)
+                        {
+                            string oldContent = FindOldActionContent(
+                                "On" + child.name + "Scroll");
+                            bindStr = Indents(4) + "private void On" + child.name + "Scroll" +
+                                      "(BaseEventData targetObj)" + "\n" + Indents(4) + "{" + oldContent +
+                                      "}";
+                            allUiVariableBindListenerEvent.Add(bindStr);
+                        }
                     }
                     else if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Toggle)
                     {
@@ -825,5 +904,4 @@ namespace XxSlitFrame.View
             }
         }
     }
-#endif
 }

@@ -12,12 +12,6 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc
     [Serializable]
     public class AudioSvcEditor : BaseEditor
     {
-        public AudioSvcEditor()
-        {
-            OnCreateConfig();
-            OnLoadConfig();
-        }
-
         private bool hideView;
         [ShowIf("hideView")] public bool Enabled;
 
@@ -60,6 +54,12 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc
         public override void OnLoadConfig()
         {
             audioInfos = _customAudioData.audioInfos;
+        }
+
+        public override void OnInit()
+        {
+            OnCreateConfig();
+            OnLoadConfig();
         }
     }
 #endif

@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using LitJson;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
+using UnityEngine.Windows;
 using XxSlitFrame.Tools.ConfigData.Editor;
-using CustomBuildData = XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomScriptableObject.CustomBuildData;
+using XxSlitFrame.Tools.Svc;
+using CustomBuildData = XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild.CustomBuildData;
 
 namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
 {
@@ -29,18 +32,16 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
 
         [LabelText("自定义打包数据")] private CustomBuildData _customBuildData;
 
+        private SceneLoad.SceneLoad _sceneLoad;
+
         [LabelText("开始打包")]
         [Button(ButtonSizes.Large)]
         public void StartBuild()
         {
+            _sceneLoad.BuildSyncScene();
+            CopySceneFile();
             CopyFile();
             Build();
-        }
-
-        public OdinCustomBuild()
-        {
-            OnCreateConfig();
-            OnLoadConfig();
         }
 
         /// <summary>
@@ -55,6 +56,33 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
                 buildCompressType);
         }
 
+        private void CopySceneFile()
+        {
+            //场景配置文件清空
+            ResSvc.DownFile sceneFile =
+                JsonMapper.ToObject<ResSvc.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
+            //打包后场景文件地址
+            string sceneLoadAssetBundlePath =
+                CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName,
+                    exportEnProjectName) + "/" + _sceneLoad.sceneAssetBundlePath.Replace("Assets/", "");
+            if (Directory.Exists(sceneLoadAssetBundlePath))
+            {
+                Directory.Delete(sceneLoadAssetBundlePath);
+            }
+            else
+            {
+                Debug.Log("地址不存在:" + sceneLoadAssetBundlePath);
+            }
+
+            foreach (ResSvc.DownFile.FileInfo fileInfo in sceneFile.fileInfoList)
+            {
+                string copyAssetPath = "Assets/" + fileInfo.filePath.Replace("/" + fileInfo.fileName, "");
+                string pastePath = CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell,
+                                       exportCnProjectName, exportEnProjectName) + "/" +
+                                   fileInfo.filePath.Replace("/" + fileInfo.fileName, "");
+                CustomBuildFileOperation.Copy(copyAssetPath, pastePath);
+            }
+        }
 
         /// <summary>
         /// 拷贝文件
@@ -131,6 +159,17 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel.OdinEditor.CustomBuild
             exportEnProjectName = _customBuildData.exportEnProjectName;
             chineseShell = _customBuildData.chineseShell;
             folderCopy = _customBuildData.folderCopy;
+        }
+
+        public override void OnInit()
+        {
+            OnCreateConfig();
+            OnLoadConfig();
+        }
+
+        public void AfferentSceneLoad(SceneLoad.SceneLoad sceneLoad)
+        {
+            _sceneLoad = sceneLoad;
         }
     }
 #endif

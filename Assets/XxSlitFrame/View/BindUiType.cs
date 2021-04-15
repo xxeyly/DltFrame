@@ -34,7 +34,7 @@ namespace XxSlitFrame.View
             PointerDown = 1 << 4,
             PointerUp = 1 << 5,
             Drag = 1 << 6,
-            /*Drop = 1 << 7,
+            Drop = 1 << 7,
             Scroll = 1 << 8,
             UpdateSelected = 1 << 9,
             Select = 1 << 10,
@@ -44,11 +44,11 @@ namespace XxSlitFrame.View
             BeginDrag = 1 << 14,
             EndDrag = 1 << 15,
             Submit = 1 << 16,
-            Cancel = 1 << 17,*/
+            Cancel = 1 << 17,
 
-            All = PointerEnter | PointerExit | PointerDown | PointerUp | PointerClick | Drag /*| Drop |
+            All = PointerEnter | PointerExit | PointerDown | PointerUp | PointerClick | Drag | Drop |
                   Scroll | UpdateSelected | Select | Deselect | Move | InitializePotentialDrag | BeginDrag |
-                  EndDrag | Submit | Cancel*/
+                  EndDrag | Submit | Cancel
         }
 
         [LabelText("UI组件类型")] public UiType type;

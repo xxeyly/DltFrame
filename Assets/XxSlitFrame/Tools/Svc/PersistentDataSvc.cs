@@ -20,7 +20,6 @@ namespace XxSlitFrame.Tools.Svc
         public string jumpSceneName;
 
         [LabelText("音乐开关")] public bool audioState;
-        [LabelText("下载文件数据")] [SerializeField] public Dictionary<string, byte[]> downFileData;
         [LabelText("当前质量")] public QualitySettingType qualitySettingType = QualitySettingType.High;
         [LabelText("鼠标状态")] public bool mouseState;
         [LabelText("加载场景方式")] public SceneLoadType sceneLoadType;

@@ -17,7 +17,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 {
     public class CustomBuild : EditorWindow
     {
-        private static CustomBuildData _buildData;
+        private static CustomBuildEditorData _buildEditorData;
 
         // [MenuItem("XFrame/打包工具", false, 0)]
         private static void ShowWindow()
@@ -35,11 +35,11 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
         private void OnEnable()
         {
-            if (_buildData == null)
+            if (_buildEditorData == null)
             {
-                _buildData =
-                    (CustomBuildData) AssetDatabase.LoadAssetAtPath("Assets/XxSlitFrame/Config/CustomBuildData.asset",
-                        typeof(CustomBuildData));
+                _buildEditorData =
+                    (CustomBuildEditorData) AssetDatabase.LoadAssetAtPath("Assets/XxSlitFrame/Config/CustomBuildData.asset",
+                        typeof(CustomBuildEditorData));
             }
         }
 
@@ -53,7 +53,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         /// </summary>
         private void SaveData()
         {
-            EditorUtility.SetDirty(_buildData);
+            EditorUtility.SetDirty(_buildEditorData);
             AssetDatabase.SaveAssets();
         }
 
@@ -64,7 +64,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             EditorGUILayout.BeginHorizontal();
             //自定义枚举下拉框
             EditorGUILayout.LabelField("选择当前项目的打包方式:", GUILayout.MaxWidth(130));
-            _buildData.buildTarget = (BuildTarget) EditorGUILayout.EnumPopup(_buildData.buildTarget);
+            _buildEditorData.buildTarget = (BuildTarget) EditorGUILayout.EnumPopup(_buildEditorData.buildTarget);
 
             #endregion
 
@@ -73,7 +73,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             if (GUILayout.Button("保存数据", GUILayout.MaxWidth(80), GUILayout.MaxHeight(20)))
             {
                 //标记脏区
-                EditorUtility.SetDirty(_buildData);
+                EditorUtility.SetDirty(_buildEditorData);
                 // 保存所有修改
                 AssetDatabase.SaveAssets();
             }
@@ -88,11 +88,11 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             //选择打包路径
             if (GUILayout.Button("选择打包路径", GUILayout.MaxWidth(80)))
             {
-                _buildData.exportPath = EditorUtility.OpenFolderPanel("选择打包路径", "", "");
+                _buildEditorData.exportPath = EditorUtility.OpenFolderPanel("选择打包路径", "", "");
             }
 
-            _buildData.exportPath =
-                EditorGUILayout.TextField(_buildData.exportPath, GUILayout.MaxWidth(520), GUILayout.MaxHeight(20));
+            _buildEditorData.exportPath =
+                EditorGUILayout.TextField(_buildEditorData.exportPath, GUILayout.MaxWidth(520), GUILayout.MaxHeight(20));
             EditorGUILayout.EndHorizontal();
 
             #endregion
@@ -102,13 +102,13 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField("项目中文名称:", GUILayout.MaxWidth(70));
-            _buildData.exportCnProjectName = EditorGUILayout.TextField(_buildData.exportCnProjectName);
+            _buildEditorData.exportCnProjectName = EditorGUILayout.TextField(_buildEditorData.exportCnProjectName);
 
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("项目英文名称:", GUILayout.MaxWidth(70));
-            _buildData.exportEnProjectName = EditorGUILayout.TextField(_buildData.exportEnProjectName);
+            _buildEditorData.exportEnProjectName = EditorGUILayout.TextField(_buildEditorData.exportEnProjectName);
 
 
             EditorGUILayout.EndHorizontal();
@@ -116,28 +116,28 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
             EditorGUILayout.BeginHorizontal();
 
-            _buildData.chineseShell = GUILayout.Toggle(_buildData.chineseShell, "中文输出外壳", GUILayout.MaxWidth(90));
+            _buildEditorData.chineseShell = GUILayout.Toggle(_buildEditorData.chineseShell, "中文输出外壳", GUILayout.MaxWidth(90));
 
-            _buildData.learningModel = GUILayout.Toggle(_buildData.learningModel, "学习模式", GUILayout.MaxWidth(70));
+            _buildEditorData.learningModel = GUILayout.Toggle(_buildEditorData.learningModel, "学习模式", GUILayout.MaxWidth(70));
 
-            if (_buildData.learningModel)
+            if (_buildEditorData.learningModel)
             {
-                _buildData.assessmentMode = false;
+                _buildEditorData.assessmentMode = false;
             }
 
-            _buildData.assessmentMode = GUILayout.Toggle(_buildData.assessmentMode, "考核模式", GUILayout.MaxWidth(70));
+            _buildEditorData.assessmentMode = GUILayout.Toggle(_buildEditorData.assessmentMode, "考核模式", GUILayout.MaxWidth(70));
 
-            if (_buildData.assessmentMode)
+            if (_buildEditorData.assessmentMode)
             {
-                _buildData.learningModel = false;
+                _buildEditorData.learningModel = false;
             }
 
-            _buildData.projectNameDate = GUILayout.Toggle(_buildData.projectNameDate, "日期", GUILayout.MaxWidth(50));
-            _buildData.watermark = GUILayout.Toggle(_buildData.watermark, "水印", GUILayout.MaxWidth(50));
-            _buildData.versionWatermark = _buildData.watermark;
-            _buildData.updateToFtp =
-                GUILayout.Toggle(_buildData.updateToFtp, "打包后是否更新到FTP服务器", GUILayout.MaxWidth(170));
-            _buildData.versionSet = GUILayout.Toggle(_buildData.versionSet, "版本打包设置");
+            _buildEditorData.projectNameDate = GUILayout.Toggle(_buildEditorData.projectNameDate, "日期", GUILayout.MaxWidth(50));
+            _buildEditorData.watermark = GUILayout.Toggle(_buildEditorData.watermark, "水印", GUILayout.MaxWidth(50));
+            _buildEditorData.versionWatermark = _buildEditorData.watermark;
+            _buildEditorData.updateToFtp =
+                GUILayout.Toggle(_buildEditorData.updateToFtp, "打包后是否更新到FTP服务器", GUILayout.MaxWidth(170));
+            _buildEditorData.versionSet = GUILayout.Toggle(_buildEditorData.versionSet, "版本打包设置");
             EditorGUILayout.EndHorizontal();
 
             #endregion
@@ -145,36 +145,36 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             #region 服务器与打包信息
 
             EditorGUILayout.BeginHorizontal();
-            if (_buildData.updateToFtp)
+            if (_buildEditorData.updateToFtp)
             {
                 EditorGUILayout.LabelField("服务器地址:", GUILayout.MaxWidth(70));
-                _buildData.ftpServerPath = EditorGUILayout.TextField(_buildData.ftpServerPath);
+                _buildEditorData.ftpServerPath = EditorGUILayout.TextField(_buildEditorData.ftpServerPath);
                 EditorGUILayout.LabelField("用户名:", GUILayout.MaxWidth(40));
-                _buildData.ftpUser = EditorGUILayout.TextField(_buildData.ftpUser);
+                _buildEditorData.ftpUser = EditorGUILayout.TextField(_buildEditorData.ftpUser);
                 EditorGUILayout.LabelField("密码:", GUILayout.MaxWidth(30));
-                _buildData.ftpPwd = EditorGUILayout.TextField(_buildData.ftpPwd);
+                _buildEditorData.ftpPwd = EditorGUILayout.TextField(_buildEditorData.ftpPwd);
                 EditorGUILayout.LabelField("存放目录:", GUILayout.MaxWidth(50));
-                _buildData.ftpRoot = EditorGUILayout.TextField(_buildData.ftpRoot);
+                _buildEditorData.ftpRoot = EditorGUILayout.TextField(_buildEditorData.ftpRoot);
             }
 
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.BeginHorizontal();
 
-            if (_buildData.versionSet)
+            if (_buildEditorData.versionSet)
             {
-                _buildData.versionWatermark =
-                    GUILayout.Toggle(_buildData.versionWatermark, "版本水印", GUILayout.MaxWidth(70));
-                _buildData.watermark = _buildData.versionWatermark;
-                _buildData.versionDownLoad =
-                    GUILayout.Toggle(_buildData.versionDownLoad, "版本下载", GUILayout.MaxWidth(70));
-                _buildData.versionLoadingProgress = GUILayout.Toggle(_buildData.versionLoadingProgress, "版本下载进度",
+                _buildEditorData.versionWatermark =
+                    GUILayout.Toggle(_buildEditorData.versionWatermark, "版本水印", GUILayout.MaxWidth(70));
+                _buildEditorData.watermark = _buildEditorData.versionWatermark;
+                _buildEditorData.versionDownLoad =
+                    GUILayout.Toggle(_buildEditorData.versionDownLoad, "版本下载", GUILayout.MaxWidth(70));
+                _buildEditorData.versionLoadingProgress = GUILayout.Toggle(_buildEditorData.versionLoadingProgress, "版本下载进度",
                     GUILayout.MaxWidth(90));
-                _buildData.versionSceneProgress =
-                    GUILayout.Toggle(_buildData.versionSceneProgress, "版本场景进度", GUILayout.MaxWidth(90));
+                _buildEditorData.versionSceneProgress =
+                    GUILayout.Toggle(_buildEditorData.versionSceneProgress, "版本场景进度", GUILayout.MaxWidth(90));
                 EditorGUILayout.LabelField("版本考核时间:", GUILayout.MaxWidth(70));
-                _buildData.versionAssessmentTime =
-                    EditorGUILayout.IntField(_buildData.versionAssessmentTime, GUILayout.MaxWidth(70));
+                _buildEditorData.versionAssessmentTime =
+                    EditorGUILayout.IntField(_buildEditorData.versionAssessmentTime, GUILayout.MaxWidth(70));
             }
 
             EditorGUILayout.EndHorizontal();
@@ -187,7 +187,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             //增加拷贝数量
             if (GUILayout.Button("增加拷贝数量", GUILayout.MaxWidth(80)))
             {
-                _buildData.folderCopies.Add(new FolderCopy());
+                _buildEditorData.folderCopies.Add(new FolderCopy());
             }
 
 
@@ -195,7 +195,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
 
 
             _copyFolderCountScroll = EditorGUILayout.BeginScrollView(_copyFolderCountScroll);
-            for (int i = 0; i < _buildData.folderCopies.Count; i++)
+            for (int i = 0; i < _buildEditorData.folderCopies.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
 
@@ -205,24 +205,24 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
                 //选择复制路径
                 if (GUILayout.Button("选择复制路径", GUILayout.MaxWidth(80)))
                 {
-                    _buildData.folderCopies[i].copyFolderPath = EditorUtility.OpenFolderPanel("选择打包路径", "", "");
+                    _buildEditorData.folderCopies[i].copyFolderPath = EditorUtility.OpenFolderPanel("选择打包路径", "", "");
                 }
 
-                _buildData.folderCopies[i].copyFolderPath =
-                    EditorGUILayout.TextField(_buildData.folderCopies[i].copyFolderPath, GUILayout.MaxHeight(20));
+                _buildEditorData.folderCopies[i].copyFolderPath =
+                    EditorGUILayout.TextField(_buildEditorData.folderCopies[i].copyFolderPath, GUILayout.MaxHeight(20));
 
 
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("粘贴文件路径", GUILayout.MaxWidth(80));
-                _buildData.folderCopies[i].pasteFolderPath =
-                    EditorGUILayout.TextField(_buildData.folderCopies[i].pasteFolderPath, GUILayout.MaxHeight(20));
+                _buildEditorData.folderCopies[i].pasteFolderPath =
+                    EditorGUILayout.TextField(_buildEditorData.folderCopies[i].pasteFolderPath, GUILayout.MaxHeight(20));
                 EditorGUILayout.EndHorizontal();
                 EditorGUILayout.EndVertical();
                 //增加拷贝数量
                 if (GUILayout.Button("删除", GUILayout.MaxWidth(60), GUILayout.MaxHeight(40)))
                 {
-                    _buildData.folderCopies.RemoveAt(i);
+                    _buildEditorData.folderCopies.RemoveAt(i);
                 }
 
                 EditorGUILayout.EndHorizontal();
@@ -311,17 +311,17 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
                 //保存打包数据
                 SaveData();
                 //拷贝打包文件
-                for (int i = 0; i < _buildData.folderCopies.Count; i++)
+                for (int i = 0; i < _buildEditorData.folderCopies.Count; i++)
                 {
-                    if (_buildData.folderCopies[i].copyFolderPath != string.Empty &&
-                        _buildData.folderCopies[i].pasteFolderPath != string.Empty)
+                    if (_buildEditorData.folderCopies[i].copyFolderPath != string.Empty &&
+                        _buildEditorData.folderCopies[i].pasteFolderPath != string.Empty)
                     {
-                        Copy(_buildData.folderCopies[i].copyFolderPath,
-                            ProjectPath() + "/" + _buildData.folderCopies[i].pasteFolderPath);
+                        Copy(_buildEditorData.folderCopies[i].copyFolderPath,
+                            ProjectPath() + "/" + _buildEditorData.folderCopies[i].pasteFolderPath);
                     }
                 }
 
-                BuildPipeline.BuildPlayer(FindEnableEditorScenes(), ProjectPath(), _buildData.buildTarget,
+                BuildPipeline.BuildPlayer(FindEnableEditorScenes(), ProjectPath(), _buildEditorData.buildTarget,
                     BuildOptions.CompressWithLz4HC);
             }
 
@@ -399,28 +399,28 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         {
             //打包路径
             string path = "";
-            path += _buildData.exportPath + "/";
+            path += _buildEditorData.exportPath + "/";
             string chinsesPath = "";
             //如果启动中文外壳
-            if (_buildData.chineseShell)
+            if (_buildEditorData.chineseShell)
             {
-                chinsesPath += _buildData.exportCnProjectName;
-                if (_buildData.learningModel)
+                chinsesPath += _buildEditorData.exportCnProjectName;
+                if (_buildEditorData.learningModel)
                 {
                     chinsesPath += "-学习模式";
                 }
 
-                if (_buildData.assessmentMode)
+                if (_buildEditorData.assessmentMode)
                 {
                     chinsesPath += "-考核模式";
                 }
 
-                if (_buildData.projectNameDate)
+                if (_buildEditorData.projectNameDate)
                 {
                     chinsesPath += "-" + DateTime.Now.ToString("yyyy.MM.dd");
                 }
 
-                if (_buildData.watermark)
+                if (_buildEditorData.watermark)
                 {
                     chinsesPath += "-水印";
                 }
@@ -433,7 +433,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             }
 
             path += chinsesPath;
-            path += _buildData.exportEnProjectName;
+            path += _buildEditorData.exportEnProjectName;
 
             /*if (_buildData.learningModel)
             {
@@ -481,7 +481,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             int index = pathToBuiltProject.LastIndexOf("/", StringComparison.Ordinal);
 
             Debug.Log("导出包体的目录 :" + pathToBuiltProject.Substring(0, index));
-            _ftpOperation = new FtpOperation(_buildData);
+            _ftpOperation = new FtpOperation(_buildEditorData);
 #if !UNITY_EDITOR
             if (_buildData.updateToFtp)
             {
@@ -499,11 +499,11 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
     /// </summary>
     public class FtpOperation
     {
-        private CustomBuildData _customBuildData;
+        private CustomBuildEditorData _customBuildEditorData;
 
-        public FtpOperation(CustomBuildData customBuildData)
+        public FtpOperation(CustomBuildEditorData customBuildEditorData)
         {
-            _customBuildData = customBuildData;
+            _customBuildEditorData = customBuildEditorData;
         }
 
         /// <summary>
@@ -515,28 +515,28 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         {
             //打包路径
             string path = "";
-            path += _customBuildData.exportPath + "/";
+            path += _customBuildEditorData.exportPath + "/";
             string chinsesPath = "";
             //如果启动中文外壳
-            if (_customBuildData.chineseShell)
+            if (_customBuildEditorData.chineseShell)
             {
-                chinsesPath += _customBuildData.exportCnProjectName;
-                if (_customBuildData.learningModel)
+                chinsesPath += _customBuildEditorData.exportCnProjectName;
+                if (_customBuildEditorData.learningModel)
                 {
                     chinsesPath += "-学习模式";
                 }
 
-                if (_customBuildData.assessmentMode)
+                if (_customBuildEditorData.assessmentMode)
                 {
                     chinsesPath += "-考核模式";
                 }
 
-                if (_customBuildData.projectNameDate)
+                if (_customBuildEditorData.projectNameDate)
                 {
                     chinsesPath += "-" + DateTime.Now.ToString("yyyy.MM.dd");
                 }
 
-                if (_customBuildData.watermark)
+                if (_customBuildEditorData.watermark)
                 {
                     chinsesPath += "-水印";
                 }
@@ -559,7 +559,7 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
         /// <returns></returns>
         private string ProjectName()
         {
-            string projectName = _customBuildData.exportEnProjectName;
+            string projectName = _customBuildEditorData.exportEnProjectName;
             /*
             if (_customBuildData.learningModel)
             {
@@ -601,15 +601,15 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
             {
                 if (pair.Key != "")
                 {
-                    MakeDir(_customBuildData.ftpServerPath, _customBuildData.ftpUser, _customBuildData.ftpPwd,
-                        _customBuildData.ftpRoot + "/" + ProjectName() + pair.Key);
+                    MakeDir(_customBuildEditorData.ftpServerPath, _customBuildEditorData.ftpUser, _customBuildEditorData.ftpPwd,
+                        _customBuildEditorData.ftpRoot + "/" + ProjectName() + pair.Key);
                 }
                 else
                 {
-                    MakeDir(_customBuildData.ftpServerPath, _customBuildData.ftpUser, _customBuildData.ftpPwd,
-                        _customBuildData.ftpRoot);
-                    MakeDir(_customBuildData.ftpServerPath, _customBuildData.ftpUser, _customBuildData.ftpPwd,
-                        _customBuildData.ftpRoot + "/" + ProjectName());
+                    MakeDir(_customBuildEditorData.ftpServerPath, _customBuildEditorData.ftpUser, _customBuildEditorData.ftpPwd,
+                        _customBuildEditorData.ftpRoot);
+                    MakeDir(_customBuildEditorData.ftpServerPath, _customBuildEditorData.ftpUser, _customBuildEditorData.ftpPwd,
+                        _customBuildEditorData.ftpRoot + "/" + ProjectName());
                 }
             }
 
@@ -619,9 +619,9 @@ namespace XxSlitFrame.Tools.Editor.CustomEditorPanel
                 foreach (string s in pair.Value)
                 {
                     WebClient client = new WebClient();
-                    Uri uri = new Uri("ftp://" + _customBuildData.ftpServerPath + "/" + _customBuildData.ftpRoot + "/" +
+                    Uri uri = new Uri("ftp://" + _customBuildEditorData.ftpServerPath + "/" + _customBuildEditorData.ftpRoot + "/" +
                                       ProjectName() + s);
-                    client.Credentials = new NetworkCredential(_customBuildData.ftpUser, _customBuildData.ftpPwd);
+                    client.Credentials = new NetworkCredential(_customBuildEditorData.ftpUser, _customBuildEditorData.ftpPwd);
                     client.UploadFileAsync(uri, "STOR", ProjectPath() + s);
                 }
             }

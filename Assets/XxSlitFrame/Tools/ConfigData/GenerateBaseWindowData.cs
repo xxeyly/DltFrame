@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace XxSlitFrame.Tools.ConfigData.Editor
+namespace XxSlitFrame.Tools.ConfigData
 {
     public class GenerateBaseWindowData : ScriptableObject
     {

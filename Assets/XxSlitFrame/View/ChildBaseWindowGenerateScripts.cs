@@ -3,8 +3,6 @@ using UnityEngine;
 
 namespace XxSlitFrame.View
 {
-#if UNITY_EDITOR
-
     public class ChildBaseWindowGenerateScripts : BaseWindowGenerateScripts
     {
         protected override string GetScriptsPath()
@@ -21,5 +19,4 @@ namespace XxSlitFrame.View
             return transform;
         }
     }
-#endif
 }
