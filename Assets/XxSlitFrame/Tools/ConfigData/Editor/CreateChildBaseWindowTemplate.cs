@@ -1,10 +1,12 @@
 ﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
-using XxSlitFrame.Tools;
 
-namespace Sirenix.OdinInspector
+namespace XxSlitFrame.Tools.ConfigData.Editor
 {
+    /// <summary>
+    /// 创建ChildBaseWindow模板
+    /// </summary>
     public class CreateChildBaseWindowTemplate
     {
         [MenuItem("Assets/Create/C# ChildBaseWindow", false, 71)]

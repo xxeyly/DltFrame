@@ -15,8 +15,8 @@ MonoBehaviour:
   buildTarget: 20
   buildCompressType: 0
   buildPackagePath: D:/Soft/Xampp/htdocs
-  exportCnProjectName: "X\u6846\u67B6"
-  exportEnProjectName: XFrame
+  exportCnProjectName: "\u4E2D\u5C71\u963B\u7259\u8D85\u58F0\u9AA8\u5200\u62D4\u9664\u667A\u9F7F"
+  exportEnProjectName: ZhongShanImpactedTeeth
   chineseShell: 1
   folderCopy:
   - copyFolderPath: Assets/XxSlitFrame/Resources/DownFile

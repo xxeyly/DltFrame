@@ -2,9 +2,12 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace XxSlitFrame.Tools.ConfigData
+namespace XxSlitFrame.Tools.ConfigData.Editor
 {
-    public class CreateBaseWindowTemplate 
+    /// <summary>
+    /// 创建BaseWindow模板
+    /// </summary>
+    public class CreateBaseWindowTemplate
     {
         [MenuItem("Assets/Create/C# BaseWindow", false, 70)]
         public static void OnCreateBaseWindowTemplate()

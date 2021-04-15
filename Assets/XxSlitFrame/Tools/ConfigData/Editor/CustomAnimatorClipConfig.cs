@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace XxSlitFrame.Tools.ConfigData.Editor
 {
@@ -30,6 +31,6 @@ namespace XxSlitFrame.Tools.ConfigData.Editor
     public class AnimFbxAndAnimClipData
     {
         public GameObject animFbx;
-        public AnimatorClipData animatorClipData;
+        [FormerlySerializedAs("animatorClipData")] public AnimatorClipEditorData animatorClipEditorData;
     }
 }
