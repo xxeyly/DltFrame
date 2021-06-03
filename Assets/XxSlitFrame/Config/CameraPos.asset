@@ -13,18 +13,13 @@ MonoBehaviour:
   m_Name: CameraPos
   m_EditorClassIdentifier: 
   cameraPosInfos:
-  - infoName: "\u672F\u524D\u6C9F\u901A"
-    navPos: {x: -0.9401761, y: 0.083333336, z: -2.516412}
-    cameraRotate: {x: 12.49042, y: 27.236986, z: -0.0000013117055}
-    cameraPos: {x: 0, y: 0.9280377, z: 0}
-    cameraFieldView: 60
-  - infoName: "\u68C0\u67E5\u5206\u6790"
-    navPos: {x: -1.604576, y: 0.083333336, z: -1.1120194}
-    cameraRotate: {x: 0.20000051, y: 270.49994, z: -0.00000010005221}
-    cameraPos: {x: 0.0006841421, y: 1.0246943, z: -0.000004887581}
-    cameraFieldView: 60
-  - infoName: "\u9ECF\u819C\u7FFB\u74E3"
-    navPos: {x: -0.107297644, y: 0.083333336, z: -0.6345336}
-    cameraRotate: {x: 33.299973, y: 15.800015, z: 0.000002553738}
-    cameraPos: {x: 0, y: 0.90084773, z: 0}
-    cameraFieldView: 60
+  - infoName: 111
+    navPos: {x: 0, y: 0, z: 0}
+    cameraRotate: {x: 0, y: 0, z: 0}
+    cameraPos: {x: 0, y: 0, z: 0}
+    cameraFieldView: 0.34
+  - infoName: 2222
+    navPos: {x: 0, y: 0, z: 0}
+    cameraRotate: {x: 0, y: 0, z: 0}
+    cameraPos: {x: 0, y: 0, z: 0}
+    cameraFieldView: 0

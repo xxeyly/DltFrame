@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using XxSlitFrame.Tools.ConfigData;
+using XxSlitFrame.Model.ConfigData;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools.Svc
@@ -15,6 +15,7 @@ namespace XxSlitFrame.Tools.Svc
         private AudioSource _backgroundAudioSource;
         private AudioSource _effectAudioSource;
         private AudioSource _tipAndDialogAudioSource;
+        [Searchable] [TableList(AlwaysExpanded = true)][InlineEditor()] [Required("选择音频配置文件")]
         [LabelText("音频数据")] public AudioSvcData audioData;
         private Dictionary<string, AudioClip> _audioDlc;
 
@@ -73,6 +74,16 @@ namespace XxSlitFrame.Tools.Svc
                 _effectAudioSource.clip = _audioDlc[audioName];
                 _effectAudioSource.Play();
             }
+        }
+
+        public float GetEffectAudioLength(string audioName)
+        {
+            if (_audioDlc.ContainsKey(audioName))
+            {
+                return _effectAudioSource.clip.length;
+            }
+
+            return -1;
         }
 
         /// <summary>

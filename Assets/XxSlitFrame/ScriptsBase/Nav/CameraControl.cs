@@ -2,6 +2,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using XxSlitFrame.Tools;
 using XxSlitFrame.Tools.Svc;
 
@@ -17,6 +18,11 @@ namespace CameraTools
         public NavMeshAgent navMeshAgent;
         [HideInInspector] public Camera currentCamera;
         [LabelText("相机是否可以操作")] public bool isControl;
+        [LabelText("UI遮挡")] public bool isViewOcclusion;
+        [LabelText("移动")] public bool isMove;
+        [LabelText("旋转")] public bool isRotate;
+        [LabelText("升降")] public bool isUpAndDown;
+        [LabelText("视野")] public bool isField;
         [LabelText("移动速度")] [SerializeField] private float moveSpeed = 1;
         [LabelText("旋转速度")] [SerializeField] private float rotationSpeed = 2;
 #pragma warning disable 0649
@@ -45,6 +51,7 @@ namespace CameraTools
 
             cameraField.x = 40;
             cameraField.y = 60;
+            transform.position = Vector3.zero;
         }
 
 
@@ -52,14 +59,41 @@ namespace CameraTools
         {
             if (isControl)
             {
-                TryScrollWheel();
+                if (!ViewOcclusion())
+                {
+                    TryScrollWheel();
+                    TryRotate();
+                }
+
                 TryMove();
-                TryRotate();
+                TryUpAndDown();
             }
         }
 
+        /// <summary>
+        /// 视图遮挡
+        /// </summary>
+        /// <returns></returns>
+        private bool ViewOcclusion()
+        {
+            if (isViewOcclusion)
+            {
+                return EventSystem.current.IsPointerOverGameObject();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
         private void TryRotate()
         {
+            if (!isRotate)
+            {
+                return;
+            }
+
             if (Input.GetMouseButton(1))
             {
                 _controllerRotate.isOpenMouseOperation = true;
@@ -70,9 +104,32 @@ namespace CameraTools
             }
         }
 
-        void TryMove()
+        private void TryMove()
         {
-            float height;
+            if (!isMove)
+            {
+                return;
+            }
+
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+
+            if (Math.Abs(v) > 0 || Math.Abs(h) > 0)
+            {
+                navMeshAgent.Move(
+                    currentCamera.transform.TransformDirection(new Vector3(h, 0, v) * (Time.deltaTime * moveSpeed)));
+            }
+        }
+
+        private void TryUpAndDown()
+        {
+            if (!isUpAndDown)
+            {
+                return;
+            }
+
+            float height = 0;
+
             if (Input.GetKey(KeyCode.Q))
             {
                 height = -1 * moveSpeed;
@@ -84,16 +141,6 @@ namespace CameraTools
             else
             {
                 height = 0;
-            }
-
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
-
-            if (Math.Abs(v) > 0 || Math.Abs(h) > 0)
-            {
-                // Debug.Log("开始移动");
-                navMeshAgent.Move(
-                    currentCamera.transform.TransformDirection(new Vector3(h, 0, v) * (Time.deltaTime * moveSpeed)));
             }
 
             if (height < 0)
@@ -128,19 +175,22 @@ namespace CameraTools
         /// </summary>
         void TryScrollWheel()
         {
-            if (Input.GetAxis("Mouse ScrollWheel") < 0)
+            if (isField)
             {
-                if (currentCamera.fieldOfView < cameraField.y)
-                    currentCamera.fieldOfView += 1;
-            }
+                if (Input.GetAxis("Mouse ScrollWheel") < 0)
+                {
+                    if (currentCamera.fieldOfView < cameraField.y)
+                        currentCamera.fieldOfView += 1;
+                }
 
-            if (Input.GetAxis("Mouse ScrollWheel") > 0)
-            {
-                if (currentCamera.fieldOfView > cameraField.x)
-                    currentCamera.fieldOfView -= 1;
+                if (Input.GetAxis("Mouse ScrollWheel") > 0)
+                {
+                    if (currentCamera.fieldOfView > cameraField.x)
+                        currentCamera.fieldOfView -= 1;
+                }
             }
         }
-        
+
         private int _navMeshAgentMoveTimeTask;
         private int _currentCameraMoveTimeTask;
         private int _currentCameraRotateTimeTask;
@@ -163,26 +213,44 @@ namespace CameraTools
             _controllerRotate.enabled = false;
             this.isControl = false;
             navMeshAgent.enabled = false;
-            _navMeshAgentMoveTimeTask = TimeSvc.Instance.MoveTargetPos(navMeshAgent.transform,
-                navMeshAgent.transform.position, targetPos, time,
-                false);
-            _currentCameraMoveTimeTask =
-                TimeSvc.Instance.RotateTargetPos(currentCamera.transform, targetRotate, time, false);
-            _currentCameraRotateTimeTask = TimeSvc.Instance.MoveTargetPos(currentCamera.transform,
-                new Vector3(0, currentCamera.transform.localPosition.y, 0), new Vector3(0, targetHigh.y, 0), time,
-                false);
-            _currentCameraReSetTimeTask = TimeSvc.Instance.AddTimeTask(() =>
-                {
-                    _controllerRotate.enabled = true;
-                    this.isControl = isControl;
-                    _controllerRotate.SetRotateObj(currentCamera.transform);
-                    navMeshAgent.enabled = true;
-                    action.Invoke();
-                    currentCamera.fieldOfView = fieldView;
-                }, "校准位置",
-                time + 0.02f);
+            if (time <= 0)
+            {
+                navMeshAgent.transform.localPosition = targetPos;
+                currentCamera.transform.localEulerAngles = targetRotate;
+                currentCamera.transform.localPosition = new Vector3(0, targetHigh.y, 0);
+                _controllerRotate.enabled = true;
+                this.isControl = isControl;
+                _controllerRotate.SetRotateObj(currentCamera.transform);
+                navMeshAgent.enabled = true;
+                action.Invoke();
+                currentCamera.fieldOfView = fieldView;
+            }
+            else
+            {
+                _navMeshAgentMoveTimeTask = TimeSvc.Instance.MoveTargetPos(navMeshAgent.transform, navMeshAgent.transform.position, targetPos, time, false);
+                _currentCameraMoveTimeTask = TimeSvc.Instance.RotateTargetPos(currentCamera.transform, targetRotate, time, false);
+                _currentCameraRotateTimeTask =
+                    TimeSvc.Instance.MoveTargetPos(currentCamera.transform, new Vector3(0, currentCamera.transform.localPosition.y, 0), new Vector3(0, targetHigh.y, 0), time, false);
+                _currentCameraReSetTimeTask = TimeSvc.Instance.AddTimeTask(() =>
+                    {
+                        _controllerRotate.enabled = true;
+                        this.isControl = isControl;
+                        _controllerRotate.SetRotateObj(currentCamera.transform);
+                        navMeshAgent.enabled = true;
+                        action.Invoke();
+                        currentCamera.fieldOfView = fieldView;
+                    }, "校准位置",
+                    time + 0.02f);
+            }
         }
 
+        /// <summary>
+        /// 移动到位置
+        /// </summary>
+        /// <param name="posName"></param>
+        /// <param name="time"></param>
+        /// <param name="isControl"></param>
+        /// <param name="action"></param>
         public void MoveTargetPos(string posName, float time, bool isControl, Action action)
         {
             CameraPos.CameraPosInfo cameraPosInfo = CameraPosEditor.Instance.cameraPos.GetCameraPosInfoByName(posName);
@@ -197,12 +265,70 @@ namespace CameraTools
             }
         }
 
+        /// <summary>
+        /// 移动到位置
+        /// </summary>
+        /// <param name="posName"></param>
+        /// <param name="time"></param>
+        /// <param name="isControl"></param>
+        /// <param name="action"></param>
+        public void MoveTargetPos(string posName, Action action)
+        {
+            CameraPos.CameraPosInfo cameraPosInfo = CameraPosEditor.Instance.cameraPos.GetCameraPosInfoByName(posName);
+            if (cameraPosInfo != null)
+            {
+                navMeshAgent.transform.localPosition = cameraPosInfo.navPos;
+                currentCamera.transform.localEulerAngles = cameraPosInfo.cameraRotate;
+                currentCamera.transform.localPosition = cameraPosInfo.cameraPos;
+                currentCamera.fieldOfView = cameraPosInfo.cameraFieldView;
+                action?.Invoke();
+#if UNITY_EDITOR
+                CameraPosEditor.Instance.cameraPosName = posName;
+#endif
+            }
+            else
+            {
+                Debug.LogWarning("未找到位置信息");
+            }
+        }
+
         public void StopMove()
         {
             TimeSvc.Instance.DeleteTimeTask(_navMeshAgentMoveTimeTask);
             TimeSvc.Instance.DeleteTimeTask(_currentCameraMoveTimeTask);
             TimeSvc.Instance.DeleteTimeTask(_currentCameraRotateTimeTask);
             TimeSvc.Instance.DeleteTimeTask(_currentCameraReSetTimeTask);
+        }
+
+        /// <summary>
+        /// 控制相机属性
+        /// </summary>
+        public void ControllerFunction(bool isMove, bool isRotate, bool isUpAndDown, bool isField)
+        {
+            this.isMove = isMove;
+            this.isRotate = isRotate;
+            this.isUpAndDown = isUpAndDown;
+            this.isField = isField;
+        }
+
+        public void ControllerMove(bool isMove)
+        {
+            this.isMove = isMove;
+        }
+
+        public void ControllerRotate(bool isRotate)
+        {
+            this.isRotate = isRotate;
+        }
+
+        public void ControllerUpAndDown(bool isUpAndDown)
+        {
+            this.isUpAndDown = isUpAndDown;
+        }
+
+        public void ControllerField(bool isField)
+        {
+            this.isField = isField;
         }
 
         private void OnDestroy()

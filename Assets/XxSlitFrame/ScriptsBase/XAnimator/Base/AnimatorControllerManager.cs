@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using XxSlitFrame.Tools;
@@ -13,7 +14,8 @@ namespace XAnimator.Base
     {
         public static AnimatorControllerManager Instance;
 
-        [Header("所有动画控制器")] [SerializeField] private List<XAnimatorControllerBase> allAnimController = new List<XAnimatorControllerBase>();
+        [LabelText("所有动画控制器")] [SerializeField] [Searchable]
+        private List<XAnimatorControllerBase> allAnimController = new List<XAnimatorControllerBase>();
 
         /// <summary>
         /// 动画控制器任务
@@ -38,7 +40,7 @@ namespace XAnimator.Base
         /// 播放动画
         /// </summary>
         /// <param name="animType"></param>
-        public void PlayAnim(AnimType animType)
+        public void PlayAnim(string animType)
         {
             foreach (XAnimatorControllerBase controllerBase in allAnimController)
             {
@@ -51,7 +53,7 @@ namespace XAnimator.Base
         /// </summary>
         /// <param name="animType"></param>
         /// <param name="playProgress">播放进度</param>
-        public void PlayAnim(AnimType animType, float playProgress)
+        public void PlayAnim(string animType, float playProgress)
         {
             foreach (XAnimatorControllerBase controllerBase in allAnimController)
             {
@@ -64,7 +66,7 @@ namespace XAnimator.Base
         /// </summary>
         /// <param name="animType"></param>
         /// <param name="animSpeedProgress"></param>
-        public void PlayAnim(AnimType animType, AnimSpeedProgress animSpeedProgress)
+        public void PlayAnim(string animType, AnimSpeedProgress animSpeedProgress)
         {
             foreach (XAnimatorControllerBase controllerBase in allAnimController)
             {
@@ -80,14 +82,16 @@ namespace XAnimator.Base
         /// </summary>
         /// <param name="animType"></param>
         /// <param name="animAction"></param>
-        public void PlayAnim(AnimType animType, UnityAction animAction)
+        public int PlayAnim(string animType, UnityAction animAction)
         {
             TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
-            _animatorTimeTask = TimeSvc.Instance.AddTimeTask(animAction, "动画播放时间", GetPlayAnimLength(animType));
+            _animatorTimeTask = TimeSvc.Instance.AddTimeTask(animAction, "动画播放时间", GetPlayAnimFirstLength(animType));
             foreach (XAnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.PlayAnim(animType);
             }
+
+            return _animatorTimeTask;
         }
 
         /// <summary>
@@ -95,10 +99,10 @@ namespace XAnimator.Base
         /// </summary>
         /// <param name="animType"></param>
         /// <param name="listenerEventType"></param>
-        public void PlayAnim(AnimType animType, string listenerEventType)
+        public void PlayAnim(string animType, string listenerEventType)
         {
             TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
-            _animatorTimeTask = TimeSvc.Instance.AddTimeTask(() => { ListenerSvc.Instance.ExecuteEvent(listenerEventType); }, "动画播放时间", GetPlayAnimLength(animType));
+            _animatorTimeTask = TimeSvc.Instance.AddTimeTask(() => { ListenerSvc.Instance.ExecuteEvent(listenerEventType); }, "动画播放时间", GetPlayAnimFirstLength(animType));
             foreach (XAnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.PlayAnim(animType);
@@ -127,12 +131,12 @@ namespace XAnimator.Base
         /// </summary>
         /// <param name="animType"></param>
         /// <returns></returns>
-        public float GetPlayAnimLength(AnimType animType)
+        public float GetPlayAnimFirstLength(string animType)
         {
             float animLength = 0;
             foreach (XAnimatorControllerBase animatorControllerBase in allAnimController)
             {
-                if (animatorControllerBase.GetPlayAnimLength(animType) != -1f)
+                if (animatorControllerBase.GetAnimState(animType))
                 {
                     animLength = animatorControllerBase.GetPlayAnimLength(animType);
                     return animLength;
@@ -140,6 +144,24 @@ namespace XAnimator.Base
             }
 
             return animLength;
+        }
+
+        /// <summary>
+        /// 获得动画状态
+        /// </summary>
+        /// <param name="animType"></param>
+        /// <returns></returns>
+        public bool GetAnimState(string animType)
+        {
+            foreach (XAnimatorControllerBase animatorControllerBase in allAnimController)
+            {
+                if (animatorControllerBase.GetAnimState(animType))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

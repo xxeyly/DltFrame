@@ -4,24 +4,6 @@ using UnityEngine;
 
 namespace XxSlitFrame.Tools
 {
-    public enum AnimType
-    {
-        Normal,
-
-        /// <summary>
-        /// 自检
-        /// </summary>
-        SelfInspectionPage
-    }
-
-    [LabelText("场景加载方式")]
-    public enum SceneLoadType
-    {
-        Normal,
-        [LabelText("场景名称")] SceneName,
-        [LabelText("场景索引")] SceneIndex
-    }
-
     [LabelText("场景质量")]
     public enum QualitySettingType
     {
@@ -35,14 +17,14 @@ namespace XxSlitFrame.Tools
     {
         public enum TimeLoopType
         {
-            [LabelText("一次")] Once,
+            [LabelText("单程")] Once,
             [LabelText("循环")] Loop,
             [LabelText("不死")] Immortal,
         }
 
-        [LabelText("任务ID")] public int tid;
-        [LabelText("任务名称")] public string tidName;
-        [LabelText("任务类型")] public TimeLoopType loopType;
+        [HideLabel] [HorizontalGroup("任务ID")] public int tid;
+        [HideLabel] [HorizontalGroup("任务名称")] public string tidName;
+        [HideLabel] [HorizontalGroup("任务类型")] public TimeLoopType loopType;
     }
 
     public static class General
@@ -100,28 +82,20 @@ namespace XxSlitFrame.Tools
             }
         }
 
-        public static string BaseWindowTemplatePath = "Assets/XxSlitFrame/Tools/General/BaseWindowTemplate.cs";
+        [LabelText("BaseWindow模板地址")] public static string BaseWindowTemplatePath = "Assets/XxSlitFrame/Model/Template/BaseWindowTemplate.cs";
 
-        public static string ChildBaseWindowTemplatePath =
-            "Assets/XxSlitFrame/Tools/General/ChildBaseWindowTemplate.cs";
+        [LabelText("子级BaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = "Assets/XxSlitFrame/Model/Template/ChildBaseWindowTemplate.cs";
 
-        [FilePath] [LabelText("自动打包配置存放路径")] [LabelWidth(120)]
-        public static string customBuildDataPath = "Assets/XxSlitFrame/Config/CustomBuildData.asset";
+        [LabelText("自动打包配置存放路径")] public static string customBuildDataPath = "Assets/XxSlitFrame/Config/CustomBuildData.asset";
 
-        [FilePath] [LabelText("音频配置存放路径")] [LabelWidth(120)]
-        public static string customAudioDataPath = "Assets/XxSlitFrame/Config/CustomAudioData.asset";
+        [LabelText("音频配置存放路径")] public static string customAudioDataPath = "Assets/XxSlitFrame/Config/CustomAudioData.asset";
 
-        [FilePath] [LabelText("框架配置存放路径")] [LabelWidth(120)]
-        public static string customFrameDataPath = "Assets/XxSlitFrame/Config/CustomFrameData.asset";
+        [LabelText("框架配置存放路径")] public static string customFrameDataPath = "Assets/XxSlitFrame/Config/CustomFrameData.asset";
 
-        [FilePath] [LabelText("生成配置存放路径")] [LabelWidth(120)]
-        public static string generateBaseWindowPath = "Assets/XxSlitFrame/Config/GenerateBaseWindowData.asset";
+        [LabelText("生成配置存放路径")] public static string generateBaseWindowPath = "Assets/XxSlitFrame/Config/GenerateBaseWindowData.asset";
 
-        [FilePath] [LabelText("场景配置存放路径")] [LabelWidth(120)]
-        public static string sceneLoadPath = "Assets/XxSlitFrame/Config/SceneLoadData.asset";
+        [LabelText("场景配置存放路径")] public static string sceneLoadPath = "Assets/XxSlitFrame/Config/SceneLoadData.asset";
 
-        [FilePath] [LabelText("场景配置存放路径")] [LabelWidth(120)]
-        public static string buildSceneAssetBundleDataPath =
-            "Assets/XxSlitFrame/Config/BuildSceneAssetBundleData.asset";
+        [LabelText("场景配置存放路径")] public static string buildSceneAssetBundleDataPath = "Assets/XxSlitFrame/Config/BuildSceneAssetBundleData.asset";
     }
 }

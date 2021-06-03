@@ -19,10 +19,20 @@ MonoBehaviour:
   customSceneSvc: 1
   timeSvcEditorSvc: 1
   viewSvcEditorSvc: 1
-  resSvcEditorInit: 1
-  audioSvcEditorInit: 1
-  listenerSvcEditorSvcInit: 1
-  customSceneSvcInit: 1
-  timeSvcEditorSvcInit: 1
-  viewSvcEditorSvcInit: 0
-  persistentDataSvcEditorInit: 1
+  entitySvcEditorSvc: 1
+  resSvcEditorFrameInit: 1
+  audioSvcEditorFrameInit: 1
+  listenerSvcEditorFrameInit: 0
+  customSceneSvcEditorFrameInit: 0
+  timeSvcEditorFrameInit: 1
+  viewSvcEditorFrameInit: 0
+  persistentDataSvcEditorFrameInit: 1
+  entityDataSvcEditorFrameInit: 0
+  resSvcEditorSceneInit: 0
+  audioSvcEditorSceneInit: 0
+  listenerSvcEditorSceneInit: 1
+  customSceneSvcEditorSceneInit: 1
+  timeSvcEditorSceneInit: 0
+  viewSvcEditorSceneInit: 1
+  persistentDataSvcEditorSceneInit: 0
+  entityDataSvcEditorSceneInit: 1

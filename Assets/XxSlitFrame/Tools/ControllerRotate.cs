@@ -17,7 +17,7 @@ public class ControllerRotate : MonoBehaviour
     [LabelText("是否开启旋转")] public bool isOpenMouseOperation;
     [LabelText("开启水平轴向")] public bool isHorizontal;
     [LabelText("开启垂直轴向")] public bool isVertical;
-    [LabelText("目标物体")] [SerializeField] private Transform targetTri;
+    [LabelText("目标物体")] [SerializeField] public Transform targetTri;
     private Quaternion _targetRotation;
     [LabelText("旋转速度")] public float rotateSpeed = 3;
     [LabelText("平滑过渡")] public bool smoothTransition;
@@ -33,46 +33,56 @@ public class ControllerRotate : MonoBehaviour
     [LabelText("水平旋转轴向")] public Axial mouseXAxial;
     [LabelText("垂直旋转轴向")] public Axial mouseYAxial;
 
-    private float _inputX;
-    private float _inputY;
+    [SerializeField] [LabelText("默认角度")] Vector3 defaultEuler = Vector3.zero;
+    [SerializeField] private float _inputX;
+    [SerializeField] private float _inputY;
     float _velocity = 0.0f;
+
+    public void SetRotateObj()
+    {
+        if (targetTri != null)
+        {
+            SetRotateObj(targetTri);
+        }
+    }
 
     public void SetRotateObj(Transform target)
     {
-        Vector3 inspectorEuler = GetInspectorEuler(target);
+        defaultEuler = GetInspectorEuler(target);
+
         targetTri = target;
         switch (mouseXAxial)
         {
             case Axial.X:
                 if (leftAndRightLimit != Vector2.zero)
                 {
-                    mouseX = ClampAngle(inspectorEuler.x, leftAndRightLimit.x, leftAndRightLimit.y);
+                    mouseX = ClampAngle(defaultEuler.x, leftAndRightLimit.x, leftAndRightLimit.y);
                 }
                 else
                 {
-                    mouseX = inspectorEuler.x;
+                    mouseX = defaultEuler.x;
                 }
 
                 break;
             case Axial.Y:
                 if (leftAndRightLimit != Vector2.zero)
                 {
-                    mouseX = ClampAngle(inspectorEuler.y, leftAndRightLimit.x, leftAndRightLimit.y);
+                    mouseX = ClampAngle(defaultEuler.y, leftAndRightLimit.x, leftAndRightLimit.y);
                 }
                 else
                 {
-                    mouseX = inspectorEuler.y;
+                    mouseX = defaultEuler.y;
                 }
 
                 break;
             case Axial.Z:
                 if (leftAndRightLimit != Vector2.zero)
                 {
-                    mouseX = ClampAngle(inspectorEuler.z, leftAndRightLimit.x, leftAndRightLimit.y);
+                    mouseX = ClampAngle(defaultEuler.z, leftAndRightLimit.x, leftAndRightLimit.y);
                 }
                 else
                 {
-                    mouseX = inspectorEuler.z;
+                    mouseX = defaultEuler.z;
                 }
 
                 break;
@@ -83,41 +93,43 @@ public class ControllerRotate : MonoBehaviour
             case Axial.X:
                 if (topAndDownLimit != Vector2.zero)
                 {
-                    mouseY = ClampAngle(inspectorEuler.x, topAndDownLimit.x, topAndDownLimit.y);
+                    mouseY = ClampAngle(defaultEuler.x, topAndDownLimit.x, topAndDownLimit.y);
                 }
                 else
                 {
-                    mouseY = inspectorEuler.x;
+                    mouseY = defaultEuler.x;
                 }
 
                 break;
             case Axial.Y:
                 if (topAndDownLimit != Vector2.zero)
                 {
-                    mouseY = ClampAngle(inspectorEuler.y, topAndDownLimit.x, topAndDownLimit.y);
+                    mouseY = ClampAngle(defaultEuler.y, topAndDownLimit.x, topAndDownLimit.y);
                 }
                 else
                 {
-                    mouseY = inspectorEuler.y;
+                    mouseY = defaultEuler.y;
                 }
 
                 break;
             case Axial.Z:
                 if (topAndDownLimit != Vector2.zero)
                 {
-                    mouseY = ClampAngle(inspectorEuler.z, topAndDownLimit.x, topAndDownLimit.y);
+                    mouseY = ClampAngle(defaultEuler.z, topAndDownLimit.x, topAndDownLimit.y);
                 }
                 else
                 {
-                    mouseY = inspectorEuler.z;
+                    mouseY = defaultEuler.z;
                 }
 
                 break;
         }
     }
 
-    private void LateUpdate()
+    private void Update()
     {
+        #region 控制旋转数值
+
         if (isOpenMouseOperation)
         {
             if (isHorizontal)
@@ -144,23 +156,26 @@ public class ControllerRotate : MonoBehaviour
             _inputY = Mathf.SmoothDamp(_inputY, 0, ref _velocity, Time.deltaTime);
         }
 
+        #endregion
+
         if (hReversal)
         {
-            mouseX += -_inputX * rotateSpeed;
+            mouseX -= -_inputX * rotateSpeed;
         }
         else
         {
-            mouseX -= -_inputX * rotateSpeed;
+            mouseX += -_inputX * rotateSpeed;
         }
 
         if (vReversal)
         {
-            mouseY += _inputY * rotateSpeed;
+            mouseY -= _inputY * rotateSpeed;
         }
         else
         {
-            mouseY -= _inputY * rotateSpeed;
+            mouseY += _inputY * rotateSpeed;
         }
+
 
         if (leftAndRightLimit != Vector2.zero)
         {
@@ -172,42 +187,210 @@ public class ControllerRotate : MonoBehaviour
             mouseY = ClampAngle(mouseY, topAndDownLimit.x, topAndDownLimit.y);
         }
 
-        Vector3 nextPos = new Vector3();
-        switch (mouseXAxial)
+
+        Vector3 nextPos = defaultEuler;
+
+        if (isHorizontal)
         {
-            case Axial.X:
-                nextPos.x = mouseX;
-                break;
-            case Axial.Y:
-                nextPos.y = mouseX;
+            switch (mouseXAxial)
+            {
+                case Axial.X:
 
-                break;
-            case Axial.Z:
-                nextPos.z = mouseX;
+                    nextPos.x = mouseX;
+                    defaultEuler.x = mouseX;
+                    if (isVertical)
+                    {
+                        switch (mouseYAxial)
+                        {
+                            case Axial.X:
+                                nextPos.y = defaultEuler.y;
+                                nextPos.z = defaultEuler.z;
+                                break;
+                            case Axial.Y:
+                                nextPos.z = defaultEuler.z;
 
-                break;
+                                break;
+                            case Axial.Z:
+                                nextPos.y = defaultEuler.y;
+
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        nextPos.y = defaultEuler.y;
+                        nextPos.z = defaultEuler.z;
+                    }
+
+
+                    break;
+                case Axial.Y:
+                    nextPos.y = mouseX;
+                    defaultEuler.y = mouseX;
+
+                    if (isVertical)
+                    {
+                        switch (mouseYAxial)
+                        {
+                            case Axial.X:
+                                nextPos.z = defaultEuler.z;
+
+                                break;
+                            case Axial.Y:
+                                nextPos.x = defaultEuler.x;
+                                nextPos.z = defaultEuler.z;
+                                break;
+                            case Axial.Z:
+                                nextPos.x = defaultEuler.x;
+
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    else
+                    {
+                        nextPos.x = defaultEuler.x;
+                        nextPos.z = defaultEuler.z;
+                    }
+
+                    break;
+                case Axial.Z:
+                    nextPos.z = mouseX;
+                    defaultEuler.z = mouseX;
+
+                    if (isVertical)
+                    {
+                        switch (mouseYAxial)
+                        {
+                            case Axial.X:
+                                nextPos.y = defaultEuler.y;
+
+                                break;
+                            case Axial.Y:
+                                nextPos.x = defaultEuler.x;
+
+                                break;
+                            case Axial.Z:
+                                nextPos.x = defaultEuler.x;
+                                nextPos.y = defaultEuler.y;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    else
+                    {
+                        nextPos.x = defaultEuler.x;
+                        nextPos.y = defaultEuler.y;
+                    }
+
+                    break;
+            }
         }
 
-        switch (mouseYAxial)
+        if (isVertical)
         {
-            case Axial.X:
-                nextPos.x = mouseY;
-                break;
-            case Axial.Y:
-                nextPos.y = mouseY;
+            switch (mouseYAxial)
+            {
+                case Axial.X:
+                    nextPos.x = mouseY;
+                    defaultEuler.x = mouseY;
 
-                break;
-            case Axial.Z:
-                nextPos.z = mouseY;
+                    if (isHorizontal)
+                    {
+                        switch (mouseXAxial)
+                        {
+                            case Axial.X:
+                                nextPos.y = defaultEuler.y;
+                                nextPos.z = defaultEuler.z;
+                                break;
+                            case Axial.Y:
+                                nextPos.z = defaultEuler.z;
+                                break;
+                            case Axial.Z:
+                                nextPos.y = defaultEuler.y;
 
-                break;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    else
+                    {
+                        nextPos.y = defaultEuler.y;
+                        nextPos.z = defaultEuler.z;
+                    }
+
+                    break;
+                case Axial.Y:
+                    nextPos.y = mouseY;
+                    defaultEuler.y = mouseY;
+
+                    if (isHorizontal)
+                    {
+                        switch (mouseXAxial)
+                        {
+                            case Axial.X:
+                                nextPos.z = defaultEuler.z;
+                                break;
+                            case Axial.Y:
+                                nextPos.x = defaultEuler.x;
+                                nextPos.z = defaultEuler.z;
+                                break;
+                            case Axial.Z:
+                                nextPos.x = defaultEuler.x;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    else
+                    {
+                        nextPos.x = defaultEuler.x;
+                        nextPos.z = defaultEuler.z;
+                    }
+
+                    break;
+                case Axial.Z:
+
+                    nextPos.z = mouseY;
+                    defaultEuler.z = mouseY;
+
+                    if (isHorizontal)
+                    {
+                        switch (mouseXAxial)
+                        {
+                            case Axial.X:
+                                nextPos.y = defaultEuler.y;
+
+                                break;
+                            case Axial.Y:
+                                nextPos.x = defaultEuler.x;
+                                break;
+                            case Axial.Z:
+                                nextPos.x = defaultEuler.x;
+                                nextPos.y = defaultEuler.y;
+                                break;
+                            default:
+                                throw new ArgumentOutOfRangeException();
+                        }
+                    }
+                    else
+                    {
+                        nextPos.x = defaultEuler.x;
+                        nextPos.y = defaultEuler.y;
+                    }
+
+                    break;
+            }
         }
 
         if (smoothTransition)
         {
             _targetRotation = Quaternion.Euler(nextPos);
             targetTri.rotation = Quaternion.Lerp(targetTri.rotation, _targetRotation,
-                Time.deltaTime * rotateSpeed * rotateSpeed);
+                Time.deltaTime * rotateSpeed);
         }
         else
         {
@@ -242,7 +425,7 @@ public class ControllerRotate : MonoBehaviour
     /// <returns></returns>
     private Vector3 GetInspectorEuler(Transform mTransform)
     {
-        Vector3 angle = mTransform.eulerAngles;
+        Vector3 angle = mTransform.localEulerAngles;
         float x = angle.x;
         float y = angle.y;
         float z = angle.z;
@@ -296,5 +479,14 @@ public class ControllerRotate : MonoBehaviour
     {
         leftAndRightLimit = leftAndRight;
         topAndDownLimit = tpoAndDown;
+    }
+
+    /// <summary>
+    /// 设置限定角度
+    /// </summary>
+    /// <param name="controllerRotateAngleData"></param>
+    public void SetRotateAngleLimit(ControllerRotateAngleData controllerRotateAngleData)
+    {
+        SetRotateAngleLimit(controllerRotateAngleData.leftAndRightLimit, controllerRotateAngleData.topAndDownLimit);
     }
 }

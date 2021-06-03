@@ -12,8 +12,6 @@ namespace XxSlitFrame.Tools.Svc
     public class PersistentDataSvc : SvcBase
     {
         public static PersistentDataSvc Instance;
-        [LabelText("当前场景索引")] public int sceneIndex;
-        [LabelText("当前场景名称")] public string sceneName;
         [BoxGroup("场景加载")] [LabelText("跳转场景")] public bool jump;
 
         [BoxGroup("场景加载")] [LabelText("跳转场景名称")]
@@ -22,8 +20,7 @@ namespace XxSlitFrame.Tools.Svc
         [LabelText("音乐开关")] public bool audioState;
         [LabelText("当前质量")] public QualitySettingType qualitySettingType = QualitySettingType.High;
         [LabelText("鼠标状态")] public bool mouseState;
-        [LabelText("加载场景方式")] public SceneLoadType sceneLoadType;
-        [LabelText("场景资源加载完毕")] public bool sceneResLoad;
+        [LabelText("考核模式")] public bool assessment;
 
         public override void InitSvc()
         {

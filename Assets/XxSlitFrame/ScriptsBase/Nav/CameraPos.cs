@@ -8,16 +8,17 @@ using UnityEngine;
 
 public class CameraPos : ScriptableObject
 {
-    [LabelText("相机位置")] public List<CameraPosInfo> cameraPosInfos;
+    [LabelText("相机位置")] [Searchable] [TableList(AlwaysExpanded = true)]
+    public List<CameraPosInfo> cameraPosInfos;
 
     [Serializable]
     public class CameraPosInfo
     {
-        public string infoName;
-        [LabelText("寻路位置")] public Vector3 navPos;
-        [LabelText("相机旋转")] public Vector3 cameraRotate;
-        [LabelText("相机位置")] public Vector3 cameraPos;
-        [LabelText("相机视野")] public float cameraFieldView;
+        [HideLabel] [HorizontalGroup("标记名称")] public string infoName;
+        [HideLabel] [HorizontalGroup("寻路位置")] public Vector3 navPos;
+        [HideLabel] [HorizontalGroup("相机旋转")] public Vector3 cameraRotate;
+        [HideLabel] [HorizontalGroup("相机位置")] public Vector3 cameraPos;
+        [HideLabel] [HorizontalGroup("相机视野")] public float cameraFieldView;
     }
 
     /// <summary>

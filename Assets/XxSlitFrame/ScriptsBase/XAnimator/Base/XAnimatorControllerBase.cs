@@ -34,7 +34,7 @@ namespace XAnimator.Base
             }
         }
 
-        public void PlayAnim(AnimType animationType, float animProgress)
+        public void PlayAnim(string animationType, float animProgress)
         {
             if (_animationClips.Contains(animationType.ToString()))
             {
@@ -48,7 +48,7 @@ namespace XAnimator.Base
             }
         }
 
-        public void PlayAnim(AnimType animationType, AnimSpeedProgress animSpeedProgress)
+        public void PlayAnim(string animationType, AnimSpeedProgress animSpeedProgress)
         {
             if (_animationClips.Contains(animationType.ToString()))
             {
@@ -72,13 +72,15 @@ namespace XAnimator.Base
         /// <param name="animationType"></param>
         /// <param name="eventAction"></param>
         /// <param name="delay"></param>
-        public void PlayAnim(AnimType animationType, UnityAction eventAction, float delay = 0)
+        public int PlayAnim(string animationType, UnityAction eventAction, float delay = 0)
         {
             if (_animationClips.Contains(animationType.ToString()))
             {
                 PlayAnim(animationType);
-                _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) + delay);
+                return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) + delay);
             }
+
+            return 0;
         }
 
 
@@ -86,7 +88,7 @@ namespace XAnimator.Base
         /// 播放动画
         /// </summary>
         /// <param name="animationType"></param>
-        public void PlayAnim(AnimType animationType)
+        public void PlayAnim(string animationType)
         {
             if (_animationClips.Contains(animationType.ToString()))
             {
@@ -108,7 +110,7 @@ namespace XAnimator.Base
         /// </summary>
         /// <param name="animType"></param>
         /// <returns></returns>
-        public float GetPlayAnimLength(AnimType animType)
+        public float GetPlayAnimLength(string animType)
         {
             AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
             foreach (AnimationClip item in clips)
@@ -120,6 +122,25 @@ namespace XAnimator.Base
             }
 
             return -1;
+        }
+
+        /// <summary>
+        /// 获得动画状态
+        /// </summary>
+        /// <param name="animType"></param>
+        /// <returns></returns>
+        public bool GetAnimState(string animType)
+        {
+            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+            foreach (AnimationClip item in clips)
+            {
+                if (item.name == animType.ToString())
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public void StopAnimTaskTime()

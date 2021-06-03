@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools.Svc

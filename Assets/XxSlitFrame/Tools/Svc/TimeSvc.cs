@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,7 +19,6 @@ namespace XxSlitFrame.Tools.Svc
     public class TimeSvc : SvcBase
     {
         public static TimeSvc Instance;
-
         private List<TimeTask> _taskTimeList;
         private List<TimeTask> _taskTimeImmortalList;
         private List<SwitchTask> _taskSwitchList;
@@ -26,8 +26,14 @@ namespace XxSlitFrame.Tools.Svc
         private List<int> _tidTimeImmortalList;
         private List<int> _tidSwitchList;
         private bool _clear;
-        [LabelText("当前时间")] public List<string> currentTime;
-        [LabelText("所有计时任务")] public List<TimeTaskList> timeTaskList;
+
+        [LabelText("计时器最小间隔")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [MinValue(0.01f)] [InfoBox("最小不能小于0.01")]
+        public float timeMinDelay = 0.01f;
+
+        [Searchable] [LabelText("当前时间")] public List<string> currentTime;
+
+        [TableList(AlwaysExpanded = true)] [Searchable] [LabelText("所有计时任务")]
+        public List<TimeTaskList> timeTaskList;
 
         public override void StartSvc()
         {
@@ -39,8 +45,7 @@ namespace XxSlitFrame.Tools.Svc
         {
             while (true)
             {
-                yield return new WaitForSeconds(0.01f);
-                UpdateCurrentSystemTime();
+                yield return new WaitForSecondsRealtime(timeMinDelay);
                 UpdateTimer();
             }
         }
@@ -54,14 +59,13 @@ namespace XxSlitFrame.Tools.Svc
             _tidSwitchList = new List<int>();
             _tidTimeImmortalList = new List<int>();
             currentTime = new List<string>() {"", "", "", "", "", ""};
-            UpdateCurrentSystemTime();
         }
 
         /// <summary>
         /// 返回当前系统时间
         /// </summary>
         /// <returns></returns>
-        public void UpdateCurrentSystemTime()
+        public List<string> UpdateCurrentSystemTime()
         {
             currentTime[0] = DateTime.Now.Year.ToString();
             if (DateTime.Now.Month < 10)
@@ -108,6 +112,8 @@ namespace XxSlitFrame.Tools.Svc
             {
                 currentTime[5] = DateTime.Now.Second.ToString();
             }
+
+            return currentTime;
         }
 
         /// <summary>
@@ -157,17 +163,17 @@ namespace XxSlitFrame.Tools.Svc
         /// <param name="time"></param>
         public int AddContinuedTimeTask(UnityAction callback, string taskName, float delay, float time)
         {
-            int count = 0;
+            float count = 0;
             if (delay >= time)
             {
                 count = 1;
             }
             else
             {
-                count = (int) (time / delay);
+                count = time / delay;
             }
 
-            return AddTimeTask(callback, taskName, delay, count);
+            return AddTimeTask(callback, taskName, delay, (int) count);
         }
 
 
@@ -453,12 +459,6 @@ namespace XxSlitFrame.Tools.Svc
 
         #endregion
 
-        private void FixedUpdate()
-        {
-            /*UpdateCurrentSystemTime();
-            UpdateTimer();*/
-        }
-
         private void UpdateTimer()
         {
             if (!_clear)
@@ -634,6 +634,11 @@ namespace XxSlitFrame.Tools.Svc
         public List<int> TimeConversion(int duration)
         {
             _timeList = new List<int>();
+            if (duration <= 0)
+            {
+                return new List<int>() {0, 0, 0, 0};
+            }
+
             if (duration <= 9)
             {
                 _timeList.Add(0);
@@ -748,7 +753,8 @@ namespace XxSlitFrame.Tools.Svc
             return AddContinuedTimeTask(
                 () =>
                 {
-                    t += Time.deltaTime;
+                    // Debug.Log("进行中:"+targetPos.y);
+                    t += 0.02f;
                     if (t >= time)
                     {
                         t = 1;
@@ -784,7 +790,7 @@ namespace XxSlitFrame.Tools.Svc
             return AddContinuedTimeTask(
                 () =>
                 {
-                    t += Time.deltaTime;
+                    t += 0.02f;
                     if (t >= time)
                     {
                         t = 1;
@@ -798,7 +804,7 @@ namespace XxSlitFrame.Tools.Svc
                     {
                         targetTri.localEulerAngles = Vector3.Lerp(startPos, targetPos, t / time);
                     }
-                }, "移动到指定位置", 0.02f, time);
+                }, "旋转到指定位置", 0.02f, time);
         }
     }
 

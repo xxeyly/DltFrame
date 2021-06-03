@@ -18,7 +18,7 @@ namespace XxSlitFrame.Tools.Svc
         /// <summary>
         /// 所有的视图窗口
         /// </summary>
-        [LabelText("所有的视图窗口")] [SerializeField]
+        [LabelText("所有的视图窗口")] [SerializeField] [Searchable]
         private List<BaseWindow> allViewWind;
 
 
@@ -59,7 +59,7 @@ namespace XxSlitFrame.Tools.Svc
         {
             foreach (BaseWindow window in allViewWind)
             {
-                if (window.GetViewShowType() == ViewShowType.Frozen)
+                if (window.GetViewShowType() == ViewShowType.Static)
                 {
                     window.Init();
                 }
@@ -77,6 +77,7 @@ namespace XxSlitFrame.Tools.Svc
                 window.ViewStartInit();
             }
 
+            FrozenInit();
             //关闭全体禁止响应
             CloseNoAllResponse();
         }
@@ -100,7 +101,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         /// <param name="view"></param>
         /// <returns></returns>
-        private bool GetViewState(Type view)
+        public bool GetViewState(Type view)
         {
             if (_activeViewDlc != null && _activeViewDlc.ContainsKey(view))
             {
@@ -118,34 +119,6 @@ namespace XxSlitFrame.Tools.Svc
             foreach (KeyValuePair<Type, BaseWindow> pair in _activeViewDlc)
             {
                 pair.Value.GetComponent<BaseWindow>().Init();
-            }
-        }
-
-        /// <summary>
-        /// 所有视图的暂停时
-        /// </summary>
-        public void ViewPause()
-        {
-            foreach (KeyValuePair<Type, BaseWindow> pair in _activeViewDlc)
-            {
-                if (GetViewState(pair.Key))
-                {
-                    pair.Value.GetComponent<BaseWindow>().ViewPause();
-                }
-            }
-        }
-
-        /// <summary>
-        /// 所有视图的暂停时
-        /// </summary>
-        public void ViewContinue()
-        {
-            foreach (KeyValuePair<Type, BaseWindow> pair in _activeViewDlc)
-            {
-                if (GetViewState(pair.Key))
-                {
-                    pair.Value.GetComponent<BaseWindow>().ViewContinue();
-                }
             }
         }
 

@@ -16,58 +16,10 @@ namespace XxSlitFrame.Tools
             {
                 DontDestroyOnLoad(this);
             }
-
-            //更新场景信息
-            SceneSvc.Instance.UpdateSceneNameOrIndex();
-            //开启场景实时检测
-            TimeSvc.Instance.AddImmortalTimeTask(() =>
-            {
-                switch (PersistentDataSvc.Instance.sceneLoadType)
-                {
-                    case SceneLoadType.Normal:
-                        break;
-                    //同步
-                    case SceneLoadType.SceneName:
-                        //新场景了
-                        if (PersistentDataSvc.Instance.sceneName != SceneManager.GetActiveScene().name)
-                        {
-                            while (FindObjectsOfType<GameRootStart>().Length == 1)
-                            {
-                                SceneSvc.Instance.InitSceneData();
-                                return;
-                            }
-                        }
-
-                        break;
-                    //异步
-                    case SceneLoadType.SceneIndex:
-                        //新场景了
-                        if (PersistentDataSvc.Instance.sceneIndex != SceneManager.GetActiveScene().buildIndex)
-                        {
-                            while (FindObjectsOfType<GameRootStart>().Length == 1)
-                            {
-                                SceneSvc.Instance.InitSceneData();
-                                return;
-                            }
-                        }
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }, "开启场景实时检测", 0.01f, 0);
-
             if (PersistentDataSvc.Instance.jump)
             {
-                SceneSvc.Instance.UpdateSceneNameOrIndex();
                 SceneSvc.Instance.SceneLoad(PersistentDataSvc.Instance.jumpSceneName);
                 Destroy(GetComponent<AudioListener>());
-            }
-            else
-            {
-                PersistentDataSvc.Instance.sceneLoadType = SceneLoadType.SceneName;
-                SceneSvc.Instance.UpdateSceneNameOrIndex();
-                SceneSvc.Instance.InitSceneStartSingletons();
             }
         }
     }

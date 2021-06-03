@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using XxSlitFrame.Tools.ConfigData;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 
 namespace XxSlitFrame.Tools.Svc
@@ -15,15 +14,20 @@ namespace XxSlitFrame.Tools.Svc
     public class SceneSvc : SvcBase
     {
         public static SceneSvc Instance;
-
-        private AsyncOperation _asyncOperation;
-        private int _sceneLoadTimeTask;
-        private int _sceneLoadOverTimeTask;
-        private int _asyncSceneLoadProgressTimeTask;
-
         public override void StartSvc()
         {
             Instance = GetComponent<SceneSvc>();
+            SceneManager.sceneLoaded += SceneLoadOverCallBack;
+        }
+
+        /// <summary>
+        /// 场景加载完毕回调
+        /// </summary>
+        /// <param name="scene"></param>
+        /// <param name="sceneType"></param>
+        private void SceneLoadOverCallBack(Scene scene, LoadSceneMode sceneType)
+        {
+            InitSceneStartSingletons();
         }
 
         public override void InitSvc()
@@ -33,21 +37,9 @@ namespace XxSlitFrame.Tools.Svc
         /// <summary>
         /// 加载场景
         /// </summary>
-        /// <param name="sceneIndex"></param>
-        public void SceneLoad(int sceneIndex)
-        {
-            PersistentDataSvc.Instance.sceneLoadType = SceneLoadType.SceneIndex;
-            SceneLoadBeforeInit();
-            SceneManager.LoadScene(sceneIndex);
-        }
-
-        /// <summary>
-        /// 加载场景
-        /// </summary>
         /// <param name="sceneName"></param>
         public void SceneLoad(string sceneName)
         {
-            PersistentDataSvc.Instance.sceneLoadType = SceneLoadType.SceneName;
             SceneLoadBeforeInit();
             if (Application.CanStreamedLevelBeLoaded(sceneName))
             {
@@ -94,16 +86,6 @@ namespace XxSlitFrame.Tools.Svc
         }
 
         /// <summary>
-        /// 初始化场景数据
-        /// </summary>
-        public void InitSceneData()
-        {
-            UpdateSceneNameOrIndex();
-            ListenerSvc.Instance.InitSvc();
-            InitSceneStartSingletons();
-        }
-
-        /// <summary>
         /// 加载场景初始化单例
         /// </summary>
         public void InitSceneStartSingletons()
@@ -117,17 +99,13 @@ namespace XxSlitFrame.Tools.Svc
             }
 
             //所有条件都加载完毕后,开始视图的初始化
-            ViewSvc.Instance.InitSvc();
-            ViewSvc.Instance.FrozenInit();
-        }
-
-        /// <summary>
-        /// 更新场景名字或索引
-        /// </summary>
-        public void UpdateSceneNameOrIndex()
-        {
-            PersistentDataSvc.Instance.sceneName = SceneManager.GetActiveScene().name;
-            PersistentDataSvc.Instance.sceneIndex = SceneManager.GetActiveScene().buildIndex;
+            foreach (SvcBase svcBase in GameRootStart.Instance.activeSvcBase)
+            {
+                if (svcBase.sceneInit)
+                {
+                    svcBase.InitSvc();
+                }
+            }
         }
 
         /// <summary>
@@ -141,9 +119,10 @@ namespace XxSlitFrame.Tools.Svc
             }
             else if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
-                #pragma warning disable 0618
-                Application.ExternalCall("close", "close");
-                #pragma warning restore 0618
+#pragma warning disable 0618
+                Application.Quit();
+                // Application.ExternalCall("close", "close");
+#pragma warning restore 0618
             }
             else if (Application.platform == RuntimePlatform.WindowsEditor)
             {

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using XxSlitFrame.Tools.Svc;
 using XxSlitFrame.Tools.Svc.BaseSvc;
+using Object = UnityEngine.Object;
 
 namespace XxSlitFrame.Tools
 {
@@ -16,9 +17,9 @@ namespace XxSlitFrame.Tools
     {
         public static GameRootStart Instance;
 #pragma warning disable 649
-        [LabelText("激活的服务")] public List<SvcBase> activeSvcBase;
-        [LabelText("场景服务")] public List<StartSingleton> sceneStartSingletons;
-        [LabelText("禁止摧毁")][BoxGroup] public bool dontDestroyOnLoad;
+        [LabelText("激活的服务")] [Searchable] public List<SvcBase> activeSvcBase;
+        [LabelText("场景服务")] [Searchable] public List<StartSingleton> sceneStartSingletons;
+        [LabelText("禁止摧毁")] [BoxGroup] public bool dontDestroyOnLoad;
 
         private void OnEnable()
         {
@@ -34,7 +35,7 @@ namespace XxSlitFrame.Tools
                 SvcStart();
                 //服务初始化
                 SvcInit();
-                // Debug.Log("服务开启");
+                Debug.Log("服务开启");
                 GameRoot gameRoot = gameObject.AddComponent<GameRoot>();
                 gameRoot.GameRootInit(dontDestroyOnLoad);
             }
@@ -56,7 +57,7 @@ namespace XxSlitFrame.Tools
         {
             foreach (SvcBase svcBase in activeSvcBase)
             {
-                if (svcBase.init)
+                if (svcBase.frameInit)
                 {
                     svcBase.InitSvc();
                 }

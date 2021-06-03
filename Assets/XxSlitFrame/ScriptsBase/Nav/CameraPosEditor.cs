@@ -9,7 +9,7 @@ using XxSlitFrame.Tools;
 
 public class CameraPosEditor : Singleton<CameraPosEditor>
 {
-    [LabelText("相机位置配置文件")] public CameraPos cameraPos;
+    [LabelText("相机位置配置文件")][InlineEditor()] public CameraPos cameraPos;
     [LabelText("保存名称")] public string cameraPosName;
 
     [Button("保存相机位置")]
@@ -32,6 +32,7 @@ public class CameraPosEditor : Singleton<CameraPosEditor>
         EditorUtility.SetDirty(cameraPos);
         // 保存所有修改
         AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
 #endif
     }
 }
