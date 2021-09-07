@@ -17,7 +17,7 @@ namespace XxSlitFrame.View.Editor.ConfigBaseWindowEditor
             GameObject obj = EditorUtility.InstanceIDToObject(instanceid) as GameObject;
             if (obj != null)
             {
-                if (obj.GetComponent<BaseWindow>() != null)
+                if (obj.GetComponent<BaseWindow>() != null && obj.GetComponent<ChildBaseWindow>() == null)
                 {
                     BaseWindow tempBaseWindow = obj.GetComponent<BaseWindow>();
 
@@ -25,7 +25,7 @@ namespace XxSlitFrame.View.Editor.ConfigBaseWindowEditor
 
                     if (tempBaseWindow.GetViewShowType() == ViewShowType.Static)
                     {
-                        Rect sRectIcon = GetRect(selectionrect, 20,18, 1);
+                        Rect sRectIcon = GetRect(selectionrect, 20, 18, 1);
                         GUI.Label(sRectIcon, "S");
                     }
 
@@ -35,7 +35,7 @@ namespace XxSlitFrame.View.Editor.ConfigBaseWindowEditor
 
                     if (tempBaseWindow.viewName != String.Empty)
                     {
-                        Rect sRectIcon = GetRect(selectionrect, 50, 180,2);
+                        Rect sRectIcon = GetRect(selectionrect, 50, 180, 2);
                         GUI.Label(sRectIcon, obj.GetComponent<BaseWindow>().viewName);
                     }
 

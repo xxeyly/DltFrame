@@ -9,6 +9,7 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 using Object = System.Object;
@@ -32,6 +33,10 @@ namespace XxSlitFrame.Tools.Svc
         public override void InitSvc()
         {
             objDic = new Dictionary<string, Object>();
+        }
+
+        public override void EndSvc()
+        {
         }
 
         /// <summary>
@@ -282,6 +287,16 @@ namespace XxSlitFrame.Tools.Svc
                 var textData = sr.ReadToEnd();
                 sr.Close();
                 return textData;
+            }
+
+            /// <summary>
+            /// 转换为本地路径
+            /// </summary>
+            /// <param name="path"></param>
+            /// <returns></returns>
+            public static string ConvertToLocalPath(string path)
+            {
+                return path.Remove(0, path.IndexOf("Assets", StringComparison.Ordinal));
             }
 
             /// <summary>获取文件的md5校验码</summary>

@@ -13,19 +13,7 @@ MonoBehaviour:
   m_Name: SceneLoadData
   m_EditorClassIdentifier: 
   sceneInfos:
-  - sceneAsset: {fileID: 102900000, guid: 74cfabdb096f8f046a774e606d10072b, type: 3}
-    sceneLoadType: 1
-    Md5: 
-  - sceneAsset: {fileID: 102900000, guid: 40bf383d7c1a5674e85d963f135d687b, type: 3}
-    sceneLoadType: 1
-    Md5: 
-  - sceneAsset: {fileID: 102900000, guid: 1d92792d6c3639540a9479c8ca7302bb, type: 3}
-    sceneLoadType: 1
-    Md5: 
-  - sceneAsset: {fileID: 102900000, guid: f08175e2f27ebed4ba646dfea7da2f83, type: 3}
-    sceneLoadType: 1
-    Md5: 
-  - sceneAsset: {fileID: 102900000, guid: ea360c4bffa679c4eaac25dc43060ceb, type: 3}
+  - sceneAsset: {fileID: 102900000, guid: 275b9d76586d3b94f9435b7496225f15, type: 3}
     sceneLoadType: 1
     Md5: 
   sceneAssetBundlePath: Assets/SceneAssetBundle

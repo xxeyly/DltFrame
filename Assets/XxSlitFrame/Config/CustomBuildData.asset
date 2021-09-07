@@ -15,9 +15,9 @@ MonoBehaviour:
   buildTarget: 20
   buildCompressType: 524288
   buildPackagePath: D:/Soft/Xampp/htdocs
-  exportCnProjectName: XFrame
-  exportEnProjectName: XFrame
-  chineseShell: 1
+  exportCnProjectName: XFramge
+  exportEnProjectName: XFramge
+  chineseShell: 0
   folderCopy:
   - copyFolderPath: Assets/XxSlitFrame/Resources/DownFile
     pasteFolderPath: DownFile

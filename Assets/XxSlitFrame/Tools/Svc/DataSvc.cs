@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using Random = System.Random;
 
@@ -51,6 +53,51 @@ namespace XxSlitFrame.Tools.Svc
             string str = input.First().ToString().ToLower() + input.Substring(1);
             return str;
         }
+
+        /// <summary>
+        /// 查找场景中所有类型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> GetAllObjectsInScene<T>()
+        {
+            // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
+            List<GameObject> objectsInScene = GetAllObjectsOnlyInScene();
+            List<T> specifiedType = new List<T>();
+            foreach (GameObject go in objectsInScene)
+            {
+                T t = go.GetComponent<T>();
+                if (t != null)
+                {
+                    specifiedType.Add(t);
+                }
+            }
+
+            return specifiedType;
+        }
+
+        /// <summary>
+        /// 获得场景中所有物体
+        /// </summary>
+        /// <returns></returns>
+        private static List<GameObject> GetAllObjectsOnlyInScene()
+        {
+            List<GameObject> objectsInScene = new List<GameObject>();
+            foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+            {
+#if UNITY_EDITOR
+                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) && !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+                {
+                    objectsInScene.Add(go);
+                }
+#else
+                objectsInScene.Add(go);
+#endif
+            }
+
+            return objectsInScene;
+        }
+
 
         public static string AllCharToLower(string input)
         {
@@ -133,5 +180,97 @@ namespace XxSlitFrame.Tools.Svc
 
             return currentList;
         }
+
+        /// <summary>
+        /// 获取面板上的值
+        /// </summary>
+        /// <param name="mTransform"></param>
+        /// <returns></returns>
+        public static Vector3 GetInspectorEuler(Transform mTransform)
+        {
+            Vector3 angle = mTransform.eulerAngles;
+            float x = angle.x;
+            float y = angle.y;
+            float z = angle.z;
+
+            if (Vector3.Dot(mTransform.up, Vector3.up) >= 0f)
+            {
+                if (angle.x >= 0f && angle.x <= 90f)
+                {
+                    x = angle.x;
+                }
+
+                if (angle.x >= 270f && angle.x <= 360f)
+                {
+                    x = angle.x - 360f;
+                }
+            }
+
+            if (Vector3.Dot(mTransform.up, Vector3.up) < 0f)
+            {
+                if (angle.x >= 0f && angle.x <= 90f)
+                {
+                    x = 180 - angle.x;
+                }
+
+                if (angle.x >= 270f && angle.x <= 360f)
+                {
+                    x = 180 - angle.x;
+                }
+            }
+
+            if (angle.y > 180)
+            {
+                y = angle.y - 360f;
+            }
+
+            if (angle.z > 180)
+            {
+                z = angle.z - 360f;
+            }
+
+            Vector3 vector3 = new Vector3(Mathf.Round(x), Mathf.Round(y), Mathf.Round(z));
+            return vector3;
+        }
+#if UNITY_EDITOR
+
+        /// <summary>
+        /// 获得继承类的所有子类
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> GetInheritAllSubclass<T>() where T : class
+        {
+            var types = Assembly.GetCallingAssembly().GetTypes();
+            var cType = typeof(T);
+            List<T> cList = new List<T>();
+
+            foreach (var type in types)
+            {
+                var baseType = type.BaseType; //获取基类
+                while (baseType != null) //获取所有基类
+                {
+                    if (baseType.Name == cType.Name)
+                    {
+                        Type objtype = Type.GetType(type.FullName, true);
+                        object obj = Activator.CreateInstance(objtype);
+                        if (obj != null)
+                        {
+                            T info = obj as T;
+                            cList.Add(info);
+                        }
+
+                        break;
+                    }
+                    else
+                    {
+                        baseType = baseType.BaseType;
+                    }
+                }
+            }
+
+            return cList;
+        }
+#endif
     }
 }

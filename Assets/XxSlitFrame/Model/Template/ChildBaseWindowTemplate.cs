@@ -1,6 +1,7 @@
 ﻿//StartUsing
 //EndUsing
 
+using Sirenix.OdinInspector;
 using XxSlitFrame.View;
 using UnityEngine;
 
@@ -9,6 +10,11 @@ public class ChildBaseWindowTemplate : ChildBaseWindow
 {
     //StartUIVariable
     //EndUIVariable
+
+    public override void Init()
+    {
+    }
+
     protected override void InitView()
     {
         //StartVariableBindPath
@@ -21,9 +27,6 @@ public class ChildBaseWindowTemplate : ChildBaseWindow
         //EndVariableBindListener
     }
 
-    protected override void InitData()
-    {
-    }
 
     //StartVariableBindEvent
     //EndVariableBindEvent

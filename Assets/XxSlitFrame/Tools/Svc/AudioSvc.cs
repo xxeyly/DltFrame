@@ -15,13 +15,19 @@ namespace XxSlitFrame.Tools.Svc
         private AudioSource _backgroundAudioSource;
         private AudioSource _effectAudioSource;
         private AudioSource _tipAndDialogAudioSource;
-        [Searchable] [TableList(AlwaysExpanded = true)][InlineEditor()] [Required("选择音频配置文件")]
-        [LabelText("音频数据")] public AudioSvcData audioData;
+
+        [Searchable] [TableList(AlwaysExpanded = true)] [InlineEditor()] [Required("选择音频配置文件")] [LabelText("音频数据")]
+        public AudioSvcData audioData;
+
         private Dictionary<string, AudioClip> _audioDlc;
 
         public override void StartSvc()
         {
             Instance = GetComponent<AudioSvc>();
+        }
+
+        public override void EndSvc()
+        {
         }
 
         public override void InitSvc()
@@ -62,6 +68,7 @@ namespace XxSlitFrame.Tools.Svc
             //播放背景音乐
             PlayBackgroundAudio();
         }
+
 
         /// <summary>
         /// 播放音效

@@ -146,8 +146,10 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.CustomBuild
             _customBuildData.folderCopy = folderCopy;
             //标记脏区
             EditorUtility.SetDirty(_customBuildData);
+#if UNITY_EDITOR
             // 保存所有修改
             AssetDatabase.SaveAssets();
+#endif
         }
 
         public override void OnLoadConfig()

@@ -29,9 +29,6 @@ namespace XxSlitFrame.Tools
 
     public static class General
     {
-        #region 点击声音
-
-        #endregion
 
         #region 视图时间
 
@@ -97,5 +94,26 @@ namespace XxSlitFrame.Tools
         [LabelText("场景配置存放路径")] public static string sceneLoadPath = "Assets/XxSlitFrame/Config/SceneLoadData.asset";
 
         [LabelText("场景配置存放路径")] public static string buildSceneAssetBundleDataPath = "Assets/XxSlitFrame/Config/BuildSceneAssetBundleData.asset";
+
+        public enum GenerateAttributesType
+        {
+            @int,
+            @string,
+            @Sprite,
+            @bool,
+            @GameObject,
+            @Transform,
+            @Camera,
+            @Color
+        }
+
+        [Serializable]
+        public struct GenerateAttributesTypeGroup
+        {
+            [HorizontalGroup("属性类型")] [HideLabel] public GenerateAttributesType generateAttributesType;
+            [HorizontalGroup("属性名称")] [HideLabel] public string attributesName;
+            [HorizontalGroup("属性描述")] [HideLabel] public string attributesDescription;
+            
+        }
     }
 }

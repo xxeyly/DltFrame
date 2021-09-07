@@ -61,6 +61,10 @@ namespace XxSlitFrame.Tools.Svc
             currentTime = new List<string>() {"", "", "", "", "", ""};
         }
 
+        public override void EndSvc()
+        {
+        }
+
         /// <summary>
         /// 返回当前系统时间
         /// </summary>

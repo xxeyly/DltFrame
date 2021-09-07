@@ -77,6 +77,11 @@ namespace XxSlitFrame.Tools.Svc
             }
         }
 
+        public override void EndSvc()
+        {
+            Instance = null;
+        }
+
         /// <summary>
         /// 插入下载任务，原任务暂停
         /// </summary>

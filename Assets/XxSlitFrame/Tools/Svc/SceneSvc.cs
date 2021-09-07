@@ -14,6 +14,7 @@ namespace XxSlitFrame.Tools.Svc
     public class SceneSvc : SvcBase
     {
         public static SceneSvc Instance;
+
         public override void StartSvc()
         {
             Instance = GetComponent<SceneSvc>();
@@ -34,6 +35,11 @@ namespace XxSlitFrame.Tools.Svc
         {
         }
 
+        public override void EndSvc()
+        {
+            SceneManager.sceneLoaded -= SceneLoadOverCallBack;
+        }
+
         /// <summary>
         /// 加载场景
         /// </summary>
@@ -43,6 +49,11 @@ namespace XxSlitFrame.Tools.Svc
             SceneLoadBeforeInit();
             if (Application.CanStreamedLevelBeLoaded(sceneName))
             {
+                if (!GameRootStart.Instance.dontDestroyOnLoad)
+                {
+                    Destroy(GameRootStart.Instance.gameObject);
+                }
+
                 SceneManager.LoadScene(sceneName);
             }
             else
@@ -87,17 +98,10 @@ namespace XxSlitFrame.Tools.Svc
 
         /// <summary>
         /// 加载场景初始化单例
+        /// 加载顺序 场景服务-场景工具-View静态界面
         /// </summary>
-        public void InitSceneStartSingletons()
+        private void InitSceneStartSingletons()
         {
-            GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
-
-            for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
-            {
-                GameRootStart.Instance.sceneStartSingletons[i].StartSvc();
-                GameRootStart.Instance.sceneStartSingletons[i].Init();
-            }
-
             //所有条件都加载完毕后,开始视图的初始化
             foreach (SvcBase svcBase in GameRootStart.Instance.activeSvcBase)
             {
@@ -106,6 +110,21 @@ namespace XxSlitFrame.Tools.Svc
                     svcBase.InitSvc();
                 }
             }
+
+            Debug.Log("场景服务加载完毕:" + SceneManager.GetActiveScene().name);
+
+            GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
+
+            for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
+            {
+                GameRootStart.Instance.sceneStartSingletons[i].StartSvc();
+                GameRootStart.Instance.sceneStartSingletons[i].Init();
+            }
+
+
+            Debug.Log("场景工具加载完毕" + SceneManager.GetActiveScene().name);
+            //静态视图初始化
+            ViewSvc.Instance.StateViewInit();
         }
 
         /// <summary>
@@ -132,5 +151,6 @@ namespace XxSlitFrame.Tools.Svc
                 Debug.Log("Quit");
             }
         }
+     
     }
 }

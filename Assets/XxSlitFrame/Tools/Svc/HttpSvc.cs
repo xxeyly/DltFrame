@@ -31,6 +31,11 @@ namespace XxSlitFrame.Tools.Svc
         {
         }
 
+        public override void EndSvc()
+        {
+            Instance = null;
+        }
+
         /// <summary>
         /// 发送Http请求
         /// </summary>

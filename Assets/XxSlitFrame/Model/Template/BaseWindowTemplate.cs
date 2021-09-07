@@ -1,8 +1,12 @@
 ﻿//StartUsing
 //EndUsing
 
+using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using XxSlitFrame.View;
 using UnityEngine;
+
 public class BaseWindowTemplate : BaseWindow
 {
     //StartUIVariable
@@ -25,4 +29,7 @@ public class BaseWindowTemplate : BaseWindow
 
     //StartVariableBindEvent
     //EndVariableBindEvent
+
+    //StartCustomAttributesStart
+    //EndCustomAttributesStart
 }

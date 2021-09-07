@@ -25,6 +25,9 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor
         [LabelText("变量方法开始")] public string startVariableBindEvent;
         [LabelText("变量方法结束")] public string endVariableBindEvent;
 
+        [LabelText("自定义属性开始")] public string startCustomAttributesStart;
+        [LabelText("自定义属性结束")] public string endCustomAttributesStart;
+
         private GenerateBaseWindowData _generateBaseWindowData;
 
         public override void OnDisable()
@@ -60,6 +63,8 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor
             _generateBaseWindowData.endVariableBindListener = endVariableBindListener;
             _generateBaseWindowData.startVariableBindEvent = startVariableBindEvent;
             _generateBaseWindowData.endVariableBindEvent = endVariableBindEvent;
+            _generateBaseWindowData.startCustomAttributesStart = startCustomAttributesStart;
+            _generateBaseWindowData.endCustomAttributesStart = endCustomAttributesStart;
             //标记脏区
             EditorUtility.SetDirty(_generateBaseWindowData);
             // 保存所有修改
@@ -78,6 +83,8 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor
             endVariableBindListener = _generateBaseWindowData.endVariableBindListener;
             startVariableBindEvent = _generateBaseWindowData.startVariableBindEvent;
             endVariableBindEvent = _generateBaseWindowData.endVariableBindEvent;
+            startCustomAttributesStart = _generateBaseWindowData.startCustomAttributesStart;
+            endCustomAttributesStart = _generateBaseWindowData.endCustomAttributesStart;
         }
 
         public override void OnInit()

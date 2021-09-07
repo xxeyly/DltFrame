@@ -4,6 +4,7 @@ using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
 using XxSlitFrame.Model.ConfigData;
 using XxSlitFrame.Tools;
+using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.View.Editor
 {
@@ -20,15 +21,6 @@ namespace XxSlitFrame.View.Editor
                 AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(General.generateBaseWindowPath);
             className = className.Replace(" ", "");
 
-            if (resourceFile == General.BaseWindowTemplatePath)
-            {
-                text = text.Replace("BaseWindowTemplate", className);
-            }
-
-            if (resourceFile == General.ChildBaseWindowTemplatePath)
-            {
-                text = text.Replace("ChildBaseWindowTemplate", className);
-            }
 
             text = text.Replace("StartUsing", _generateBaseWindowData.startUsing);
             text = text.Replace("EndUsing", _generateBaseWindowData.endUsing);
@@ -40,6 +32,18 @@ namespace XxSlitFrame.View.Editor
             text = text.Replace("EndVariableBindListener", _generateBaseWindowData.endVariableBindListener);
             text = text.Replace("StartVariableBindEvent", _generateBaseWindowData.startVariableBindEvent);
             text = text.Replace("EndVariableBindEvent", _generateBaseWindowData.endVariableBindEvent);
+
+            if (resourceFile == General.BaseWindowTemplatePath)
+            {
+                text = text.Replace("BaseWindowTemplate", className);
+                text = text.Replace("StartCustomAttributesStart", _generateBaseWindowData.startCustomAttributesStart);
+                text = text.Replace("EndCustomAttributesStart", _generateBaseWindowData.endCustomAttributesStart);
+            }
+
+            if (resourceFile == General.ChildBaseWindowTemplatePath)
+            {
+                text = text.Replace("ChildBaseWindowTemplate", className);
+            }
 
             //utf8
             var encoding = new UTF8Encoding(true, false);

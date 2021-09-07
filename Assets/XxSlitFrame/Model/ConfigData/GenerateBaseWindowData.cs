@@ -21,5 +21,8 @@ namespace XxSlitFrame.Model.ConfigData
 
         [LabelText("变量方法开始")] public string startVariableBindEvent;
         [LabelText("变量方法结束")] public string endVariableBindEvent;
+        
+        [LabelText("自定义属性开始")] public string startCustomAttributesStart;
+        [LabelText("自定义属性结束")] public string endCustomAttributesStart;
     }
 }

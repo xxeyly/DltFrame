@@ -15,5 +15,6 @@ namespace XxSlitFrame.Tools.Svc.BaseSvc
 
 
         public abstract void InitSvc();
+        public abstract void EndSvc();
     }
 }

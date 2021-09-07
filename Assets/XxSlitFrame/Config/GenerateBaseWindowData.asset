@@ -22,3 +22,5 @@ MonoBehaviour:
   endVariableBindListener: "\u53D8\u91CF\u7ED1\u5B9A\u7ED3\u675F"
   startVariableBindEvent: "\u53D8\u91CF\u65B9\u6CD5\u5F00\u59CB"
   endVariableBindEvent: "\u53D8\u91CF\u65B9\u6CD5\u7ED3\u675F"
+  startCustomAttributesStart: "\u81EA\u5B9A\u4E49\u5C5E\u6027\u5F00\u59CB"
+  endCustomAttributesStart: "\u81EA\u5B9A\u4E49\u5C5E\u6027\u7ED3\u675F"

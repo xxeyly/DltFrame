@@ -31,7 +31,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
                 //View 窗口根目录
                 GameObject windowView = new GameObject("Empty WindowView");
                 Vector2 windowSize = uiCanvas.GetComponent<CanvasScaler>().referenceResolution;
-                windowView.AddComponent<RectTransform>().sizeDelta = windowSize;
+                windowView.AddComponent<RectTransform>().sizeDelta = Vector2.zero;
                 // windowView.AddComponent<GenerationBaseWindow>().Init();
                 windowView.AddComponent<BaseWindowGenerateScripts>();
                 //Window目录
@@ -40,7 +40,7 @@ namespace XxSlitFrame.Tools.Editor.ConfigBaseWindowEditor
                 window.AddComponent<CanvasGroup>();
                 //背景
                 GameObject background = new GameObject("Background");
-                background.AddComponent<Image>().rectTransform.sizeDelta = windowSize;
+                background.AddComponent<Image>().rectTransform.sizeDelta = Vector2.zero;
                 windowView.transform.SetParent(uiCanvas.transform);
                 window.transform.SetParent(windowView.transform);
                 background.transform.SetParent(window.transform);

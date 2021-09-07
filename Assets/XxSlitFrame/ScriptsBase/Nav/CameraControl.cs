@@ -11,7 +11,7 @@ namespace CameraTools
     /// <summary>
     /// 相机控制
     /// </summary>
-    [RequireComponent(typeof(ControllerRotate))]
+    [RequireComponent(typeof(ControllerSelfRotate))]
     public class CameraControl : StartSingleton
     {
         public static CameraControl Instance;
@@ -32,7 +32,7 @@ namespace CameraTools
 
         [LabelText("相机高度")] [SerializeField] private Vector2 cameraHeightRange = Vector2.zero;
 #pragma warning restore 0649
-        private ControllerRotate _controllerRotate;
+        private ControllerSelfRotate _controllerSelfRotate;
 
         public override void StartSvc()
         {
@@ -43,11 +43,11 @@ namespace CameraTools
         {
             navMeshAgent = GetComponentInChildren<NavMeshAgent>();
             currentCamera = GetComponentInChildren<Camera>();
-            _controllerRotate = GetComponent<ControllerRotate>();
-            _controllerRotate.rotateSpeed = rotationSpeed;
-            _controllerRotate.leftAndRightLimit = leftAndRightLimit;
-            _controllerRotate.topAndDownLimit = topAndDownLimit;
-            _controllerRotate.SetRotateObj(currentCamera.transform);
+            _controllerSelfRotate = GetComponent<ControllerSelfRotate>();
+            _controllerSelfRotate.rotateSpeed = rotationSpeed;
+            _controllerSelfRotate.leftAndRightLimit = leftAndRightLimit;
+            _controllerSelfRotate.topAndDownLimit = topAndDownLimit;
+            _controllerSelfRotate.SetRotateObj(currentCamera.transform);
 
             cameraField.x = 40;
             cameraField.y = 60;
@@ -96,11 +96,11 @@ namespace CameraTools
 
             if (Input.GetMouseButton(1))
             {
-                _controllerRotate.isOpenMouseOperation = true;
+                _controllerSelfRotate.isOpenMouseOperation = true;
             }
             else
             {
-                _controllerRotate.isOpenMouseOperation = false;
+                _controllerSelfRotate.isOpenMouseOperation = false;
             }
         }
 
@@ -210,7 +210,7 @@ namespace CameraTools
             bool isControl, float fieldView, Action action)
         {
             StopMove();
-            _controllerRotate.enabled = false;
+            _controllerSelfRotate.enabled = false;
             this.isControl = false;
             navMeshAgent.enabled = false;
             if (time <= 0)
@@ -218,9 +218,9 @@ namespace CameraTools
                 navMeshAgent.transform.localPosition = targetPos;
                 currentCamera.transform.localEulerAngles = targetRotate;
                 currentCamera.transform.localPosition = new Vector3(0, targetHigh.y, 0);
-                _controllerRotate.enabled = true;
+                _controllerSelfRotate.enabled = true;
                 this.isControl = isControl;
-                _controllerRotate.SetRotateObj(currentCamera.transform);
+                _controllerSelfRotate.SetRotateObj(currentCamera.transform);
                 navMeshAgent.enabled = true;
                 action.Invoke();
                 currentCamera.fieldOfView = fieldView;
@@ -233,9 +233,9 @@ namespace CameraTools
                     TimeSvc.Instance.MoveTargetPos(currentCamera.transform, new Vector3(0, currentCamera.transform.localPosition.y, 0), new Vector3(0, targetHigh.y, 0), time, false);
                 _currentCameraReSetTimeTask = TimeSvc.Instance.AddTimeTask(() =>
                     {
-                        _controllerRotate.enabled = true;
+                        _controllerSelfRotate.enabled = true;
                         this.isControl = isControl;
-                        _controllerRotate.SetRotateObj(currentCamera.transform);
+                        _controllerSelfRotate.SetRotateObj(currentCamera.transform);
                         navMeshAgent.enabled = true;
                         action.Invoke();
                         currentCamera.fieldOfView = fieldView;
@@ -272,15 +272,16 @@ namespace CameraTools
         /// <param name="time"></param>
         /// <param name="isControl"></param>
         /// <param name="action"></param>
-        public void MoveTargetPos(string posName, Action action)
+        public void MoveTargetPos(string posName, Action action = null)
         {
             CameraPos.CameraPosInfo cameraPosInfo = CameraPosEditor.Instance.cameraPos.GetCameraPosInfoByName(posName);
             if (cameraPosInfo != null)
             {
                 navMeshAgent.transform.localPosition = cameraPosInfo.navPos;
-                currentCamera.transform.localEulerAngles = cameraPosInfo.cameraRotate;
                 currentCamera.transform.localPosition = cameraPosInfo.cameraPos;
                 currentCamera.fieldOfView = cameraPosInfo.cameraFieldView;
+                currentCamera.transform.localEulerAngles = cameraPosInfo.cameraRotate;
+                _controllerSelfRotate.SetRotateObj(currentCamera.transform);
                 action?.Invoke();
 #if UNITY_EDITOR
                 CameraPosEditor.Instance.cameraPosName = posName;
@@ -330,11 +331,12 @@ namespace CameraTools
         {
             this.isField = isField;
         }
-
-        private void OnDestroy()
+      
+        public void ChangeToRotateCamera(GameObject rotateCamera)
         {
-            StopMove();
-            _controllerRotate.SetRotateObj(currentCamera.transform);
+            gameObject.SetActive(false);
+            rotateCamera.SetActive(true);
+            rotateCamera.transform.GetComponentInChildren<CameraControl>().Init();
         }
     }
 }

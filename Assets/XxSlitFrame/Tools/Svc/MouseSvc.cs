@@ -65,6 +65,12 @@ namespace XxSlitFrame.Tools.Svc
         {
         }
 
+        public override void EndSvc()
+        {
+            Instance = null;
+            
+        }
+
         private void Update()
         {
             if (Input.GetMouseButtonDown(0) && !GetMouseOverUI())

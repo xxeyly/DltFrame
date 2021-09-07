@@ -67,7 +67,7 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.SceneTools
             }
 
             GameObject CameraTools = new GameObject("CameraTools");
-            ControllerRotate controllerRotate = CameraTools.AddComponent<ControllerRotate>();
+            ControllerSelfRotate controllerSelfRotate = CameraTools.AddComponent<ControllerSelfRotate>();
             CameraControl cameraControl = CameraTools.AddComponent<CameraControl>();
             CameraTools.AddComponent<CameraPosEditor>();
             GameObject CameraPosition = new GameObject("CameraPosition");
@@ -81,7 +81,7 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.SceneTools
             CameraPosition.transform.parent = CameraTools.transform;
             CameraTools.transform.parent = sceneToolsRoot;
             //属性设置
-            controllerRotate.targetTri = MainCamera.transform;
+            controllerSelfRotate.targetTri = MainCamera.transform;
             cameraControl.navMeshAgent = navMeshAgent;
         }
 

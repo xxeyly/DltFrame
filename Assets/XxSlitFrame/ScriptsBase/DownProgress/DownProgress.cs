@@ -79,7 +79,7 @@ public class DownProgress : BaseWindow
         //变量绑定开始
         BindListener(_anyKeyContinue, EventTriggerType.PointerClick, OnAnyKeyContinueClick);
         //变量绑定结束
-        ListenerSvc.AddListenerEvent<string>("OnShowDownLoadProgress", OnShowDownLoadProgress);
+        AddListenerEvent<string>("OnShowDownLoadProgress", OnShowDownLoadProgress);
     }
 
     //变量方法开始
@@ -87,8 +87,8 @@ public class DownProgress : BaseWindow
     {
         if (_downData != null)
         {
-            SceneSvc.SceneLoad(_downData.downName);
-            HideView();
+            SceneLoad(_downData.downName);
+            HideThisView();
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using XxSlitFrame.Tools;
@@ -16,50 +17,96 @@ namespace XAnimator.Base
         End
     }
 
+    public enum AnimValueType
+    {
+        None,
+        Progress,
+        Speed,
+        Delay
+    }
+
     /// <summary>
     /// 动画控制器基类
     /// </summary>
     public abstract class XAnimatorControllerBase : MonoBehaviour
     {
         protected UnityEngine.Animator animator;
-        private List<string> _animationClips;
+        private List<AnimatorControllerParameter> _allParameter;
 
         public virtual void StartSvc()
         {
             animator = GetComponent<UnityEngine.Animator>();
-            _animationClips = new List<string>();
-            foreach (AnimationClip animationClip in animator.runtimeAnimatorController.animationClips)
-            {
-                _animationClips.Add(animationClip.name);
-            }
+            _allParameter = new List<AnimatorControllerParameter>(animator.parameters);
         }
 
-        public void PlayAnim(string animationType, float animProgress)
+        private bool ContainsParameter(string parameterName)
         {
-            if (_animationClips.Contains(animationType.ToString()))
+            foreach (AnimatorControllerParameter animatorControllerParameter in _allParameter)
             {
-                animator.speed = 0;
-                if (animProgress >= 1f)
+                if (animatorControllerParameter.name == parameterName)
                 {
-                    animProgress = 0.99f;
+                    return true;
                 }
+            }
 
-                animator.Play(animationType.ToString(), 0, animProgress);
+            return false;
+        }
+
+        /// <summary>
+        /// 暂停
+        /// </summary>
+        public void PausePlay()
+        {
+            animator.speed = 0;
+        }
+
+        /// <summary>
+        /// 继续播放
+        /// </summary>
+        public void ContinuePlay()
+        {
+            animator.speed = 1;
+        }
+
+        public void PlayAnim(string animationType, float animValue, AnimValueType animValueType = AnimValueType.Progress)
+        {
+            if (ContainsParameter(animationType))
+            {
+                switch (animValueType)
+                {
+                    case AnimValueType.Progress:
+                        animator.speed = 0;
+                        if (animValue >= 1f)
+                        {
+                            animValue = 0.99f;
+                        }
+
+                        animator.Play(animationType, 0, animValue);
+                        break;
+                    case AnimValueType.Speed:
+                        animator.speed = animValue;
+                        animator.Play(animationType, 0);
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(animValueType), animValueType, null);
+                }
             }
         }
 
         public void PlayAnim(string animationType, AnimSpeedProgress animSpeedProgress)
         {
-            if (_animationClips.Contains(animationType.ToString()))
+            if (ContainsParameter(animationType))
             {
                 animator.speed = 0;
                 if (animSpeedProgress == AnimSpeedProgress.End)
                 {
-                    animator.Play(animationType.ToString(), 0, 0.99f);
+                    animator.Play(animationType, 0, 0.99f);
                 }
                 else if (animSpeedProgress == AnimSpeedProgress.Start)
                 {
-                    animator.Play(animationType.ToString(), 0, normalizedTime: 0.01f);
+                    Debug.Log(animationType);
+                    animator.Play(animationType, 0, normalizedTime: 0.01f);
                 }
             }
         }
@@ -71,13 +118,26 @@ namespace XAnimator.Base
         /// </summary>
         /// <param name="animationType"></param>
         /// <param name="eventAction"></param>
-        /// <param name="delay"></param>
-        public int PlayAnim(string animationType, UnityAction eventAction, float delay = 0)
+        /// <param name="animValue"></param>
+        public int PlayAnim(string animationType, UnityAction eventAction, float animValue, AnimValueType animValueType = AnimValueType.Progress)
         {
-            if (_animationClips.Contains(animationType.ToString()))
+            if (ContainsParameter(animationType))
+
             {
-                PlayAnim(animationType);
-                return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) + delay);
+                switch (animValueType)
+                {
+                    case AnimValueType.Progress:
+                        PlayAnim(animationType, animValue, animValueType);
+                        return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) * (1 - animValue));
+                    case AnimValueType.Speed:
+                        PlayAnim(animationType, animValue, animValueType);
+                        return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) / animValue);
+                    case AnimValueType.Delay:
+                        PlayAnim(animationType);
+                        return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) + animValue);
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(animValueType), animValueType, null);
+                }
             }
 
             return 0;
@@ -90,11 +150,22 @@ namespace XAnimator.Base
         /// <param name="animationType"></param>
         public void PlayAnim(string animationType)
         {
-            if (_animationClips.Contains(animationType.ToString()))
+            if (ContainsParameter(animationType))
             {
                 animator.speed = 1;
-                animator.SetTrigger(animationType.ToString());
+                // Debug.Log(animator.name + ":" + animationType);
+                animator.SetTrigger(animationType);
             }
+        }
+
+        /// <summary>
+        /// 获得当前动画播放是否完毕
+        /// </summary>
+        /// <returns></returns>
+        public bool GetAnimClipPlayOver()
+        {
+            return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f && animator.gameObject.activeSelf &&
+                   !AnimatorControllerManager.Instance.eventChange;
         }
 
         /// <summary>
@@ -115,7 +186,7 @@ namespace XAnimator.Base
             AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
             foreach (AnimationClip item in clips)
             {
-                if (item.name == animType.ToString())
+                if (item.name == animType)
                 {
                     return item.length;
                 }
@@ -134,7 +205,7 @@ namespace XAnimator.Base
             AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
             foreach (AnimationClip item in clips)
             {
-                if (item.name == animType.ToString())
+                if (item.name == animType)
                 {
                     return true;
                 }

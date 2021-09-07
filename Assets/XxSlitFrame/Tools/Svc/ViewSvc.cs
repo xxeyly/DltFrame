@@ -53,9 +53,9 @@ namespace XxSlitFrame.Tools.Svc
         }
 
         /// <summary>
-        /// 冻结视图初始化
+        /// 静态视图初始化
         /// </summary>
-        public void FrozenInit()
+        public void StateViewInit()
         {
             foreach (BaseWindow window in allViewWind)
             {
@@ -68,7 +68,17 @@ namespace XxSlitFrame.Tools.Svc
 
         public override void InitSvc()
         {
-            allViewWind = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
+            List<BaseWindow> tempSceneBaseWindow = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
+            allViewWind = new List<BaseWindow>();
+            // allViewWind = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
+            for (int i = 0; i < tempSceneBaseWindow.Count; i++)
+            {
+                if (!tempSceneBaseWindow[i].GetComponent<ChildBaseWindow>())
+                {
+                    allViewWind.Add(tempSceneBaseWindow[i]);
+                }
+            }
+
             _activeViewDlc = new Dictionary<Type, BaseWindow>();
             _allActiveView = new List<Type>();
             AddView();
@@ -77,9 +87,12 @@ namespace XxSlitFrame.Tools.Svc
                 window.ViewStartInit();
             }
 
-            FrozenInit();
             //关闭全体禁止响应
             CloseNoAllResponse();
+        }
+
+        public override void EndSvc()
+        {
         }
 
         /// <summary>
@@ -278,7 +291,7 @@ namespace XxSlitFrame.Tools.Svc
             ViewTimeTask(HideView, types, time);
         }
 
-        public void HideView()
+        public void HideAllView()
         {
             foreach (KeyValuePair<Type, BaseWindow> pair in _activeViewDlc)
             {

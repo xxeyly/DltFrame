@@ -41,6 +41,14 @@ namespace XxSlitFrame.Tools
             }
         }
 
+        private void OnDestroy()
+        {
+            foreach (SvcBase svcBase in activeSvcBase)
+            {
+                svcBase.EndSvc();
+            }
+        }
+
         protected void Awake()
         {
         }

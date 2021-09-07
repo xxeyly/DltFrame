@@ -23,7 +23,7 @@ MonoBehaviour:
   resSvcEditorFrameInit: 1
   audioSvcEditorFrameInit: 1
   listenerSvcEditorFrameInit: 0
-  customSceneSvcEditorFrameInit: 0
+  customSceneSvcEditorFrameInit: 1
   timeSvcEditorFrameInit: 1
   viewSvcEditorFrameInit: 0
   persistentDataSvcEditorFrameInit: 1
@@ -31,7 +31,7 @@ MonoBehaviour:
   resSvcEditorSceneInit: 0
   audioSvcEditorSceneInit: 0
   listenerSvcEditorSceneInit: 1
-  customSceneSvcEditorSceneInit: 1
+  customSceneSvcEditorSceneInit: 0
   timeSvcEditorSceneInit: 0
   viewSvcEditorSceneInit: 1
   persistentDataSvcEditorSceneInit: 0
