@@ -189,7 +189,7 @@ namespace XAnimator.Base
         {
             foreach (XAnimatorControllerBase animatorControllerBase in allAnimController)
             {
-                if (animatorControllerBase.GetAnimState(animType))
+                if (animatorControllerBase.GetAnimState(animType) && animatorControllerBase.gameObject.activeInHierarchy)
                 {
                     return animatorControllerBase;
                 }
