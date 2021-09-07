@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
+using System.Timers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 using Random = UnityEngine.Random;
-
-// ReSharper disable Unity.InefficientPropertyAccess
 
 namespace XxSlitFrame.Tools.Svc
 {
@@ -27,26 +25,80 @@ namespace XxSlitFrame.Tools.Svc
         private List<int> _tidSwitchList;
         private bool _clear;
 
-        [LabelText("计时器最小间隔")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [MinValue(0.01f)] [InfoBox("最小不能小于0.01")]
+        [BoxGroup("计时器")] [LabelText("计时器最小间隔")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [MinValue(0.01f)] [InfoBox("最小不能小于0.01")]
         public float timeMinDelay = 0.01f;
 
-        [Searchable] [LabelText("当前时间")] public List<string> currentTime;
+        [BoxGroup("计时器")] [LabelText("当前运行时间")]
+        public float currentRunTime = 0;
 
-        [TableList(AlwaysExpanded = true)] [Searchable] [LabelText("所有计时任务")]
+        [BoxGroup("计时器")] [LabelText("时间暂停")] public bool pause;
+
+        [BoxGroup("计时器")] [TableList(AlwaysExpanded = true)] [Searchable] [LabelText("所有计时任务")]
         public List<TimeTaskList> timeTaskList;
+
+
+        [BoxGroup("日期失效")] [SerializeField] [LabelText("开启日期失效")]
+        private bool isExpire = false;
+
+        [BoxGroup("日期失效")] [SerializeField] [LabelText("更新当前时间")]
+        private bool isUpdateCurrentTime = false;
+
+        [BoxGroup("日期失效")] [Searchable] [LabelText("当前时间")]
+        public List<string> currentTime;
+
+        [BoxGroup("日期失效")] [Searchable] [LabelText("到期时间")]
+        public List<int> expireDate;
 
         public override void StartSvc()
         {
             Instance = GetComponent<TimeSvc>();
-            StartCoroutine(Timer());
+            if (isExpire)
+            {
+                if (expireDate.Count != 6)
+                {
+                    return;
+                }
+
+                TimeSpan expire = new DateTime(expireDate[0], expireDate[1], expireDate[2], expireDate[3], expireDate[4], expireDate[5]).ToUniversalTime() -
+                                  new DateTime(1970, 1, 1, 0, 0, 0);
+                TimeSpan currentTimeSpan = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0);
+                if (Convert.ToInt64(expire.TotalSeconds) > Convert.ToInt64(currentTimeSpan.TotalSeconds))
+                {
+                    Debug.Log("未过期");
+                }
+                else
+                {
+                    Debug.Log("过期了");
+                }
+            }
         }
 
-        IEnumerator Timer()
+        IEnumerator Countdown()
         {
             while (true)
             {
-                yield return new WaitForSecondsRealtime(timeMinDelay);
-                UpdateTimer();
+                yield return new WaitForSeconds(Time.fixedDeltaTime);
+                if (!pause)
+                {
+                    currentRunTime += timeMinDelay;
+                }
+            }
+        }
+
+        private void FixedUpdate()
+        {
+            if (!pause)
+            {
+                currentRunTime += Time.fixedDeltaTime;
+            }
+        }
+
+        private void Update()
+        {
+            UpdateTimer();
+            if (isUpdateCurrentTime)
+            {
+                UpdateCurrentSystemTime();
             }
         }
 
@@ -63,6 +115,7 @@ namespace XxSlitFrame.Tools.Svc
 
         public override void EndSvc()
         {
+            // _timer.Close();
         }
 
         /// <summary>
@@ -142,7 +195,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public int AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
-            float destTime = Time.time + delay;
+            float destTime = currentRunTime + delay;
             int tid = GetTimeTaskTid();
             TimeTask timeTask = new TimeTask
             {
@@ -153,7 +206,8 @@ namespace XxSlitFrame.Tools.Svc
             {
                 tid = timeTask.Tid,
                 tidName = timeTask.TaskName,
-                loopType = TimeTaskList.TimeLoopType.Once
+                loopType = TimeTaskList.TimeLoopType.Once,
+                endTime = destTime
             });
             return tid;
         }
@@ -186,7 +240,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public int AddImmortalTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
-            float destTime = Time.time + delay;
+            float destTime = currentRunTime + delay;
             int tid = GetImmortalTaskTid();
             TimeTask timeTask = new TimeTask
             {
@@ -349,7 +403,7 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         public int AddSwitchTask(List<UnityAction> callbackList, string taskName, float delay, int count = 1)
         {
-            float destTime = Time.time + delay;
+            float destTime = currentRunTime + delay;
             int tid = GetSwitchTaskTid();
             SwitchTask switchTask = new SwitchTask
             {
@@ -472,8 +526,16 @@ namespace XxSlitFrame.Tools.Svc
                     for (int i = 0; i < _taskTimeList.Count; i++)
                     {
                         TimeTask timeTask = _taskTimeList[i];
-                        if (timeTask.DestTime > Time.time)
+                        if (timeTask.DestTime > currentRunTime)
                         {
+                            foreach (TimeTaskList taskList in timeTaskList)
+                            {
+                                if (taskList.tid == timeTask.Tid)
+                                {
+                                    taskList.waitingTime = timeTask.DestTime - currentRunTime;
+                                    break;
+                                }
+                            }
                         }
                         else
                         {
@@ -524,7 +586,7 @@ namespace XxSlitFrame.Tools.Svc
                     for (int i = 0; i < _taskTimeImmortalList.Count; i++)
                     {
                         TimeTask timeTask = _taskTimeImmortalList[i];
-                        if (timeTask.DestTime > Time.time)
+                        if (timeTask.DestTime > currentRunTime)
                         {
                         }
                         else
@@ -576,7 +638,7 @@ namespace XxSlitFrame.Tools.Svc
                     for (int i = 0; i < _taskSwitchList.Count; i++)
                     {
                         SwitchTask switchTask = _taskSwitchList[i];
-                        if (switchTask.DestTime > Time.time)
+                        if (switchTask.DestTime > currentRunTime)
                         {
                         }
                         else
@@ -750,6 +812,8 @@ namespace XxSlitFrame.Tools.Svc
             return errorTipsTimeTask;
         }
 
+        #region Transform操作
+
         public int MoveTargetPos(Transform targetTri, Vector3 startPos, Vector3 targetPos, float time,
             bool world = true)
         {
@@ -810,6 +874,8 @@ namespace XxSlitFrame.Tools.Svc
                     }
                 }, "旋转到指定位置", 0.02f, time);
         }
+
+        #endregion
     }
 
     /// <summary>

@@ -13,7 +13,7 @@ namespace XxSlitFrame.Tools
     }
 
     [Serializable]
-    public struct TimeTaskList
+    public class TimeTaskList
     {
         public enum TimeLoopType
         {
@@ -24,6 +24,8 @@ namespace XxSlitFrame.Tools
 
         [HideLabel] [HorizontalGroup("任务ID")] public int tid;
         [HideLabel] [HorizontalGroup("任务名称")] public string tidName;
+        [HideLabel] [HorizontalGroup("结束时间")] public float endTime;
+        [HideLabel] [HorizontalGroup("等待时间")] public float waitingTime;
         [HideLabel] [HorizontalGroup("任务类型")] public TimeLoopType loopType;
     }
 
