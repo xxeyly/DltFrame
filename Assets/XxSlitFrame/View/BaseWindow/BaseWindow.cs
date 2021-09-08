@@ -36,31 +36,30 @@ namespace XxSlitFrame.View
         protected GameObject window;
         protected CanvasGroup canvasGroup;
 
-        [BoxGroup("属性")] [LabelText("视图类型")] [SerializeField] [EnumToggleButtons]
+        [HorizontalGroup("标签")] [BoxGroup("标签/属性")] [LabelText("视图类型")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)]
         protected ViewShowType viewShowType = ViewShowType.Activity;
 
-        [BoxGroup("属性")] [LabelText("显示类型")] [SerializeField] [EnumToggleButtons]
+        [BoxGroup("标签/属性")] [LabelText("显示类型")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)]
         protected ShowType showType = ShowType.Direct;
 
-        [BoxGroup("属性")] [LabelText("显示时间")] [Range(0.1f, 9)] [SerializeField] [ShowIf("showType", ShowType.Curve)]
+        [BoxGroup("标签/属性")] [LabelText("显示时间")] [Range(0.1f, 9)] [SerializeField] /*[ShowIf("showType", ShowType.Curve)]*/[EnableIf("showType", ShowType.Curve)]
         protected float showTime = 1;
+
+        [BoxGroup("调试")] [ToggleLeft] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("日志输出")]
+        public bool isLog;
+
+        [BoxGroup("调试")] [TableList(AlwaysExpanded = true, DrawScrollView = false)] [Searchable] [SerializeField] [LabelText("计时任务列表")]
+        protected List<TimeTaskInfo> timeTaskInfoList = new List<TimeTaskInfo>();
 
         [HideInInspector] public Type viewType;
 
-        [BoxGroup("命名")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("视图名称")]
+        [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("视图名称")][LabelWidth(50)]
         public string viewName;
 
-        [BoxGroup("命名")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("类名称")]
+        [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("类名称")][LabelWidth(50)]
         public string typeName;
 
-
-        [BoxGroup("属性")] [ToggleLeft] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("日志输出")]
-        public bool isLog;
-
-        [BoxGroup("属性")] [TableList(AlwaysExpanded = true, DrawScrollView = false)] [Searchable] [SerializeField] [LabelText("计时任务列表")]
-        protected List<TimeTaskInfo> timeTaskInfoList = new List<TimeTaskInfo>();
-
-        [BoxGroup("命名")]
+        [BoxGroup("标签/命名")]
         [Button(ButtonSizes.Medium)]
         [LabelText("重命名")]
         [GUIColor(0, 1, 0)]

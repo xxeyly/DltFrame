@@ -22,7 +22,7 @@ namespace XxSlitFrame.Tools.Svc
         [HideLabel] [HorizontalGroup("实体标签")] public string entityGroupTag;
         [HideLabel] [HorizontalGroup("实体组")] public List<EntityItem> entityGroup;
 
-        [Button("仅显示当前组")]
+        [HideLabel]  [Button("仅显示当前组")]
         public void OnOnlyShow()
         {
           UnityEngine.Object.FindObjectOfType<EntitySvc>().DisplayEditorEntityGroup(entityGroupTag, true, true);

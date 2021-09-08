@@ -14,7 +14,7 @@ namespace XxSlitFrame.View
     {
         #region 子类数据生成
 
-        [BoxGroup("属性生成")] [LabelText("生成属性类名称")]
+       [BoxGroup("属性生成")] [LabelText("生成属性类名称")]
         public string generateAttributesStructName;
 
         [BoxGroup("属性生成")] [TableList] [LabelText("生成属性类组")]

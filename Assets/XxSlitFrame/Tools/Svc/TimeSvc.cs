@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Timers;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,9 +22,6 @@ namespace XxSlitFrame.Tools.Svc
         private List<int> _tidTimeImmortalList;
         private List<int> _tidSwitchList;
         private bool _clear;
-
-        [BoxGroup("计时器")] [LabelText("计时器最小间隔")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [MinValue(0.01f)] [InfoBox("最小不能小于0.01")]
-        public float timeMinDelay = 0.01f;
 
         [BoxGroup("计时器")] [LabelText("当前运行时间")]
         public float currentRunTime = 0;
@@ -69,18 +64,6 @@ namespace XxSlitFrame.Tools.Svc
                 else
                 {
                     Debug.Log("过期了");
-                }
-            }
-        }
-
-        IEnumerator Countdown()
-        {
-            while (true)
-            {
-                yield return new WaitForSeconds(Time.fixedDeltaTime);
-                if (!pause)
-                {
-                    currentRunTime += timeMinDelay;
                 }
             }
         }
@@ -791,25 +774,6 @@ namespace XxSlitFrame.Tools.Svc
                     new Color(twinkleImage.color.r, twinkleImage.color.g, twinkleImage.color.b, apache);
             }, "提示", twinkleInterval, 0);
             return twinkleTimeTask;
-        }
-
-        /// <summary>
-        /// 显示错误提示
-        /// </summary>
-        /// <param name="errorTips">错误提示面板</param>
-        /// <param name="errorTipContent">错误提示内容文本</param>
-        /// <param name="content">错误提示内容</param>
-        /// <param name="action">错误提示完毕后执行事件</param>
-        /// <returns></returns>
-        public int ShowErrorTip(GameObject errorTips, Text errorTipContent, string content, UnityAction action = null)
-        {
-            int errorTipsTimeTask = 0;
-            errorTips.SetActive(true);
-            errorTipContent.text = content;
-            action?.Invoke();
-            errorTipsTimeTask = AddTimeTask(() => { errorTips.SetActive(false); }, "错误提示内容",
-                General.ViewErrorTime);
-            return errorTipsTimeTask;
         }
 
         #region Transform操作

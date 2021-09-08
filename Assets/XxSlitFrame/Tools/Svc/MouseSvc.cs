@@ -68,7 +68,6 @@ namespace XxSlitFrame.Tools.Svc
         public override void EndSvc()
         {
             Instance = null;
-            
         }
 
         private void Update()

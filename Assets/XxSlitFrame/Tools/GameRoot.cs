@@ -16,6 +16,7 @@ namespace XxSlitFrame.Tools
             {
                 DontDestroyOnLoad(this);
             }
+
             if (PersistentDataSvc.Instance.jump)
             {
                 SceneSvc.Instance.SceneLoad(PersistentDataSvc.Instance.jumpSceneName);
