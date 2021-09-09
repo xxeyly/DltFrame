@@ -111,9 +111,10 @@ namespace XxSlitFrame.Tools.Svc
                 }
             }
 
-            Debug.Log("场景服务加载完毕:" + SceneManager.GetActiveScene().name);
+            Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景服务加载完毕");
 
-            GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
+            // GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
+            GameRootStart.Instance.sceneStartSingletons = DataSvc.GetAllObjectsInScene<StartSingleton>();
 
             for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
             {
@@ -122,7 +123,7 @@ namespace XxSlitFrame.Tools.Svc
             }
 
 
-            Debug.Log("场景工具加载完毕" + SceneManager.GetActiveScene().name);
+            Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景工具加载完毕");
             //静态视图初始化
             ViewSvc.Instance.StateViewInit();
         }
@@ -151,6 +152,5 @@ namespace XxSlitFrame.Tools.Svc
                 Debug.Log("Quit");
             }
         }
-     
     }
 }

@@ -10,6 +10,7 @@
         /// <summary>
         /// 服务初始化
         /// </summary>
+        /// <param name="onTimeAddTimeTask"></param>
         void InitSvc();
     }
 }

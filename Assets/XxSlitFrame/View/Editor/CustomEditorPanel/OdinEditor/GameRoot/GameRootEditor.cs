@@ -8,6 +8,7 @@ using XxSlitFrame.Tools;
 using XxSlitFrame.Tools.Svc;
 using XxSlitFrame.Tools.Svc.BaseSvc;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc;
+using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.CircuitSvc;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.EntitySvc;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.Listener;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.PersistentDataSvc;
@@ -44,10 +45,13 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.GameRoot
         [Toggle("Enabled")] [LabelText("实体服务")]
         public EntityBaseSvcEditor entityBaseSvcEditorSvc;
 
+        [Toggle("Enabled")] [LabelText("流程服务")]
+        public CircuitSvcEditor circuitSvcEditor;
+
         private GameRootEditorEditorData _gameRootEditorEditorData;
 
         public GameRootEditor(PersistentDataSvcEditor persistentDataSvcEditor, ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor, ListenerSvcEditor listenerSvcEditorSvc,
-            SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, EntityBaseSvcEditor entityBaseSvcSvc, ViewSvcEditor viewSvcEditorSvc)
+            SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, EntityBaseSvcEditor entityBaseSvcSvc, ViewSvcEditor viewSvcEditorSvc, CircuitSvcEditor circuitSvcEditor)
         {
             this.persistentDataSvcEditor = persistentDataSvcEditor;
             this.resSvcEditor = resSvcEditor;
@@ -57,95 +61,111 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.GameRoot
             this.timeSvcEditorSvc = timeSvcEditorSvc;
             this.viewSvcEditorSvc = viewSvcEditorSvc;
             this.entityBaseSvcEditorSvc = entityBaseSvcSvc;
+            this.circuitSvcEditor = circuitSvcEditor;
         }
 
         [Button(ButtonSizes.Large), GUIColor(0, 1, 0)]
-        [LabelText("生成预制体")]
+        [LabelText("生成框架")]
         public void Generate()
         {
+            if (GameObject.Find("GameRootStart"))
+            {
+                return;
+            }
+
             GameObject gameRootStart = new GameObject("GameRootStart");
             GameRootStart tempGameRootStart = gameRootStart.AddComponent<GameRootStart>();
             tempGameRootStart.activeSvcBase = new List<SvcBase>();
             if (persistentDataSvcEditor.Enabled)
             {
-                GameObject resSvcObj = new GameObject("PersistentDataSvc");
-                PersistentDataSvc resSvc = resSvcObj.AddComponent<PersistentDataSvc>();
-                resSvcObj.transform.SetParent(gameRootStart.transform);
-                resSvc.frameInit = resSvcEditor.isFrameInit;
-                resSvc.sceneInit = resSvcEditor.isSceneInit;
-                tempGameRootStart.activeSvcBase.Add(resSvc);
+                GameObject timeSvcObj = new GameObject("PersistentDataSvc");
+                PersistentDataSvc timeSvc = timeSvcObj.AddComponent<PersistentDataSvc>();
+                timeSvcObj.transform.SetParent(gameRootStart.transform);
+                timeSvc.frameInit = resSvcEditor.isFrameInit;
+                timeSvc.sceneInit = resSvcEditor.isSceneInit;
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
             }
 
             if (resSvcEditor.Enabled)
             {
-                GameObject resSvcObj = new GameObject("ResSvc");
-                ResSvc resSvc = resSvcObj.AddComponent<ResSvc>();
-                resSvcObj.transform.SetParent(gameRootStart.transform);
-                resSvc.frameInit = resSvcEditor.isFrameInit;
-                resSvc.sceneInit = resSvcEditor.isSceneInit;
-                tempGameRootStart.activeSvcBase.Add(resSvc);
+                GameObject timeSvcObj = new GameObject("ResSvc");
+                ResSvc timeSvc = timeSvcObj.AddComponent<ResSvc>();
+                timeSvcObj.transform.SetParent(gameRootStart.transform);
+                timeSvc.frameInit = resSvcEditor.isFrameInit;
+                timeSvc.sceneInit = resSvcEditor.isSceneInit;
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
             }
 
             if (audioSvcEditor.Enabled)
             {
-                GameObject resSvcObj = new GameObject("AudioSvc");
-                AudioSvc resSvc = resSvcObj.AddComponent<AudioSvc>();
-                resSvc.frameInit = audioSvcEditor.isFrameInit;
-                resSvc.sceneInit = audioSvcEditor.isSceneInit;
-                resSvc.audioData =
+                GameObject timeSvcObj = new GameObject("AudioSvc");
+                AudioSvc timeSvc = timeSvcObj.AddComponent<AudioSvc>();
+                timeSvc.frameInit = audioSvcEditor.isFrameInit;
+                timeSvc.sceneInit = audioSvcEditor.isSceneInit;
+                timeSvc.audioData =
                     AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
-                resSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(resSvc);
+                timeSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
             }
 
             if (listenerSvcEditorSvc.Enabled)
             {
-                GameObject resSvcObj = new GameObject("ListenerSvc");
-                ListenerSvc resSvc = resSvcObj.AddComponent<ListenerSvc>();
-                resSvc.frameInit = listenerSvcEditorSvc.isFrameInit;
-                resSvc.sceneInit = listenerSvcEditorSvc.isSceneInit;
-                resSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(resSvc);
+                GameObject timeSvcObj = new GameObject("ListenerSvc");
+                ListenerSvc timeSvc = timeSvcObj.AddComponent<ListenerSvc>();
+                timeSvc.frameInit = listenerSvcEditorSvc.isFrameInit;
+                timeSvc.sceneInit = listenerSvcEditorSvc.isSceneInit;
+                timeSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
             }
 
             if (customSceneSvc.Enabled)
             {
-                GameObject resSvcObj = new GameObject("SceneSvc");
-                SceneSvc resSvc = resSvcObj.AddComponent<SceneSvc>();
-                resSvc.frameInit = customSceneSvc.isFrameInit;
-                resSvc.sceneInit = customSceneSvc.isSceneInit;
-                resSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(resSvc);
+                GameObject timeSvcObj = new GameObject("SceneSvc");
+                SceneSvc timeSvc = timeSvcObj.AddComponent<SceneSvc>();
+                timeSvc.frameInit = customSceneSvc.isFrameInit;
+                timeSvc.sceneInit = customSceneSvc.isSceneInit;
+                timeSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
             }
 
             if (timeSvcEditorSvc.Enabled)
             {
-                GameObject resSvcObj = new GameObject("TimeSvc");
-                TimeSvc resSvc = resSvcObj.AddComponent<TimeSvc>();
-                resSvc.frameInit = timeSvcEditorSvc.isFrameInit;
-                resSvc.sceneInit = timeSvcEditorSvc.isSceneInit;
-                resSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(resSvc);
+                GameObject timeSvcObj = new GameObject("TimeSvc");
+                TimeSvc timeSvc = timeSvcObj.AddComponent<TimeSvc>();
+                timeSvc.frameInit = timeSvcEditorSvc.isFrameInit;
+                timeSvc.sceneInit = timeSvcEditorSvc.isSceneInit;
+                timeSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
             }
 
             if (entityBaseSvcEditorSvc.Enabled)
             {
-                GameObject resSvcObj = new GameObject("EntitySvc");
-                EntitySvc entitySvc = resSvcObj.AddComponent<EntitySvc>();
-                entitySvc.frameInit = entityBaseSvcEditorSvc.isFrameInit;
-                entitySvc.sceneInit = entityBaseSvcEditorSvc.isSceneInit;
-                entitySvc.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(entitySvc);
+                GameObject timeSvcObj = new GameObject("EntitySvc");
+                EntitySvc timeSvc = timeSvcObj.AddComponent<EntitySvc>();
+                timeSvc.frameInit = entityBaseSvcEditorSvc.isFrameInit;
+                timeSvc.sceneInit = entityBaseSvcEditorSvc.isSceneInit;
+                timeSvc.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
             }
 
             if (viewSvcEditorSvc.Enabled)
             {
-                GameObject resSvcObj = new GameObject("ViewSvc");
-                ViewSvc resSvc = resSvcObj.AddComponent<ViewSvc>();
-                resSvc.frameInit = viewSvcEditorSvc.isFrameInit;
-                resSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
-                resSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(resSvc);
+                GameObject timeSvcObj = new GameObject("ViewSvc");
+                ViewSvc timeSvc = timeSvcObj.AddComponent<ViewSvc>();
+                timeSvc.frameInit = viewSvcEditorSvc.isFrameInit;
+                timeSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
+                timeSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
+            }
+
+            if (circuitSvcEditor.Enabled)
+            {
+                GameObject timeSvcObj = new GameObject("CircuitSvc");
+                CircuitSvc timeSvc = timeSvcObj.AddComponent<CircuitSvc>();
+                timeSvc.frameInit = viewSvcEditorSvc.isFrameInit;
+                timeSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
+                timeSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(timeSvc);
             }
         }
 
@@ -198,6 +218,11 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.GameRoot
             _gameRootEditorEditorData.entitySvcEditorSvc = entityBaseSvcEditorSvc.Enabled;
             _gameRootEditorEditorData.entityDataSvcEditorFrameInit = entityBaseSvcEditorSvc.isFrameInit;
             _gameRootEditorEditorData.entityDataSvcEditorSceneInit = entityBaseSvcEditorSvc.isSceneInit;
+
+            _gameRootEditorEditorData.circuitSvcEditorSvc = entityBaseSvcEditorSvc.Enabled;
+            _gameRootEditorEditorData.circuitDataSvcEditorFrameInit = entityBaseSvcEditorSvc.isFrameInit;
+            _gameRootEditorEditorData.circuitDataSvcEditorSceneInit = entityBaseSvcEditorSvc.isSceneInit;
+
             //标记脏区
             EditorUtility.SetDirty(_gameRootEditorEditorData);
             // 保存所有修改
@@ -240,6 +265,10 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.GameRoot
             entityBaseSvcEditorSvc.Enabled = _gameRootEditorEditorData.entitySvcEditorSvc;
             entityBaseSvcEditorSvc.isFrameInit = _gameRootEditorEditorData.entityDataSvcEditorFrameInit;
             entityBaseSvcEditorSvc.isSceneInit = _gameRootEditorEditorData.entityDataSvcEditorSceneInit;
+
+            circuitSvcEditor.Enabled = _gameRootEditorEditorData.entitySvcEditorSvc;
+            circuitSvcEditor.isFrameInit = _gameRootEditorEditorData.entityDataSvcEditorFrameInit;
+            circuitSvcEditor.isSceneInit = _gameRootEditorEditorData.entityDataSvcEditorSceneInit;
         }
 
         public override void OnInit()

@@ -173,6 +173,10 @@ namespace XxSlitFrame.Tools.Svc
 
         #region 定时任务
 
+        public delegate void DelegateAddTimeTask(int tid, string taskName);
+
+        public DelegateAddTimeTask onAddTimeTask;
+
         /// <summary>
         /// 增加定时任务
         /// </summary>
@@ -192,6 +196,8 @@ namespace XxSlitFrame.Tools.Svc
                 loopType = TimeTaskList.TimeLoopType.Once,
                 endTime = destTime
             });
+            onAddTimeTask.Invoke(tid, taskName);
+
             return tid;
         }
 
@@ -239,6 +245,10 @@ namespace XxSlitFrame.Tools.Svc
             return tid;
         }
 
+        public delegate void DelegateDeleteTimeTask(int tid);
+
+        public DelegateDeleteTimeTask onDeleteTimeTask;
+
         /// <summary>
         /// 删除任务
         /// </summary>
@@ -273,6 +283,8 @@ namespace XxSlitFrame.Tools.Svc
                     break;
                 }
             }
+
+            onDeleteTimeTask.Invoke(tid);
 
             return exist;
         }
@@ -381,6 +393,10 @@ namespace XxSlitFrame.Tools.Svc
 
         #region 切换类型定时任务
 
+        public delegate void DelegateAddSwitchTask(int tid, string taskName);
+
+        public DelegateAddTimeTask onAddSwitchTask;
+
         /// <summary>
         /// 增加定时任务
         /// </summary>
@@ -404,8 +420,13 @@ namespace XxSlitFrame.Tools.Svc
                 tidName = switchTask.TaskName,
                 loopType = TimeTaskList.TimeLoopType.Loop
             });
+            onAddSwitchTask.Invoke(tid, taskName);
             return tid;
         }
+
+        public delegate void DelegateDeleteSwitchTask(int tid);
+
+        public DelegateDeleteSwitchTask onDeleteSwitchTask;
 
         /// <summary>
         /// 删除任务
@@ -441,6 +462,8 @@ namespace XxSlitFrame.Tools.Svc
                     break;
                 }
             }
+
+            onDeleteSwitchTask.Invoke(tid);
 
             return exist;
         }
@@ -535,6 +558,7 @@ namespace XxSlitFrame.Tools.Svc
                                 {
                                     if (taskList.tid == timeTaskTid)
                                     {
+                                        onDeleteTimeTask.Invoke(timeTaskTid);
                                         timeTaskList.Remove(taskList);
                                         break;
                                     }
@@ -646,6 +670,7 @@ namespace XxSlitFrame.Tools.Svc
                                     {
                                         if (taskList.tid == timeTaskTid)
                                         {
+                                            onDeleteTimeTask.Invoke(timeTaskTid);
                                             timeTaskList.Remove(taskList);
                                             break;
                                         }
@@ -653,6 +678,8 @@ namespace XxSlitFrame.Tools.Svc
 
                                     if (_taskSwitchList.Contains(switchTask))
                                     {
+                                        onDeleteSwitchTask.Invoke(timeTaskTid);
+
                                         _taskSwitchList.Remove(switchTask);
                                     }
                                 }

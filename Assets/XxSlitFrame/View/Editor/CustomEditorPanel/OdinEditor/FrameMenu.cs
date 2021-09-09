@@ -3,6 +3,7 @@ using UnityEditor;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.CustomBuild;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.GameRoot;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.AudioSvc;
+using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.CircuitSvc;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.EntitySvc;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.Listener;
 using XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor.Svc.PersistentDataSvc;
@@ -54,10 +55,13 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor
             ViewSvcEditor viewSvcEditor = new ViewSvcEditor();
             //实体服务
             EntityBaseSvcEditor entityBaseSvcEditor = new EntityBaseSvcEditor();
+            //流程服务
+            CircuitSvcEditor circuitSvcEditor = new CircuitSvcEditor();
             //生成配置
             generateBaseWindowEditor = new GenerateBaseWindowEditor();
             //框架配置
-            gameRootEditor = new GameRootEditor(persistentDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor,  entityBaseSvcEditor,viewSvcEditor);
+            gameRootEditor = new GameRootEditor(persistentDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entityBaseSvcEditor, viewSvcEditor,
+                circuitSvcEditor);
             ResourceUnification resourceUnification = new ResourceUnification();
             sceneLoad = new SceneLoad.SceneLoad();
             sceneLoad.OnInit();

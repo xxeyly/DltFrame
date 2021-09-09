@@ -1,22 +1,35 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
+using XxSlitFrame.Tools.Svc;
 
 namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor
 {
     public class ResourceUnification : BaseEditor
     {
 #pragma warning disable 414
-        private int max = 1000;
+        [HorizontalGroup()] [LabelText("替换字体")][LabelWidth(100)]
+        public Font changeFont;
 #pragma warning restore 414
-        [ProgressBar(0, "max")] public int progressBar = 0;
-
+        [HorizontalGroup()]
         [Button(ButtonSizes.Medium)]
-        [LabelText("资源统一化")]
+        [LabelText("字体替换")]
         public void OnTest()
         {
-            Debug.Log("资源统一化");
-            max = 156;
+            if (changeFont == null)
+            {
+                return;
+            }
+
+            List<Text> sceneAllText = DataSvc.GetAllObjectsInScene<Text>();
+            foreach (Text text in sceneAllText)
+            {
+                text.font = changeFont;
+            }
+
+            Debug.Log("场景字体替换完毕:" + sceneAllText.Count);
         }
 
         public override void OnDisable()
@@ -37,7 +50,6 @@ namespace XxSlitFrame.View.Editor.CustomEditorPanel.OdinEditor
 
         public override void OnInit()
         {
-            
         }
     }
 }

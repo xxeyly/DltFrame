@@ -47,6 +47,15 @@ namespace XxSlitFrame.Tools.Svc
         /// </summary>
         private int _checkVersionInfoLoadOverTaskTime;
 
+        public delegate void DelegateShowView(Type type);
+
+        public DelegateShowView onShowView;
+
+        public delegate void DelegateHideView(Type type);
+
+        public DelegateHideView onHideView;
+
+
         public override void StartSvc()
         {
             Instance = GetComponent<ViewSvc>();
@@ -68,7 +77,8 @@ namespace XxSlitFrame.Tools.Svc
 
         public override void InitSvc()
         {
-            List<BaseWindow> tempSceneBaseWindow = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
+            // List<BaseWindow> tempSceneBaseWindow = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
+            List<BaseWindow> tempSceneBaseWindow = DataSvc.GetAllObjectsInScene<BaseWindow>();
             allViewWind = new List<BaseWindow>();
             // allViewWind = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
             for (int i = 0; i < tempSceneBaseWindow.Count; i++)
@@ -195,6 +205,8 @@ namespace XxSlitFrame.Tools.Svc
             {
                 _allActiveView.Add(type);
             }
+
+            onShowView.Invoke(type);
         }
 
         /// <summary>
@@ -255,6 +267,8 @@ namespace XxSlitFrame.Tools.Svc
             {
                 _allActiveView.Remove(type);
             }
+
+            onHideView.Invoke(type);
         }
 
         /// <summary>

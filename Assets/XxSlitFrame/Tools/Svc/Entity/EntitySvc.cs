@@ -22,10 +22,11 @@ namespace XxSlitFrame.Tools.Svc
         [HideLabel] [HorizontalGroup("实体标签")] public string entityGroupTag;
         [HideLabel] [HorizontalGroup("实体组")] public List<EntityItem> entityGroup;
 
-        [HideLabel]  [Button("仅显示当前组")]
+        [HideLabel]
+        [Button("仅显示当前组")]
         public void OnOnlyShow()
         {
-          UnityEngine.Object.FindObjectOfType<EntitySvc>().DisplayEditorEntityGroup(entityGroupTag, true, true);
+            UnityEngine.Object.FindObjectOfType<EntitySvc>().DisplayEditorEntityGroup(entityGroupTag, true, true);
         }
     }
 
@@ -39,6 +40,14 @@ namespace XxSlitFrame.Tools.Svc
 
         [TableList(AlwaysExpanded = true, DrawScrollView = false)] [LabelText("编辑器实体组")]
         public List<EditorEntitySvcDataInfo> editorEntitySvcDataInfos;
+
+        public delegate void DelegateOnShowEntity(string entityName);
+
+        public DelegateOnShowEntity onShowEntity;
+
+        public delegate void DelegateOnHideEntity(string entityName);
+
+        public DelegateOnHideEntity onHideEntity;
 
         public void TryAddEntity(EntityItem entityItem)
         {
@@ -195,7 +204,9 @@ namespace XxSlitFrame.Tools.Svc
                 //清空
                 tempSceEntityItems.Clear();
             }
-        }  /// <summary>
+        }
+
+        /// <summary>
         /// 实体组控制
         /// </summary>
         /// <param name="groupTag"></param>
@@ -340,7 +351,14 @@ namespace XxSlitFrame.Tools.Svc
             {
                 if (entityItem.entityName == entityName)
                 {
-                    entityItem.gameObject.SetActive(display);
+                    if (display)
+                    {
+                        entityItem.Show();
+                    }
+                    else
+                    {
+                        entityItem.Hide();
+                    }
                 }
             }
         }
@@ -358,7 +376,15 @@ namespace XxSlitFrame.Tools.Svc
                 {
                     if (entityName == entityItem.entityName)
                     {
-                        entityItem.gameObject.SetActive(display);
+                        if (display)
+                        {
+                            entityItem.Show();
+                        }
+                        else
+                        {
+                            entityItem.Hide();
+                        }
+
                         break;
                     }
                 }

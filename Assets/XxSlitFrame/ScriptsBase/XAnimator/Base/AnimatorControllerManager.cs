@@ -32,7 +32,8 @@ namespace XAnimator.Base
 
         public override void Init()
         {
-            allAnimController = new List<XAnimatorControllerBase>(FindObjectsOfType<XAnimatorControllerBase>());
+            // allAnimController = new List<XAnimatorControllerBase>(FindObjectsOfType<XAnimatorControllerBase>());
+            allAnimController = DataSvc.GetAllObjectsInScene<XAnimatorControllerBase>();
             foreach (XAnimatorControllerBase animatorControllerBase in allAnimController)
             {
                 animatorControllerBase.StartSvc();

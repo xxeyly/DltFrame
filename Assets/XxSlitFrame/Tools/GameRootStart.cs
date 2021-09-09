@@ -33,9 +33,11 @@ namespace XxSlitFrame.Tools
                 Instance = GetComponent<GameRootStart>();
                 //服务开启
                 SvcStart();
+                Debug.Log("服务开启");
                 //服务初始化
                 SvcInit();
-                Debug.Log("服务开启");
+                Debug.Log("框架服务加载完毕");
+
                 GameRoot gameRoot = gameObject.AddComponent<GameRoot>();
                 gameRoot.GameRootInit(dontDestroyOnLoad);
             }

@@ -42,6 +42,8 @@ namespace XxSlitFrame.Tools.Svc
             {
                 gameObject.SetActive(true);
             }
+
+            EntitySvc.Instance.onShowEntity.Invoke(entityName);
         }
 
         public void Hide()
@@ -55,6 +57,8 @@ namespace XxSlitFrame.Tools.Svc
             {
                 gameObject.SetActive(false);
             }
+
+            EntitySvc.Instance.onHideEntity.Invoke(entityName);
         }
     }
 }

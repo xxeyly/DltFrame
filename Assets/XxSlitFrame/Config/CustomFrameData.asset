@@ -20,6 +20,7 @@ MonoBehaviour:
   timeSvcEditorSvc: 1
   viewSvcEditorSvc: 1
   entitySvcEditorSvc: 1
+  circuitSvcEditorSvc: 1
   resSvcEditorFrameInit: 1
   audioSvcEditorFrameInit: 1
   listenerSvcEditorFrameInit: 0
@@ -28,6 +29,7 @@ MonoBehaviour:
   viewSvcEditorFrameInit: 0
   persistentDataSvcEditorFrameInit: 1
   entityDataSvcEditorFrameInit: 0
+  circuitDataSvcEditorFrameInit: 0
   resSvcEditorSceneInit: 0
   audioSvcEditorSceneInit: 0
   listenerSvcEditorSceneInit: 1
@@ -36,3 +38,4 @@ MonoBehaviour:
   viewSvcEditorSceneInit: 1
   persistentDataSvcEditorSceneInit: 0
   entityDataSvcEditorSceneInit: 1
+  circuitDataSvcEditorSceneInit: 1
