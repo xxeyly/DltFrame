@@ -66,10 +66,10 @@ namespace XFramework
             List<T> specifiedType = new List<T>();
             foreach (GameObject go in objectsInScene)
             {
-                T t = go.GetComponent<T>();
-                if (t != null)
+                List<T> ts = new List<T>(go.GetComponents<T>());
+                for (int i = 0; i < ts.Count; i++)
                 {
-                    specifiedType.Add(t);
+                    specifiedType.Add(ts[i]);
                 }
             }
 
@@ -98,7 +98,11 @@ namespace XFramework
             return objectsInScene;
         }
 
-
+        /// <summary>
+        /// 所有转换为小写
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string AllCharToLower(string input)
         {
             if (String.IsNullOrEmpty(input))
@@ -179,6 +183,23 @@ namespace XFramework
             }
 
             return currentList;
+        }
+
+        /// <summary>
+        /// 值克隆
+        /// </summary>
+        /// <param name="targetValue"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> DataValueClone<T>(List<T> targetValue)
+        {
+            List<T> temp = new List<T>();
+            foreach (T t in targetValue)
+            {
+                temp.Add(t);
+            }
+
+            return temp;
         }
 
         /// <summary>

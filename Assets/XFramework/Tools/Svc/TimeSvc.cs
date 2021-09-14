@@ -289,6 +289,18 @@ namespace XFramework
         }
 
         /// <summary>
+        /// 删除任务
+        /// </summary>
+        /// <param name="tid"></param>
+        public void DeleteTimeTask(List<int> tid)
+        {
+            for (int i = 0; i < tid.Count; i++)
+            {
+                DeleteTimeTask(tid[i]);
+            }
+        }
+
+        /// <summary>
         /// 删除不死任务
         /// </summary>
         /// <param name="tid"></param>
