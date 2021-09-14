@@ -17,7 +17,7 @@ namespace XFramework
         [LabelText("动画是否切换")] public bool eventChange;
 
         [LabelText("所有动画控制器")] [SerializeField] [Searchable]
-        private List<XAnimatorControllerBase> allAnimController = new List<XAnimatorControllerBase>();
+        private List<AnimatorControllerBase> allAnimController = new List<AnimatorControllerBase>();
 
         /// <summary>
         /// 动画控制器任务
@@ -31,9 +31,9 @@ namespace XFramework
 
         public override void Init()
         {
-            // allAnimController = new List<XAnimatorControllerBase>(FindObjectsOfType<XAnimatorControllerBase>());
-            allAnimController = DataSvc.GetAllObjectsInScene<XAnimatorControllerBase>();
-            foreach (XAnimatorControllerBase animatorControllerBase in allAnimController)
+            // allAnimController = new List<AnimatorControllerBase>(FindObjectsOfType<AnimatorControllerBase>());
+            allAnimController = DataSvc.GetAllObjectsInScene<AnimatorControllerBase>();
+            foreach (AnimatorControllerBase animatorControllerBase in allAnimController)
             {
                 animatorControllerBase.StartSvc();
             }
@@ -47,7 +47,7 @@ namespace XFramework
         {
             currentPlayAnim = animType;
             eventChange = true;
-            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.PlayAnim(animType);
             }
@@ -63,7 +63,7 @@ namespace XFramework
             currentPlayAnim = animType;
             eventChange = true;
 
-            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 if (controllerBase.enabled)
                 {
@@ -82,7 +82,7 @@ namespace XFramework
             currentPlayAnim = animType;
             eventChange = true;
 
-            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 if (controllerBase.gameObject.activeInHierarchy)
                 {
@@ -103,7 +103,7 @@ namespace XFramework
             eventChange = false;
 
             TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
-            XAnimatorControllerBase fistController = GetPlayAnimFirstController(animType);
+            AnimatorControllerBase fistController = GetPlayAnimFirstController(animType);
 
             _animatorTimeTask = TimeSvc.Instance.AddTimeTask(
                 () =>
@@ -119,7 +119,7 @@ namespace XFramework
                     }
                 }
                 , "动画播放时间", GetPlayAnimFirstLength(animType));
-            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.PlayAnim(animType);
             }
@@ -140,7 +140,7 @@ namespace XFramework
             TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
 
             _animatorTimeTask = TimeSvc.Instance.AddTimeTask(() => { ListenerSvc.Instance.ExecuteEvent(listenerEventType); }, "动画播放时间", GetPlayAnimFirstLength(animType));
-            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.PlayAnim(animType);
             }
@@ -149,7 +149,7 @@ namespace XFramework
         public void StopAnimAction()
         {
             TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
-            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.StopAnim();
             }
@@ -157,7 +157,7 @@ namespace XFramework
 
         public void StopAllAnimAction()
         {
-            foreach (XAnimatorControllerBase controllerBase in allAnimController)
+            foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.StopAnimTaskTime();
             }
@@ -171,7 +171,7 @@ namespace XFramework
         public float GetPlayAnimFirstLength(string animType)
         {
             // float animLength = 0;
-            XAnimatorControllerBase fistController = GetPlayAnimFirstController(animType);
+            AnimatorControllerBase fistController = GetPlayAnimFirstController(animType);
             if (fistController != null)
             {
                 return fistController.GetPlayAnimLength(animType);
@@ -185,9 +185,9 @@ namespace XFramework
         /// </summary>
         /// <param name="animType"></param>
         /// <returns></returns>
-        public XAnimatorControllerBase GetPlayAnimFirstController(string animType)
+        public AnimatorControllerBase GetPlayAnimFirstController(string animType)
         {
-            foreach (XAnimatorControllerBase animatorControllerBase in allAnimController)
+            foreach (AnimatorControllerBase animatorControllerBase in allAnimController)
             {
                 if (animatorControllerBase.GetAnimState(animType) && animatorControllerBase.gameObject.activeInHierarchy)
                 {
@@ -205,7 +205,7 @@ namespace XFramework
         /// <returns></returns>
         public bool GetAnimState(string animType)
         {
-            foreach (XAnimatorControllerBase animatorControllerBase in allAnimController)
+            foreach (AnimatorControllerBase animatorControllerBase in allAnimController)
             {
                 if (animatorControllerBase.GetAnimState(animType))
                 {
@@ -221,7 +221,7 @@ namespace XFramework
         /// </summary>
         public void PausePlay()
         {
-            foreach (XAnimatorControllerBase xAnimatorControllerBase in allAnimController)
+            foreach (AnimatorControllerBase xAnimatorControllerBase in allAnimController)
             {
                 xAnimatorControllerBase.PausePlay();
             }
@@ -232,7 +232,7 @@ namespace XFramework
         /// </summary>
         public void ContinuePlay()
         {
-            foreach (XAnimatorControllerBase xAnimatorControllerBase in allAnimController)
+            foreach (AnimatorControllerBase xAnimatorControllerBase in allAnimController)
             {
                 xAnimatorControllerBase.ContinuePlay();
             }

@@ -9,7 +9,7 @@ namespace XFramework
     {
         #region 子类数据生成
 
-       [BoxGroup("属性生成")] [LabelText("生成属性类名称")]
+        [BoxGroup("属性生成")] [LabelText("生成属性类名称")]
         public string generateAttributesStructName;
 
         [BoxGroup("属性生成")] [TableList] [LabelText("生成属性类组")]
@@ -29,7 +29,16 @@ namespace XFramework
                 return;
             }
 
-            string dataName = GetComponent<BaseWindow>().GetType().ToString();
+            string dataName = String.Empty;
+            if (generateAttributesStructName == String.Empty)
+            {
+                dataName = GetComponent<BaseWindow>().GetType().ToString();
+            }
+            else
+            {
+                dataName = generateAttributesStructName;
+            }
+
             allCustomAttributes.Add(Indents(4) + "[Serializable]" + LineFeed);
             allCustomAttributes.Add(Indents(4) + "public struct " + dataName + "Data" + LineFeed);
             allCustomAttributes.Add(Indents(4) + "{" + LineFeed);

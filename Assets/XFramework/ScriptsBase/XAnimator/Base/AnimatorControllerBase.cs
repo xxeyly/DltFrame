@@ -26,7 +26,7 @@ namespace XFramework
     /// <summary>
     /// 动画控制器基类
     /// </summary>
-    public abstract class XAnimatorControllerBase : MonoBehaviour
+    public abstract class AnimatorControllerBase : MonoBehaviour
     {
         protected UnityEngine.Animator animator;
         private List<AnimatorControllerParameter> _allParameter;
