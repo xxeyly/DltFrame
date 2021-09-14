@@ -22,6 +22,7 @@
 [Aa]ssets/Plugins/Editor/JetBrains*
 [Aa]ssets/Plugins/Sirenix*
 [Aa]ssets/Plugins/ConsolePro*
+[Aa]ssets/Scene/*
 # Visual Studio cache directory
 .vs/
 
@@ -63,3 +64,10 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+
+Assets/Scripts.meta
+
+Assets/Scripts/
+
+
+Assets/Scene/
