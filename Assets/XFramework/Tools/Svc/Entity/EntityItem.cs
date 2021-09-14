@@ -43,7 +43,10 @@ namespace XFramework
                 gameObject.SetActive(true);
             }
 
-            EntitySvc.Instance.onShowEntity.Invoke(entityName);
+            if (Application.isPlaying)
+            {
+                EntitySvc.Instance.onShowEntity.Invoke(entityName);
+            }
         }
 
         public void Hide()
@@ -58,7 +61,10 @@ namespace XFramework
                 gameObject.SetActive(false);
             }
 
-            EntitySvc.Instance.onHideEntity.Invoke(entityName);
+            if (Application.isPlaying)
+            {
+                EntitySvc.Instance.onHideEntity.Invoke(entityName);
+            }
         }
     }
 }

@@ -22,7 +22,8 @@ namespace XFramework
         [Button("仅显示当前组")]
         public void OnOnlyShow()
         {
-            UnityEngine.Object.FindObjectOfType<EntitySvc>().DisplayEditorEntityGroup(entityGroupTag, true, true);
+            EntitySvc entitySvc = UnityEngine.Object.FindObjectOfType<EntitySvc>();
+            entitySvc.DisplayEditorEntityGroup(entityGroupTag, true, true);
         }
     }
 
