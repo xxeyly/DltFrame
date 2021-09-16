@@ -117,30 +117,15 @@ namespace XFramework
         /// <param name="animationType"></param>
         /// <param name="eventAction"></param>
         /// <param name="animValue"></param>
-        public int PlayAnim(string animationType, UnityAction eventAction, float animValue, AnimValueType animValueType = AnimValueType.Progress)
+        public int PlayAnim(string animationType, UnityAction eventAction)
         {
             if (ContainsParameter(animationType))
-
             {
-                switch (animValueType)
-                {
-                    case AnimValueType.Progress:
-                        PlayAnim(animationType, animValue, animValueType);
-                        return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) * (1 - animValue));
-                    case AnimValueType.Speed:
-                        PlayAnim(animationType, animValue, animValueType);
-                        return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) / animValue);
-                    case AnimValueType.Delay:
-                        PlayAnim(animationType);
-                        return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType) + animValue);
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(animValueType), animValueType, null);
-                }
+                return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType));
             }
 
             return 0;
         }
-
 
         /// <summary>
         /// 播放动画
