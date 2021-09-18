@@ -49,7 +49,10 @@ namespace XFramework
             eventChange = true;
             foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
-                controllerBase.PlayAnim(animType);
+                if (controllerBase.gameObject.activeInHierarchy)
+                {
+                    controllerBase.PlayAnim(animType);
+                }
             }
         }
 
@@ -86,7 +89,6 @@ namespace XFramework
             {
                 if (controllerBase.gameObject.activeInHierarchy)
                 {
-                    Debug.Log(controllerBase.name);
                     controllerBase.PlayAnim(animType, animSpeedProgress);
                 }
             }

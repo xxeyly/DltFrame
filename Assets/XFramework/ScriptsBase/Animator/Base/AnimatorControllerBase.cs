@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -29,21 +30,40 @@ namespace XFramework
     public abstract class AnimatorControllerBase : MonoBehaviour
     {
         protected UnityEngine.Animator animator;
-        private List<AnimatorControllerParameter> _allParameter;
+        [SerializeField] private List<AnimatorControllerParameter> _allParameter;
+        [LabelText("动画初始化")] public bool isLoadParameter = false;
 
         public virtual void StartSvc()
         {
             animator = GetComponent<UnityEngine.Animator>();
-            _allParameter = new List<AnimatorControllerParameter>(animator.parameters);
+            if (gameObject.activeInHierarchy)
+            {
+                _allParameter = new List<AnimatorControllerParameter>(animator.parameters);
+                isLoadParameter = true;
+            }
         }
 
         private bool ContainsParameter(string parameterName)
         {
-            foreach (AnimatorControllerParameter animatorControllerParameter in _allParameter)
+            if (!gameObject.activeInHierarchy)
             {
-                if (animatorControllerParameter.name == parameterName)
+                return false;
+            }
+
+            if (!isLoadParameter)
+            {
+                _allParameter = new List<AnimatorControllerParameter>(animator.parameters);
+                isLoadParameter = true;
+            }
+
+            if (isLoadParameter)
+            {
+                foreach (AnimatorControllerParameter animatorControllerParameter in _allParameter)
                 {
-                    return true;
+                    if (animatorControllerParameter.name == parameterName)
+                    {
+                        return true;
+                    }
                 }
             }
 
@@ -127,6 +147,7 @@ namespace XFramework
             return 0;
         }
 
+
         /// <summary>
         /// 播放动画
         /// </summary>
@@ -136,7 +157,6 @@ namespace XFramework
             if (ContainsParameter(animationType))
             {
                 animator.speed = 1;
-                // Debug.Log(animator.name + ":" + animationType);
                 animator.SetTrigger(animationType);
             }
         }
