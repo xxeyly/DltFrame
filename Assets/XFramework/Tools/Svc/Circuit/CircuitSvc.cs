@@ -15,6 +15,7 @@ namespace XFramework
 
         [LabelText("场景流程")] public List<CircuitBaseData> sceneCircuitBaseData;
         private Dictionary<Type, CircuitBaseData> _allCircuitBaseDataDic;
+        private Type _oldCircuitBaseData;
 
         public override void StartSvc()
         {
@@ -53,14 +54,37 @@ namespace XFramework
 
         public void StartCircuit(Type circuitType)
         {
-            ClearTempCircuit();
+            ClearTempCircuit(true);
+            if (_oldCircuitBaseData != null)
+            {
+                _allCircuitBaseDataDic[_oldCircuitBaseData].EndCircuit();
+            }
+
+            _oldCircuitBaseData = circuitType;
+
             _allCircuitBaseDataDic[circuitType].StartCircuit();
         }
 
-        private void ClearTempCircuit()
+        public void StartCircuit(Type circuitType, bool clearView)
         {
-            Type[] viewType = DataSvc.DataValueClone(circuitTempData.activityViewType).ToArray();
-            ViewSvc.Instance.HideView(viewType);
+            ClearTempCircuit(clearView);
+            if (_oldCircuitBaseData != null)
+            {
+                _allCircuitBaseDataDic[_oldCircuitBaseData].EndCircuit();
+            }
+
+            _oldCircuitBaseData = circuitType;
+            _allCircuitBaseDataDic[circuitType].StartCircuit();
+        }
+
+
+        private void ClearTempCircuit(bool clearView)
+        {
+            if (clearView)
+            {
+                Type[] viewType = DataSvc.DataValueClone(circuitTempData.activityViewType).ToArray();
+                ViewSvc.Instance.HideView(viewType);
+            }
 
             List<int> timeTask = DataSvc.DataValueClone(circuitTempData.timeTask);
             TimeSvc.Instance.DeleteTimeTask(timeTask);
