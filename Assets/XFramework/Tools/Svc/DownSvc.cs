@@ -63,7 +63,7 @@ namespace XFramework
             {
                 DownData downData = new DownData
                 {
-                    downName = fileInfo.fileName, downPath = fileInfo.filePath, downCurrentSize = 0,
+                    downName = fileInfo.fileName, downFileOriginalName = fileInfo.fileOriginalName, downPath = fileInfo.filePath, downCurrentSize = 0,
                     downTotalSize = fileInfo.fileSize
                 };
                 allDownSvcData.Add(downData);
@@ -88,9 +88,6 @@ namespace XFramework
         public void InsertDownTask(string downName)
         {
             //正在下载的与切入的是同一个，不需要切换
-            Debug.Log(downName);
-            Debug.Log(_currentDownDataTask.downName);
-
             if (_currentDownDataTask != null && _currentDownDataTask.downName == DataSvc.AllCharToLower(downName))
             {
                 Debug.Log("插入的下载任务与当前下载的一致");
@@ -227,6 +224,7 @@ namespace XFramework
         public class DownData
         {
             [LabelText("下载名称")] public string downName;
+            [LabelText("文件原名称")] public string downFileOriginalName;
             [LabelText("下载地址")] public string downPath;
             [LabelText("当前下载大小")] public long downCurrentSize;
             [LabelText("总的下载大小")] public long downTotalSize;

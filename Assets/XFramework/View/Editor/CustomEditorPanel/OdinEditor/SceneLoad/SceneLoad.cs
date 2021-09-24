@@ -167,6 +167,7 @@ namespace XFramework
                                       DataSvc.AllCharToLower(sceneInfo.sceneAsset.name);
                     sceneFile.fileInfoList.Add(new ResSvc.DownFile.FileInfo()
                     {
+                        fileOriginalName = sceneInfo.sceneAsset.name,
                         fileName = DataSvc.AllCharToLower(sceneInfo.sceneAsset.name),
                         filePath = filePath,
                         fileSize = File.ReadAllBytes(Application.dataPath + "/" + filePath).Length

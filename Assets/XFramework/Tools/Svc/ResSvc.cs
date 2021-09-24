@@ -171,6 +171,7 @@ namespace XFramework
             public struct FileInfo
             {
                 [Header("文件名称")] public string fileName;
+                [Header("文件原名称")] public string fileOriginalName;
 
                 [Header("文件路径")] public string filePath;
                 [Header("文件大小")] public long fileSize;

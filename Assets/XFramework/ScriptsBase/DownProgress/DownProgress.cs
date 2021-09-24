@@ -32,7 +32,8 @@ public class DownProgress : BaseWindow
     /// <param name="fileName"></param>
     private void OnShowDownLoadProgress(string fileName)
     {
-        _downTimeTask = AddTimeTask(() => { UpdateDownProgress(fileName); }, "获得下载进度", 0.1f, 0);
+        UpdateDownProgress(fileName);
+        _downTimeTask = AddTimeTask(() => { UpdateDownProgress(fileName); }, "获得下载进度", 1f, 0);
     }
 
     /// <summary>
@@ -58,7 +59,7 @@ public class DownProgress : BaseWindow
                                 _downData.downTotalSize / 1024 / 1024 + "M";
             Debug.Log("下载完毕");
             DeleteTimeTask(_downTimeTask);
-            HideObj(_barSlider);
+            // HideObj(_barSlider);
             ShowObj(_anyKeyContinue);
         }
     }
@@ -86,7 +87,7 @@ public class DownProgress : BaseWindow
     {
         if (_downData != null)
         {
-            SceneLoad(_downData.downName);
+            SceneLoad(DataSvc.FirstCharToUpper(_downData.downFileOriginalName));
             HideThisView();
         }
     }

@@ -16,4 +16,7 @@ MonoBehaviour:
   - sceneAsset: {fileID: 102900000, guid: 275b9d76586d3b94f9435b7496225f15, type: 3}
     sceneLoadType: 1
     Md5: 
+  - sceneAsset: {fileID: 102900000, guid: a6285edd7f530024dbda435952783ac0, type: 3}
+    sceneLoadType: 2
+    Md5: 334e53bd0991667fdfff2e3b6452c5d1
   sceneAssetBundlePath: Assets/SceneAssetBundle

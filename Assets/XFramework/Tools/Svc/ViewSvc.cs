@@ -94,6 +94,8 @@ namespace XFramework
                 window.ViewStartInit();
             }
 
+            StateViewInit();
+
             //关闭全体禁止响应
             CloseNoAllResponse();
         }

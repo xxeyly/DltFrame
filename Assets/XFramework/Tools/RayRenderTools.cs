@@ -145,7 +145,7 @@ namespace XFramework
             _leftDoubleClickRay = new List<GameObject>();
             _rightDoubleClickRay = new List<GameObject>();
             _centerDoubleClickRay = new List<GameObject>();
-            TimeSvc.Instance.AddTimeTask(UpdateRayAction, "射线监听", 0.01f, 0);
+            TimeSvc.Instance.AddImmortalTimeTask(UpdateRayAction, "射线监听", 0.01f, 0);
         }
 
         public override void Init()

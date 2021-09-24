@@ -31,9 +31,17 @@ namespace XFramework
                 //服务初始化
                 SvcInit();
                 Debug.Log("框架服务加载完毕");
-
+            }
+        }
+        /// <summary>
+        /// 框架加载结束
+        /// </summary>
+        public void FrameSceneLoadEnd()
+        {
+            if (!GetComponent<GameRoot>())
+            {
                 GameRoot gameRoot = gameObject.AddComponent<GameRoot>();
-                gameRoot.GameRootInit(dontDestroyOnLoad);
+                gameRoot.GameRootInit(PersistentDataSvc.Instance.jump);
             }
         }
 

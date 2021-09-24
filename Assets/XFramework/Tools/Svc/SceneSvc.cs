@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,7 +11,10 @@ namespace XFramework
     public class SceneSvc : SvcBase
     {
         public static SceneSvc Instance;
-
+        private DownSvc.DownData _currentSceneDownData;
+        private string _sceneName;
+        private bool _asyncLoad;
+        private AssetBundle _sceneAssetBundle;
         public override void StartSvc()
         {
             Instance = GetComponent<SceneSvc>();
@@ -36,42 +40,54 @@ namespace XFramework
             SceneManager.sceneLoaded -= SceneLoadOverCallBack;
         }
 
+        private void Update()
+        {
+            if (_asyncLoad)
+            {
+                if (_currentSceneDownData != null)
+                {
+                    if (_currentSceneDownData.downOver)
+                    {
+                        _sceneAssetBundle = AssetBundle.LoadFromMemory(_currentSceneDownData.downContent);
+                        while (Application.CanStreamedLevelBeLoaded(_sceneName))
+                        {
+                            // SceneManager.LoadScene(_sceneName);
+                            Debug.Log("场景加载完毕:" + _sceneName);
+                            _asyncLoad = false;
+                            _sceneName = String.Empty;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// 加载场景
         /// </summary>
         /// <param name="sceneName"></param>
         public void SceneLoad(string sceneName)
         {
+            _sceneName = sceneName;
             SceneLoadBeforeInit();
             if (Application.CanStreamedLevelBeLoaded(sceneName))
             {
+                Debug.Log("加载同步场景");
                 if (!GameRootStart.Instance.dontDestroyOnLoad)
                 {
                     Destroy(GameRootStart.Instance.gameObject);
                 }
-
                 SceneManager.LoadScene(sceneName);
             }
             else
             {
-                DownSvc.DownData currentSceneDownData = DownSvc.Instance.GetDownSvcDataByFileName(sceneName);
-                if (currentSceneDownData != null)
+                _currentSceneDownData = DownSvc.Instance.GetDownSvcDataByFileName(sceneName);
+                if (_currentSceneDownData != null)
                 {
-                    if (currentSceneDownData.downOver)
-                    {
-                        AssetBundle.LoadFromMemory(currentSceneDownData.downContent);
-                        while (Application.CanStreamedLevelBeLoaded(sceneName))
-                        {
-                            SceneManager.LoadScene(sceneName);
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        DownSvc.Instance.InsertDownTask(sceneName);
-                        ViewSvc.Instance.ShowView(typeof(DownProgress));
-                        ListenerSvc.Instance.ExecuteEvent("OnShowDownLoadProgress", sceneName);
-                    }
+                    DownSvc.Instance.InsertDownTask(sceneName);
+                    ViewSvc.Instance.ShowView(typeof(DownProgress));
+                    _asyncLoad = true;
+                    ListenerSvc.Instance.ExecuteEvent("OnShowDownLoadProgress", _sceneName);
                 }
             }
         }
@@ -87,7 +103,7 @@ namespace XFramework
             //删除所有计时任务
             TimeSvc.Instance.DeleteSwitchTask();
             TimeSvc.Instance.DeleteTimeTask();
-            //音频提示播放
+            //音频停止播放
             AudioSvc.Instance.StopEffectAudio();
             AudioSvc.Instance.StopTipAndDialogAudio();
         }
@@ -98,6 +114,16 @@ namespace XFramework
         /// </summary>
         private void InitSceneStartSingletons()
         {
+            // GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
+            GameRootStart.Instance.sceneStartSingletons = DataSvc.GetAllObjectsInScene<StartSingleton>();
+
+            for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
+            {
+                GameRootStart.Instance.sceneStartSingletons[i].StartSvc();
+                GameRootStart.Instance.sceneStartSingletons[i].Init();
+            }
+
+            Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景工具加载完毕");
             //所有条件都加载完毕后,开始视图的初始化
             foreach (SvcBase svcBase in GameRootStart.Instance.activeSvcBase)
             {
@@ -108,20 +134,7 @@ namespace XFramework
             }
 
             Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景服务加载完毕");
-
-            // GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
-            GameRootStart.Instance.sceneStartSingletons = DataSvc.GetAllObjectsInScene<StartSingleton>();
-
-            for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
-            {
-                GameRootStart.Instance.sceneStartSingletons[i].StartSvc();
-                GameRootStart.Instance.sceneStartSingletons[i].Init();
-            }
-
-
-            Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景工具加载完毕");
-            //静态视图初始化
-            ViewSvc.Instance.StateViewInit();
+            GameRootStart.Instance.FrameSceneLoadEnd();
         }
 
         /// <summary>

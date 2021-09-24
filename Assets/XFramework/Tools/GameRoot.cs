@@ -15,9 +15,11 @@ namespace XFramework
 
             if (PersistentDataSvc.Instance.jump)
             {
+                Debug.Log("初始场景跳转");
                 SceneSvc.Instance.SceneLoad(PersistentDataSvc.Instance.jumpSceneName);
                 Destroy(GetComponent<AudioListener>());
             }
         }
+        
     }
 }
