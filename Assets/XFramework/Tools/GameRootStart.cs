@@ -33,6 +33,7 @@ namespace XFramework
                 Debug.Log("框架服务加载完毕");
             }
         }
+
         /// <summary>
         /// 框架加载结束
         /// </summary>
@@ -47,9 +48,12 @@ namespace XFramework
 
         private void OnDestroy()
         {
-            foreach (SvcBase svcBase in activeSvcBase)
+            if (dontDestroyOnLoad)
             {
-                svcBase.EndSvc();
+                foreach (SvcBase svcBase in activeSvcBase)
+                {
+                    svcBase.EndSvc();
+                }
             }
         }
 
