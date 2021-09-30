@@ -11,6 +11,8 @@ namespace XFramework
         [BoxGroup] [LabelText("场景初始化")] [ToggleLeft] [GUIColor(0.3f, 0.8f, 0.8f, 1f)]
         public bool sceneInit;
 
+        [BoxGroup] [LabelText("服务索引")] public int svcIndex;
+
         public abstract void StartSvc();
 
 
