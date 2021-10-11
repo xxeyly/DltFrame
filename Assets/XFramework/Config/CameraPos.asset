@@ -12,24 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e68eabba3361594896d57e1371fd4b7, type: 3}
   m_Name: CameraPos
   m_EditorClassIdentifier: 
-  cameraPosInfos:
-  - infoName: "\u9EBB\u9189\u70B9\u9009\u62E9"
-    navPos: {x: -0.6173607, y: 0.18133333, z: 1.1901542}
-    cameraRotate: {x: 54.286503, y: 334.24472, z: 0}
-    cameraPos: {x: 0.10188958, y: 0.96993303, z: -0.20206869}
-    cameraFieldView: 60
-  - infoName: "\u9EBB\u9189\u63A7\u5236"
-    navPos: {x: -0.6007974, y: 0.18133333, z: 1.0897472}
-    cameraRotate: {x: 14.835829, y: 0.1859132, z: 0.0000000017250331}
-    cameraPos: {x: 0.10400081, y: 1.0099522, z: -0.2189802}
-    cameraFieldView: 60
-  - infoName: "\u95EE\u8BCA"
-    navPos: {x: 0.24822739, y: 0.18133333, z: 0.30469128}
-    cameraRotate: {x: 31.100018, y: 320.90002, z: -0.0000009970881}
-    cameraPos: {x: -0.06417229, y: 1.450489, z: 0.11159909}
-    cameraFieldView: 60
-  - infoName: "\u68C0\u67E5"
-    navPos: {x: -0.3558159, y: 0.18133333, z: 0.8106105}
-    cameraRotate: {x: 34.800007, y: 297.50003, z: 0.0000020794603}
-    cameraPos: {x: -0.0067017972, y: 1.3821583, z: 0.06413144}
-    cameraFieldView: 60
+  cameraPosInfos: []

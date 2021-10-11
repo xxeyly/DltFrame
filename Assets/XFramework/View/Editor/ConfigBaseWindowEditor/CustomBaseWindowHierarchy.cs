@@ -54,6 +54,10 @@ namespace XFramework
                     {
                         Debug.Log(window.transform.parent.name);
                     }
+#if UNITY_2019
+                    SceneVisibilityManager.instance.DisablePicking(obj, false);
+                    SceneVisibilityManager.instance.DisablePicking(window, false);
+#endif
                 }
             }
         }

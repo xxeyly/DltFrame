@@ -29,7 +29,7 @@ namespace XFramework
         #region 旋转
 
         [BoxGroup("旋转")] [LabelText("是否可旋转")] public bool canManualRotate = true;
-        [BoxGroup("旋转")] [LabelText("旋转按键")] public KeyCode rotateCode;
+        [BoxGroup("旋转")] [LabelText("旋转按键")] public KeyCode rotateCode = KeyCode.Mouse1;
         [BoxGroup("旋转")] [LabelText("仅水平旋转")] public bool onlyX = false;
         [BoxGroup("旋转")] [LabelText("水平旋转速度")] public float xSpeed = 250.0f;
         [BoxGroup("旋转")] [LabelText("垂直旋转速度")] public float ySpeed = 120.0f;

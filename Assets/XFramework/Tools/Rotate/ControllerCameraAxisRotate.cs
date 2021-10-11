@@ -5,23 +5,22 @@ using UnityEngine;
 
 public class ControllerCameraAxisRotate : MonoBehaviour
 {
+    [LabelText("开启操作")]
     public bool isOperation;
 
     /// <summary>
     /// 缓存鼠标坐标
     /// </summary>
     private Vector3 _localMousePoint;
-
-    /// <summary>
-    /// 根节点
-    /// </summary>
+    [LabelText("目标位置")]
     public Transform rotateTarget;
 
     [LabelText("当前相机")] public Camera sceneCamera;
+    [BoxGroup("旋转")] [LabelText("旋转按键")] public KeyCode rotateCode = KeyCode.Mouse1;
 
     void Update()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetKey(rotateCode))
         {
             if (isOperation)
             {
@@ -34,7 +33,7 @@ public class ControllerCameraAxisRotate : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetKeyUp(rotateCode))
         {
             _localMousePoint = Vector3.zero;
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,29 +15,28 @@ namespace XFramework
         End
     }
 
-    public enum AnimValueType
-    {
-        None,
-        Progress,
-        Speed,
-        Delay
-    }
-
     /// <summary>
     /// 动画控制器基类
     /// </summary>
     public abstract class AnimatorControllerBase : MonoBehaviour
     {
-        protected UnityEngine.Animator animator;
-        [SerializeField] private List<AnimatorControllerParameter> _allParameter;
-        [LabelText("动画初始化")] public bool isLoadParameter = false;
+        private Animator _animator;
+        [LabelText("动画属性")] [SerializeField] private List<string> animatorControllerParameterName;
+        private List<AnimatorControllerParameter> _allParameter;
+        [LabelText("动画初始化")] public bool isLoadParameter;
 
         public virtual void StartSvc()
         {
-            animator = GetComponent<UnityEngine.Animator>();
+            _animator = GetComponent<Animator>();
+            animatorControllerParameterName = new List<string>();
             if (gameObject.activeInHierarchy)
             {
-                _allParameter = new List<AnimatorControllerParameter>(animator.parameters);
+                _allParameter = new List<AnimatorControllerParameter>(_animator.parameters);
+                foreach (AnimatorControllerParameter animatorControllerParameter in _allParameter)
+                {
+                    animatorControllerParameterName.Add(animatorControllerParameter.name);
+                }
+
                 isLoadParameter = true;
             }
         }
@@ -52,7 +50,12 @@ namespace XFramework
 
             if (!isLoadParameter)
             {
-                _allParameter = new List<AnimatorControllerParameter>(animator.parameters);
+                _allParameter = new List<AnimatorControllerParameter>(_animator.parameters);
+                foreach (AnimatorControllerParameter animatorControllerParameter in _allParameter)
+                {
+                    animatorControllerParameterName.Add(animatorControllerParameter.name);
+                }
+
                 isLoadParameter = true;
             }
 
@@ -75,7 +78,7 @@ namespace XFramework
         /// </summary>
         public void PausePlay()
         {
-            animator.speed = 0;
+            _animator.speed = 0;
         }
 
         /// <summary>
@@ -83,32 +86,20 @@ namespace XFramework
         /// </summary>
         public void ContinuePlay()
         {
-            animator.speed = 1;
+            _animator.speed = 1;
         }
 
-        public void PlayAnim(string animationType, float animValue, AnimValueType animValueType = AnimValueType.Progress)
+        public void PlayAnim(string animationType, float animValue)
         {
             if (ContainsParameter(animationType))
             {
-                switch (animValueType)
+                _animator.speed = 0;
+                if (animValue >= 1f)
                 {
-                    case AnimValueType.Progress:
-                        animator.speed = 0;
-                        if (animValue >= 1f)
-                        {
-                            animValue = 0.99f;
-                        }
-
-                        animator.Play(animationType, 0, animValue);
-                        break;
-                    case AnimValueType.Speed:
-                        animator.speed = animValue;
-                        animator.Play(animationType, 0);
-
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(animValueType), animValueType, null);
+                    animValue = 0.99f;
                 }
+
+                _animator.Play(animationType, 0, animValue);
             }
         }
 
@@ -116,15 +107,15 @@ namespace XFramework
         {
             if (ContainsParameter(animationType))
             {
-                animator.speed = 0;
+                _animator.speed = 0;
                 if (animSpeedProgress == AnimSpeedProgress.End)
                 {
-                    animator.Play(animationType, 0, 0.99f);
+                    _animator.Play(animationType, 0, 0.99f);
                 }
                 else if (animSpeedProgress == AnimSpeedProgress.Start)
                 {
                     Debug.Log(animationType);
-                    animator.Play(animationType, 0, normalizedTime: 0.01f);
+                    _animator.Play(animationType, 0, normalizedTime: 0.01f);
                 }
             }
         }
@@ -136,7 +127,6 @@ namespace XFramework
         /// </summary>
         /// <param name="animationType"></param>
         /// <param name="eventAction"></param>
-        /// <param name="animValue"></param>
         public int PlayAnim(string animationType, UnityAction eventAction)
         {
             if (ContainsParameter(animationType))
@@ -156,8 +146,8 @@ namespace XFramework
         {
             if (ContainsParameter(animationType))
             {
-                animator.speed = 1;
-                animator.SetTrigger(animationType);
+                _animator.speed = 1;
+                _animator.SetTrigger(animationType);
             }
         }
 
@@ -167,7 +157,7 @@ namespace XFramework
         /// <returns></returns>
         public bool GetAnimClipPlayOver()
         {
-            return animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f && animator.gameObject.activeSelf &&
+            return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f && _animator.gameObject.activeSelf &&
                    !AnimatorControllerManager.Instance.eventChange;
         }
 
@@ -176,7 +166,7 @@ namespace XFramework
         /// </summary>
         public void StopAnim()
         {
-            animator.speed = 0;
+            _animator.speed = 0;
         }
 
         /// <summary>
@@ -186,7 +176,7 @@ namespace XFramework
         /// <returns></returns>
         public float GetPlayAnimLength(string animType)
         {
-            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+            AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
             foreach (AnimationClip item in clips)
             {
                 if (item.name == animType)
@@ -205,7 +195,7 @@ namespace XFramework
         /// <returns></returns>
         public bool GetAnimState(string animType)
         {
-            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+            AnimationClip[] clips = _animator.runtimeAnimatorController.animationClips;
             foreach (AnimationClip item in clips)
             {
                 if (item.name == animType)
