@@ -26,6 +26,7 @@ namespace XFramework
         public float currentRunTime = 0;
 
         [BoxGroup("计时器")] [LabelText("时间暂停")] public bool pause;
+        [BoxGroup("计时器")] [LabelText("系统速度")] public float systemSpeed = 1f;
 
         [BoxGroup("计时器")] [TableList(AlwaysExpanded = true)] [Searchable] [LabelText("所有计时任务")]
         public List<TimeTaskList> timeTaskList;
@@ -42,6 +43,7 @@ namespace XFramework
 
         [BoxGroup("日期失效")] [Searchable] [LabelText("到期时间")]
         public List<int> expireDate;
+
 
         public override void StartSvc()
         {
@@ -82,6 +84,8 @@ namespace XFramework
             {
                 UpdateCurrentSystemTime();
             }
+
+            Time.timeScale = systemSpeed;
         }
 
         public override void InitSvc()
