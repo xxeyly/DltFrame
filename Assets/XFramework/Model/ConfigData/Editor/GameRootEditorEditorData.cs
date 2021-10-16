@@ -18,9 +18,9 @@ namespace XFramework
         [LabelText("场景服务")] public bool customSceneSvc;
         [LabelText("计时器服务")] public bool timeSvcEditorSvc;
         [LabelText("视图服务")] public bool viewSvcEditorSvc;
-
         [LabelText("实体服务")] public bool entitySvcEditorSvc;
         [LabelText("流程服务")] public bool circuitSvcEditorSvc;
+        [LabelText("流程服务")] public bool mouseSvcEditorSvc;
 
         //是否开启框架初始化
         [LabelText("资源框架初始化")] public bool resSvcEditorFrameInit;
@@ -32,6 +32,7 @@ namespace XFramework
         [LabelText("持久化框架初始化")] public bool persistentDataSvcEditorFrameInit;
         [LabelText("实体框架初始化")] public bool entityDataSvcEditorFrameInit;
         [LabelText("流程框架初始化")] public bool circuitDataSvcEditorFrameInit;
+        [LabelText("鼠标框架初始化")] public bool mouseSvcEditorFrameInit;
 
         //是否开启场景初始化
         [LabelText("资源场景初始化")] public bool resSvcEditorSceneInit;
@@ -43,5 +44,6 @@ namespace XFramework
         [LabelText("持久化场景初始化")] public bool persistentDataSvcEditorSceneInit;
         [LabelText("实体场景初始化")] public bool entityDataSvcEditorSceneInit;
         [LabelText("流程场景初始化")] public bool circuitDataSvcEditorSceneInit;
+        [LabelText("鼠标场景初始化")] public bool mouseSvcEditorSceneInit;
     }
 }

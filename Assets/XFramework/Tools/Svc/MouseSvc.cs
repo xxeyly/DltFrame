@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -46,11 +47,14 @@ namespace XFramework
         private Vector3 _vec3MouseScreenSpace; // 鼠标的屏幕空间坐标  
         private Vector3 _vec3Offset; // 偏移 
 #pragma warning disable 649
+        [LabelText("鼠标常态")]
         [SerializeField] private Texture2D _mouseNormal; // 鼠标常态
+        [LabelText("鼠标移入")]
         [SerializeField] private Texture2D _mouseEnter; // 鼠标移入
 #pragma warning restore
         private Canvas _canvas;
-        private GameObject _mouseEnterUI;
+        private GameObject _mouseEnterUi;
+        [LabelText("鼠标按下")]
         public bool mouseDown;
 
         public override void StartSvc()
@@ -278,15 +282,15 @@ namespace XFramework
 
             if (PersistentDataSvc.Instance.mouseState)
             {
-                _mouseEnterUI = GetMouseEnterUi();
-                if (_mouseEnterUI != null)
+                _mouseEnterUi = GetMouseEnterUi();
+                if (_mouseEnterUi != null)
                 {
-                    if (_mouseEnterUI.GetComponent<Button>() || _mouseEnterUI.GetComponent<Toggle>() ||
-                        _mouseEnterUI.GetComponent<Slider>())
+                    if (_mouseEnterUi.GetComponent<Button>() || _mouseEnterUi.GetComponent<Toggle>() ||
+                        _mouseEnterUi.GetComponent<Slider>())
                     {
                         SetMouseArrow(_mouseEnter, new Vector2(0, 0));
                     }
-                    else if (_mouseEnterUI.GetComponent<Image>() && _mouseEnterUI.GetComponent<Image>().raycastTarget)
+                    else if (_mouseEnterUi.GetComponent<Image>() && _mouseEnterUi.GetComponent<Image>().raycastTarget)
                     {
                         SetMouseArrow(_mouseEnter, new Vector2(0, 0));
                     }

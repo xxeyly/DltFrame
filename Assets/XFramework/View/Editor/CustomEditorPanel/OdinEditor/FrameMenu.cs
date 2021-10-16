@@ -46,11 +46,13 @@ namespace XFramework
             EntityBaseSvcEditor entityBaseSvcEditor = new EntityBaseSvcEditor();
             //流程服务
             CircuitSvcEditor circuitSvcEditor = new CircuitSvcEditor();
+            //鼠标服务
+            MouseSvcEditor mouseSvcEditor = new MouseSvcEditor();
             //生成配置
             generateBaseWindowEditor = new GenerateBaseWindowEditor();
             //框架配置
             gameRootEditor = new GameRootEditor(persistentDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entityBaseSvcEditor, viewSvcEditor,
-                circuitSvcEditor);
+                circuitSvcEditor,mouseSvcEditor);
             ResourceUnification resourceUnification = new ResourceUnification();
             sceneLoad = new SceneLoad();
             sceneLoad.OnInit();

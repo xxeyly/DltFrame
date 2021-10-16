@@ -2,7 +2,6 @@
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
-
 namespace XFramework
 {
     public class GameRootEditor : BaseEditor
@@ -34,10 +33,15 @@ namespace XFramework
         [Toggle("Enabled")] [LabelText("流程服务")]
         public CircuitSvcEditor circuitSvcEditor;
 
+        [Toggle("Enabled")] [LabelText("鼠标服务")]
+        public MouseSvcEditor mouseSvcEditor;
+
+
         private GameRootEditorEditorData _gameRootEditorEditorData;
 
         public GameRootEditor(PersistentDataSvcEditor persistentDataSvcEditor, ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor, ListenerSvcEditor listenerSvcEditorSvc,
-            SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, EntityBaseSvcEditor entityBaseSvcSvc, ViewSvcEditor viewSvcEditorSvc, CircuitSvcEditor circuitSvcEditor)
+            SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, EntityBaseSvcEditor entityBaseSvcSvc, ViewSvcEditor viewSvcEditorSvc, CircuitSvcEditor circuitSvcEditor,
+            MouseSvcEditor mouseSvcEditor)
         {
             this.persistentDataSvcEditor = persistentDataSvcEditor;
             this.resSvcEditor = resSvcEditor;
@@ -48,6 +52,7 @@ namespace XFramework
             this.viewSvcEditorSvc = viewSvcEditorSvc;
             this.entityBaseSvcEditorSvc = entityBaseSvcSvc;
             this.circuitSvcEditor = circuitSvcEditor;
+            this.mouseSvcEditor = mouseSvcEditor;
         }
 
         [Button(ButtonSizes.Large), GUIColor(0, 1, 0)]
@@ -152,6 +157,14 @@ namespace XFramework
                 tempSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
+            } if (mouseSvcEditor.Enabled)
+            {
+                GameObject tempSvcObj = new GameObject("MouseSvc");
+                MouseSvc tempSvc = tempSvcObj.AddComponent<MouseSvc>();
+                tempSvc.frameInit = viewSvcEditorSvc.isFrameInit;
+                tempSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
+                tempSvcObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
         }
 
@@ -205,9 +218,13 @@ namespace XFramework
             _gameRootEditorEditorData.entityDataSvcEditorFrameInit = entityBaseSvcEditorSvc.isFrameInit;
             _gameRootEditorEditorData.entityDataSvcEditorSceneInit = entityBaseSvcEditorSvc.isSceneInit;
 
-            _gameRootEditorEditorData.circuitSvcEditorSvc = entityBaseSvcEditorSvc.Enabled;
-            _gameRootEditorEditorData.circuitDataSvcEditorFrameInit = entityBaseSvcEditorSvc.isFrameInit;
-            _gameRootEditorEditorData.circuitDataSvcEditorSceneInit = entityBaseSvcEditorSvc.isSceneInit;
+            _gameRootEditorEditorData.circuitSvcEditorSvc = circuitSvcEditor.Enabled;
+            _gameRootEditorEditorData.circuitDataSvcEditorFrameInit = circuitSvcEditor.isFrameInit;
+            _gameRootEditorEditorData.circuitDataSvcEditorSceneInit = circuitSvcEditor.isSceneInit;
+            
+            _gameRootEditorEditorData.mouseSvcEditorSvc = mouseSvcEditor.Enabled;
+            _gameRootEditorEditorData.mouseSvcEditorFrameInit = mouseSvcEditor.isFrameInit;
+            _gameRootEditorEditorData.mouseSvcEditorSceneInit = mouseSvcEditor.isSceneInit;
 
             //标记脏区
             EditorUtility.SetDirty(_gameRootEditorEditorData);
@@ -250,11 +267,15 @@ namespace XFramework
 
             entityBaseSvcEditorSvc.Enabled = _gameRootEditorEditorData.entitySvcEditorSvc;
             entityBaseSvcEditorSvc.isFrameInit = _gameRootEditorEditorData.entityDataSvcEditorFrameInit;
-            entityBaseSvcEditorSvc.isSceneInit = _gameRootEditorEditorData.entityDataSvcEditorSceneInit;
+            entityBaseSvcEditorSvc.isSceneInit = _gameRootEditorEditorData.entityDataSvcEditorSceneInit; 
+            
+            circuitSvcEditor.Enabled = _gameRootEditorEditorData.circuitSvcEditorSvc;
+            circuitSvcEditor.isFrameInit = _gameRootEditorEditorData.circuitDataSvcEditorFrameInit;
+            circuitSvcEditor.isSceneInit = _gameRootEditorEditorData.circuitDataSvcEditorSceneInit;
 
-            circuitSvcEditor.Enabled = _gameRootEditorEditorData.entitySvcEditorSvc;
-            circuitSvcEditor.isFrameInit = _gameRootEditorEditorData.entityDataSvcEditorFrameInit;
-            circuitSvcEditor.isSceneInit = _gameRootEditorEditorData.entityDataSvcEditorSceneInit;
+            mouseSvcEditor.Enabled = _gameRootEditorEditorData.mouseSvcEditorSvc;
+            mouseSvcEditor.isFrameInit = _gameRootEditorEditorData.mouseSvcEditorFrameInit;
+            mouseSvcEditor.isSceneInit = _gameRootEditorEditorData.mouseSvcEditorSceneInit;
         }
 
         public override void OnInit()
