@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace XFramework
 {
+#if UNITY_EDITOR
     public class EntityEditor
     {
         [MenuItem("GameObject/生成 /@(Alt+E) 生成实体 &e", false, 0)]
@@ -17,4 +18,5 @@ namespace XFramework
             }
         }
     }
+#endif
 }
