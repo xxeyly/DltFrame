@@ -17,16 +17,14 @@ namespace XFramework
         /// <summary>
         /// 三键按下持续触发任务
         /// </summary>
-        private int _leftDownContinuousTriggerTimeTask;
-
-        private int _rightDownContinuousTriggerTimeTask;
-        private int _centerDownContinuousTriggerTimeTask;
+        private bool _leftDownContinuousTrigger;
+        private bool _rightDownContinuousTrigger;
+        private bool _centerDownContinuousTrigger;
 
         /// <summary>
         /// 三键双击触发
         /// </summary>
         private List<GameObject> _leftDoubleClickRay;
-
         private List<GameObject> _rightDoubleClickRay;
         private List<GameObject> _centerDoubleClickRay;
 
@@ -34,7 +32,8 @@ namespace XFramework
         public class RayRenderItemInfo
         {
             [LabelText("事件ID")] public int actionId;
-            [LabelText("事件")] public Action<RaycastHit> rayHit;
+            [LabelText("触发事件")] public Action<RaycastHit> rayHit;
+            [LabelText("离开触发事件")] public Action<RaycastHit> unRayHit;
             [LabelText("触发层")] public LayerMask currentOperationMask;
             [LabelText("鼠标类型")] public MouseType mouseType;
             [LabelText("触发类型")] public TriggerType triggerType;
@@ -50,7 +49,7 @@ namespace XFramework
         /// <param name="triggerType"></param>
         /// <param name="continuousTrigger"></param>
         /// <returns></returns>
-        public int AddRayListener(Camera camera, Action<RaycastHit> rayHit, LayerMask currentOperationMask, MouseType mouseType,
+        public int AddRayListener(Camera camera, Action<RaycastHit> rayHit, Action<RaycastHit> unRayHit, LayerMask currentOperationMask, MouseType mouseType,
             TriggerType triggerType, bool continuousTrigger = false)
         {
             currentRayCamera = camera;
@@ -74,6 +73,7 @@ namespace XFramework
                 RayRenderItemInfo tempRenderItemInfo = new RayRenderItemInfo();
                 tempRenderItemInfo.actionId = id;
                 tempRenderItemInfo.rayHit = rayHit;
+                tempRenderItemInfo.unRayHit = unRayHit;
                 tempRenderItemInfo.currentOperationMask = currentOperationMask;
                 tempRenderItemInfo.mouseType = mouseType;
                 tempRenderItemInfo.triggerType = triggerType;
@@ -94,9 +94,18 @@ namespace XFramework
             {
                 if (rayRenderItemInfos[i].actionId == id)
                 {
+                    Debug.Log(rayRenderItemInfos[i].actionId);
                     rayRenderItemInfos.RemoveAt(i);
                     break;
                 }
+            }
+        }
+
+        public void RemoveAllRayListener()
+        {
+            for (int i = 0; i < rayRenderItemInfos.Count; i++)
+            {
+                rayRenderItemInfos.RemoveAt(i);
             }
         }
 
@@ -145,12 +154,46 @@ namespace XFramework
             _leftDoubleClickRay = new List<GameObject>();
             _rightDoubleClickRay = new List<GameObject>();
             _centerDoubleClickRay = new List<GameObject>();
-            TimeSvc.Instance.AddImmortalTimeTask(UpdateRayAction, "射线监听", 0.01f, 0);
         }
+
+        private void Update()
+        {
+            UpdateRayAction();
+            if (_leftDownContinuousTrigger)
+            {
+                List<RayRenderItemInfo> leftDownContinuousTriggerRayAction = DownContinuousTriggerRayAction(MouseType.Left);
+                foreach (RayRenderItemInfo rayRenderItemInfo in leftDownContinuousTriggerRayAction)
+                {
+                    SendRay(rayRenderItemInfo);
+                }
+            }
+
+            if (_rightDownContinuousTrigger)
+            {
+                List<RayRenderItemInfo> rightDownContinuousTriggerRayAction =
+                    DownContinuousTriggerRayAction(MouseType.Right);
+                foreach (RayRenderItemInfo rayRenderItemInfo in rightDownContinuousTriggerRayAction)
+                {
+                    SendRay(rayRenderItemInfo);
+                }
+            }
+
+            if (_centerDownContinuousTrigger)
+            {
+                List<RayRenderItemInfo> centerDownContinuousTriggerRayAction =
+                    DownContinuousTriggerRayAction(MouseType.Center);
+                foreach (RayRenderItemInfo rayRenderItemInfo in centerDownContinuousTriggerRayAction)
+                {
+                    SendRay(rayRenderItemInfo);
+                }
+            }
+        }
+
 
         public override void Init()
         {
         }
+
 
         /// <summary>
         /// 执行射线事件
@@ -172,14 +215,7 @@ namespace XFramework
                 #region 持续触发
 
                 List<RayRenderItemInfo> leftDownContinuousTriggerRayAction = DownContinuousTriggerRayAction(MouseType.Left);
-                _leftDownContinuousTriggerTimeTask = TimeSvc.Instance.AddTimeTask(() =>
-                {
-                    foreach (RayRenderItemInfo rayRenderItemInfo in leftDownContinuousTriggerRayAction)
-                    {
-                        SendRay(rayRenderItemInfo);
-                    }
-                }, "左键按下持续触发", 0.01f, 0);
-
+                _leftDownContinuousTrigger = true;
                 #endregion
 
                 #region 双击触发
@@ -209,13 +245,7 @@ namespace XFramework
 
                 List<RayRenderItemInfo> rightDownContinuousTriggerRayAction =
                     DownContinuousTriggerRayAction(MouseType.Right);
-                _rightDownContinuousTriggerTimeTask = TimeSvc.Instance.AddTimeTask(() =>
-                {
-                    foreach (RayRenderItemInfo rayRenderItemInfo in rightDownContinuousTriggerRayAction)
-                    {
-                        SendRay(rayRenderItemInfo);
-                    }
-                }, "右键按下持续触发", 0.01f, 0);
+                _rightDownContinuousTrigger = true;
 
                 #endregion
 
@@ -246,16 +276,9 @@ namespace XFramework
 
                 List<RayRenderItemInfo> centerDownContinuousTriggerRayAction =
                     DownContinuousTriggerRayAction(MouseType.Center);
-                _centerDownContinuousTriggerTimeTask = TimeSvc.Instance.AddTimeTask(() =>
-                {
-                    foreach (RayRenderItemInfo rayRenderItemInfo in centerDownContinuousTriggerRayAction)
-                    {
-                        SendRay(rayRenderItemInfo);
-                    }
-                }, "中键按下持续触发", 0.01f, 0);
+                _centerDownContinuousTrigger = true;
 
                 #endregion
-
                 #region 双击触发
 
                 List<RayRenderItemInfo> centerDoubleRayAction = DoubleRayAction(MouseType.Center);
@@ -266,7 +289,6 @@ namespace XFramework
 
                 #endregion
             }
-
 
             if (Input.GetMouseButtonUp(0))
             {
@@ -279,8 +301,7 @@ namespace XFramework
                 }
 
                 #endregion
-
-                TimeSvc.Instance.DeleteTimeTask(_leftDownContinuousTriggerTimeTask);
+                _leftDownContinuousTrigger = false;
             }
 
             if (Input.GetMouseButtonUp(1))
@@ -294,8 +315,7 @@ namespace XFramework
                 }
 
                 #endregion
-
-                TimeSvc.Instance.DeleteTimeTask(_rightDownContinuousTriggerTimeTask);
+                _rightDownContinuousTrigger = false;
             }
 
             if (Input.GetMouseButtonUp(2))
@@ -309,8 +329,7 @@ namespace XFramework
                 }
 
                 #endregion
-
-                TimeSvc.Instance.DeleteTimeTask(_centerDownContinuousTriggerTimeTask);
+                _centerDownContinuousTrigger = false;
             }
 
             #region 其他触发
@@ -578,11 +597,11 @@ namespace XFramework
 
         private void SendRay(RayRenderItemInfo rayRenderItemInfo)
         {
-            SendRay(rayRenderItemInfo.rayHit, rayRenderItemInfo.currentOperationMask, rayRenderItemInfo.mouseType,
+            SendRay(rayRenderItemInfo.rayHit, rayRenderItemInfo.unRayHit, rayRenderItemInfo.currentOperationMask, rayRenderItemInfo.mouseType,
                 rayRenderItemInfo.triggerType, rayRenderItemInfo.actionId);
         }
 
-        private void SendRay(Action<RaycastHit> testAction, LayerMask currentOperationMask, MouseType mouseType,
+        private void SendRay(Action<RaycastHit> triggerAction, Action<RaycastHit> unTriggerAction, LayerMask currentOperationMask, MouseType mouseType,
             TriggerType triggerType, int rayTask)
         {
             Ray ray = currentRayCamera.ScreenPointToRay(Input.mousePosition);
@@ -597,7 +616,7 @@ namespace XFramework
                         case MouseType.Left:
                             if (_leftDoubleClickRay.Contains(hit.collider.gameObject))
                             {
-                                testAction.Invoke(hit);
+                                triggerAction.Invoke(hit);
                                 _leftDoubleClickRay.Remove(hit.collider.gameObject);
                             }
                             else
@@ -616,7 +635,7 @@ namespace XFramework
                         case MouseType.Center:
                             if (_centerDoubleClickRay.Contains(hit.collider.gameObject))
                             {
-                                testAction.Invoke(hit);
+                                triggerAction.Invoke(hit);
                                 _centerDoubleClickRay.Remove(hit.collider.gameObject);
                             }
                             else
@@ -635,7 +654,7 @@ namespace XFramework
                         case MouseType.Right:
                             if (_rightDoubleClickRay.Contains(hit.collider.gameObject))
                             {
-                                testAction.Invoke(hit);
+                                triggerAction.Invoke(hit);
                                 _rightDoubleClickRay.Remove(hit.collider.gameObject);
                             }
                             else
@@ -646,7 +665,6 @@ namespace XFramework
                                     if (_rightDoubleClickRay.Contains(hit.collider.gameObject))
                                     {
                                         _rightDoubleClickRay.Remove(hit.collider.gameObject);
-                                    
                                     }
                                 }, "左键双击移除", doubleClickTime);
                             }
@@ -659,24 +677,26 @@ namespace XFramework
                 }
                 else if (triggerType == TriggerType.Down)
                 {
-                    testAction.Invoke(hit);
+                    triggerAction.Invoke(hit);
                 }
                 else if (triggerType == TriggerType.Up)
                 {
-                    testAction.Invoke(hit);
-
+                    triggerAction.Invoke(hit);
                 }
                 else if (triggerType == TriggerType.Normal)
                 {
-                    testAction.Invoke(hit);
-
+                    triggerAction.Invoke(hit);
                 }
+            }
+            else
+            {
+                //离开触发区域
+                unTriggerAction?.Invoke(hit);
             }
         }
 
         public void CloseRayTest(int timeTask)
         {
-            // TimeSvc.Instance.DeleteTimeTask(timeTask);
             for (int i = 0; i < rayRenderItemInfos.Count; i++)
             {
                 if (rayRenderItemInfos[i].actionId == timeTask)
