@@ -98,7 +98,7 @@ namespace XFramework
                 "//" + GenerateBaseWindowData.endVariableBindEvent);
             // CustomReplaceScriptContent(_currentScriptsContent);
             _currentScriptsContent = CustomReplaceScriptContent(_currentScriptsContent);
-            ResSvc.FileOperation.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
+            FileOperation.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
             ClearConsole();
 #endif
         }
@@ -287,7 +287,7 @@ namespace XFramework
         /// </summary>
         private string GetOldScriptsContent()
         {
-            string oldScriptContent = ResSvc.FileOperation.GetTextToLoad(GetScriptsPath());
+            string oldScriptContent = FileOperation.GetTextToLoad(GetScriptsPath());
             return oldScriptContent;
         }
 

@@ -96,7 +96,7 @@ namespace XFramework
         {
             string scriptPath = GetPath(scriptsName);
 
-            string oldScriptContent = ResSvc.FileOperation.GetTextToLoad(scriptPath);
+            string oldScriptContent = FileOperation.GetTextToLoad(scriptPath);
             return oldScriptContent;
         }
 

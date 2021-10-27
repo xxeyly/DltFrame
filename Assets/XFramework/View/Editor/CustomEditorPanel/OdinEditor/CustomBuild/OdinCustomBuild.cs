@@ -144,8 +144,11 @@ namespace XFramework
             //标记脏区
             EditorUtility.SetDirty(_customBuildData);
 #if UNITY_EDITOR
-            // 保存所有修改
-            AssetDatabase.SaveAssets();
+            if (!Application.isPlaying)
+            {
+                // 保存所有修改
+                AssetDatabase.SaveAssets();
+            }
 #endif
         }
 

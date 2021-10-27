@@ -111,7 +111,7 @@ namespace XFramework
                 if (sceneInfo.sceneLoadType == SceneLoadEditorData.SceneLoadType.异步)
                 {
                     string currentSceneMd5 =
-                        ResSvc.FileOperation.GetMD5HashFromFile(AssetDatabase.GetAssetPath(sceneInfo.sceneAsset));
+                        FileOperation.GetMD5HashFromFile(AssetDatabase.GetAssetPath(sceneInfo.sceneAsset));
                     //场景已经更新了
                     if (currentSceneMd5 != sceneInfo.Md5)
                     {
@@ -176,7 +176,7 @@ namespace XFramework
             }
 
             //保存场景配置信息
-            ResSvc.FileOperation.SaveTextToLoad(
+            FileOperation.SaveTextToLoad(
                 Application.dataPath + "/XFramework/Resources/DownFile/SceneFileInfo.json",
                 JsonMapper.ToJson(sceneFile));
         }

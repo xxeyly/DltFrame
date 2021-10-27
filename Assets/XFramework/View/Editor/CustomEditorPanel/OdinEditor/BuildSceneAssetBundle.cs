@@ -53,7 +53,7 @@ namespace XFramework
                     if (sceneInfo.sceneAsset == sceneAssetBundleInfo.sceneAsset)
                     {
                         //两个文件的Md5不一样
-                        if (ResSvc.FileOperation.GetMD5HashFromFile(AssetDatabase.GetAssetPath(sceneInfo.sceneAsset)) ==
+                        if (FileOperation.GetMD5HashFromFile(AssetDatabase.GetAssetPath(sceneInfo.sceneAsset)) ==
                             sceneAssetBundleInfo.Md5)
                         {
                             // isBuild = true;
@@ -61,7 +61,7 @@ namespace XFramework
                         else
                         {
                             sceneAssetBundleInfo.Md5 =
-                                ResSvc.FileOperation.GetMD5HashFromFile(
+                                FileOperation.GetMD5HashFromFile(
                                     AssetDatabase.GetAssetPath(sceneInfo.sceneAsset));
                             sceneAssetBundleInfo.sceneAbPath =
                                 _sceneLoadEditorData.sceneAssetBundlePath + "/" +
@@ -92,7 +92,7 @@ namespace XFramework
                         {
                             sceneAsset = sceneInfo.sceneAsset,
                             Md5 =
-                                ResSvc.FileOperation.GetMD5HashFromFile(
+                                FileOperation.GetMD5HashFromFile(
                                     AssetDatabase.GetAssetPath(sceneInfo.sceneAsset)),
                             sceneAbPath =
                                 _sceneLoadEditorData.sceneAssetBundlePath + "/" +
@@ -167,7 +167,7 @@ namespace XFramework
                 }
             }
 
-            ResSvc.FileOperation.SaveTextToLoad(
+            FileOperation.SaveTextToLoad(
                 Application.dataPath + "/XFramework/Resources/DownFile/DownFileInfo.json",
                 JsonMapper.ToJson(downFile));
         }

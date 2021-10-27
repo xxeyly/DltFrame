@@ -25,6 +25,7 @@ namespace XFramework
             else
             {
                 Instance = GetComponent<GameRootStart>();
+                dontDestroyOnLoad = true;
                 //服务开启
                 SvcStart();
                 Debug.Log("服务开启");
@@ -42,7 +43,7 @@ namespace XFramework
             if (!GetComponent<GameRoot>())
             {
                 GameRoot gameRoot = gameObject.AddComponent<GameRoot>();
-                gameRoot.GameRootInit(PersistentDataSvc.Instance.jump);
+                gameRoot.GameRootInit(dontDestroyOnLoad);
             }
         }
 

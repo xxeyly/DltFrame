@@ -120,7 +120,7 @@ namespace XFramework
                     }
 
                     _allScriptsPath.Add(files[i].Name);
-                    _allScriptsContentDic.Add(files[i].Name.Replace(".cs", ""), ResSvc.FileOperation.GetTextToLoad(ResSvc.FileOperation.ConvertToLocalPath(files[i].FullName)));
+                    _allScriptsContentDic.Add(files[i].Name.Replace(".cs", ""), FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName)));
                 }
             }
 
@@ -206,7 +206,7 @@ namespace XFramework
 
             string oldContent = GenerateGeneral.GetOldScriptsContent("ListenerSvcData");
             oldContent = GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(callDic2), "//监听生成开始", "//监听生成结束");
-            ResSvc.FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerSvcData"), oldContent);
+            FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerSvcData"), oldContent);
         }
     }
 }
