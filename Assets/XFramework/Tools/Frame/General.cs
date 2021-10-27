@@ -83,7 +83,9 @@ namespace XFramework
 
         [LabelText("BaseWindow模板地址")] public static string BaseWindowTemplatePath = "Assets/XFramework/Model/Template/BaseWindowTemplate.cs";
 
-        [LabelText("子级BaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = "Assets/XFramework/Model/Template/ChildBaseWindowTemplate.cs";
+        [LabelText("ChildBaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = "Assets/XFramework/Model/Template/ChildBaseWindowTemplate.cs";
+        
+        [LabelText("CircuitBaseData模板地址")] public static string CircuitBaseDataTemplatePath = "Assets/XFramework/Model/Template/CircuitBaseDataTemplate.cs";
 
         [LabelText("自动打包配置存放路径")] public static string customBuildDataPath = "Assets/XFramework/Config/CustomBuildData.asset";
 

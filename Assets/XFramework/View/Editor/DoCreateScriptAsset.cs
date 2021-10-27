@@ -41,6 +41,12 @@ namespace XFramework
             {
                 text = text.Replace("ChildBaseWindowTemplate", className);
             }
+            
+            if (resourceFile == General.CircuitBaseDataTemplatePath)
+            {
+                text = text.Replace("CircuitBaseDataTemplate", className);
+            }
+
 
             //utf8
             var encoding = new UTF8Encoding(true, false);

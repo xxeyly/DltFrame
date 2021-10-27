@@ -282,7 +282,6 @@ namespace XFramework
             Vector3 vector3 = new Vector3(Mathf.Round(x), Mathf.Round(y), Mathf.Round(z));
             return vector3;
         }
-#if UNITY_EDITOR
 
         /// <summary>
         /// 获得继承类的所有子类
@@ -291,7 +290,8 @@ namespace XFramework
         /// <returns></returns>
         public static List<T> GetInheritAllSubclass<T>() where T : class
         {
-            var types = Assembly.GetCallingAssembly().GetTypes();
+            // var types = Assembly.GetCallingAssembly().GetTypes();
+            var types = typeof(T).Assembly.GetTypes();
             var cType = typeof(T);
             List<T> cList = new List<T>();
 
@@ -321,6 +321,8 @@ namespace XFramework
 
             return cList;
         }
+#if UNITY_EDITOR
+
 #endif
     }
 

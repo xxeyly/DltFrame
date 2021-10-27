@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace XFramework
 {
-    public abstract class CircuitBaseData : MonoBehaviour
+    public abstract class CircuitBaseData 
     {
         /// <summary>
         /// 注册

@@ -33,11 +33,12 @@ namespace XFramework
             EntitySvc.Instance.onShowEntity += OnShowEntity;
             EntitySvc.Instance.onHideEntity += OnHideEntity;
             _allCircuitBaseDataDic = new Dictionary<Type, CircuitBaseData>();
-            sceneCircuitBaseData = DataSvc.GetAllObjectsInScene<CircuitBaseData>();
+            sceneCircuitBaseData = DataSvc.GetInheritAllSubclass<CircuitBaseData>();
             foreach (CircuitBaseData circuitBaseData in sceneCircuitBaseData)
             {
                 _allCircuitBaseDataDic.Add(circuitBaseData.GetType(), circuitBaseData);
             }
+
         }
 
         public override void EndSvc()
