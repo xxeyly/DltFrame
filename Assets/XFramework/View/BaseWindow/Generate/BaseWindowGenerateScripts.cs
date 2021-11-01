@@ -55,7 +55,13 @@ namespace XFramework
                 temp += Indents(8);
                 temp += "[HorizontalGroup(" + "\"" + generateAttributesTypeGroup.attributesDescription + "\")]" + Indents(1);
                 temp += "[HideLabel]" + Indents(1);
-                temp += "public" + Indents(1) + generateAttributesTypeGroup.generateAttributesType.ToString().Replace("@", "") + Indents(1) + generateAttributesTypeGroup.attributesName +
+                string generateAttributesType = generateAttributesTypeGroup.generateAttributesType.ToString().Replace("@", "");
+                if (generateAttributesType.Contains("_"))
+                {
+                    generateAttributesType = generateAttributesTypeGroup.generateAttributesType.ToString().Replace("_", "<") + ">";
+                }
+
+                temp += "public" + Indents(1) + generateAttributesType + Indents(1) + generateAttributesTypeGroup.attributesName +
                         Semicolon;
                 temp += LineFeed;
                 allCustomAttributes.Add(temp);

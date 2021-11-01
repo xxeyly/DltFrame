@@ -31,7 +31,6 @@ namespace XFramework
 
     public static class General
     {
-
         #region 视图时间
 
         [LabelText("视图切换时间")] public const float ViewSwitchTime = 2f;
@@ -84,8 +83,10 @@ namespace XFramework
         [LabelText("BaseWindow模板地址")] public static string BaseWindowTemplatePath = "Assets/XFramework/Model/Template/BaseWindowTemplate.cs";
 
         [LabelText("ChildBaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = "Assets/XFramework/Model/Template/ChildBaseWindowTemplate.cs";
-        
+
         [LabelText("CircuitBaseData模板地址")] public static string CircuitBaseDataTemplatePath = "Assets/XFramework/Model/Template/CircuitBaseDataTemplate.cs";
+        
+        [LabelText("ListenerSvcData模板地址")] public static string ListenerSvcDataTemplatePath = "Assets/XFramework/Model/Template/ListenerSvcDataTemplate.cs";
 
         [LabelText("自动打包配置存放路径")] public static string customBuildDataPath = "Assets/XFramework/Config/CustomBuildData.asset";
 
@@ -108,7 +109,15 @@ namespace XFramework
             @GameObject,
             @Transform,
             @Camera,
-            @Color
+            @Color,
+            [LabelText("List<int>")] @List_int,
+            [LabelText("List<string>")] @List_string,
+            [LabelText("List<Sprite>")] @List_Sprite,
+            [LabelText("List<bool>")] @List_bool,
+            [LabelText("List<GameObject>")] @List_GameObject,
+            [LabelText("List<Transform>")] @List_Transform,
+            [LabelText("List<Camera>")] @List_Camera,
+            [LabelText("List<Color>")] @List_Color,
         }
 
         [Serializable]
@@ -117,7 +126,6 @@ namespace XFramework
             [HorizontalGroup("属性类型")] [HideLabel] public GenerateAttributesType generateAttributesType;
             [HorizontalGroup("属性名称")] [HideLabel] public string attributesName;
             [HorizontalGroup("属性描述")] [HideLabel] public string attributesDescription;
-            
         }
     }
 }

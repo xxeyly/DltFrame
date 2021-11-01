@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 571b5c2e65134929888f5539a596d639, type: 3}
   m_Name: CustomBuildData
   m_EditorClassIdentifier: 
-  buildTarget: 20
+  buildTarget: 19
   buildCompressType: 524288
   buildPackagePath: D:/Soft/Xampp/htdocs
   exportCnProjectName: XFramge
-  exportEnProjectName: XFramge
+  exportEnProjectName: XFramgePC
   chineseShell: 0
   folderCopy:
   - copyFolderPath: Assets/XFramework/Resources/DownFile

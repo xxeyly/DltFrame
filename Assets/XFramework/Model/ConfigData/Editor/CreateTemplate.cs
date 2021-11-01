@@ -46,7 +46,19 @@ namespace XFramework
                 ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewCircuitBaseData.cs", null,
                 General.CircuitBaseDataTemplatePath);
         }
+        [MenuItem("Assets/Create/XFramework/C# ListenerSvcData", false, 73)]
+        public static void OnCreateListenerSvcDataTemplate()
+        {
+            string path = GetSelectedPath();
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
 
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
+                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/ListenerSvcData.cs", null,
+                General.ListenerSvcDataTemplatePath);
+        }
         /// <summary>
         /// 获得选择文件地址
         /// </summary>

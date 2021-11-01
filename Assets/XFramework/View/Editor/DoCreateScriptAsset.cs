@@ -41,10 +41,15 @@ namespace XFramework
             {
                 text = text.Replace("ChildBaseWindowTemplate", className);
             }
-            
+
             if (resourceFile == General.CircuitBaseDataTemplatePath)
             {
                 text = text.Replace("CircuitBaseDataTemplate", className);
+            }
+
+            if (resourceFile == General.ListenerSvcDataTemplatePath)
+            {
+                text = text.Replace("ListenerSvcDataTemplate", "ListenerSvc");
             }
 
 

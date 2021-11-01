@@ -100,7 +100,13 @@ namespace XFramework
         [LabelText("代码生成")]
         public void OnGenerate()
         {
-            // callDic = new Dictionary<string, List<string>>();
+            string listenerSvcDataPath = GenerateGeneral.GetPath("ListenerSvcData");
+            if (listenerSvcDataPath == null)
+            {
+                Debug.LogWarning("ListenerSvcData脚本未创建");
+                return;
+            }
+
             callDic2 = new Dictionary<string, Dictionary<string, List<string>>>();
             string path = string.Format("{0}", Application.dataPath + "/Scripts");
 
