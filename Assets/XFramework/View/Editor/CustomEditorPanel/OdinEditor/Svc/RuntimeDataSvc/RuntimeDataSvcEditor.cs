@@ -3,7 +3,7 @@
 namespace XFramework
 {
     [Serializable]
-    public class PersistentDataSvcEditor : BaseSvcEditor
+    public class RuntimeDataSvcEditor : BaseSvcEditor
     {
         
     }

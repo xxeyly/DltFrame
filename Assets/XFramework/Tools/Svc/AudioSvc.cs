@@ -138,7 +138,7 @@ namespace XFramework
         public void Continue()
         {
             _effectAudioSource.UnPause();
-            if (PersistentDataSvc.Instance.audioState)
+            if (RuntimeDataSvc.Instance.audioState)
             {
                 _backgroundAudioSource.UnPause();
             }
@@ -167,7 +167,7 @@ namespace XFramework
         {
             PlayEffectAudio("背景音乐");
             _backgroundAudioSource.Pause();
-            PersistentDataSvc.Instance.audioState = false;
+            RuntimeDataSvc.Instance.audioState = false;
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace XFramework
             {
                 _backgroundAudioSource.clip = _audioDlc["背景音乐"];
                 _backgroundAudioSource.Play();
-                PersistentDataSvc.Instance.audioState = true;
+                RuntimeDataSvc.Instance.audioState = true;
             }
             else
             {

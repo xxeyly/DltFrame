@@ -7,7 +7,7 @@ namespace XFramework
     public class GameRootEditor : BaseEditor
 
     {
-        [Toggle("Enabled")] [LabelText("持久化")] public PersistentDataSvcEditor persistentDataSvcEditor;
+        [Toggle("Enabled")] [LabelText("持久化")] public RuntimeDataSvcEditor RuntimeDataSvcEditor;
 
         [Toggle("Enabled")] [LabelText("资源服务")]
         public ResSvcEditor resSvcEditor;
@@ -39,11 +39,11 @@ namespace XFramework
 
         private GameRootEditorEditorData _gameRootEditorEditorData;
 
-        public GameRootEditor(PersistentDataSvcEditor persistentDataSvcEditor, ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor, ListenerSvcEditor listenerSvcEditorSvc,
+        public GameRootEditor(RuntimeDataSvcEditor runtimeDataSvcEditor, ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor, ListenerSvcEditor listenerSvcEditorSvc,
             SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, EntitySvcEditor entitySvcSvc, ViewSvcEditor viewSvcEditorSvc, CircuitSvcEditor circuitSvcEditor,
             MouseSvcEditor mouseSvcEditor)
         {
-            this.persistentDataSvcEditor = persistentDataSvcEditor;
+            this.RuntimeDataSvcEditor = runtimeDataSvcEditor;
             this.resSvcEditor = resSvcEditor;
             this.audioSvcEditor = audioSvcEditor;
             this.listenerSvcEditorSvc = listenerSvcEditorSvc;
@@ -67,10 +67,10 @@ namespace XFramework
             GameObject gameRootStart = new GameObject("GameRootStart");
             GameRootStart tempGameRootStart = gameRootStart.AddComponent<GameRootStart>();
             tempGameRootStart.activeSvcBase = new List<SvcBase>();
-            if (persistentDataSvcEditor.Enabled)
+            if (RuntimeDataSvcEditor.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("PersistentDataSvc");
-                PersistentDataSvc tempSvc = tempSvcObj.AddComponent<PersistentDataSvc>();
+                GameObject tempSvcObj = new GameObject("RuntimeDataSvc");
+                RuntimeDataSvc tempSvc = tempSvcObj.AddComponent<RuntimeDataSvc>();
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempSvc.frameInit = resSvcEditor.isFrameInit;
                 tempSvc.sceneInit = resSvcEditor.isSceneInit;
@@ -185,9 +185,9 @@ namespace XFramework
 
         public override void OnSaveConfig()
         {
-            _gameRootEditorEditorData.persistentDataSvcEditor = persistentDataSvcEditor.Enabled;
-            _gameRootEditorEditorData.persistentDataSvcEditorFrameInit = persistentDataSvcEditor.isFrameInit;
-            _gameRootEditorEditorData.persistentDataSvcEditorSceneInit = persistentDataSvcEditor.isSceneInit;
+            _gameRootEditorEditorData.persistentDataSvcEditor = RuntimeDataSvcEditor.Enabled;
+            _gameRootEditorEditorData.persistentDataSvcEditorFrameInit = RuntimeDataSvcEditor.isFrameInit;
+            _gameRootEditorEditorData.persistentDataSvcEditorSceneInit = RuntimeDataSvcEditor.isSceneInit;
 
             _gameRootEditorEditorData.resSvcEditor = resSvcEditor.Enabled;
             _gameRootEditorEditorData.resSvcEditorFrameInit = resSvcEditor.isFrameInit;
@@ -236,9 +236,9 @@ namespace XFramework
             _gameRootEditorEditorData =
                 AssetDatabase.LoadAssetAtPath<GameRootEditorEditorData>(General.customFrameDataPath);
 
-            persistentDataSvcEditor.Enabled = _gameRootEditorEditorData.persistentDataSvcEditor;
-            persistentDataSvcEditor.isFrameInit = _gameRootEditorEditorData.persistentDataSvcEditorFrameInit;
-            persistentDataSvcEditor.isSceneInit = _gameRootEditorEditorData.persistentDataSvcEditorSceneInit;
+            RuntimeDataSvcEditor.Enabled = _gameRootEditorEditorData.persistentDataSvcEditor;
+            RuntimeDataSvcEditor.isFrameInit = _gameRootEditorEditorData.persistentDataSvcEditorFrameInit;
+            RuntimeDataSvcEditor.isSceneInit = _gameRootEditorEditorData.persistentDataSvcEditorSceneInit;
 
             resSvcEditor.Enabled = _gameRootEditorEditorData.resSvcEditor;
             resSvcEditor.isFrameInit = _gameRootEditorEditorData.resSvcEditorFrameInit;

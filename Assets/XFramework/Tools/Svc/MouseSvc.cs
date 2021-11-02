@@ -280,7 +280,7 @@ namespace XFramework
         {
             #region UI
 
-            if (PersistentDataSvc.Instance.mouseState)
+            if (RuntimeDataSvc.Instance.mouseState)
             {
                 _mouseEnterUi = GetMouseEnterUi();
                 if (_mouseEnterUi != null)

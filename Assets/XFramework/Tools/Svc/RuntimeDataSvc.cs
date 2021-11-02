@@ -5,9 +5,9 @@ namespace XFramework
     /// <summary>
     /// 动态加载数据
     /// </summary>
-    public partial class PersistentDataSvc : SvcBase
+    public partial class RuntimeDataSvc : SvcBase
     {
-        public static PersistentDataSvc Instance;
+        public static RuntimeDataSvc Instance;
         [BoxGroup("场景加载")] [LabelText("跳转场景")] public bool jump;
 
         [BoxGroup("场景加载")] [LabelText("跳转场景名称")]
@@ -28,7 +28,7 @@ namespace XFramework
 
         public override void StartSvc()
         {
-            Instance = GetComponent<PersistentDataSvc>();
+            Instance = GetComponent<RuntimeDataSvc>();
         }
     }
 }

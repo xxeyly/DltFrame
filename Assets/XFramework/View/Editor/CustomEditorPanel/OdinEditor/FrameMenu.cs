@@ -29,7 +29,7 @@ namespace XFramework
             //打包
             customBuild = new OdinCustomBuild();
             //可持久化
-            PersistentDataSvcEditor persistentDataSvcEditor = new PersistentDataSvcEditor();
+            RuntimeDataSvcEditor runtimeDataSvcEditor = new RuntimeDataSvcEditor();
             //资源服务
             ResSvcEditor resSvcEditor = new ResSvcEditor();
             //音频服务
@@ -51,7 +51,7 @@ namespace XFramework
             //生成配置
             generateBaseWindowEditor = new GenerateBaseWindowEditor();
             //框架配置
-            gameRootEditor = new GameRootEditor(persistentDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
+            gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
                 circuitSvcEditor,mouseSvcEditor);
             ResourceUnification resourceUnification = new ResourceUnification();
             sceneLoad = new SceneLoad();
