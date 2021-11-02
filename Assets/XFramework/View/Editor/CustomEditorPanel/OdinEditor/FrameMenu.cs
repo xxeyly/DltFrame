@@ -43,7 +43,7 @@ namespace XFramework
             //视图服务
             ViewSvcEditor viewSvcEditor = new ViewSvcEditor();
             //实体服务
-            EntityBaseSvcEditor entityBaseSvcEditor = new EntityBaseSvcEditor();
+            EntitySvcEditor entitySvcEditor = new EntitySvcEditor();
             //流程服务
             CircuitSvcEditor circuitSvcEditor = new CircuitSvcEditor();
             //鼠标服务
@@ -51,7 +51,7 @@ namespace XFramework
             //生成配置
             generateBaseWindowEditor = new GenerateBaseWindowEditor();
             //框架配置
-            gameRootEditor = new GameRootEditor(persistentDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entityBaseSvcEditor, viewSvcEditor,
+            gameRootEditor = new GameRootEditor(persistentDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
                 circuitSvcEditor,mouseSvcEditor);
             ResourceUnification resourceUnification = new ResourceUnification();
             sceneLoad = new SceneLoad();

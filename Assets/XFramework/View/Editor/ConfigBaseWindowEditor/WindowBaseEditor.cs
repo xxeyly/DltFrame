@@ -81,6 +81,7 @@ namespace XFramework
                          !uiObj.GetComponent<InputField>() &&
                          !uiObj.GetComponent<Dropdown>())
                 {
+                   
                     uiObj.GetComponent<BindUiType>().type = General.UiType.Image;
                 }
                 else if (uiObj.GetComponent<Text>())

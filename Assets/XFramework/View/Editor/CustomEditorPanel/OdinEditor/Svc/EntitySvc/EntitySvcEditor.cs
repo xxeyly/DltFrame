@@ -3,7 +3,7 @@
 namespace XFramework
 {
     [Serializable]
-    public class EntityBaseSvcEditor : BaseSvcEditor
+    public class EntitySvcEditor : BaseSvcEditor
     {
        
     }
