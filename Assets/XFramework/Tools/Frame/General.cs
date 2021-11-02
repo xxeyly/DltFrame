@@ -85,7 +85,7 @@ namespace XFramework
         [LabelText("ChildBaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = "Assets/XFramework/Model/Template/ChildBaseWindowTemplate.cs";
 
         [LabelText("CircuitBaseData模板地址")] public static string CircuitBaseDataTemplatePath = "Assets/XFramework/Model/Template/CircuitBaseDataTemplate.cs";
-        
+
         [LabelText("ListenerSvcData模板地址")] public static string ListenerSvcDataTemplatePath = "Assets/XFramework/Model/Template/ListenerSvcDataTemplate.cs";
 
         [LabelText("自动打包配置存放路径")] public static string customBuildDataPath = "Assets/XFramework/Config/CustomBuildData.asset";
@@ -100,9 +100,13 @@ namespace XFramework
 
         [LabelText("场景配置存放路径")] public static string buildSceneAssetBundleDataPath = "Assets/XFramework/Config/BuildSceneAssetBundleData.asset";
 
+        /// <summary>
+        /// 生成属性类型
+        /// </summary>
         public enum GenerateAttributesType
         {
             @int,
+            @float,
             @string,
             @Sprite,
             @bool,
@@ -111,6 +115,7 @@ namespace XFramework
             @Camera,
             @Color,
             [LabelText("List<int>")] @List_int,
+            [LabelText("List<float>")] @List_float,
             [LabelText("List<string>")] @List_string,
             [LabelText("List<Sprite>")] @List_Sprite,
             [LabelText("List<bool>")] @List_bool,
@@ -119,6 +124,56 @@ namespace XFramework
             [LabelText("List<Camera>")] @List_Camera,
             [LabelText("List<Color>")] @List_Color,
         }
+
+        /// <summary>
+        /// 组件类型
+        /// </summary>
+        public enum UiType
+        {
+            Button,
+            Image,
+            Text,
+            Toggle,
+            RawImage,
+            Scrollbar,
+            Dropdown,
+            InputField,
+            ScrollRect,
+            GameObject,
+            Slider,
+            VideoPlayer,
+            ChildList,
+        }
+
+        /// <summary>
+        /// 事件触发类型
+        /// </summary>
+        [System.Flags]
+        public enum UIEventTriggerType
+        {
+            PointerClick = 1 << 1,
+            PointerEnter = 1 << 2,
+            PointerExit = 1 << 3,
+            PointerDown = 1 << 4,
+            PointerUp = 1 << 5,
+            Drag = 1 << 6,
+            Drop = 1 << 7,
+            Scroll = 1 << 8,
+            UpdateSelected = 1 << 9,
+            Select = 1 << 10,
+            Deselect = 1 << 11,
+            Move = 1 << 12,
+            InitializePotentialDrag = 1 << 13,
+            BeginDrag = 1 << 14,
+            EndDrag = 1 << 15,
+            Submit = 1 << 16,
+            Cancel = 1 << 17,
+
+            All = PointerEnter | PointerExit | PointerDown | PointerUp | PointerClick | Drag | Drop |
+                  Scroll | UpdateSelected | Select | Deselect | Move | InitializePotentialDrag | BeginDrag |
+                  EndDrag | Submit | Cancel
+        }
+
 
         [Serializable]
         public struct GenerateAttributesTypeGroup

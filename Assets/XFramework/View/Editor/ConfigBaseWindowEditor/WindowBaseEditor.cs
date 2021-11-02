@@ -70,8 +70,8 @@ namespace XFramework
 
                 if (uiObj.GetComponent<Button>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Button;
-                    uiObj.GetComponent<BindUiType>().eventTriggerType = BindUiType.UIEventTriggerType.PointerClick;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.Button;
+                    uiObj.GetComponent<BindUiType>().eventTriggerType = General.UIEventTriggerType.PointerClick;
                 }
                 else if (uiObj.GetComponent<Image>() &&
                          !uiObj.GetComponent<Button>() &&
@@ -81,52 +81,52 @@ namespace XFramework
                          !uiObj.GetComponent<InputField>() &&
                          !uiObj.GetComponent<Dropdown>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Image;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.Image;
                 }
                 else if (uiObj.GetComponent<Text>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Text;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.Text;
                 }
                 else if (uiObj.GetComponent<Toggle>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Toggle;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.Toggle;
                 }
                 else if (uiObj.GetComponent<RawImage>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.RawImage;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.RawImage;
                 }
                 else if (uiObj.GetComponent<Scrollbar>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Scrollbar;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.Scrollbar;
                 }
                 else if (uiObj.GetComponent<Dropdown>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Dropdown;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.Dropdown;
                 }
                 else if (uiObj.GetComponent<InputField>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.InputField;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.InputField;
                 }
                 else if (uiObj.GetComponent<ScrollRect>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.ScrollRect;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.ScrollRect;
                 }
                 else if (uiObj.GetComponent<VideoPlayer>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.VideoPlayer;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.VideoPlayer;
                 }
                 else if (uiObj.GetComponent<Slider>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.Slider;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.Slider;
                 }
                 else if (uiObj.GetComponentInChildren<ChildBaseWindow>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.ChildList;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.ChildList;
                     uiObj.GetComponent<BindUiType>().childType = uiObj.GetComponentInChildren<ChildBaseWindow>();
                 }
                 else
                 {
-                    uiObj.GetComponent<BindUiType>().type = BindUiType.UiType.GameObject;
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.GameObject;
                 }
             }
         }

@@ -3,7 +3,7 @@
     // ReSharper disable once InconsistentNaming
     public class ChildUiBaseWindow : ChildBaseWindow
     {
-        public BindUiType.UiType uiType;
+        public BindUiType uiType;
 
         public override void Init()
         {

@@ -26,9 +26,9 @@ namespace XFramework
 #pragma warning disable 0649
         protected GenerateBaseWindowData GenerateBaseWindowData;
         private string _currentScriptsContent;
-        [LabelText("分号")] protected  string Semicolon = ";";
+        [LabelText("分号")] protected string Semicolon = ";";
 #pragma warning disable 0414
-        [LabelText("换行")] protected  string LineFeed = "\n";
+        [LabelText("换行")] protected string LineFeed = "\n";
 #pragma warning restore 0414
         [LabelText("监听事件列表")] private Dictionary<string, string> _listenerActionList;
 #pragma warning restore 0649
@@ -379,80 +379,80 @@ namespace XFramework
                 {
                     switch (bindUiType.type)
                     {
-                        case BindUiType.UiType.GameObject:
+                        case General.UiType.GameObject:
 
                             allUiVariableName.Add(Indents(4) + "private GameObject _" +
                                                   DataSvc.FirstCharToLower(child.name) + Semicolon);
                             AddUsing("using UnityEngine;");
                             break;
-                        case BindUiType.UiType.Button:
+                        case General.UiType.Button:
 
                             allUiVariableName.Add(
                                 Indents(4) + "private Button _" + DataSvc.FirstCharToLower(child.name) + Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.Image:
+                        case General.UiType.Image:
                             allUiVariableName.Add(Indents(4) + "private Image _" +
                                                   DataSvc.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.Text:
+                        case General.UiType.Text:
                             allUiVariableName.Add(Indents(4) + "private Text _" +
                                                   DataSvc.FirstCharToLower(child.name) +
                                                   Semicolon);
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.Toggle:
+                        case General.UiType.Toggle:
                             allUiVariableName.Add(
                                 Indents(4) + "private Toggle _" + DataSvc.FirstCharToLower(child.name) +
                                 Semicolon);
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.RawImage:
+                        case General.UiType.RawImage:
                             allUiVariableName.Add(Indents(4) + "private RawImage _" +
                                                   DataSvc.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.Scrollbar:
+                        case General.UiType.Scrollbar:
                             allUiVariableName.Add(Indents(4) + "private Scrollbar _" +
                                                   DataSvc.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.ScrollRect:
+                        case General.UiType.ScrollRect:
                             allUiVariableName.Add(Indents(4) + "private ScrollRect _" +
                                                   DataSvc.FirstCharToLower(child.name) + Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.InputField:
+                        case General.UiType.InputField:
 
                             allUiVariableName.Add(Indents(4) + "private InputField _" +
                                                   DataSvc.FirstCharToLower(child.name) + Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.Dropdown:
+                        case General.UiType.Dropdown:
                             allUiVariableName.Add(Indents(4) + "private Dropdown _" +
                                                   DataSvc.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.Slider:
+                        case General.UiType.Slider:
                             allUiVariableName.Add(Indents(4) + "private Slider _" +
                                                   DataSvc.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
-                        case BindUiType.UiType.VideoPlayer:
+                        case General.UiType.VideoPlayer:
                             allUiVariableName.Add(Indents(4) + "private VideoPlayer _" +
                                                   DataSvc.FirstCharToLower(child.name) +
                                                   Semicolon
@@ -460,7 +460,7 @@ namespace XFramework
                             AddUsing("using UnityEngine.UI;");
                             break;
 
-                        case BindUiType.UiType.ChildList:
+                        case General.UiType.ChildList:
 
                             string childTypeName;
                             Type childType;
@@ -523,77 +523,77 @@ namespace XFramework
                 if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
                 {
                     string bindStr;
-                    if (bindUiType.type == BindUiType.UiType.Button)
+                    if (bindUiType.type == General.UiType.Button)
                     {
-                        BindUiType.UIEventTriggerType uiEventTriggerType =
+                        General.UIEventTriggerType uiEventTriggerType =
                             child.GetComponent<BindUiType>().eventTriggerType;
 
-                        if ((BindUiType.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerClick)
+                        if ((General.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerClick)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerClick" + "," + "On" + child.name + "Click" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerEnter)
+                        if ((General.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerEnter)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerEnter" + "," + "On" + child.name + "Enter" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerExit)
+                        if ((General.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerExit)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerExit" + "," + "On" + child.name + "Exit" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerDown)
+                        if ((General.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerDown)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerDown" + "," + "On" + child.name + "Down" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerUp)
+                        if ((General.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerUp)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerUp" + "," + "On" + child.name + "Up" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.Drag)
+                        if ((General.UIEventTriggerType.Drag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.Drag)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.Drag" + "," + "On" + child.name + "Drag" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.BeginDrag)
+                        if ((General.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.BeginDrag)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.BeginDrag" + "," + "On" + child.name + "BeginDrag" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.EndDrag)
+                        if ((General.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.EndDrag)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.EndDrag" + "," + "On" + child.name + "EndDrag" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.Scroll & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.Scroll)
+                        if ((General.UIEventTriggerType.Scroll & uiEventTriggerType) ==
+                            General.UIEventTriggerType.Scroll)
                         {
                             bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.Scroll" + "," + "On" + child.name + "Scroll" + ");";
@@ -602,7 +602,7 @@ namespace XFramework
 
                         AddUsing("using UnityEngine.EventSystems;");
                     }
-                    else if (bindUiType.type == BindUiType.UiType.Toggle)
+                    else if (bindUiType.type == General.UiType.Toggle)
                     {
                         bindStr = Indents(8) + "_" + DataSvc.FirstCharToLower(child.name) +
                                   ".onValueChanged.AddListener(" +
@@ -654,82 +654,82 @@ namespace XFramework
 
                 if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
                 {
-                    if (bindUiType.type == BindUiType.UiType.Button)
+                    if (bindUiType.type == General.UiType.Button)
                     {
-                        BindUiType.UIEventTriggerType uiEventTriggerType =
+                        General.UIEventTriggerType uiEventTriggerType =
                             child.GetComponent<BindUiType>().eventTriggerType;
 
-                        if ((BindUiType.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerClick)
+                        if ((General.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerClick)
                         {
                             actionNameList.Add(FindActionNameKey(
                                 "On" + child.name + "Click", scriptContent));
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerEnter)
+                        if ((General.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerEnter)
                         {
                             actionNameList.Add(FindActionNameKey(
                                 "On" + child.name + "Enter", scriptContent));
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerExit)
+                        if ((General.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerExit)
                         {
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "Exit",
                                     scriptContent));
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerDown)
+                        if ((General.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerDown)
                         {
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "Down",
                                     scriptContent));
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerUp)
+                        if ((General.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerUp)
                         {
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "Up",
                                     scriptContent));
                         }
 
-                        if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.Drag)
+                        if ((General.UIEventTriggerType.Drag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.Drag)
                         {
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "Drag",
                                     scriptContent));
                         }
 
-                        if ((BindUiType.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.BeginDrag)
+                        if ((General.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.BeginDrag)
                         {
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "BeginDrag",
                                     scriptContent));
                         }
 
-                        if ((BindUiType.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.EndDrag)
+                        if ((General.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.EndDrag)
                         {
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "EndDrag",
                                     scriptContent));
                         }
 
-                        if ((BindUiType.UIEventTriggerType.Scroll & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.Scroll)
+                        if ((General.UIEventTriggerType.Scroll & uiEventTriggerType) ==
+                            General.UIEventTriggerType.Scroll)
                         {
                             actionNameList.Add(
                                 FindActionNameKey("On" + child.name + "Scroll",
                                     scriptContent));
                         }
                     }
-                    else if (bindUiType.type == BindUiType.UiType.Toggle)
+                    else if (bindUiType.type == General.UiType.Toggle)
                     {
                         actionNameList.Add(FindActionNameKey("On" + child.name,
                             scriptContent));
@@ -875,13 +875,13 @@ namespace XFramework
             {
                 if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
                 {
-                    if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Button)
+                    if (child.GetComponent<BindUiType>().type == General.UiType.Button)
                     {
                         string bindStr;
-                        BindUiType.UIEventTriggerType uiEventTriggerType =
+                        General.UIEventTriggerType uiEventTriggerType =
                             child.GetComponent<BindUiType>().eventTriggerType;
-                        if ((BindUiType.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerClick)
+                        if ((General.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerClick)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "Click");
@@ -891,8 +891,8 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerEnter)
+                        if ((General.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerEnter)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "Enter");
@@ -903,8 +903,8 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerExit)
+                        if ((General.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerExit)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "Exit");
@@ -914,8 +914,8 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerDown)
+                        if ((General.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerDown)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "Down");
@@ -925,8 +925,8 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.PointerUp)
+                        if ((General.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
+                            General.UIEventTriggerType.PointerUp)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "Up");
@@ -936,8 +936,8 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.Drag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.Drag)
+                        if ((General.UIEventTriggerType.Drag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.Drag)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "Drag");
@@ -947,8 +947,8 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.BeginDrag)
+                        if ((General.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.BeginDrag)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "BeginDrag");
@@ -958,8 +958,8 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.EndDrag)
+                        if ((General.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
+                            General.UIEventTriggerType.EndDrag)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "EndDrag");
@@ -969,8 +969,8 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
 
-                        if ((BindUiType.UIEventTriggerType.Scroll & uiEventTriggerType) ==
-                            BindUiType.UIEventTriggerType.Scroll)
+                        if ((General.UIEventTriggerType.Scroll & uiEventTriggerType) ==
+                            General.UIEventTriggerType.Scroll)
                         {
                             string oldContent = FindOldActionContent(
                                 "On" + child.name + "Scroll");
@@ -980,7 +980,7 @@ namespace XFramework
                             allUiVariableBindListenerEvent.Add(bindStr);
                         }
                     }
-                    else if (child.GetComponent<BindUiType>().type == BindUiType.UiType.Toggle)
+                    else if (child.GetComponent<BindUiType>().type == General.UiType.Toggle)
                     {
                         string oldContent = FindOldActionContent(
                             "On" + child.name);
