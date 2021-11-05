@@ -10,7 +10,7 @@ namespace XFramework
     {
         public static CircuitSvc Instance;
 
-        [TableList(AlwaysExpanded = true, DrawScrollView = false)] [LabelText("场景缓存流程数据")]
+        [BoxGroup] [TableList(AlwaysExpanded = true, DrawScrollView = false)] [LabelText("场景缓存流程数据")]
         public CircuitTempData circuitTempData;
 
         [LabelText("场景流程")] public List<CircuitBaseData> sceneCircuitBaseData;
@@ -38,7 +38,6 @@ namespace XFramework
             {
                 _allCircuitBaseDataDic.Add(circuitBaseData.GetType(), circuitBaseData);
             }
-
         }
 
         public override void EndSvc()

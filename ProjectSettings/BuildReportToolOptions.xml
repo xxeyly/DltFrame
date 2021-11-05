@@ -86,7 +86,7 @@
   <NumberOfTopLargestUnusedAssetsToShow>10</NumberOfTopLargestUnusedAssetsToShow>
   <AllowDeletingOfUsedAssets>false</AllowDeletingOfUsedAssets>
   <ShowImportedSizeForUsedAssets>false</ShowImportedSizeForUsedAssets>
-  <AutoShowWindowAfterNormalBuild>true</AutoShowWindowAfterNormalBuild>
+  <AutoShowWindowAfterNormalBuild>false</AutoShowWindowAfterNormalBuild>
   <AutoResortAssetsWhenUnityEditorRegainsFocus>false</AutoResortAssetsWhenUnityEditorRegainsFocus>
   <UseThreadedReportGeneration>true</UseThreadedReportGeneration>
   <UseThreadedFileLoading>false</UseThreadedFileLoading>

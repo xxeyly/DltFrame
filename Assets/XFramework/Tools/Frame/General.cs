@@ -182,5 +182,13 @@ namespace XFramework
             [HorizontalGroup("属性名称")] [HideLabel] public string attributesName;
             [HorizontalGroup("属性描述")] [HideLabel] public string attributesDescription;
         }
+#if UNITY_EDITOR
+        public enum BuildTargetPlatform
+        {
+            StandaloneWindows,
+            StandaloneWindows64,
+            WebGL
+        }
+#endif
     }
 }

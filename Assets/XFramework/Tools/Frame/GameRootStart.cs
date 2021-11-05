@@ -33,6 +33,7 @@ namespace XFramework
                 SvcInit();
                 Debug.Log("框架服务加载完毕");
             }
+            
         }
 
         /// <summary>

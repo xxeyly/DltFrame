@@ -9,7 +9,7 @@ namespace XFramework
     [Serializable]
     public class CustomBuildData : ScriptableObject
     {
-        [LabelText("当前打包方式:")] public BuildTarget buildTarget;
+        [LabelText("当前打包方式:")] public General.BuildTargetPlatform buildTargetPlatform;
         [LabelText("压缩类型")] public BuildOptions buildCompressType;
 
         [LabelText("当前打包存放路径")] [FolderPath(AbsolutePath = true)]

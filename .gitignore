@@ -73,3 +73,13 @@ Assets/Scene/
 Assets/Plugins.meta
 
 Assets/Scene.meta
+
+ProjectSettings/BuildReportToolOptions.xml
+
+ProjectSettings/EditorBuildSettings.asset
+
+Packages/manifest.json
+
+Assets/SceneAssetBundle/
+
+Assets/SceneAssetBundle.meta

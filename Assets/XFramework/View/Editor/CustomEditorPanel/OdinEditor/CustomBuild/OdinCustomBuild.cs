@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using LitJson;
 using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEditor.Build.Reporting;
 using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.Windows;
@@ -13,7 +14,7 @@ namespace XFramework
 
     public class OdinCustomBuild : BaseEditor
     {
-        [LabelText("当前打包方式:")] public BuildTarget buildTarget;
+        [LabelText("当前打包方式:")] public General.BuildTargetPlatform buildTargetPlatform;
         [LabelText("压缩类型")] public BuildOptions buildCompressType;
 
         [LabelText("当前打包存放路径")] [FolderPath(AbsolutePath = true)]
@@ -36,9 +37,9 @@ namespace XFramework
         public void StartBuild()
         {
             _sceneLoad.BuildSyncScene();
+            Build();
             CopySceneFile();
             CopyFile();
-            Build();
         }
 
         /// <summary>
@@ -47,10 +48,47 @@ namespace XFramework
         private void Build()
         {
             OnSaveConfig();
-            BuildPipeline.BuildPlayer(CustomBuildTools.FindEnableEditorScenes(),
-                CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName,
-                    exportEnProjectName), buildTarget,
-                buildCompressType);
+            BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
+            buildPlayerOptions.scenes = CustomBuildTools.FindEnableEditorScenes();
+            string outPath = CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName, exportEnProjectName);
+            BuildTarget buildTarget = BuildTarget.NoTarget;
+            switch (buildTargetPlatform)
+            {
+                case General.BuildTargetPlatform.StandaloneWindows:
+                    buildTarget = BuildTarget.StandaloneWindows;
+                    break;
+                case General.BuildTargetPlatform.StandaloneWindows64:
+                    buildTarget = BuildTarget.StandaloneWindows64;
+                    break;
+                case General.BuildTargetPlatform.WebGL:
+                    buildTarget = BuildTarget.WebGL;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            Debug.Log(buildTarget);
+            if (buildTarget == BuildTarget.StandaloneWindows || buildTarget == BuildTarget.StandaloneWindows64)
+            {
+                Debug.Log("PC路径修正");
+                outPath += "PC/" + exportEnProjectName + ".exe";
+            }
+
+            buildPlayerOptions.locationPathName = outPath;
+            buildPlayerOptions.target = buildTarget;
+            buildPlayerOptions.options = buildCompressType;
+            BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            BuildSummary summary = report.summary;
+
+            if (summary.result == BuildResult.Succeeded)
+            {
+                Debug.Log("Build succeeded: " + summary.totalSize + " bytes");
+            }
+
+            if (summary.result == BuildResult.Failed)
+            {
+                Debug.Log("Build failed" + outPath);
+            }
         }
 
         private void CopySceneFile()
@@ -73,10 +111,27 @@ namespace XFramework
 
             foreach (ResSvc.DownFile.FileInfo fileInfo in sceneFile.fileInfoList)
             {
+                string buildTargetPlatformPath = String.Empty;
+                switch (buildTargetPlatform)
+                {
+                    case General.BuildTargetPlatform.StandaloneWindows:
+                        buildTargetPlatformPath = "PC";
+                        break;
+                    case General.BuildTargetPlatform.StandaloneWindows64:
+                        buildTargetPlatformPath = "PC";
+                        break;
+                    case General.BuildTargetPlatform.WebGL:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
                 string copyAssetPath = "Assets/" + fileInfo.filePath.Replace("/" + fileInfo.fileName, "");
                 string pastePath = CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell,
-                                       exportCnProjectName, exportEnProjectName) + "/" +
+                                       exportCnProjectName, exportEnProjectName) + buildTargetPlatformPath + "/" +
                                    fileInfo.filePath.Replace("/" + fileInfo.fileName, "");
+
+                Debug.Log(pastePath);
                 CustomBuildFileOperation.Copy(copyAssetPath, pastePath);
             }
         }
@@ -90,9 +145,26 @@ namespace XFramework
             {
                 if (folderCopy[i].copyFolderPath != string.Empty && folderCopy[i].pasteFolderPath != string.Empty)
                 {
-                    CustomBuildFileOperation.Copy(folderCopy[i].copyFolderPath,
-                        CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName,
-                            exportEnProjectName) + "/" + folderCopy[i].pasteFolderPath);
+                    string buildTargetPlatformPath = String.Empty;
+                    switch (buildTargetPlatform)
+                    {
+                        case General.BuildTargetPlatform.StandaloneWindows:
+                            buildTargetPlatformPath = "PC";
+                            break;
+                        case General.BuildTargetPlatform.StandaloneWindows64:
+                            buildTargetPlatformPath = "PC";
+                            break;
+                        case General.BuildTargetPlatform.WebGL:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+
+                    string pastePath = CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName,
+                        exportEnProjectName) + buildTargetPlatformPath + "/" + folderCopy[i].pasteFolderPath;
+
+                    Debug.Log(pastePath);
+                    CustomBuildFileOperation.Copy(folderCopy[i].copyFolderPath, pastePath);
                 }
             }
         }
@@ -134,7 +206,7 @@ namespace XFramework
 
         public override void OnSaveConfig()
         {
-            _customBuildData.buildTarget = buildTarget;
+            _customBuildData.buildTargetPlatform = buildTargetPlatform;
             _customBuildData.buildCompressType = buildCompressType;
             _customBuildData.buildPackagePath = buildPackagePath;
             _customBuildData.exportCnProjectName = exportCnProjectName;
@@ -154,7 +226,7 @@ namespace XFramework
 
         public override void OnLoadConfig()
         {
-            buildTarget = _customBuildData.buildTarget;
+            buildTargetPlatform = _customBuildData.buildTargetPlatform;
             buildCompressType = _customBuildData.buildCompressType;
             buildPackagePath = _customBuildData.buildPackagePath;
             exportCnProjectName = _customBuildData.exportCnProjectName;
