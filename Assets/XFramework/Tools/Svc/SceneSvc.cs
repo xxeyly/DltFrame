@@ -15,6 +15,7 @@ namespace XFramework
         private string _sceneName;
         private bool _asyncLoad;
         private AssetBundle _sceneAssetBundle;
+
         public override void StartSvc()
         {
             Instance = GetComponent<SceneSvc>();
@@ -77,6 +78,7 @@ namespace XFramework
                 {
                     Destroy(GameRootStart.Instance.gameObject);
                 }
+
                 SceneManager.LoadScene(sceneName);
             }
             else
@@ -117,13 +119,6 @@ namespace XFramework
             // GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
             GameRootStart.Instance.sceneStartSingletons = DataSvc.GetAllObjectsInScene<StartSingleton>();
 
-            for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
-            {
-                GameRootStart.Instance.sceneStartSingletons[i].StartSvc();
-                GameRootStart.Instance.sceneStartSingletons[i].Init();
-            }
-
-            Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景工具加载完毕");
             //所有条件都加载完毕后,开始视图的初始化
             foreach (SvcBase svcBase in GameRootStart.Instance.activeSvcBase)
             {
@@ -134,6 +129,14 @@ namespace XFramework
             }
 
             Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景服务加载完毕");
+
+            for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
+            {
+                GameRootStart.Instance.sceneStartSingletons[i].StartSvc();
+                GameRootStart.Instance.sceneStartSingletons[i].Init();
+            }
+
+            Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景工具加载完毕");
             GameRootStart.Instance.FrameSceneLoadEnd();
         }
 
