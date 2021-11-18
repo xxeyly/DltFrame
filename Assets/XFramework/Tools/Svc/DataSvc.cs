@@ -23,15 +23,21 @@ namespace XFramework
         public static List<T> RandomSort<T>(List<T> list)
         {
             var random = new Random();
-            var newList = new List<T>();
-            foreach (var item in list)
+            T time;
+            int index = 0;
+            for (int i = 0; i < list.Count; i++)
             {
-                newList.Insert(random.Next(newList.Count), item);
+                index = random.Next(0, list.Count - 1);
+                if (index != i)
+                {
+                    time = list[i];
+                    list[i] = list[index];
+                    list[index] = time;
+                }
             }
 
-            return newList;
+            return list;
         }
-
         /// <summary>
         /// 首字母大写
         /// </summary>
