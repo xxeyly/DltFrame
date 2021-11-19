@@ -1,26 +1,59 @@
 ﻿using Sirenix.OdinInspector.Editor;
 using UnityEditor;
+using UnityEngine;
 
 namespace XFramework
 {
     public class FrameMenu : OdinMenuEditorWindow
     {
-        [MenuItem("Xframe/框架")]
+        [MenuItem("Xframe/框架界面")]
         private static void OpenWindow()
         {
             GetWindow<FrameMenu>().Show();
         }
 
+        [MenuItem("Xframe/一键打包")]
+        private static void StartBuild()
+        {
+            customBuild.StartBuild();
+        }
+
+        [MenuItem("Xframe/监听生成")]
+        private static void OnListenerGenerate()
+        {
+            ListenerSvcGenerateData listenerSvcGenerateData = DataSvc.GetAllObjectsInScene<ListenerSvcGenerateData>()[0];
+            if (listenerSvcGenerateData != null)
+            {
+                listenerSvcGenerateData.OnGenerate();
+                Debug.Log("监听生成完毕");
+            }
+            else
+            {
+                Debug.LogWarning(" ListenerSvc未添加");
+            }
+        }
+        [MenuItem("Xframe/框架生成")]
+        private static void FrameBuild()
+        {
+            gameRootEditor.Generate();
+        }
+
+        [MenuItem("Xframe/打包异步场景")]
+        private static void BuildAsyncScene()
+        {
+            sceneLoad.BuildSyncScene();
+        }
+
         //打包
-        private OdinCustomBuild customBuild;
+        private static OdinCustomBuild customBuild;
 
         //音频服务
         private AudioSvcEditor audioSvcEditor;
 
         //框架配置
-        private GameRootEditor gameRootEditor;
+        private static GameRootEditor gameRootEditor;
         private GenerateBaseWindowEditor generateBaseWindowEditor;
-        private SceneLoad sceneLoad;
+        private static SceneLoad sceneLoad;
 
         protected override OdinMenuTree BuildMenuTree()
         {
@@ -52,7 +85,7 @@ namespace XFramework
             generateBaseWindowEditor = new GenerateBaseWindowEditor();
             //框架配置
             gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
-                circuitSvcEditor,mouseSvcEditor);
+                circuitSvcEditor, mouseSvcEditor);
             ResourceUnification resourceUnification = new ResourceUnification();
             sceneLoad = new SceneLoad();
             sceneLoad.OnInit();
