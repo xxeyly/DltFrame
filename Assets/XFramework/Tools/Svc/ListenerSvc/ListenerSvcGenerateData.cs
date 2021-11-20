@@ -8,15 +8,13 @@ namespace XFramework
 {
     public class ListenerSvcGenerateData : MonoBehaviour
     {
-        private Dictionary<string, Dictionary<string, List<string>>> callDic2 = new Dictionary<string, Dictionary<string, List<string>>>();
+        private Dictionary<string, Dictionary<string, List<string>>> _callDic = new Dictionary<string, Dictionary<string, List<string>>>();
         private Dictionary<string, string> _allScriptsContentDic;
         private List<string> _allScriptsPath;
 
         private string GenerationMethod(Dictionary<string, Dictionary<string, List<string>>> method2)
         {
             Dictionary<string, List<string>> group = new Dictionary<string, List<string>>();
-
-
             foreach (KeyValuePair<string, Dictionary<string, List<string>>> pair in method2)
             {
                 List<string> group2 = new List<string>();
@@ -107,7 +105,7 @@ namespace XFramework
                 return;
             }
 
-            callDic2 = new Dictionary<string, Dictionary<string, List<string>>>();
+            _callDic = new Dictionary<string, Dictionary<string, List<string>>>();
             string path = string.Format("{0}", Application.dataPath + "/Scripts");
 
             _allScriptsContentDic = new Dictionary<string, string>();
@@ -136,83 +134,139 @@ namespace XFramework
                 {
                     int index = 0;
                     int count = 0;
-                    int Length = 0;
-                    string parameter = String.Empty;
                     string functionName = String.Empty;
 
                     Dictionary<string, List<string>> funGroup = new Dictionary<string, List<string>>();
                     while ((index = pair.Value.IndexOf("AddListenerEvent", index, StringComparison.Ordinal)) != -1)
                     {
+                        string parameter = String.Empty;
                         count++;
                         index = index + "AddListenerEvent".Length;
-                        Length = 0;
-                        if (pair.Value[index].ToString() == "(")
+                        int firstBrackets = index;
+                        // Debug.Log(pair.Value);
+                        for (int i = index; i < pair.Value.Length; i++)
                         {
-                            parameter = String.Empty;
-                            int Length2 = -2;
-                            for (int j = index + 1; j < pair.Value.Length; j++)
+                            if (pair.Value[i].ToString() == "(")
                             {
-                                if (pair.Value[j].ToString() == ",")
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    Length2++;
-                                }
+                                break;
                             }
 
-                            functionName = pair.Value.Substring(index + Length + 2, Length2);
+                            firstBrackets++;
                         }
 
-                        else if (pair.Value[index].ToString() == "<")
+                        for (int i = index; i < firstBrackets; i++)
                         {
-                            for (int j = index; j < pair.Value.Length; j++)
+                            parameter += pair.Value[i];
+                        }
+
+                        // Debug.Log("属性:" + parameter);
+                        //去掉多余<>
+                        if (parameter.Length > 1 && parameter[0].ToString() == "<" && parameter[parameter.Length - 1].ToString() == ">")
+                        {
+                            parameter = parameter.Remove(0, 1);
+                            parameter = parameter.Remove(parameter.Length - 1, 1);
+                        }
+
+                        // Debug.Log("属性:" + parameter);
+                        int eventNameStart = firstBrackets + ("(" + "\"").Length;
+                        // Debug.Log(eventNameStart);
+                        int eventNameEnd = eventNameStart;
+                        for (int i = eventNameStart; i < pair.Value.Length; i++)
+                        {
+                            if (pair.Value[i].ToString() == "\"")
                             {
-                                Length++;
-                                if (pair.Value[j].ToString() == ">")
-                                {
-                                    break;
-                                }
+                                break;
                             }
 
-                            parameter = pair.Value.Substring(index + 1, Length - 2);
-                            int lenght2 = -2;
-                            for (int j = index + Length; j < pair.Value.Length; j++)
-                            {
-                                if (pair.Value[j].ToString() == ",")
-                                {
-                                    break;
-                                }
-                                else
-                                {
-                                    lenght2++;
-                                }
-                            }
-
-                            functionName = pair.Value.Substring(index + Length + 2, lenght2 - 1);
+                            eventNameEnd++;
                         }
 
-
-                        if (parameter.Length <= 0)
+                        // Debug.Log(eventNameEnd);
+                        for (int i = eventNameStart; i < eventNameEnd; i++)
                         {
-                            funGroup.Add(functionName, new List<string>());
-                            // callDic.Add(functionName, new List<string>());
+                            functionName += pair.Value[i];
                         }
-                        else
+
+                        // Debug.Log("Event事件名称:" + functionName);
+                        List<string> parameterList = ParameterSplit(parameter);
+                        foreach (string s in parameterList)
                         {
-                            funGroup.Add(functionName, new List<string>(parameter.Split(',')));
-                            // callDic.Add(functionName, new List<string>(parameter.Split(',')));
+                            // Debug.Log(s);
                         }
+
+                        funGroup.Add(functionName, parameterList);
+                        functionName = String.Empty;
                     }
 
-                    callDic2.Add(pair.Key, funGroup);
+                    _callDic.Add(pair.Key, funGroup);
                 }
             }
 
             string oldContent = GenerateGeneral.GetOldScriptsContent("ListenerSvcData");
-            oldContent = GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(callDic2), "//监听生成开始", "//监听生成结束");
+            oldContent = GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(_callDic), "//监听生成开始", "//监听生成结束");
             FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerSvcData"), oldContent);
+        }
+
+        /// <summary>
+        /// 属性分割
+        /// </summary>
+        /// <param name="paramete"></param>
+        /// <returns></returns>
+        private List<string> ParameterSplit(string paramete)
+        {
+            int leftBrackets = 0;
+            List<string> parameterList = new List<string>();
+            string singleParameter = String.Empty;
+            for (int i = 0; i < paramete.Length; i++)
+            {
+                if (paramete[i].ToString() == "<")
+                {
+                    leftBrackets += 1;
+                    singleParameter += paramete[i];
+                }
+                else if (paramete[i].ToString() == ">")
+                {
+                    leftBrackets -= 1;
+                    singleParameter += paramete[i];
+                    if (leftBrackets == 0)
+                    {
+                        parameterList.Add(singleParameter);
+                        singleParameter = String.Empty;
+                    }
+                }
+                else if (paramete[i].ToString() == ",")
+                {
+                    if (leftBrackets == 0)
+                    {
+                        if (singleParameter.Length > 0)
+                        {
+                            parameterList.Add(singleParameter);
+                        }
+
+                        singleParameter = String.Empty;
+                    }
+                    else
+                    {
+                        singleParameter += paramete[i];
+                    }
+                }
+                else if (i == paramete.Length - 1)
+                {
+                    singleParameter += paramete[i];
+                    if (singleParameter.Length > 0)
+                    {
+                        parameterList.Add(singleParameter);
+                    }
+
+                    singleParameter = String.Empty;
+                }
+                else
+                {
+                    singleParameter += paramete[i];
+                }
+            }
+
+            return parameterList;
         }
     }
 }
