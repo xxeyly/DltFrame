@@ -6,6 +6,10 @@ namespace XFramework
 {
     public class FrameMenu : OdinMenuEditorWindow
     {
+        private FrameMenu()
+        {
+        }
+
         [MenuItem("Xframe/框架界面")]
         private static void OpenWindow()
         {
@@ -15,13 +19,16 @@ namespace XFramework
         [MenuItem("Xframe/一键打包")]
         private static void StartBuild()
         {
-            customBuild.StartBuild();
+            if (customBuild != null)
+            {
+                customBuild.StartBuild();
+            }
         }
 
         [MenuItem("Xframe/监听生成")]
         private static void OnListenerGenerate()
         {
-            ListenerSvcGenerateData listenerSvcGenerateData = DataSvc.GetAllObjectsInScene<ListenerSvcGenerateData>()[0];
+            ListenerSvcGenerateData listenerSvcGenerateData = DataSvc.GetObjectsInScene<ListenerSvcGenerateData>();
             if (listenerSvcGenerateData != null)
             {
                 listenerSvcGenerateData.OnGenerate();
@@ -32,57 +39,74 @@ namespace XFramework
                 Debug.LogWarning(" ListenerSvc未添加");
             }
         }
+
         [MenuItem("Xframe/框架生成")]
         private static void FrameBuild()
         {
-            gameRootEditor.Generate();
+            if (gameRootEditor != null)
+            {
+                gameRootEditor.Generate();
+            }
         }
 
         [MenuItem("Xframe/打包异步场景")]
         private static void BuildAsyncScene()
         {
-            sceneLoad.BuildSyncScene();
+            if (sceneLoad == null)
+            {
+                SceneLoad tempSceneLoad = new SceneLoad();
+                tempSceneLoad.OnInit();
+                tempSceneLoad.BuildSyncScene();
+            }
+            else
+            {
+                sceneLoad.BuildSyncScene();
+            }
         }
 
         //打包
-        private static OdinCustomBuild customBuild;
+        private static OdinCustomBuild customBuild = new OdinCustomBuild();
 
         //音频服务
-        private AudioSvcEditor audioSvcEditor;
+        private AudioSvcEditor audioSvcEditor = new AudioSvcEditor();
 
         //框架配置
         private static GameRootEditor gameRootEditor;
-        private GenerateBaseWindowEditor generateBaseWindowEditor;
+        private GenerateBaseWindowEditor generateBaseWindowEditor = new GenerateBaseWindowEditor();
         private static SceneLoad sceneLoad;
 
+        //可持久化
+        RuntimeDataSvcEditor runtimeDataSvcEditor = new RuntimeDataSvcEditor();
+
+        //资源服务
+        ResSvcEditor resSvcEditor = new ResSvcEditor();
+
+        //监听服务
+        ListenerSvcEditor listenerSvcEditor = new ListenerSvcEditor();
+
+        //场景服务
+        SceneSvcEditor sceneSvcEditor = new SceneSvcEditor();
+
+        //计时器服务
+        TimeSvcEditor timeSvcEditor = new TimeSvcEditor();
+
+        //视图服务
+        ViewSvcEditor viewSvcEditor = new ViewSvcEditor();
+
+        //实体服务
+        EntitySvcEditor entitySvcEditor = new EntitySvcEditor();
+
+        //流程服务
+        CircuitSvcEditor circuitSvcEditor = new CircuitSvcEditor();
+
+        //鼠标服务
+        MouseSvcEditor mouseSvcEditor = new MouseSvcEditor();
+
+        //生成配置
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
             tree.Selection.SupportsMultiSelect = false;
-            //打包
-            customBuild = new OdinCustomBuild();
-            //可持久化
-            RuntimeDataSvcEditor runtimeDataSvcEditor = new RuntimeDataSvcEditor();
-            //资源服务
-            ResSvcEditor resSvcEditor = new ResSvcEditor();
-            //音频服务
-            audioSvcEditor = new AudioSvcEditor();
-            //监听服务
-            ListenerSvcEditor listenerSvcEditor = new ListenerSvcEditor();
-            //场景服务
-            SceneSvcEditor sceneSvcEditor = new SceneSvcEditor();
-            //计时器服务
-            TimeSvcEditor timeSvcEditor = new TimeSvcEditor();
-            //视图服务
-            ViewSvcEditor viewSvcEditor = new ViewSvcEditor();
-            //实体服务
-            EntitySvcEditor entitySvcEditor = new EntitySvcEditor();
-            //流程服务
-            CircuitSvcEditor circuitSvcEditor = new CircuitSvcEditor();
-            //鼠标服务
-            MouseSvcEditor mouseSvcEditor = new MouseSvcEditor();
-            //生成配置
-            generateBaseWindowEditor = new GenerateBaseWindowEditor();
             //框架配置
             gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
                 circuitSvcEditor, mouseSvcEditor);

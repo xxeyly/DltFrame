@@ -38,6 +38,7 @@ namespace XFramework
 
             return list;
         }
+
         /// <summary>
         /// 首字母大写
         /// </summary>
@@ -87,6 +88,18 @@ namespace XFramework
         }
 
         /// <summary>
+        /// 查找场景中第一个类型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetObjectsInScene<T>()
+        {
+            // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
+            GameObject objectsInScene = GetObjectsOnlyInScene();
+            return objectsInScene.GetComponent<T>();
+        }
+
+        /// <summary>
         /// 获得场景中所有物体
         /// </summary>
         /// <returns></returns>
@@ -106,6 +119,28 @@ namespace XFramework
             }
 
             return objectsInScene;
+        }
+
+        /// <summary>
+        /// 获得场景中所有第一个物体
+        /// </summary>
+        /// <returns></returns>
+        private static GameObject GetObjectsOnlyInScene()
+        {
+            foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+            {
+#if UNITY_EDITOR
+                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) && !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+                {
+                    return go;
+                }
+
+#else
+                return go;
+#endif
+            }
+
+            return null;
         }
 
         /// <summary>
