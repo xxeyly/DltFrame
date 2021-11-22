@@ -29,7 +29,7 @@ namespace XFramework
         [HideLabel] [HorizontalGroup("任务类型")] public TimeLoopType loopType;
     }
 
-    public static class General
+    public static partial class General
     {
         #region 视图时间
 
@@ -174,7 +174,9 @@ namespace XFramework
                   EndDrag | Submit | Cancel
         }
 
-
+        /// <summary>
+        /// BaseWindow属性
+        /// </summary>
         [Serializable]
         public struct GenerateAttributesTypeGroup
         {
@@ -183,6 +185,9 @@ namespace XFramework
             [HorizontalGroup("属性描述")] [HideLabel] public string attributesDescription;
         }
 #if UNITY_EDITOR
+        /// <summary>
+        /// 平台类型
+        /// </summary>
         public enum BuildTargetPlatform
         {
             StandaloneWindows,
