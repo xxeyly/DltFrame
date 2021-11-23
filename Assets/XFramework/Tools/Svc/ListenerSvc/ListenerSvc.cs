@@ -23,7 +23,7 @@ namespace XFramework
 
         public delegate void CallBack<T, X, Y, Z, W>(T arg1, X arg2, Y arg3, Z arg4, W arg5);
 
-        [SerializeField] private Dictionary<string, Delegate> listenerDic;
+        [SerializeField] private Dictionary<string, List<Delegate>> listenerDic;
 
         public override void StartSvc()
         {
@@ -32,7 +32,7 @@ namespace XFramework
 
         public override void InitSvc()
         {
-            listenerDic = new Dictionary<string, Delegate>();
+            listenerDic = new Dictionary<string, List<Delegate>>();
         }
 
         public override void EndSvc()
@@ -43,16 +43,36 @@ namespace XFramework
         /// 添加事件监听
         /// </summary>
         /// <param name="eventType"></param>
-        /// <param name="unityAction"></param>
-        public void AddListenerEvent(string eventType, CallBack unityAction)
+        /// <param name="callBack"></param>
+        public void AddListenerEvent(string eventType, CallBack callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        /// <summary>
+        /// 添加委托
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="delegate"></param>
+        private void AddDelegateToListenerEvent(string eventType, Delegate @delegate)
         {
             if (!listenerDic.ContainsKey(eventType))
             {
-                listenerDic.Add(eventType, unityAction);
+                List<Delegate> delegates = new List<Delegate>();
+                delegates.Add(@delegate);
+                listenerDic.Add(eventType, delegates);
             }
             else
             {
-                Debug.LogError(eventType + "该事件已经被绑定了");
+                List<Delegate> delegates = listenerDic[eventType];
+                if (!delegates.Contains(@delegate))
+                {
+                    delegates.Add(@delegate);
+                }
+                else
+                {
+                    Debug.LogError(eventType + "该事件已经被绑定了");
+                }
             }
         }
 
@@ -63,14 +83,7 @@ namespace XFramework
         /// <param name="callBack"></param>
         public void AddListenerEvent<T>(string eventType, CallBack<T> callBack)
         {
-            if (!listenerDic.ContainsKey(eventType))
-            {
-                listenerDic.Add(eventType, callBack);
-            }
-            else
-            {
-//                Debug.LogError("该事件已经被绑定了");
-            }
+            AddDelegateToListenerEvent(eventType, callBack);
         }
 
         /// <summary>
@@ -78,16 +91,9 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, TY>(string eventType, CallBack<T, TY> callBack)
+        public void AddListenerEvent<T, X>(string eventType, CallBack<T, X> callBack)
         {
-            if (!listenerDic.ContainsKey(eventType))
-            {
-                listenerDic.Add(eventType, callBack);
-            }
-            else
-            {
-                Debug.LogError("该事件已经被绑定了");
-            }
+            AddDelegateToListenerEvent(eventType, callBack);
         }
 
         /// <summary>
@@ -95,16 +101,9 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, TY, TYX>(string eventType, CallBack<T, TY, TYX> callBack)
+        public void AddListenerEvent<T, X, Y>(string eventType, CallBack<T, X, Y> callBack)
         {
-            if (!listenerDic.ContainsKey(eventType))
-            {
-                listenerDic.Add(eventType, callBack);
-            }
-            else
-            {
-                Debug.LogError("该事件已经被绑定了");
-            }
+            AddDelegateToListenerEvent(eventType, callBack);
         }
 
         /// <summary>
@@ -112,16 +111,9 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, TY, TYX, TYXZ>(string eventType, CallBack<T, TY, TYX, TYXZ> callBack)
+        public void AddListenerEvent<T, X, Y, Z>(string eventType, CallBack<T, X, Y, Z> callBack)
         {
-            if (!listenerDic.ContainsKey(eventType))
-            {
-                listenerDic.Add(eventType, callBack);
-            }
-            else
-            {
-                Debug.LogError("该事件已经被绑定了");
-            }
+            AddDelegateToListenerEvent(eventType, callBack);
         }
 
         /// <summary>
@@ -129,17 +121,10 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, TY, TYX, TYXZ, TYXZW>(string eventType,
-            CallBack<T, TY, TYX, TYXZ, TYXZW> callBack)
+        public void AddListenerEvent<T, X, Y, Z, W>(string eventType,
+            CallBack<T, X, Y, Z, W> callBack)
         {
-            if (!listenerDic.ContainsKey(eventType))
-            {
-                listenerDic.Add(eventType, callBack);
-            }
-            else
-            {
-                Debug.LogError("该事件已经被绑定了");
-            }
+            AddDelegateToListenerEvent(eventType, callBack);
         }
 
 
@@ -147,12 +132,12 @@ namespace XFramework
         /// 删除事件监听
         /// </summary>
         /// <param name="eventType"></param>
-        /// <param name="unityAction"></param>
-        public void DeleteListenerEvent(string eventType, UnityAction unityAction)
+        /// <param name="callBack"></param>
+        public void DeleteListenerEvent(string eventType, UnityAction callBack)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                listenerDic.Remove(eventType);
+                listenerDic[eventType].Remove(callBack);
             }
             else
             {
@@ -164,11 +149,21 @@ namespace XFramework
         /// 执行事件
         /// </summary>
         /// <param name="eventType"></param>
-        public void ExecuteEvent(string eventType)
+        private void ExecuteEvent(string eventType)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                ((CallBack) listenerDic[eventType]).Invoke();
+                foreach (Delegate @delegate in listenerDic[eventType])
+                {
+                    try
+                    {
+                        ((CallBack) @delegate)?.Invoke();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
             }
             else
             {
@@ -181,29 +176,21 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="t"></param>
-        public void ExecuteEvent<T>(string eventType, T t)
+        private void ExecuteEvent<T>(string eventType, T t)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                ((CallBack<T>) listenerDic[eventType]).Invoke(t);
-            }
-            else
-            {
-                Debug.LogError(eventType + "该事件没有被绑定过");
-            }
-        }
-
-        /// <summary>
-        /// 执行事件
-        /// </summary>
-        /// <param name="eventType"></param>
-        /// <param name="t"></param>
-        /// <param name="y"></param>
-        public void ExecuteEvent<T, TY>(string eventType, T t, TY y)
-        {
-            if (listenerDic.ContainsKey(eventType))
-            {
-                ((CallBack<T, TY>) listenerDic[eventType]).Invoke(t, y);
+                foreach (Delegate @delegate in listenerDic[eventType])
+                {
+                    try
+                    {
+                        ((CallBack<T>) @delegate)?.Invoke(t);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
             }
             else
             {
@@ -217,11 +204,49 @@ namespace XFramework
         /// <param name="eventType"></param>
         /// <param name="t"></param>
         /// <param name="y"></param>
-        public void ExecuteEvent<T, TY, TX>(string eventType, T t, TY y, TX x)
+        private void ExecuteEvent<T, Y>(string eventType, T t, Y y)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                ((CallBack<T, TY, TX>) listenerDic[eventType]).Invoke(t, y, x);
+                foreach (Delegate @delegate in listenerDic[eventType])
+                {
+                    try
+                    {
+                        ((CallBack<T, Y>) @delegate).Invoke(t, y);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogError("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        /// <summary>
+        /// 执行事件
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="t"></param>
+        /// <param name="y"></param>
+        private void ExecuteEvent<T, X, Y>(string eventType, T t, X x, Y y)
+        {
+            if (listenerDic.ContainsKey(eventType))
+            {
+                foreach (Delegate @delegate in listenerDic[eventType])
+                {
+                    try
+                    {
+                        ((CallBack<T, X, Y>) @delegate).Invoke(t, x, y);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
             }
             else
             {
@@ -235,11 +260,21 @@ namespace XFramework
         /// <param name="eventType"></param>r
         /// <param name="t"></param>
         /// <param name="y"></param>
-        public void ExecuteEvent<T, Y, X, Z>(string eventType, T t, Y y, X x, Z z)
+        private void ExecuteEvent<T, Y, X, Z>(string eventType, T t, Y y, X x, Z z)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                ((CallBack<T, Y, X, Z>) listenerDic[eventType]).Invoke(t, y, x, z);
+                foreach (Delegate @delegate in listenerDic[eventType])
+                {
+                    try
+                    {
+                        ((CallBack<T, Y, X, Z>) @delegate).Invoke(t, y, x, z);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
             }
             else
             {
@@ -253,27 +288,26 @@ namespace XFramework
         /// <param name="eventType"></param>r
         /// <param name="t"></param>
         /// <param name="y"></param>
-        public void ExecuteEvent<T, Y, X, Z, W>(string eventType, T t, Y y, X x, Z z, W w)
+        private void ExecuteEvent<T, Y, X, Z, W>(string eventType, T t, Y y, X x, Z z, W w)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                ((CallBack<T, Y, X, Z, W>) listenerDic[eventType]).Invoke(t, y, x, z, w);
+                foreach (Delegate @delegate in listenerDic[eventType])
+                {
+                    try
+                    {
+                        ((CallBack<T, Y, X, Z, W>) @delegate).Invoke(t, y, x, z, w);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
             }
             else
             {
                 Debug.LogError("该事件没有被绑定过:" + eventType);
             }
-        }
-
-
-        /// <summary>
-        /// 获得事件类型
-        /// </summary>
-        /// <param name="eventType"></param>
-        /// <returns></returns>
-        public CallBack<T> GetEvent<T>(string eventType)
-        {
-            return (CallBack<T>) listenerDic[eventType];
         }
     }
 }

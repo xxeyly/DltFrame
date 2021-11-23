@@ -78,8 +78,6 @@ public class DownProgress : BaseWindow
     {
         //变量绑定开始
         BindListener(_anyKeyContinue, EventTriggerType.PointerClick, OnAnyKeyContinueClick);
-        //变量绑定结束
-        AddListenerEvent<string>("OnShowDownLoadProgress", OnShowDownLoadProgress);
     }
 
     //变量方法开始

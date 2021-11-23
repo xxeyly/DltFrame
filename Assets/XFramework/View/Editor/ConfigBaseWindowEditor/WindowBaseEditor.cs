@@ -29,6 +29,7 @@ namespace XFramework
             {
                 //View 窗口根目录
                 GameObject windowView = new GameObject("Empty WindowView");
+                Undo.RegisterCreatedObjectUndo(windowView, "Empty WindowView");
                 Vector2 windowSize = uiCanvas.GetComponent<CanvasScaler>().referenceResolution;
                 windowView.AddComponent<RectTransform>().sizeDelta = Vector2.zero;
                 // windowView.AddComponent<GenerationBaseWindow>().Init();
@@ -81,7 +82,6 @@ namespace XFramework
                          !uiObj.GetComponent<InputField>() &&
                          !uiObj.GetComponent<Dropdown>())
                 {
-                   
                     uiObj.GetComponent<BindUiType>().type = General.UiType.Image;
                 }
                 else if (uiObj.GetComponent<Text>())
@@ -131,7 +131,6 @@ namespace XFramework
                 }
             }
         }
-      
     }
 }
 #endif

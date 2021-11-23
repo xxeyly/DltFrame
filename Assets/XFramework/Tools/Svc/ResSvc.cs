@@ -58,43 +58,6 @@ namespace XFramework
             }
         }
 
-        /// <summary>
-        /// 异步从网络上加载
-        /// </summary>
-        /// <param name="assetBundleNetPath"></param>
-        /// <param name="eventType"></param>
-        public void AsyncResourcesByNetwork(string assetBundleNetPath, string eventType)
-        {
-            StartCoroutine(LoadResourcesByNetwork(assetBundleNetPath, eventType));
-        }
-
-        /// <summary>
-        /// 异步从网络上加载
-        /// </summary>
-        /// <param name="assetBundleNetPath"></param>
-        /// <param name="eventType"></param>
-        public void AsyncResourcesByNetwork<T>(string assetBundleNetPath, string eventType, T t)
-        {
-            StartCoroutine(LoadResourcesByNetwork(assetBundleNetPath, eventType, t));
-        }
-
-        IEnumerator LoadResourcesByNetwork(string serverResourcesPath, string eventType)
-        {
-            //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
-            UnityWebRequest request = UnityWebRequest.Get(serverResourcesPath);
-            //2、等待这个请求进行发送完
-            yield return request.SendWebRequest();
-            ListenerSvc.Instance.ExecuteEvent(eventType, request.downloadHandler.data);
-        }
-
-        IEnumerator LoadResourcesByNetwork<T>(string serverResourcesPath, string eventType, T t)
-        {
-            //1、使用UnityWebRequest.Get(路径)【服务器 / 本地都可以】 去获取到网页请求
-            UnityWebRequest request = UnityWebRequest.Get(serverResourcesPath);
-            //2、等待这个请求进行发送完
-            yield return request.SendWebRequest();
-            ListenerSvc.Instance.ExecuteEvent(eventType, request.downloadHandler.data, t);
-        }
 
         /// <summary>
         /// 异步从网络上加载AssetBundle

@@ -71,7 +71,7 @@ namespace XFramework
             if (buildTarget == BuildTarget.StandaloneWindows || buildTarget == BuildTarget.StandaloneWindows64)
             {
                 Debug.Log("PC路径修正");
-                outPath += "PC/" + exportEnProjectName + ".exe";
+                outPath += "/" + exportEnProjectName + ".exe";
             }
 
             buildPlayerOptions.locationPathName = outPath;
@@ -115,10 +115,10 @@ namespace XFramework
                 switch (buildTargetPlatform)
                 {
                     case General.BuildTargetPlatform.StandaloneWindows:
-                        buildTargetPlatformPath = "PC";
+                        buildTargetPlatformPath = "";
                         break;
                     case General.BuildTargetPlatform.StandaloneWindows64:
-                        buildTargetPlatformPath = "PC";
+                        buildTargetPlatformPath = "";
                         break;
                     case General.BuildTargetPlatform.WebGL:
                         break;
@@ -149,10 +149,10 @@ namespace XFramework
                     switch (buildTargetPlatform)
                     {
                         case General.BuildTargetPlatform.StandaloneWindows:
-                            buildTargetPlatformPath = "PC";
+                            buildTargetPlatformPath = "";
                             break;
                         case General.BuildTargetPlatform.StandaloneWindows64:
-                            buildTargetPlatformPath = "PC";
+                            buildTargetPlatformPath = "";
                             break;
                         case General.BuildTargetPlatform.WebGL:
                             break;

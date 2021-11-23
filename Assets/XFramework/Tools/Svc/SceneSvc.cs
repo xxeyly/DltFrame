@@ -89,7 +89,6 @@ namespace XFramework
                     DownSvc.Instance.InsertDownTask(sceneName);
                     ViewSvc.Instance.ShowView(typeof(DownProgress));
                     _asyncLoad = true;
-                    ListenerSvc.Instance.ExecuteEvent("OnShowDownLoadProgress", _sceneName);
                 }
             }
         }

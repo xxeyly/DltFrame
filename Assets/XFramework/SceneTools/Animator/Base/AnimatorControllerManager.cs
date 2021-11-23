@@ -129,25 +129,6 @@ namespace XFramework
             return _animatorTimeTask;
         }
 
-        /// <summary>
-        /// 播放动画
-        /// </summary>
-        /// <param name="animType"></param>
-        /// <param name="listenerEventType"></param>
-        public void PlayAnim(string animType, string listenerEventType)
-        {
-            currentPlayAnim = animType;
-            eventChange = true;
-
-            TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
-
-            _animatorTimeTask = TimeSvc.Instance.AddTimeTask(() => { ListenerSvc.Instance.ExecuteEvent(listenerEventType); }, "动画播放时间", GetPlayAnimFirstLength(animType));
-            foreach (AnimatorControllerBase controllerBase in allAnimController)
-            {
-                controllerBase.PlayAnim(animType);
-            }
-        }
-
         public void StopAnimAction()
         {
             TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);

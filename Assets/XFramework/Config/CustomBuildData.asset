@@ -15,7 +15,7 @@ MonoBehaviour:
   buildTargetPlatform: 2
   buildCompressType: 524288
   buildPackagePath: D:/Soft/Xampp/htdocs
-  exportCnProjectName: XFrame
+  exportCnProjectName: "X\u6846\u67B6WebGl"
   exportEnProjectName: XFrame
   chineseShell: 1
   folderCopy:
