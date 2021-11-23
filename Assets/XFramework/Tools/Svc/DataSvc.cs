@@ -95,7 +95,7 @@ namespace XFramework
         public static T GetObjectsInScene<T>()
         {
             // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
-            GameObject objectsInScene = GetObjectsOnlyInScene();
+            GameObject objectsInScene = GetObjectsOnlyInScene<T>();
             return objectsInScene.GetComponent<T>();
         }
 
@@ -106,7 +106,7 @@ namespace XFramework
         private static List<GameObject> GetAllObjectsOnlyInScene()
         {
             List<GameObject> objectsInScene = new List<GameObject>();
-            foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+            foreach (GameObject go in (GameObject[]) Resources.FindObjectsOfTypeAll(typeof(GameObject)))
             {
 #if UNITY_EDITOR
                 if (!EditorUtility.IsPersistent(go.transform.root.gameObject) && !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
@@ -125,18 +125,23 @@ namespace XFramework
         /// 获得场景中所有第一个物体
         /// </summary>
         /// <returns></returns>
-        private static GameObject GetObjectsOnlyInScene()
+        private static GameObject GetObjectsOnlyInScene<T>()
         {
-            foreach (GameObject go in Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[])
+            foreach (GameObject go in (GameObject[]) Resources.FindObjectsOfTypeAll(typeof(GameObject)))
             {
 #if UNITY_EDITOR
                 if (!EditorUtility.IsPersistent(go.transform.root.gameObject) && !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
                 {
+                    if (go.GetComponent<T>() != null)
+                    {
+                        return go;
+                    }
+                }
+#else
+                if (go.GetComponent<T>() != null)
+                {
                     return go;
                 }
-
-#else
-                return go;
 #endif
             }
 
