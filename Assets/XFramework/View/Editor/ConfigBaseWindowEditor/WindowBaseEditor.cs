@@ -57,7 +57,7 @@ namespace XFramework
             }
         }
 
-        [MenuItem("GameObject/生成 /@(Alt+T) 绑定UI类型  &t", false, 0)]
+        [MenuItem("GameObject/生成 /@(Alt+U) 绑定UI类型  &u", false, 0)]
         public static void BindComponent()
         {
             GameObject uiObj = Selection.objects.First() as GameObject;
@@ -65,7 +65,7 @@ namespace XFramework
             {
                 if (!uiObj.GetComponent<BindUiType>())
                 {
-                    uiObj.AddComponent<BindUiType>();
+                    Undo.AddComponent<BindUiType>(uiObj);
                 }
 
                 if (uiObj.GetComponent<Button>())
@@ -131,16 +131,7 @@ namespace XFramework
                 }
             }
         }
-
-        [MenuItem("GameObject/生成 /@(Alt+G) 生成代码 &g", false, 0)]
-        public static void Generate()
-        {
-            GameObject uiObj = Selection.objects.First() as GameObject;
-            if (uiObj != null && uiObj.GetComponent<BaseWindow>() && uiObj.GetComponent<BaseWindowGenerateScripts>())
-            {
-                uiObj.GetComponent<BaseWindowGenerateScripts>().Generate();
-            }
-        }
+      
     }
 }
 #endif

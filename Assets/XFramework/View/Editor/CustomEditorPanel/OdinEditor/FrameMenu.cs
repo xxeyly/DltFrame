@@ -16,16 +16,7 @@ namespace XFramework
             GetWindow<FrameMenu>().Show();
         }
 
-        [MenuItem("Xframe/一键打包")]
-        private static void StartBuild()
-        {
-            if (customBuild != null)
-            {
-                customBuild.StartBuild();
-            }
-        }
-
-        [MenuItem("Xframe/监听生成")]
+        [MenuItem("Xframe/监听生成 &l")]
         private static void OnListenerGenerate()
         {
             ListenerSvcGenerateData listenerSvcGenerateData = DataSvc.GetObjectsInScene<ListenerSvcGenerateData>();
@@ -40,30 +31,6 @@ namespace XFramework
             }
         }
 
-        [MenuItem("Xframe/框架生成")]
-        private static void FrameBuild()
-        {
-            if (gameRootEditor != null)
-            {
-                gameRootEditor.Generate();
-            }
-        }
-
-        [MenuItem("Xframe/打包异步场景")]
-        private static void BuildAsyncScene()
-        {
-            if (sceneLoad == null)
-            {
-                SceneLoad tempSceneLoad = new SceneLoad();
-                tempSceneLoad.OnInit();
-                tempSceneLoad.BuildSyncScene();
-            }
-            else
-            {
-                sceneLoad.BuildSyncScene();
-            }
-        }
-
         //打包
         private static OdinCustomBuild customBuild = new OdinCustomBuild();
 
@@ -73,7 +40,7 @@ namespace XFramework
         //框架配置
         private static GameRootEditor gameRootEditor;
         private GenerateBaseWindowEditor generateBaseWindowEditor = new GenerateBaseWindowEditor();
-        private static SceneLoad sceneLoad;
+        private static SceneLoad sceneLoad = new SceneLoad();
 
         //可持久化
         RuntimeDataSvcEditor runtimeDataSvcEditor = new RuntimeDataSvcEditor();
@@ -102,6 +69,12 @@ namespace XFramework
         //鼠标服务
         MouseSvcEditor mouseSvcEditor = new MouseSvcEditor();
 
+        //资源统一化
+        ResourceUnification resourceUnification = new ResourceUnification();
+
+        //场景工具
+        SceneTools sceneTools = new SceneTools();
+
         //生成配置
         protected override OdinMenuTree BuildMenuTree()
         {
@@ -110,8 +83,6 @@ namespace XFramework
             //框架配置
             gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
                 circuitSvcEditor, mouseSvcEditor);
-            ResourceUnification resourceUnification = new ResourceUnification();
-            sceneLoad = new SceneLoad();
             sceneLoad.OnInit();
             customBuild.OnInit();
             gameRootEditor.OnInit();
@@ -125,7 +96,7 @@ namespace XFramework
             tree.Add("音频配置", audioSvcEditor);
             tree.Add("生成配置", generateBaseWindowEditor);
             tree.Add("资源统一化", resourceUnification);
-            tree.Add("场景工具", new SceneTools());
+            tree.Add("场景工具", sceneTools);
             return tree;
         }
 

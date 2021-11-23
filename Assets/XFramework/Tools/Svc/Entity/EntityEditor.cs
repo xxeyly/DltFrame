@@ -13,8 +13,7 @@ namespace XFramework
             GameObject uiObj = Selection.objects.First() as GameObject;
             if (uiObj != null && !uiObj.GetComponent<EntityItem>())
             {
-                uiObj.AddComponent<EntityItem>().GetCurrentGameObjectName();
-                Undo.RegisterCompleteObjectUndo(uiObj, uiObj.name);
+                Undo.AddComponent<EntityItem>(uiObj).GetCurrentGameObjectName();
             }
         }
     }
