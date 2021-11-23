@@ -8,7 +8,9 @@ namespace XFramework
 {
     public class ListenerSvcGenerateData : SerializedMonoBehaviour
     {
-        public Dictionary<string, Dictionary<string, List<List<string>>>> _callDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
+        public Dictionary<string, Dictionary<string, List<List<string>>>> _callDic =
+            new Dictionary<string, Dictionary<string, List<List<string>>>>();
+
         private Dictionary<string, string> _allScriptsContentDic;
         private List<string> _allScriptsPath;
 
@@ -39,7 +41,8 @@ namespace XFramework
                             }
                         }
 
-                        methodName += parameter + ")" + GenerateGeneral.LineFeed + GenerateGeneral.Indents(12) + "{" + GenerateGeneral.LineFeed;
+                        methodName += parameter + ")" + GenerateGeneral.LineFeed + GenerateGeneral.Indents(12) + "{" +
+                                      GenerateGeneral.LineFeed;
                         parameter2 = String.Empty;
 
                         for (int j = 0; j < valuePair.Value[i].Count; j++)
@@ -64,7 +67,9 @@ namespace XFramework
                             temp3 = ",";
                         }
 
-                        methodName += GenerateGeneral.Indents(16) + "Instance.ExecuteEvent(\"" + valuePair.Key + "\"" + temp3 + parameter2 + ");" + GenerateGeneral.LineFeed;
+                        Debug.Log(pair.Key);
+                        methodName += GenerateGeneral.Indents(16) + "Instance.ExecuteEvent(\"" + pair.Key + "_" +
+                                      valuePair.Key + "\"" + temp3 + parameter2 + ");" + GenerateGeneral.LineFeed;
                         methodName += GenerateGeneral.Indents(12) + "}" + GenerateGeneral.LineFeed;
                         group2.Add(methodName);
                     }
@@ -77,7 +82,8 @@ namespace XFramework
             string tt = String.Empty;
             foreach (KeyValuePair<string, List<string>> pair in group)
             {
-                tt += GenerateGeneral.Indents(8) + "public " + pair.Key + " " + DataSvc.FirstCharToLower(pair.Key) + " = new " + pair.Key + "()" + ";" + GenerateGeneral.LineFeed;
+                tt += GenerateGeneral.Indents(8) + "public " + pair.Key + " " + DataSvc.FirstCharToLower(pair.Key) +
+                      " = new " + pair.Key + "()" + ";" + GenerateGeneral.LineFeed;
             }
 
             foreach (KeyValuePair<string, List<string>> pair in group)
@@ -128,7 +134,8 @@ namespace XFramework
                     }
 
                     _allScriptsPath.Add(files[i].Name);
-                    _allScriptsContentDic.Add(files[i].Name.Replace(".cs", ""), FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName)));
+                    _allScriptsContentDic.Add(files[i].Name.Replace(".cs", ""),
+                        FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName)));
                 }
             }
 
@@ -165,7 +172,8 @@ namespace XFramework
 
                         // Debug.Log("属性:" + parameter);
                         //去掉多余<>
-                        if (parameter.Length > 1 && parameter[0].ToString() == "<" && parameter[parameter.Length - 1].ToString() == ">")
+                        if (parameter.Length > 1 && parameter[0].ToString() == "<" &&
+                            parameter[parameter.Length - 1].ToString() == ">")
                         {
                             parameter = parameter.Remove(0, 1);
                             parameter = parameter.Remove(parameter.Length - 1, 1);
@@ -217,7 +225,8 @@ namespace XFramework
             }
 
             string oldContent = GenerateGeneral.GetOldScriptsContent("ListenerSvcData");
-            oldContent = GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(_callDic), "//监听生成开始", "//监听生成结束");
+            oldContent =
+                GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(_callDic), "//监听生成开始", "//监听生成结束");
             FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerSvcData"), oldContent);
         }
 
