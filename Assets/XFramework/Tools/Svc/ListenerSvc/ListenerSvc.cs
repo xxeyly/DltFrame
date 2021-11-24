@@ -15,13 +15,13 @@ namespace XFramework
 
         public delegate void CallBack<T>(T t);
 
-        public delegate void CallBack<T, X>(T arg1, X arg2);
+        public delegate void CallBack<T, X>(T t, X x);
 
-        public delegate void CallBack<T, X, Y>(T arg1, X arg2, Y arg3);
+        public delegate void CallBack<T, X, Y>(T t, X x, Y y);
 
-        public delegate void CallBack<T, X, Y, Z>(T arg1, X arg2, Y arg3, Z arg4);
+        public delegate void CallBack<T, X, Y, Z>(T t, X x, Y y, Z z);
 
-        public delegate void CallBack<T, X, Y, Z, W>(T arg1, X arg2, Y arg3, Z arg4, W arg5);
+        public delegate void CallBack<T, X, Y, Z, W>(T t, X x, Y y, Z z, W w);
 
         [SerializeField] private Dictionary<string, List<Delegate>> listenerDic;
 
@@ -53,21 +53,20 @@ namespace XFramework
         /// 添加委托
         /// </summary>
         /// <param name="eventType"></param>
-        /// <param name="delegate"></param>
-        private void AddDelegateToListenerEvent(string eventType, Delegate @delegate)
+        /// <param name="customDelegate"></param>
+        private void AddDelegateToListenerEvent(string eventType, Delegate customDelegate)
         {
             if (!listenerDic.ContainsKey(eventType))
             {
-                List<Delegate> delegates = new List<Delegate>();
-                delegates.Add(@delegate);
+                List<Delegate> delegates = new List<Delegate> {customDelegate};
                 listenerDic.Add(eventType, delegates);
             }
             else
             {
                 List<Delegate> delegates = listenerDic[eventType];
-                if (!delegates.Contains(@delegate))
+                if (!delegates.Contains(customDelegate))
                 {
-                    delegates.Add(@delegate);
+                    delegates.Add(customDelegate);
                 }
                 else
                 {
@@ -153,15 +152,12 @@ namespace XFramework
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                foreach (Delegate @delegate in listenerDic[eventType])
+                foreach (Delegate customDelegate in listenerDic[eventType])
                 {
-                    try
+                    if (customDelegate.Method.GetParameters().Length == 0)
                     {
-                        ((CallBack) @delegate)?.Invoke();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
+                        ((CallBack) customDelegate)();
+                        return;
                     }
                 }
             }
@@ -180,15 +176,13 @@ namespace XFramework
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                foreach (Delegate @delegate in listenerDic[eventType])
+                foreach (Delegate customDelegate in listenerDic[eventType])
                 {
-                    try
+                    if (customDelegate.Method.GetParameters().Length == 1 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType())
                     {
-                        ((CallBack<T>) @delegate)?.Invoke(t);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
+                        ((CallBack<T>) customDelegate)(t);
+                        return;
                     }
                 }
             }
@@ -203,20 +197,19 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="t"></param>
-        /// <param name="y"></param>
-        private void ExecuteEvent<T, Y>(string eventType, T t, Y y)
+        /// <param name="x"></param>
+        private void ExecuteEvent<T, X>(string eventType, T t, X x)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                foreach (Delegate @delegate in listenerDic[eventType])
+                foreach (Delegate customDelegate in listenerDic[eventType])
                 {
-                    try
+                    if (customDelegate.Method.GetParameters().Length == 2 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType())
                     {
-                        ((CallBack<T, Y>) @delegate).Invoke(t, y);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
+                        ((CallBack<T, X>) customDelegate)(t, x);
+                        return;
                     }
                 }
             }
@@ -236,15 +229,15 @@ namespace XFramework
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                foreach (Delegate @delegate in listenerDic[eventType])
+                foreach (Delegate customDelegate in listenerDic[eventType])
                 {
-                    try
+                    if (customDelegate.Method.GetParameters().Length == 3 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType())
                     {
-                        ((CallBack<T, X, Y>) @delegate).Invoke(t, x, y);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
+                        ((CallBack<T, X, Y>) customDelegate)(t, x, y);
+                        return;
                     }
                 }
             }
@@ -260,19 +253,20 @@ namespace XFramework
         /// <param name="eventType"></param>r
         /// <param name="t"></param>
         /// <param name="y"></param>
-        private void ExecuteEvent<T, Y, X, Z>(string eventType, T t, Y y, X x, Z z)
+        private void ExecuteEvent<T, X, Y, Z>(string eventType, T t, X x, Y y, Z z)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                foreach (Delegate @delegate in listenerDic[eventType])
+                foreach (Delegate customDelegate in listenerDic[eventType])
                 {
-                    try
+                    if (customDelegate.Method.GetParameters().Length == 4 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType())
                     {
-                        ((CallBack<T, Y, X, Z>) @delegate).Invoke(t, y, x, z);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
+                        ((CallBack<T, X, Y, Z>) customDelegate)(t, x, y, z);
+                        return;
                     }
                 }
             }
@@ -288,19 +282,21 @@ namespace XFramework
         /// <param name="eventType"></param>r
         /// <param name="t"></param>
         /// <param name="y"></param>
-        private void ExecuteEvent<T, Y, X, Z, W>(string eventType, T t, Y y, X x, Z z, W w)
+        private void ExecuteEvent<T, X, Y, Z, W>(string eventType, T t, X x, Y y, Z z, W w)
         {
             if (listenerDic.ContainsKey(eventType))
             {
-                foreach (Delegate @delegate in listenerDic[eventType])
+                foreach (Delegate customDelegate in listenerDic[eventType])
                 {
-                    try
+                    if (customDelegate.Method.GetParameters().Length == 5 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == w.GetType())
                     {
-                        ((CallBack<T, Y, X, Z, W>) @delegate).Invoke(t, y, x, z, w);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
+                        ((CallBack<T, X, Y, Z, W>) customDelegate)(t, x, y, z, w);
+                        return;
                     }
                 }
             }

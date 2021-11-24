@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,10 @@ namespace XFramework
         private string _sceneName;
         private bool _asyncLoad;
         private AssetBundle _sceneAssetBundle;
+#if UNITY_WEBGL
+        [DllImport("__Internal")]
+        private static extern void WindowClose();
+#endif
 
         public override void StartSvc()
         {
@@ -151,7 +156,8 @@ namespace XFramework
             else if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
 #pragma warning disable 0618
-                Application.Quit();
+                WindowClose();
+                // Application.Quit();
                 // Application.ExternalCall("close", "close");
 #pragma warning restore 0618
             }
