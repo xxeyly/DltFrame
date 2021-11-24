@@ -156,7 +156,9 @@ namespace XFramework
             else if (Application.platform == RuntimePlatform.WebGLPlayer)
             {
 #pragma warning disable 0618
+#if UNITY_WEBGL
                 WindowClose();
+#endif
                 // Application.Quit();
                 // Application.ExternalCall("close", "close");
 #pragma warning restore 0618
