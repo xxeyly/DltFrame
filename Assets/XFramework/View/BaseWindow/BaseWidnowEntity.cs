@@ -11,7 +11,7 @@ namespace XFramework
         /// <param name="groupTag"></param>
         /// <param name="display"></param>
         /// <param name="hideOther"></param>
-        public void DisplayEntityGroup(string groupTag, bool display, bool hideOther = false)
+        protected void DisplayEntityGroup(string groupTag, bool display, bool hideOther = false)
         {
             EntitySvc.Instance.DisplayEntityGroup(groupTag, display, hideOther);
         }
@@ -22,12 +22,12 @@ namespace XFramework
         /// <param name="groupTag"></param>
         /// <param name="display"></param>
         /// <param name="hideOther"></param>
-        public void DisplayEntityGroup(bool display, params string[] groupTag)
+        protected void DisplayEntityGroup(bool display, params string[] groupTag)
         {
             EntitySvc.Instance.DisplayEntityGroup(display, groupTag);
         }
 
-        public List<EntityItem> GetEntityItemByEntityGroupName(string groupName)
+        protected List<EntityItem> GetEntityItemByEntityGroupName(string groupName)
         {
             return EntitySvc.Instance.GetEntityItemByEntityGroupName(groupName);
         }
@@ -35,7 +35,7 @@ namespace XFramework
         /// <summary>
         /// 实体全部隐藏
         /// </summary>
-        public void EntityAllHide()
+        protected void EntityAllHide()
         {
             EntitySvc.Instance.EntityAllHide();
         }
@@ -43,7 +43,7 @@ namespace XFramework
         /// <summary>
         /// 实体全部显示
         /// </summary>
-        public void EntityAllShow()
+        protected void EntityAllShow()
         {
             EntitySvc.Instance.EntityAllShow();
         }
@@ -54,7 +54,7 @@ namespace XFramework
         /// <param name="entityName"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T GetFirstEntityItemByName<T>(string entityName) where T : MonoBehaviour
+        protected T GetFirstEntityItemByName<T>(string entityName) where T : MonoBehaviour
         {
             return EntitySvc.Instance.GetFirstEntityItemByName<T>(entityName);
         }
@@ -69,7 +69,7 @@ namespace XFramework
         /// </summary>
         /// <param name="entityName"></param>
         /// <param name="display"></param>
-        public void DisplayEntityByEntityName(bool display, string entityName)
+        protected void DisplayEntityByEntityName(bool display, string entityName)
         {
             EntitySvc.Instance.DisplayEntityByEntityName(display, entityName);
         }
@@ -79,7 +79,7 @@ namespace XFramework
         /// </summary>
         /// <param name="entityNames"></param>
         /// <param name="display"></param>
-        public void DisplayEntityByEntityName(bool display, params string[] entityNames)
+        protected void DisplayEntityByEntityName(bool display, params string[] entityNames)
         {
             EntitySvc.Instance.DisplayEntityByEntityName(display, entityNames);
         }
@@ -89,7 +89,7 @@ namespace XFramework
         /// </summary>
         /// <param name="entityName"></param>
         /// <returns></returns>
-        public bool GetFirstEntityStateByEntityName(string entityName)
+        protected bool GetFirstEntityStateByEntityName(string entityName)
         {
             return EntitySvc.Instance.GetFirstEntityStateByEntityName(entityName);
         }

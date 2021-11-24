@@ -7,7 +7,7 @@ namespace XFramework
         /// 加载场景
         /// </summary>
         /// <param name="sceneName"></param>
-        public void SceneLoad(string sceneName)
+        protected void SceneLoad(string sceneName)
         {
             SceneSvc.Instance.SceneLoad(sceneName);
         }

@@ -6,102 +6,12 @@ using UnityEngine;
 
 namespace XFramework
 {
-    public class ListenerSvcGenerateData : SerializedMonoBehaviour
+    public class ListenerSvcGenerateData : MonoBehaviour
     {
-        public Dictionary<string, Dictionary<string, List<List<string>>>> _callDic =
-            new Dictionary<string, Dictionary<string, List<List<string>>>>();
-
-        private Dictionary<string, string> _allScriptsContentDic;
-        private List<string> _allScriptsPath;
-
-        private string GenerationMethod(Dictionary<string, Dictionary<string, List<List<string>>>> method)
-        {
-            Dictionary<string, List<string>> group = new Dictionary<string, List<string>>();
-            foreach (KeyValuePair<string, Dictionary<string, List<List<string>>>> pair in method)
-            {
-                List<string> group2 = new List<string>();
-                foreach (KeyValuePair<string, List<List<string>>> valuePair in pair.Value)
-                {
-                    for (int i = 0; i < valuePair.Value.Count; i++)
-                    {
-                        string methodName = String.Empty;
-                        string parameter = String.Empty;
-                        string parameter2 = String.Empty;
-                        parameter = String.Empty;
-                        methodName = GenerateGeneral.Indents(12) + "public void " + valuePair.Key + "(";
-                        for (int j = 0; j < valuePair.Value[i].Count; j++)
-                        {
-                            if (j == valuePair.Value[i].Count - 1)
-                            {
-                                parameter += valuePair.Value[i][j] + " " + "arg" + j;
-                            }
-                            else
-                            {
-                                parameter += valuePair.Value[i][j] + " " + "arg" + j + ",";
-                            }
-                        }
-
-                        methodName += parameter + ")" + GenerateGeneral.LineFeed + GenerateGeneral.Indents(12) + "{" +
-                                      GenerateGeneral.LineFeed;
-                        parameter2 = String.Empty;
-
-                        for (int j = 0; j < valuePair.Value[i].Count; j++)
-                        {
-                            if (j == valuePair.Value[i].Count - 1)
-                            {
-                                parameter2 += "arg" + j;
-                            }
-                            else
-                            {
-                                parameter2 += "arg" + j + ",";
-                            }
-                        }
-
-                        string temp3 = String.Empty;
-                        if (parameter2 == String.Empty)
-                        {
-                            temp3 = String.Empty;
-                        }
-                        else
-                        {
-                            temp3 = ",";
-                        }
-
-                        Debug.Log(pair.Key);
-                        methodName += GenerateGeneral.Indents(16) + "Instance.ExecuteEvent(\"" + pair.Key + "_" +
-                                      valuePair.Key + "\"" + temp3 + parameter2 + ");" + GenerateGeneral.LineFeed;
-                        methodName += GenerateGeneral.Indents(12) + "}" + GenerateGeneral.LineFeed;
-                        group2.Add(methodName);
-                    }
-                }
-
-
-                group.Add(pair.Key, group2);
-            }
-
-            string tt = String.Empty;
-            foreach (KeyValuePair<string, List<string>> pair in group)
-            {
-                tt += GenerateGeneral.Indents(8) + "public " + pair.Key + " " + DataSvc.FirstCharToLower(pair.Key) +
-                      " = new " + pair.Key + "()" + ";" + GenerateGeneral.LineFeed;
-            }
-
-            foreach (KeyValuePair<string, List<string>> pair in group)
-            {
-                tt += GenerateGeneral.Indents(8) + "public class " + pair.Key + GenerateGeneral.LineFeed;
-                tt += GenerateGeneral.Indents(8) + "{" + GenerateGeneral.LineFeed;
-                foreach (string moth in pair.Value)
-                {
-                    tt += moth;
-                }
-
-                tt += GenerateGeneral.Indents(8) + "}" + GenerateGeneral.LineFeed;
-            }
-
-
-            return tt;
-        }
-
+        [LabelText("生成脚本内容")] private Dictionary<string, Dictionary<string, List<List<string>>>> _callDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
+        [LabelText("所有脚本内容")] private Dictionary<string, string> _allScriptsContentDic;
+        [LabelText("加载脚本路径")] public string loadScriptsPath = "Scripts";
+        [LabelText("所有脚本")] [SerializeField] private List<string> allScriptPath;
 
         [Button(ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
@@ -115,43 +25,49 @@ namespace XFramework
                 return;
             }
 
+            #region 加载本地脚本
+
             _callDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
-            string path = string.Format("{0}", Application.dataPath + "/Scripts");
+            //脚本路径
+            string scriptsPath = $"{Application.dataPath + "/" + loadScriptsPath}";
 
             _allScriptsContentDic = new Dictionary<string, string>();
-            _allScriptsPath = new List<string>();
+            allScriptPath = new List<string>();
             //获取指定路径下面的所有资源文件  
-            if (Directory.Exists(path))
+            if (Directory.Exists(scriptsPath))
             {
-                DirectoryInfo direction = new DirectoryInfo(path);
+                DirectoryInfo direction = new DirectoryInfo(scriptsPath);
                 FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
                 for (int i = 0; i < files.Length; i++)
                 {
-                    //忽略关联文件
-                    if (files[i].Name.EndsWith(".meta"))
+                    //忽略关联文件与特殊类
+                    if (files[i].Name.EndsWith(".meta") || files[i].Name == "BaseWidnow.cs" || files[i].Name == "ListenerSvcData.cs")
                     {
                         continue;
                     }
 
-                    _allScriptsPath.Add(files[i].Name);
-                    _allScriptsContentDic.Add(files[i].Name.Replace(".cs", ""),
-                        FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName)));
+                    //添加类名称
+                    allScriptPath.Add(files[i].Name);
+                    //读取类内容
+                    _allScriptsContentDic.Add(files[i].Name.Replace(".cs", ""), FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName)));
                 }
             }
+
+            #endregion
+
+            #region 读取监听内容
 
             foreach (KeyValuePair<string, string> pair in _allScriptsContentDic)
             {
                 if (pair.Value.Contains("AddListenerEvent"))
                 {
                     int index = 0;
-                    int count = 0;
                     string functionName = String.Empty;
 
                     Dictionary<string, List<List<string>>> funGroup = new Dictionary<string, List<List<string>>>();
                     while ((index = pair.Value.IndexOf("AddListenerEvent", index, StringComparison.Ordinal)) != -1)
                     {
                         string parameter = String.Empty;
-                        count++;
                         index = index + "AddListenerEvent".Length;
                         int firstBrackets = index;
                         // Debug.Log(pair.Value);
@@ -203,10 +119,6 @@ namespace XFramework
 
                         // Debug.Log("Event事件名称:" + functionName);
                         List<string> parameterList = ParameterSplit(parameter);
-                        foreach (string s in parameterList)
-                        {
-                            // Debug.Log("方法:" + functionName + ":" + s);
-                        }
 
                         if (!funGroup.ContainsKey(functionName))
                         {
@@ -224,10 +136,113 @@ namespace XFramework
                 }
             }
 
+            #endregion
+
+            #region 写入生成内容
+
             string oldContent = GenerateGeneral.GetOldScriptsContent("ListenerSvcData");
             oldContent =
                 GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(_callDic), "//监听生成开始", "//监听生成结束");
             FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerSvcData"), oldContent);
+
+            #endregion
+        }
+
+        /// <summary>
+        /// 生成方法
+        /// </summary>
+        /// <param name="method"></param>
+        /// <returns></returns>
+        private string GenerationMethod(Dictionary<string, Dictionary<string, List<List<string>>>> method)
+        {
+            //类方法组
+            Dictionary<string, List<string>> classMethodGroup = new Dictionary<string, List<string>>();
+            foreach (KeyValuePair<string, Dictionary<string, List<List<string>>>> pair in method)
+            {
+                List<string> classMethod = new List<string>();
+                foreach (KeyValuePair<string, List<List<string>>> valuePair in pair.Value)
+                {
+                    for (int i = 0; i < valuePair.Value.Count; i++)
+                    {
+                        //方法名称
+                        string methodName;
+                        //方法属性
+                        string methodParameter = String.Empty;
+                        //监听属性
+                        string listenePparameter;
+                        methodName = GenerateGeneral.Indents(12) + "public void " + valuePair.Key + "(";
+                        for (int j = 0; j < valuePair.Value[i].Count; j++)
+                        {
+                            if (j == valuePair.Value[i].Count - 1)
+                            {
+                                methodParameter += valuePair.Value[i][j] + " " + "arg" + j;
+                            }
+                            else
+                            {
+                                methodParameter += valuePair.Value[i][j] + " " + "arg" + j + ",";
+                            }
+                        }
+
+                        methodName += methodParameter + ")" + GenerateGeneral.LineFeed + GenerateGeneral.Indents(12) + "{" +
+                                      GenerateGeneral.LineFeed;
+                        listenePparameter = String.Empty;
+
+                        for (int j = 0; j < valuePair.Value[i].Count; j++)
+                        {
+                            if (j == valuePair.Value[i].Count - 1)
+                            {
+                                listenePparameter += "arg" + j;
+                            }
+                            else
+                            {
+                                listenePparameter += "arg" + j + ",";
+                            }
+                        }
+
+                        string temp;
+                        if (listenePparameter == String.Empty)
+                        {
+                            temp = String.Empty;
+                        }
+                        else
+                        {
+                            temp = ",";
+                        }
+
+                        methodName += GenerateGeneral.Indents(16) + "Instance.ExecuteEvent(\"" + pair.Key + "_" +
+                                      valuePair.Key + "\"" + temp + listenePparameter + ");" + GenerateGeneral.LineFeed;
+                        methodName += GenerateGeneral.Indents(12) + "}" + GenerateGeneral.LineFeed;
+                        classMethod.Add(methodName);
+                    }
+                }
+
+                classMethodGroup.Add(pair.Key, classMethod);
+            }
+
+            //生成类
+            string generateClassContent = String.Empty;
+            //
+            foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
+            {
+                generateClassContent += GenerateGeneral.Indents(8) + "public " + pair.Key + " " + DataSvc.FirstCharToLower(pair.Key) +
+                                        " = new " + pair.Key + "()" + ";" + GenerateGeneral.LineFeed;
+            }
+
+            //生成类方法
+            foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
+            {
+                generateClassContent += GenerateGeneral.Indents(8) + "public class " + pair.Key + GenerateGeneral.LineFeed;
+                generateClassContent += GenerateGeneral.Indents(8) + "{" + GenerateGeneral.LineFeed;
+                foreach (string moth in pair.Value)
+                {
+                    generateClassContent += moth;
+                }
+
+                generateClassContent += GenerateGeneral.Indents(8) + "}" + GenerateGeneral.LineFeed;
+            }
+
+
+            return generateClassContent;
         }
 
         /// <summary>

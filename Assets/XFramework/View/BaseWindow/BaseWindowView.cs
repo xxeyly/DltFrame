@@ -9,7 +9,7 @@ namespace XFramework
         /// </summary>
         /// <param name="view"></param>
         /// <returns></returns>
-        public bool GetViewState(Type view)
+        protected bool GetViewState(Type view)
         {
             return ViewSvc.Instance.GetViewState(view);
         }
@@ -19,7 +19,7 @@ namespace XFramework
         /// 获得当前活动的视图数量
         /// </summary>
         /// <returns></returns>
-        public int GetCurrentActiveViewCount()
+        protected int GetCurrentActiveViewCount()
         {
             return ViewSvc.Instance.GetCurrentActiveViewCount();
         }
@@ -27,7 +27,7 @@ namespace XFramework
 
         #region 显示视图
 
-        public void ShowThisView()
+        protected void ShowThisView()
         {
             ViewSvc.Instance.ShowView(viewType);
         }
@@ -36,7 +36,7 @@ namespace XFramework
         /// 显示单一视图类型
         /// </summary>
         /// <param name="type"></param>
-        public void ShowView(Type type)
+        protected void ShowView(Type type)
         {
             ViewSvc.Instance.ShowView(type);
         }
@@ -45,7 +45,7 @@ namespace XFramework
         /// 显示一些视图
         /// </summary>
         /// <param name="types"></param>
-        public void ShowView(params Type[] types)
+        protected void ShowView(params Type[] types)
         {
             ViewSvc.Instance.ShowView(types);
         }
@@ -55,7 +55,7 @@ namespace XFramework
         /// </summary>
         /// <param name="type">视图类型</param>
         /// <param name="time">切换所需时间</param>
-        public void ShowView(Type type, float time)
+        protected void ShowView(Type type, float time)
         {
             ViewSvc.Instance.ShowView(type, time);
         }
@@ -65,7 +65,7 @@ namespace XFramework
         /// </summary>
         /// <param name="typeList"></param>
         /// <param name="time">切换所需时间</param>
-        public void ShowView(float time, params Type[] typeList)
+        protected void ShowView(float time, params Type[] typeList)
         {
             ViewSvc.Instance.ShowView(time, typeList);
         }
@@ -78,7 +78,7 @@ namespace XFramework
         /// 显示单一视图类型
         /// </summary>
         /// <param name="type"></param>
-        public void HideView(Type type)
+        protected void HideView(Type type)
         {
             ViewSvc.Instance.HideView(type);
         }
@@ -87,7 +87,7 @@ namespace XFramework
         /// 隐藏一些视图
         /// </summary>
         /// <param name="types"></param>
-        public void HideView(params Type[] types)
+        protected void HideView(params Type[] types)
         {
             ViewSvc.Instance.HideView(types);
         }
@@ -97,7 +97,7 @@ namespace XFramework
         /// </summary>
         /// <param name="type">视图类型</param>
         /// <param name="time">切换所需时间</param>
-        public void HideView(Type type, float time)
+        protected void HideView(Type type, float time)
         {
             ViewSvc.Instance.HideView(type, time);
         }
@@ -107,7 +107,7 @@ namespace XFramework
         /// </summary>
         /// <param name="types"></param>
         /// <param name="time">切换所需时间</param>
-        public void HideView(float time, params Type[] types)
+        protected void HideView(float time, params Type[] types)
         {
             ViewSvc.Instance.HideView(time, types);
         }
@@ -115,7 +115,7 @@ namespace XFramework
         /// <summary>
         /// 隐藏视图
         /// </summary>
-        public void HideAllView()
+        protected void HideAllView()
         {
             ViewSvc.Instance.HideAllView();
         }

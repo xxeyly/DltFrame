@@ -5,7 +5,7 @@ namespace XFramework
 {
     partial class BaseWindow
     {
-        public void Log(string message)
+        protected void Log(string message)
         {
             if (isLog)
             {
@@ -13,7 +13,7 @@ namespace XFramework
             }
         }
 
-        public void LogError(object message)
+        protected void LogError(object message)
         {
             if (isLog)
             {

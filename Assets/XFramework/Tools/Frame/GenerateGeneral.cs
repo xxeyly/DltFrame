@@ -90,8 +90,11 @@ namespace XFramework
             return ReplaceScriptContent(scriptsContent, temp, insertStartMark, insertEndMark);
         }
 
+        /// <summary>
         /// 获得旧的脚本内容
         /// </summary>
+        /// <param name="scriptsName"></param>
+        /// <returns></returns>
         public static string GetOldScriptsContent(string scriptsName)
         {
             string scriptPath = GetPath(scriptsName);
