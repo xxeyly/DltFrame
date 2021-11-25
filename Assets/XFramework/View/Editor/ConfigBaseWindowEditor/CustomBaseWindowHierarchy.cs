@@ -25,18 +25,20 @@ namespace XFramework
 
                     if (tempBaseWindow.GetViewShowType() == ViewShowType.Static)
                     {
-                        Rect sRectIcon = GetRect(selectionrect, 20, 18, 1);
-                        GUI.Label(sRectIcon, "S");
+                        GUI.Label(SetRect(selectionrect, 0, 18), "S");
                     }
-
                     #endregion
 
                     #region 描述
 
-                    if (tempBaseWindow.viewName != String.Empty)
+                    if (!string.IsNullOrEmpty(tempBaseWindow.viewName))
                     {
-                        Rect sRectIcon = GetRect(selectionrect, 50, 180, 2);
-                        GUI.Label(sRectIcon, obj.GetComponent<BaseWindow>().viewName);
+                        string viewName = tempBaseWindow.viewName;
+                        Rect viewNameRect = SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
+                        GUI.Label(viewNameRect, viewName, new GUIStyle()
+                        {
+                            fontStyle = FontStyle.Normal
+                        });
                     }
 
                     #endregion
@@ -45,7 +47,7 @@ namespace XFramework
                     rectCheck.x += rectCheck.width - 20;
                     rectCheck.width = 18;
                     GameObject window = obj.transform.Find("Window").gameObject;
-                    window.SetActive(GUI.Toggle(rectCheck, window.activeSelf, string.Empty));
+                    window.SetActive(GUI.Toggle(SetRect(selectionrect, -20, 18), window.activeSelf, string.Empty));
                     if (window.GetComponent<CanvasGroup>())
                     {
                         window.GetComponent<CanvasGroup>().alpha = window.activeSelf ? 1 : 0;
@@ -62,10 +64,10 @@ namespace XFramework
             }
         }
 
-        private static Rect GetRect(Rect selectionRect, int length, int width, int index)
+        private static Rect SetRect(Rect selectionRect, float offset, float width)
         {
             Rect rect = new Rect(selectionRect);
-            rect.x += rect.width - length - (length * index);
+            rect.x += rect.width + offset;
             rect.width = width;
             return rect;
         }
