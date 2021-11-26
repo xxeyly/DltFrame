@@ -459,6 +459,27 @@ namespace XFramework
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
+                        case General.UiType.TextMeshProUGUI:
+                            allUiVariableName.Add(Indents(4) + "private TextMeshProUGUI _" +
+                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  Semicolon
+                            );
+                            AddUsing("using TMPro;");
+                            break;
+                        case General.UiType.TMP_Dropdown:
+                            allUiVariableName.Add(Indents(4) + "private TMP_Dropdown _" +
+                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  Semicolon
+                            );
+                            AddUsing("using TMPro;");
+                            break;
+                        case General.UiType.TMP_InputField:
+                            allUiVariableName.Add(Indents(4) + "private TMP_InputField _" +
+                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  Semicolon
+                            );
+                            AddUsing("using TMPro;");
+                            break;
 
                         case General.UiType.ChildList:
 

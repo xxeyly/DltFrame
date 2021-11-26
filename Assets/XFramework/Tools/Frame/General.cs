@@ -142,7 +142,14 @@ namespace XFramework
             GameObject,
             Slider,
             VideoPlayer,
+            // ReSharper disable once InconsistentNaming
+            TextMeshProUGUI,
+            // ReSharper disable once InconsistentNaming
+            TMP_Dropdown,
+            // ReSharper disable once InconsistentNaming
+            TMP_InputField,
             ChildList,
+            
         }
 
         /// <summary>

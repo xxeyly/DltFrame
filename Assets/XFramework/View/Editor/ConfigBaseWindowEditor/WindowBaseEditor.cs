@@ -1,5 +1,6 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -79,7 +80,9 @@ namespace XFramework
                          !uiObj.GetComponent<Scrollbar>() &&
                          !uiObj.GetComponent<ScrollRect>() &&
                          !uiObj.GetComponent<RawImage>() &&
+                         !uiObj.GetComponent<TMP_InputField>() &&
                          !uiObj.GetComponent<InputField>() &&
+                         !uiObj.GetComponent<TMP_Dropdown>() &&
                          !uiObj.GetComponent<Dropdown>())
                 {
                     uiObj.GetComponent<BindUiType>().type = General.UiType.Image;
@@ -124,6 +127,18 @@ namespace XFramework
                 {
                     uiObj.GetComponent<BindUiType>().type = General.UiType.ChildList;
                     uiObj.GetComponent<BindUiType>().childType = uiObj.GetComponentInChildren<ChildBaseWindow>();
+                }
+                else if (uiObj.GetComponentInChildren<TMP_Dropdown>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.TMP_Dropdown;
+                }
+                else if (uiObj.GetComponentInChildren<TMP_InputField>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.TMP_InputField;
+                }
+                else if (uiObj.GetComponentInChildren<TextMeshProUGUI>())
+                {
+                    uiObj.GetComponent<BindUiType>().type = General.UiType.TextMeshProUGUI;
                 }
                 else
                 {
