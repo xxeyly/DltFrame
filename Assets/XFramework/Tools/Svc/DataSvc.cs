@@ -103,7 +103,7 @@ namespace XFramework
         /// 获得场景中所有物体
         /// </summary>
         /// <returns></returns>
-        private static List<GameObject> GetAllObjectsOnlyInScene()
+        public static List<GameObject> GetAllObjectsOnlyInScene()
         {
             List<GameObject> objectsInScene = new List<GameObject>();
             foreach (GameObject go in (GameObject[]) Resources.FindObjectsOfTypeAll(typeof(GameObject)))
