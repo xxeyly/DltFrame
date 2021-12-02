@@ -104,6 +104,7 @@ namespace XFramework
 
             GameObject AnimatorControllerManager = new GameObject("AnimatorControllerManager");
             AnimatorControllerManager.AddComponent<AnimatorControllerManager>();
+            AnimatorControllerManager.AddComponent<AnimatorControllerGenerate>();
             AnimatorControllerManager.transform.parent = sceneToolsRoot;
         }
 

@@ -42,6 +42,15 @@ namespace XFramework
         /// <summary>
         /// 播放动画
         /// </summary>
+        /// <param name="animParameters"></param>
+        public void PlayAnim(AnimParameters animParameters)
+        {
+            PlayAnim(animParameters.ToString());
+        }
+
+        /// <summary>
+        /// 播放动画
+        /// </summary>
         /// <param name="animType"></param>
         public void PlayAnim(string animType)
         {
@@ -55,7 +64,24 @@ namespace XFramework
                 }
             }
         }
+        /// <summary>
+        /// 播放动画
+        /// </summary>
+        /// <param name="animType"></param>
+        /// <param name="playProgress">播放进度</param>
+        public void PlayAnim(AnimParameters animParameter, float playProgress)
+        {
+            currentPlayAnim = animParameter.ToString();
+            eventChange = true;
 
+            foreach (AnimatorControllerBase controllerBase in allAnimController)
+            {
+                if (controllerBase.enabled)
+                {
+                    controllerBase.PlayAnim(animParameter.ToString(), playProgress);
+                }
+            }
+        }
         /// <summary>
         /// 播放动画
         /// </summary>

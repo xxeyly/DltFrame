@@ -8,6 +8,7 @@ using System.Text;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 using Random = System.Random;
 
 namespace XFramework
@@ -146,6 +147,73 @@ namespace XFramework
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// 获得所有文件的路径(.meta文件除外)
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<string, List<string>> GetAllObjectsOnlyInAssetsPath()
+        {
+            Dictionary<string, List<string>> assetsTypePathDic = new Dictionary<string, List<string>>();
+            DirectoryInfo direction = new DirectoryInfo("Assets");
+            FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Name.EndsWith(".meta"))
+                {
+                    continue;
+                }
+
+                //后缀名
+                string extension = files[i].Extension.Replace(".", "");
+                //绝对路径
+                string absolutePath = files[i].FullName;
+                //相对路径
+                string relativePath = absolutePath.Substring(absolutePath.IndexOf("Assets", StringComparison.Ordinal));
+                if (!assetsTypePathDic.ContainsKey(extension))
+                {
+                    assetsTypePathDic.Add(extension, new List<string>() {relativePath});
+                }
+                else
+                {
+                    assetsTypePathDic[extension].Add(relativePath);
+                }
+            }
+
+            return assetsTypePathDic;
+        }
+
+        /// <summary>
+        /// 获得指定类型文件路径
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetSpecifyTypeOnlyInAssetsPath(string fileExtension)
+        {
+            if (GetAllObjectsOnlyInAssetsPath().ContainsKey(fileExtension))
+            {
+                return GetAllObjectsOnlyInAssetsPath()[fileExtension];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 获得指定类型文件
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> GetSpecifyTypeOnlyInAssetsByFilePath<T>(List<string> filePath) where T : Object
+        {
+            List<T> specifyType = new List<T>();
+
+            foreach (string path in filePath)
+            {
+                specifyType.Add(AssetDatabase.LoadAssetAtPath<T>(path));
+            }
+
+            return specifyType;
         }
 
         /// <summary>
@@ -411,7 +479,6 @@ namespace XFramework
             {
                 Directory.CreateDirectory(path);
             }
-
             FileStream aFile = new FileStream(path, FileMode.Create);
             //得到字符串的UTF8 数据流
             byte[] bts = System.Text.Encoding.UTF8.GetBytes(information);
