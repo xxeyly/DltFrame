@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEditor;
@@ -207,11 +206,13 @@ namespace XFramework
         public static List<T> GetSpecifyTypeOnlyInAssetsByFilePath<T>(List<string> filePath) where T : Object
         {
             List<T> specifyType = new List<T>();
+#if UNITY_EDITOR
 
             foreach (string path in filePath)
             {
                 specifyType.Add(AssetDatabase.LoadAssetAtPath<T>(path));
             }
+#endif
 
             return specifyType;
         }
@@ -359,6 +360,7 @@ namespace XFramework
 
             if (Vector3.Dot(mTransform.up, Vector3.up) >= 0f)
             {
+                Debug.Log("大于0");
                 if (angle.x >= 0f && angle.x <= 90f)
                 {
                     x = angle.x;
@@ -368,10 +370,12 @@ namespace XFramework
                 {
                     x = angle.x - 360f;
                 }
+                
             }
 
             if (Vector3.Dot(mTransform.up, Vector3.up) < 0f)
             {
+                Debug.Log("小于0");
                 if (angle.x >= 0f && angle.x <= 90f)
                 {
                     x = 180 - angle.x;
@@ -383,6 +387,7 @@ namespace XFramework
                 }
             }
 
+            Debug.Log(angle.y);
             if (angle.y > 180)
             {
                 y = angle.y - 360f;
@@ -479,6 +484,7 @@ namespace XFramework
             {
                 Directory.CreateDirectory(path);
             }
+
             FileStream aFile = new FileStream(path, FileMode.Create);
             //得到字符串的UTF8 数据流
             byte[] bts = System.Text.Encoding.UTF8.GetBytes(information);

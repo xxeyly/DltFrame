@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using Directory = UnityEngine.Windows.Directory;
 
 namespace XFramework
 {
     public class AnimatorControllerGenerate : MonoBehaviour
     {
+#if UNITY_EDITOR
+
         [LabelText("加载脚本路径")] public string loadScriptsPath = "Scripts";
 
         /// <summary>
@@ -132,5 +133,6 @@ namespace XFramework
 
             return temp;
         }
+#endif
     }
 }
