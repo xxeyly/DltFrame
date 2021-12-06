@@ -51,6 +51,11 @@ namespace XFramework
             {
                 text = text.Replace("ListenerSvcDataTemplate", "ListenerSvc");
             }
+            
+            if (resourceFile == General.AnimatorControllerParameterDataTemplatePath)
+            {
+                text = text.Replace("AnimatorControllerParameterDataTemplate", "AnimatorControllerData");
+            }
 
 
             //utf8

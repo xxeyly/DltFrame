@@ -9,8 +9,8 @@ namespace XFramework
     public class AnimatorControllerGenerate : MonoBehaviour
     {
 #if UNITY_EDITOR
-
         [LabelText("加载脚本路径")] public string loadScriptsPath = "Scripts";
+        [LabelText("加载脚本名称")] public string loadScriptsName = "AnimatorControllerParameterData";
 
         /// <summary>
         /// 获得生成内容
@@ -40,7 +40,7 @@ namespace XFramework
         [LabelText("代码生成")]
         public void Generate()
         {
-            string listenerSvcDataPath = GenerateGeneral.GetPath("AnimatorControllerData");
+            string listenerSvcDataPath = GenerateGeneral.GetPath(loadScriptsName);
             if (listenerSvcDataPath == null)
             {
                 Debug.LogWarning("AnimatorControllerData脚本未创建");
@@ -60,11 +60,11 @@ namespace XFramework
                 for (int i = 0; i < files.Length; i++)
                 {
                     //忽略关联文件与特殊类
-                    if (!files[i].Name.EndsWith(".meta") && files[i].Name == "AnimatorControllerData.cs")
+                    if (!files[i].Name.EndsWith(".meta") && files[i].Name == loadScriptsName + ".cs")
                     {
                         string oldScriptsContent = FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName));
                         string newScriptsContent = ReplaceScriptContent(oldScriptsContent, GetReplaceContent(), "//属性生成开始", "//属性生成结束");
-                        FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("AnimatorControllerData"), newScriptsContent);
+                        FileOperation.SaveTextToLoad(GenerateGeneral.GetPath(loadScriptsName), newScriptsContent);
 
                         return;
                     }
@@ -110,7 +110,8 @@ namespace XFramework
                 string tempInsertContent = String.Empty;
                 for (int i = 0; i < insertContent.Count; i++)
                 {
-                    tempInsertContent += Indents(8) + insertContent[i] + ",\n";
+                    tempInsertContent += Indents(4) + "public" + Indents(1) + "static" + Indents(1) + "string" + Indents(1) + insertContent[i] + Indents(1) + "=" + "\"" + insertContent[i] + "\"" +
+                                         ";\n";
                 }
 
                 tempInsertContent = insertStartMark + "\n" + tempInsertContent + "\n";

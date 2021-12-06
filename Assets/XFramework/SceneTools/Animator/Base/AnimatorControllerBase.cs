@@ -89,19 +89,6 @@ namespace XFramework
             _animator.speed = 1;
         }
 
-        public void PlayAnim(AnimParameters animationType, float animValue)
-        {
-            if (ContainsParameter(animationType.ToString()))
-            {
-                _animator.speed = 0;
-                if (animValue >= 1f)
-                {
-                    animValue = 0.99f;
-                }
-
-                _animator.Play(animationType.ToString(), 0, animValue);
-            }
-        }
 
         public void PlayAnim(string animationType, float animValue)
         {
@@ -130,23 +117,6 @@ namespace XFramework
                 {
                     Debug.Log(animationType);
                     _animator.Play(animationType, 0, normalizedTime: 0.01f);
-                }
-            }
-        }
-
-        public void PlayAnim(AnimParameters animationType, AnimSpeedProgress animSpeedProgress)
-        {
-            if (ContainsParameter(animationType.ToString()))
-            {
-                _animator.speed = 0;
-                if (animSpeedProgress == AnimSpeedProgress.End)
-                {
-                    _animator.Play(animationType.ToString(), 0, 0.99f);
-                }
-                else if (animSpeedProgress == AnimSpeedProgress.Start)
-                {
-                    Debug.Log(animationType);
-                    _animator.Play(animationType.ToString(), 0, normalizedTime: 0.01f);
                 }
             }
         }

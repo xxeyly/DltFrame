@@ -59,6 +59,21 @@ namespace XFramework
                 ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/ListenerSvcData.cs", null,
                 General.ListenerSvcDataTemplatePath);
         }
+        
+        [MenuItem("Assets/Create/XFramework/C# AnimatorControllerParameterData", false, 74)]
+        public static void OnCreateAnimatorControllerParameterDataTemplate()
+        {
+            string path = GetSelectedPath();
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
+                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/AnimatorControllerParameterData.cs", null,
+                General.AnimatorControllerParameterDataTemplatePath);
+        }
+        
         /// <summary>
         /// 获得选择文件地址
         /// </summary>

@@ -88,6 +88,9 @@ namespace XFramework
 
         [LabelText("ListenerSvcData模板地址")] public static string ListenerSvcDataTemplatePath = "Assets/XFramework/Model/Template/ListenerSvcDataTemplate.cs";
 
+        [LabelText("AnimatorControllerParameterData模板地址")]
+        public static string AnimatorControllerParameterDataTemplatePath = "Assets/XFramework/Model/Template/AnimatorControllerParameterDataTemplate.cs";
+
         [LabelText("自动打包配置存放路径")] public static string customBuildDataPath = "Assets/XFramework/Config/CustomBuildData.asset";
 
         [LabelText("音频配置存放路径")] public static string customAudioDataPath = "Assets/XFramework/Config/CustomAudioData.asset";
@@ -142,14 +145,16 @@ namespace XFramework
             GameObject,
             Slider,
             VideoPlayer,
+
             // ReSharper disable once InconsistentNaming
             TextMeshProUGUI,
+
             // ReSharper disable once InconsistentNaming
             TMP_Dropdown,
+
             // ReSharper disable once InconsistentNaming
             TMP_InputField,
             ChildList,
-            
         }
 
         /// <summary>

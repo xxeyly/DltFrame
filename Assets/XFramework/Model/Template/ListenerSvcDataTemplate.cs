@@ -1,6 +1,7 @@
 ﻿/// <summary>
 /// 该脚本自动生成
 /// </summary>
+using System.Collections.Generic;
 
 namespace XFramework
 {

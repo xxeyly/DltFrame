@@ -360,7 +360,6 @@ namespace XFramework
 
             if (Vector3.Dot(mTransform.up, Vector3.up) >= 0f)
             {
-                Debug.Log("大于0");
                 if (angle.x >= 0f && angle.x <= 90f)
                 {
                     x = angle.x;
@@ -370,12 +369,10 @@ namespace XFramework
                 {
                     x = angle.x - 360f;
                 }
-                
             }
 
             if (Vector3.Dot(mTransform.up, Vector3.up) < 0f)
             {
-                Debug.Log("小于0");
                 if (angle.x >= 0f && angle.x <= 90f)
                 {
                     x = 180 - angle.x;
@@ -387,7 +384,6 @@ namespace XFramework
                 }
             }
 
-            Debug.Log(angle.y);
             if (angle.y > 180)
             {
                 y = angle.y - 360f;
