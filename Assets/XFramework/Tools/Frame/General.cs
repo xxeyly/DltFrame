@@ -204,7 +204,8 @@ namespace XFramework
         {
             StandaloneWindows,
             StandaloneWindows64,
-            WebGL
+            WebGL,
+            Android
         }
 #endif
     }

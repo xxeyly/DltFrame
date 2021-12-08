@@ -8,33 +8,34 @@ namespace XFramework
     public class GameRootEditor : BaseEditor
 
     {
-        [Toggle("Enabled")] [LabelText("持久化")] public RuntimeDataSvcEditor RuntimeDataSvcEditor;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("持久化")]
+        public RuntimeDataSvcEditor RuntimeDataSvcEditor;
 
-        [Toggle("Enabled")] [LabelText("资源服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("资源服务")]
         public ResSvcEditor resSvcEditor;
 
-        [Toggle("Enabled")] [LabelText("音频服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("音频服务")]
         public AudioSvcEditor audioSvcEditor;
 
-        [Toggle("Enabled")] [LabelText("监听服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("监听服务")]
         public ListenerSvcEditor listenerSvcEditorSvc;
 
-        [Toggle("Enabled")] [LabelText("场景服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("场景服务")]
         public SceneSvcEditor customSceneSvc;
 
-        [Toggle("Enabled")] [LabelText("计时器服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("计时器服务")]
         public TimeSvcEditor timeSvcEditorSvc;
 
-        [Toggle("Enabled")] [LabelText("视图服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("视图服务")]
         public ViewSvcEditor viewSvcEditorSvc;
 
-        [Toggle("Enabled")] [LabelText("实体服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("实体服务")]
         public EntitySvcEditor entitySvcEditorSvc;
 
-        [Toggle("Enabled")] [LabelText("流程服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("流程服务")]
         public CircuitSvcEditor circuitSvcEditor;
 
-        [Toggle("Enabled")] [LabelText("鼠标服务")]
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("鼠标服务")]
         public MouseSvcEditor mouseSvcEditor;
 
 
@@ -56,6 +57,7 @@ namespace XFramework
             this.mouseSvcEditor = mouseSvcEditor;
         }
 
+        [BoxGroup("Generate")]
         [Button(ButtonSizes.Large), GUIColor(0, 1, 0)]
         [LabelText("生成框架")]
         public void Generate()
@@ -170,6 +172,17 @@ namespace XFramework
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
+        }
+
+        [BoxGroup("Export")] [LabelText("导出路径")] [FolderPath(AbsolutePath = true)]
+        public string ExportPath;
+
+        [BoxGroup("Export")]
+        [Button(ButtonSizes.Large), GUIColor(0, 1, 0)]
+        [LabelText("导出框架")]
+        public void ExportFrameToDesktop()
+        {
+            AssetDatabase.ExportPackage("Assets/" + "XFramework", ExportPath + "/XFramework.unitypackage", ExportPackageOptions.Recurse);
         }
 
         public override void OnDisable()

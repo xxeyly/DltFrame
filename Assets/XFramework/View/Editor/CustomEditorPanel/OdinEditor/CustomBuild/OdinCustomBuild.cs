@@ -39,7 +39,10 @@ namespace XFramework
             _sceneLoad.BuildSyncScene();
             Build();
             CopySceneFile();
-            CopyFile();
+            if (buildTargetPlatform == General.BuildTargetPlatform.WebGL)
+            {
+                CopyFile();
+            }
         }
 
         /// <summary>
@@ -63,6 +66,9 @@ namespace XFramework
                 case General.BuildTargetPlatform.WebGL:
                     buildTarget = BuildTarget.WebGL;
                     break;
+                case General.BuildTargetPlatform.Android:
+                    buildTarget = BuildTarget.Android;
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -71,8 +77,15 @@ namespace XFramework
             if (buildTarget == BuildTarget.StandaloneWindows || buildTarget == BuildTarget.StandaloneWindows64)
             {
                 Debug.Log("PC路径修正");
-                outPath += "/" + exportEnProjectName + ".exe";
+                outPath += ".exe";
             }
+            else if (buildTarget == BuildTarget.Android)
+            {
+                Debug.Log("Android路径修正");
+                outPath += ".apk";
+            }
+
+            Debug.Log(outPath);
 
             buildPlayerOptions.locationPathName = outPath;
             buildPlayerOptions.target = buildTarget;
@@ -122,6 +135,8 @@ namespace XFramework
                         break;
                     case General.BuildTargetPlatform.WebGL:
                         break;
+                    case General.BuildTargetPlatform.Android:
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -156,6 +171,8 @@ namespace XFramework
                             break;
                         case General.BuildTargetPlatform.WebGL:
                             break;
+                        case General.BuildTargetPlatform.Android:
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -163,7 +180,6 @@ namespace XFramework
                     string pastePath = CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName,
                         exportEnProjectName) + buildTargetPlatformPath + "/" + folderCopy[i].pasteFolderPath;
 
-                    Debug.Log(pastePath);
                     CustomBuildFileOperation.Copy(folderCopy[i].copyFolderPath, pastePath);
                 }
             }
@@ -177,12 +193,10 @@ namespace XFramework
         [PostProcessBuild(1)]
         public static void AfterBuild(BuildTarget target, string pathToBuiltProject)
         {
-            Debug.Log("打包成功....");
             Debug.Log("Build Success  输出平台: " + target + "  输出路径: " + pathToBuiltProject);
             //打开文件或文件夹
             System.Diagnostics.Process.Start(pathToBuiltProject);
             int index = pathToBuiltProject.LastIndexOf("/", StringComparison.Ordinal);
-            Debug.Log("导出包体的目录 :" + pathToBuiltProject.Substring(0, index));
         }
 
         public override void OnDisable()

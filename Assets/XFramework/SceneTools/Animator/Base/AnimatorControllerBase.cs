@@ -182,11 +182,16 @@ namespace XFramework
             {
                 if (item.name == animType)
                 {
-                    return item.length;
+                    return item.length / GetPlayAnimPlaySpeed();
                 }
             }
 
             return -1;
+        }
+
+        public float GetPlayAnimPlaySpeed()
+        {
+            return _animator.GetCurrentAnimatorStateInfo(0).speed;
         }
 
         /// <summary>
