@@ -78,10 +78,18 @@ namespace XFramework
         [LabelText("平台类型")]
         public enum PlatformType
         {
-            WebGl
+            WebGl,
+            Android
         }
 
-        [BoxGroup("图片压缩")] [LabelText("平台")] public PlatformType platformType;
+        [BoxGroup("图片压缩/信息")] [LabelText("平台")]
+        public PlatformType platformType;
+
+        [BoxGroup("图片压缩/信息")] [LabelText("检测图片长")]
+        public int textureWidth = 300;
+
+        [BoxGroup("图片压缩/信息")] [LabelText("检测图片高")]
+        public int textureHigh = 300;
 
         [BoxGroup("图片压缩")]
         [Button("图片压缩(Png.Jpg.Tif.Tiff.Tga)", ButtonSizes.Medium)]
@@ -108,22 +116,53 @@ namespace XFramework
             foreach (string path in texturePath)
             {
                 TextureImporter textureImporter = AssetImporter.GetAtPath(path) as TextureImporter;
-                if (textureImporter != null && (textureImporter.textureType == TextureImporterType.NormalMap || textureImporter.textureType == TextureImporterType.Default))
+                if (textureImporter != null && (textureImporter.textureType == TextureImporterType.NormalMap || textureImporter.textureType == TextureImporterType.Sprite ||
+                                                textureImporter.textureType == TextureImporterType.Default))
                 {
                     switch (platformType)
                     {
                         case PlatformType.WebGl:
                             textureImporter.SetPlatformTextureSettings(new TextureImporterPlatformSettings()
                             {
-                                maxTextureSize = 1024,
+                                maxTextureSize = 2048,
                                 compressionQuality = 50,
                                 name = "WebGL",
+                                overridden = true,
+                                format = TextureImporterFormat.DXT5Crunched
+                            });
+
+
+                            break;
+                        case PlatformType.Android:
+                            textureImporter.SetPlatformTextureSettings(new TextureImporterPlatformSettings()
+                            {
+                                maxTextureSize = 2048,
+                                compressionQuality = 50,
+                                name = "Android",
                                 overridden = true,
                                 format = TextureImporterFormat.DXT5Crunched
                             });
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
+                    }
+
+                    Texture2D texture2D = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                    //图片大小超出了这个尺寸
+                    if (texture2D.width >= textureWidth || texture2D.height >= textureHigh)
+                    {
+                        if (texture2D.width % 4 == 0 && texture2D.height % 4 == 0)
+                        {
+                        }
+                        else
+                        {
+                            Debug.Log("该图片不能被压缩:" + texture2D.name + "[" + texture2D.width + ":" + texture2D.height + "]");
+                        }
+                    }
+
+
+                    if (textureImporter)
+                    {
                     }
 
                     AssetDatabase.ImportAsset(path);

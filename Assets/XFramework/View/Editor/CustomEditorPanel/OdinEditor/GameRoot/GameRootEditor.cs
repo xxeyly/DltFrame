@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -175,7 +176,7 @@ namespace XFramework
         }
 
         [BoxGroup("Export")] [LabelText("导出路径")] [FolderPath(AbsolutePath = true)]
-        public string ExportPath;
+        public string ExportPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 
         [BoxGroup("Export")]
         [Button(ButtonSizes.Large), GUIColor(0, 1, 0)]

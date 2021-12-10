@@ -194,7 +194,7 @@ namespace XFramework
                 return GetAllObjectsOnlyInAssetsPath()[fileExtension];
             }
 
-            return null;
+            return new List<string>();
         }
 
         /// <summary>
