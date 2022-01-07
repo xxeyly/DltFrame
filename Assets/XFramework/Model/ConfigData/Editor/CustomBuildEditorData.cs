@@ -10,7 +10,6 @@ namespace XFramework
     /// 打包数据
     /// </summary>
     [Serializable]
-    // [CreateAssetMenu(fileName = "CustomBuildData", menuName = "配置文件/打包数据", order = 1)]
     public class CustomBuildEditorData : ScriptableObject
     {
         /// <summary>
