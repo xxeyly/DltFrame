@@ -109,7 +109,8 @@ namespace XFramework
             foreach (GameObject go in (GameObject[]) Resources.FindObjectsOfTypeAll(typeof(GameObject)))
             {
 #if UNITY_EDITOR
-                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) && !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) &&
+                    !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
                 {
                     objectsInScene.Add(go);
                 }
@@ -130,7 +131,8 @@ namespace XFramework
             foreach (GameObject go in (GameObject[]) Resources.FindObjectsOfTypeAll(typeof(GameObject)))
             {
 #if UNITY_EDITOR
-                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) && !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) &&
+                    !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
                 {
                     if (go.GetComponent<T>() != null)
                     {
@@ -501,6 +503,60 @@ namespace XFramework
 #if UNITY_EDITOR
             AssetDatabase.Refresh();
 #endif
+        }
+
+        /// <summary>
+        /// 保存文件到本地
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="information"></param>
+        public static void SaveFileToLocal(string path, string fileName, byte[] information, FileMode fileMode,
+            int buffSize = 1024 * 1024)
+        {
+            FileStream aFile = new FileStream(path + "/" + fileName, fileMode, FileAccess.Write);
+            ;
+            if (File.Exists(path))
+            {
+            }
+            else
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            //是否被完整除开
+            bool integer = information.Length % buffSize == 0;
+            int numberCycles = 0;
+            if (integer)
+            {
+                numberCycles = information.Length / buffSize;
+            }
+            else
+            {
+                numberCycles = information.Length / buffSize + 1;
+            }
+
+            for (int i = 0; i < numberCycles; i++)
+            {
+                if (integer)
+                {
+                    aFile.Write(information, i * buffSize, buffSize);
+                }
+                else
+                {
+                    if (i < numberCycles - 1)
+                    {
+                        aFile.Write(information, i * buffSize, buffSize);
+                    }
+                    else
+                    {
+                        aFile.Write(information, i * buffSize, information.Length - i * buffSize);
+                    }
+                }
+            }
+
+            // Debug.Log(fileName + "写入次数" + numberCycles);
+            // 关闭流
+            aFile.Close();
         }
 
         /// <summary>

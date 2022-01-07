@@ -97,7 +97,7 @@ namespace XFramework
                 _animator.speed = 0;
                 if (animValue >= 1f)
                 {
-                    animValue = 0.99f;
+                    animValue = 1f;
                 }
 
                 _animator.Play(animationType, 0, animValue);
@@ -111,12 +111,12 @@ namespace XFramework
                 _animator.speed = 0;
                 if (animSpeedProgress == AnimSpeedProgress.End)
                 {
-                    _animator.Play(animationType, 0, 0.99f);
+                    _animator.Play(animationType, 0, 1f);
                 }
                 else if (animSpeedProgress == AnimSpeedProgress.Start)
                 {
                     Debug.Log(animationType);
-                    _animator.Play(animationType, 0, normalizedTime: 0.01f);
+                    _animator.Play(animationType, 0, normalizedTime: 0f);
                 }
             }
         }

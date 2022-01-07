@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEditor;
@@ -74,6 +75,50 @@ namespace XFramework
             }
         }
 
+        [BoxGroup("字体压缩")] [LabelText("要压缩的字体")]
+        public TMP_FontAsset TargetFontAsset;
+
+        [BoxGroup("字体压缩")]
+        [Button("TextMeshPro字体压缩", ButtonSizes.Medium)]
+        public void TextMeshProCompress()
+        {
+            ExtractTexture(AssetDatabase.GetAssetPath(TargetFontAsset));
+            /*Texture2D texture2D = new Texture2D(TargetFontAsset.atlasTexture.width, TargetFontAsset.atlasTexture.height, TextureFormat.Alpha8, false);
+            Graphics.CopyTexture(TargetFontAsset.atlasTexture, texture2D);
+            byte[] dataBytes = texture2D.EncodeToPNG();
+            FileStream fs = File.Open(AssetDatabase.GetAssetPath(TargetFontAsset).Replace(".asset", ".png"), FileMode.OpenOrCreate);
+            fs.Write(dataBytes, 0, dataBytes.Length);
+            fs.Flush();
+            fs.Close();
+            AssetDatabase.Refresh();
+            Texture2D atlas = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GetAssetPath(TargetFontAsset));
+            AssetDatabase.RemoveObjectFromAsset(TargetFontAsset.atlasTexture);
+            TargetFontAsset.atlasTextures[0] = atlas;
+            TargetFontAsset.material.mainTexture = atlas;
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();*/
+        }
+        
+        //这里的fontPath是绝对路径
+        public void ExtractTexture(string fontPath){
+            string texturePath = fontPath.Replace(".asset", ".png");
+            TMP_FontAsset targeFontAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(fontPath.Replace(Application.dataPath, "Assets"));
+            Texture2D texture2D = new Texture2D(targeFontAsset.atlasTexture.width, targeFontAsset.atlasTexture.height, TextureFormat.Alpha8, false);
+            Graphics.CopyTexture(targeFontAsset.atlasTexture, texture2D);
+            byte[] dataBytes = texture2D.EncodeToPNG();
+            FileStream fs = File.Open(texturePath, FileMode.OpenOrCreate);
+            fs.Write(dataBytes, 0, dataBytes.Length);
+            fs.Flush();
+            fs.Close();
+            AssetDatabase.Refresh();
+            Texture2D atlas = AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath.Replace(Application.dataPath, "Assets"));
+            AssetDatabase.RemoveObjectFromAsset(targeFontAsset.atlasTexture);
+            targeFontAsset.atlasTextures[0] = atlas;
+            targeFontAsset.material.mainTexture = atlas;
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
         [BoxGroup("图片压缩")]
         [LabelText("平台类型")]
         public enum PlatformType
@@ -124,7 +169,7 @@ namespace XFramework
                         case PlatformType.WebGl:
                             textureImporter.SetPlatformTextureSettings(new TextureImporterPlatformSettings()
                             {
-                                maxTextureSize = 2048,
+                                maxTextureSize = 1024,
                                 compressionQuality = 50,
                                 name = "WebGL",
                                 overridden = true,

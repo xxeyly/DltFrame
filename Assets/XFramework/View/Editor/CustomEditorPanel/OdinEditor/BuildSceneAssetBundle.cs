@@ -40,7 +40,7 @@ namespace XFramework
             LoadData();
             foreach (SceneLoadEditorData.SceneInfo sceneInfo in _sceneLoadEditorData.sceneInfos)
             {
-                if (sceneInfo.sceneLoadType != SceneLoadEditorData.SceneLoadType.异步)
+                if (sceneInfo.sceneLoadType != SceneLoad.SceneLoadType.异步)
                 {
                     continue;
                 }

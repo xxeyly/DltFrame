@@ -57,9 +57,6 @@ namespace XFramework
             BuildTarget buildTarget = BuildTarget.NoTarget;
             switch (buildTargetPlatform)
             {
-                case General.BuildTargetPlatform.StandaloneWindows:
-                    buildTarget = BuildTarget.StandaloneWindows;
-                    break;
                 case General.BuildTargetPlatform.StandaloneWindows64:
                     buildTarget = BuildTarget.StandaloneWindows64;
                     break;
@@ -127,9 +124,6 @@ namespace XFramework
                 string buildTargetPlatformPath = String.Empty;
                 switch (buildTargetPlatform)
                 {
-                    case General.BuildTargetPlatform.StandaloneWindows:
-                        buildTargetPlatformPath = "";
-                        break;
                     case General.BuildTargetPlatform.StandaloneWindows64:
                         buildTargetPlatformPath = "";
                         break;
@@ -163,9 +157,6 @@ namespace XFramework
                     string buildTargetPlatformPath = String.Empty;
                     switch (buildTargetPlatform)
                     {
-                        case General.BuildTargetPlatform.StandaloneWindows:
-                            buildTargetPlatformPath = "";
-                            break;
                         case General.BuildTargetPlatform.StandaloneWindows64:
                             buildTargetPlatformPath = "";
                             break;
@@ -209,6 +200,10 @@ namespace XFramework
             _customBuildData = AssetDatabase.LoadAssetAtPath<CustomBuildData>(General.customBuildDataPath);
             if (_customBuildData == null)
             {
+                if (!Directory.Exists(General.assetRootPath))
+                {
+                    Directory.CreateDirectory(General.assetRootPath);
+                }
                 //创建数据
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<CustomBuildData>(),
                     General.customBuildDataPath);
@@ -229,13 +224,6 @@ namespace XFramework
             _customBuildData.folderCopy = folderCopy;
             //标记脏区
             EditorUtility.SetDirty(_customBuildData);
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
-            {
-                // 保存所有修改
-                AssetDatabase.SaveAssets();
-            }
-#endif
         }
 
         public override void OnLoadConfig()

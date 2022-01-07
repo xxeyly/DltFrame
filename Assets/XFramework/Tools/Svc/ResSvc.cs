@@ -111,6 +111,7 @@ namespace XFramework
 
                 [Header("文件路径")] public string filePath;
                 [Header("文件大小")] public long fileSize;
+                [Header("文件MD5")] public string fileMd5;
             }
         }
 

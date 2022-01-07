@@ -13,6 +13,7 @@ namespace XFramework
         //是否激活
         [LabelText("持久化服务")] public bool persistentDataSvcEditor;
         [LabelText("资源服务")] public bool resSvcEditor;
+        [LabelText("下载服务")] public bool downSvcEditor;
         [LabelText("音频服务")] public bool audioSvcEditor;
         [LabelText("监听服务")] public bool listenerSvcEditorSvc;
         [LabelText("场景服务")] public bool customSceneSvc;
@@ -24,6 +25,7 @@ namespace XFramework
 
         //是否开启框架初始化
         [LabelText("资源框架初始化")] public bool resSvcEditorFrameInit;
+        [LabelText("下载框架初始化")] public bool downSvcEditorFrameInit;
         [LabelText("音频框架初始化")] public bool audioSvcEditorFrameInit;
         [LabelText("监听框架初始化")] public bool listenerSvcEditorFrameInit;
         [LabelText("场景框架初始化")] public bool customSceneSvcEditorFrameInit;
@@ -36,6 +38,7 @@ namespace XFramework
 
         //是否开启场景初始化
         [LabelText("资源场景初始化")] public bool resSvcEditorSceneInit;
+        [LabelText("下载场景初始化")]  public bool downSvcEditorSceneInit;
         [LabelText("音频场景初始化")] public bool audioSvcEditorSceneInit;
         [LabelText("监听场景初始化")] public bool listenerSvcEditorSceneInit;
         [LabelText("场景场景初始化")] public bool customSceneSvcEditorSceneInit;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace XFramework
 {
-    // [CreateAssetMenu(fileName = "AnimatorClipData", menuName = "配置文件/动画片段配置", order = 1)]
+    [CreateAssetMenu(fileName = "AnimatorClipData", menuName = "配置文件/动画片段配置", order = 1)]
     public class AnimatorClipEditorData : ScriptableObject
     {
         [HideInInspector] public List<AnimatorClipDataInfo> animatorClipDataInfos = new List<AnimatorClipDataInfo>();

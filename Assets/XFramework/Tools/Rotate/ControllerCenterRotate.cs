@@ -23,6 +23,10 @@ namespace XFramework
         [BoxGroup("缩放")] [LabelText("最近距离")] public float nearLimit = 0.8f;
         [BoxGroup("缩放")] [LabelText("最远距离")] public float farLimit = 4f;
         float smoothTime = 0.3f;
+#if UNITY_ANDROID
+        private Touch oldTouch1; //上次触摸点1(手指1)  
+        private Touch oldTouch2; //上次触摸点2(手指2) 
+#endif
 
         #endregion
 
@@ -135,15 +139,41 @@ namespace XFramework
         private void MouseFunction()
         {
             //旋转
-            if (Input.GetKey(rotateCode) && canManualRotate)
+            if (canManualRotate)
             {
-                x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
-
-                if (onlyX == false)
+#if UNITY_WEBGL || UNITY_EDITOR_WIN
+                if (Input.GetKey(rotateCode))
                 {
-                    y -= Input.GetAxis("Mouse Y") * xSpeed * 0.02f;
+                    Debug.Log("鼠标操作");
+                    x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
+
+                    if (onlyX == false)
+                    {
+                        y -= Input.GetAxis("Mouse Y") * xSpeed * 0.02f;
+                    }
                 }
+#elif UNITY_ANDROID
+
+                if (Input.touchCount == 1)
+                {
+                    Debug.Log("手指操作");
+                    x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
+
+                    if (onlyX == false)
+                    {
+                        y -= Input.GetAxis("Mouse Y") * xSpeed * 0.02f;
+                    }
+
+                    Debug.Log(x);
+                    Debug.Log(y);
+                }
+                else
+                {
+                    
+                }
+#endif
             }
+
 
             if (Input.GetKey(moveCode) && canManualMove)
             {
@@ -235,14 +265,41 @@ namespace XFramework
                 _currentMousePos = Vector3.zero;
                 _oldMousePos = Vector3.zero;
             }
-
+#if UNITY_WEBGL || UNITY_EDITOR_WIN
             //镜头远近
             if (Input.GetAxis("Mouse ScrollWheel") != 0)
             {
+                Debug.Log("鼠标缩放");
                 targetDistance -= Input.GetAxis("Mouse ScrollWheel") * movSpeedScroll;
                 targetDistance = Mathf.Clamp(targetDistance, nearLimit, farLimit);
             }
 
+#elif UNITY_ANDROID
+            if (Input.touchCount == 2)
+            {
+                Debug.Log("手指缩放");
+                //多点触摸, 放大缩小  
+                Touch newTouch1 = Input.GetTouch(0);
+                Touch newTouch2 = Input.GetTouch(1);
+
+                //第2点刚开始接触屏幕, 只记录，不做处理  
+                if (newTouch2.phase == TouchPhase.Began)
+                {
+                    oldTouch2 = newTouch2;
+                    oldTouch1 = newTouch1;
+                    return;
+                }
+
+                //计算老的两点距离和新的两点间距离，变大要放大模型，变小要缩放模型  
+                float oldDistance = Vector2.Distance(oldTouch1.position, oldTouch2.position);
+                float newDistance = Vector2.Distance(newTouch1.position, newTouch2.position);
+
+                //两个距离之差，为正表示放大手势， 为负表示缩小手势  
+                float offset = newDistance - oldDistance;
+                targetDistance -= offset * movSpeedScroll;
+                targetDistance = Mathf.Clamp(targetDistance, nearLimit, farLimit);
+            }
+#endif
             if (canManualZoom)
             {
                 distance = Mathf.SmoothDamp(distance, targetDistance, ref _velocity, smoothTime);
@@ -259,7 +316,7 @@ namespace XFramework
         /// <param name="min"></param>
         /// <param name="max"></param>
         /// <returns></returns>
-        static float ClampAngle(float angle, float min, float max)
+        public static float ClampAngle(float angle, float min, float max)
         {
             if (angle < -360)
                 angle += 360;

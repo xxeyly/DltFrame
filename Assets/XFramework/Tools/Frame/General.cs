@@ -60,6 +60,39 @@ namespace XFramework
             }
         }
 
+        [LabelText("平台StreamingAssets路径")]
+        public static string GetPlatformStreamingAssetsPath()
+        {
+#if UNITY_ANDROID //安卓  
+            return Application.dataPath + "!/assets/";
+#elif UNITY_IPHONE //iPhone  
+            return Application.dataPath + "/Raw/";
+#elif UNITY_STANDALONE_WIN || UNITY_EDITOR //windows平台和web平台  
+            return Application.dataPath + "/StreamingAssets/";
+#else
+            return string.Empty;
+#endif
+        }
+
+        [LabelText("平台PersistentDataPath路径")]
+        public static string GetPlatformDownLoadDataPath()
+        {
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                return @"Assets\StreamingAssets\";
+            }
+            else if (Application.platform == RuntimePlatform.Android)
+            {
+                return Application.persistentDataPath + "/";
+            }
+            else if (Application.platform == RuntimePlatform.WindowsPlayer)
+            {
+                return Application.streamingAssetsPath + "/";
+            }
+
+            return string.Empty;
+        }
+
         /// <summary>
         /// 获得文件数据地址
         /// </summary>
@@ -74,10 +107,13 @@ namespace XFramework
             {
                 return "file://" + Application.dataPath + "/" + relativePath;
             }
-            else
+
+            else if (Application.platform == RuntimePlatform.Android)
             {
-                return "";
+                return "http://192.168.1.111/ZiYanGuDingYiChi/" + relativePath;
             }
+
+            return "";
         }
 
         [LabelText("BaseWindow模板地址")] public static string BaseWindowTemplatePath = "Assets/XFramework/Model/Template/BaseWindowTemplate.cs";
@@ -91,17 +127,18 @@ namespace XFramework
         [LabelText("AnimatorControllerParameterData模板地址")]
         public static string AnimatorControllerParameterDataTemplatePath = "Assets/XFramework/Model/Template/AnimatorControllerParameterDataTemplate.cs";
 
-        [LabelText("自动打包配置存放路径")] public static string customBuildDataPath = "Assets/XFramework/Config/CustomBuildData.asset";
+        [LabelText("存放路径根路径")] public static string assetRootPath = "Assets/Config/";
+        [LabelText("自动打包配置存放路径")] public static string customBuildDataPath = assetRootPath + "CustomBuildData.asset";
 
-        [LabelText("音频配置存放路径")] public static string customAudioDataPath = "Assets/XFramework/Config/CustomAudioData.asset";
+        [LabelText("音频配置存放路径")] public static string customAudioDataPath = assetRootPath + "CustomAudioData.asset";
 
-        [LabelText("框架配置存放路径")] public static string customFrameDataPath = "Assets/XFramework/Config/CustomFrameData.asset";
+        [LabelText("框架配置存放路径")] public static string customFrameDataPath = assetRootPath + "CustomFrameData.asset";
 
-        [LabelText("生成配置存放路径")] public static string generateBaseWindowPath = "Assets/XFramework/Config/GenerateBaseWindowData.asset";
+        [LabelText("生成配置存放路径")] public static string generateBaseWindowPath = assetRootPath + "GenerateBaseWindowData.asset";
 
-        [LabelText("场景配置存放路径")] public static string sceneLoadPath = "Assets/XFramework/Config/SceneLoadData.asset";
+        [LabelText("场景配置存放路径")] public static string sceneLoadPath = assetRootPath + "SceneLoadData.asset";
 
-        [LabelText("场景配置存放路径")] public static string buildSceneAssetBundleDataPath = "Assets/XFramework/Config/BuildSceneAssetBundleData.asset";
+        [LabelText("场景配置存放路径")] public static string buildSceneAssetBundleDataPath = assetRootPath + "BuildSceneAssetBundleData.asset";
 
         /// <summary>
         /// 生成属性类型
@@ -202,10 +239,19 @@ namespace XFramework
         /// </summary>
         public enum BuildTargetPlatform
         {
-            StandaloneWindows,
             StandaloneWindows64,
             WebGL,
             Android
+        }
+
+        [LabelText("场景加载方式")]
+        public enum SceneLoadType
+        {
+            不加载,
+            同步,
+            异步,
+            下载同步,
+            下载异步
         }
 #endif
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -14,6 +15,9 @@ namespace XFramework
 
         [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("资源服务")]
         public ResSvcEditor resSvcEditor;
+
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("下载服务")]
+        public DownSvcEditor downSvcEditor;
 
         [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("音频服务")]
         public AudioSvcEditor audioSvcEditor;
@@ -42,12 +46,13 @@ namespace XFramework
 
         private GameRootEditorEditorData _gameRootEditorEditorData;
 
-        public GameRootEditor(RuntimeDataSvcEditor runtimeDataSvcEditor, ResSvcEditor resSvcEditor, AudioSvcEditor audioSvcEditor, ListenerSvcEditor listenerSvcEditorSvc,
+        public GameRootEditor(RuntimeDataSvcEditor runtimeDataSvcEditor, ResSvcEditor resSvcEditor, DownSvcEditor downSvcEditor, AudioSvcEditor audioSvcEditor, ListenerSvcEditor listenerSvcEditorSvc,
             SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, EntitySvcEditor entitySvcSvc, ViewSvcEditor viewSvcEditorSvc, CircuitSvcEditor circuitSvcEditor,
             MouseSvcEditor mouseSvcEditor)
         {
             this.RuntimeDataSvcEditor = runtimeDataSvcEditor;
             this.resSvcEditor = resSvcEditor;
+            this.downSvcEditor = downSvcEditor;
             this.audioSvcEditor = audioSvcEditor;
             this.listenerSvcEditorSvc = listenerSvcEditorSvc;
             this.customSceneSvc = customSceneSvc;
@@ -72,6 +77,8 @@ namespace XFramework
             Undo.RegisterCreatedObjectUndo(gameRootStart, "UndoCreate");
             GameRootStart tempGameRootStart = gameRootStart.AddComponent<GameRootStart>();
             tempGameRootStart.activeSvcBase = new List<SvcBase>();
+
+
             if (RuntimeDataSvcEditor.Enabled)
             {
                 GameObject tempSvcObj = new GameObject("RuntimeDataSvc");
@@ -86,6 +93,16 @@ namespace XFramework
             {
                 GameObject tempSvcObj = new GameObject("ResSvc");
                 ResSvc tempSvc = tempSvcObj.AddComponent<ResSvc>();
+                tempSvcObj.transform.SetParent(gameRootStart.transform);
+                tempSvc.frameInit = resSvcEditor.isFrameInit;
+                tempSvc.sceneInit = resSvcEditor.isSceneInit;
+                tempGameRootStart.activeSvcBase.Add(tempSvc);
+            }
+
+            if (downSvcEditor.Enabled)
+            {
+                GameObject tempSvcObj = new GameObject("DownSvc");
+                DownSvc tempSvc = tempSvcObj.AddComponent<DownSvc>();
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempSvc.frameInit = resSvcEditor.isFrameInit;
                 tempSvc.sceneInit = resSvcEditor.isSceneInit;
@@ -193,12 +210,15 @@ namespace XFramework
 
         public override void OnCreateConfig()
         {
-            _gameRootEditorEditorData =
-                AssetDatabase.LoadAssetAtPath<GameRootEditorEditorData>(General.customFrameDataPath);
+            _gameRootEditorEditorData = AssetDatabase.LoadAssetAtPath<GameRootEditorEditorData>(General.customFrameDataPath);
             if (_gameRootEditorEditorData == null)
             {
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GameRootEditorEditorData>(),
-                    General.customFrameDataPath);
+                if (!Directory.Exists(General.assetRootPath))
+                {
+                    Directory.CreateDirectory(General.assetRootPath);
+                }
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GameRootEditorEditorData>(), General.customFrameDataPath);
+                _gameRootEditorEditorData = AssetDatabase.LoadAssetAtPath<GameRootEditorEditorData>(General.customFrameDataPath);
             }
         }
 
@@ -211,6 +231,10 @@ namespace XFramework
             _gameRootEditorEditorData.resSvcEditor = resSvcEditor.Enabled;
             _gameRootEditorEditorData.resSvcEditorFrameInit = resSvcEditor.isFrameInit;
             _gameRootEditorEditorData.resSvcEditorSceneInit = resSvcEditor.isSceneInit;
+
+            _gameRootEditorEditorData.downSvcEditor = downSvcEditor.Enabled;
+            _gameRootEditorEditorData.downSvcEditorFrameInit = downSvcEditor.isFrameInit;
+            _gameRootEditorEditorData.downSvcEditorSceneInit = downSvcEditor.isSceneInit;
 
             _gameRootEditorEditorData.audioSvcEditor = audioSvcEditor.Enabled;
             _gameRootEditorEditorData.audioSvcEditorFrameInit = audioSvcEditor.isFrameInit;
@@ -246,8 +270,6 @@ namespace XFramework
 
             //标记脏区
             EditorUtility.SetDirty(_gameRootEditorEditorData);
-            // 保存所有修改
-            AssetDatabase.SaveAssets();
         }
 
         public override void OnLoadConfig()
@@ -258,6 +280,10 @@ namespace XFramework
             RuntimeDataSvcEditor.Enabled = _gameRootEditorEditorData.persistentDataSvcEditor;
             RuntimeDataSvcEditor.isFrameInit = _gameRootEditorEditorData.persistentDataSvcEditorFrameInit;
             RuntimeDataSvcEditor.isSceneInit = _gameRootEditorEditorData.persistentDataSvcEditorSceneInit;
+
+            downSvcEditor.Enabled = _gameRootEditorEditorData.downSvcEditor;
+            downSvcEditor.isFrameInit = _gameRootEditorEditorData.downSvcEditorFrameInit;
+            downSvcEditor.isSceneInit = _gameRootEditorEditorData.downSvcEditorSceneInit;
 
             resSvcEditor.Enabled = _gameRootEditorEditorData.resSvcEditor;
             resSvcEditor.isFrameInit = _gameRootEditorEditorData.resSvcEditorFrameInit;

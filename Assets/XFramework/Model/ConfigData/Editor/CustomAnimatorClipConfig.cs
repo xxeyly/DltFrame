@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 
 namespace XFramework
 {
-    // [CreateAssetMenu(fileName = "CustomAnimatorClipConfig", menuName = "配置文件/动画文件关联配置", order = 1)]
+    [CreateAssetMenu(fileName = "CustomAnimatorClipConfig", menuName = "配置文件/动画文件关联配置", order = 1)]
     [Serializable]
     public class CustomAnimatorClipConfig : ScriptableObject
     {

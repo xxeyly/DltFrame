@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector;
+﻿using System.IO;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,25 +7,25 @@ namespace XFramework
 {
     public class GenerateBaseWindowEditor : BaseEditor
     {
-        [LabelText("Using开始")] public string startUsing;
-        [LabelText("Using开始")] public string endUsing;
+        [LabelText("Using开始")] public string startUsing = "引入开始";
+        [LabelText("Using开始")] public string endUsing = "引入结束";
 
-        [LabelText("变量声明开始")] public string startUiVariable;
-        [LabelText("变量声明结束")] public string endUiVariable;
-
-
-        [LabelText("变量位置绑定开始")] public string startVariableBindPath;
-        [LabelText("变量位置绑定结束")] public string endVariableBindPath;
+        [LabelText("变量声明开始")] public string startUiVariable = "变量声明开始";
+        [LabelText("变量声明结束")] public string endUiVariable = "变量声明结束";
 
 
-        [LabelText("变量事件绑定开始")] public string startVariableBindListener;
-        [LabelText("变量事件绑定结束")] public string endVariableBindListener;
+        [LabelText("变量位置绑定开始")] public string startVariableBindPath = "变量查找开始";
+        [LabelText("变量位置绑定结束")] public string endVariableBindPath = "变量查找结束";
 
-        [LabelText("变量方法开始")] public string startVariableBindEvent;
-        [LabelText("变量方法结束")] public string endVariableBindEvent;
 
-        [LabelText("自定义属性开始")] public string startCustomAttributesStart;
-        [LabelText("自定义属性结束")] public string endCustomAttributesStart;
+        [LabelText("变量事件绑定开始")] public string startVariableBindListener = "变量绑定开始";
+        [LabelText("变量事件绑定结束")] public string endVariableBindListener = "变量绑定结束";
+
+        [LabelText("变量方法开始")] public string startVariableBindEvent = "变量方法开始";
+        [LabelText("变量方法结束")] public string endVariableBindEvent = "变量方法结束";
+
+        [LabelText("自定义属性开始")] public string startCustomAttributesStart = "自定义属性开始";
+        [LabelText("自定义属性结束")] public string endCustomAttributesStart = "自定义属性结束";
 
         private GenerateBaseWindowData _generateBaseWindowData;
 
@@ -39,13 +40,15 @@ namespace XFramework
                 AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(General.generateBaseWindowPath);
             if (_generateBaseWindowData == null)
             {
+                if (!Directory.Exists(General.assetRootPath))
+                {
+                    Directory.CreateDirectory(General.assetRootPath);
+                }
+
                 //创建数据
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GenerateBaseWindowData>(),
-                    General.generateBaseWindowPath);
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GenerateBaseWindowData>(), General.generateBaseWindowPath);
                 //读取数据
-                _generateBaseWindowData =
-                    AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(
-                        General.generateBaseWindowPath);
+                _generateBaseWindowData = AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(General.generateBaseWindowPath);
             }
         }
 
@@ -65,8 +68,6 @@ namespace XFramework
             _generateBaseWindowData.endCustomAttributesStart = endCustomAttributesStart;
             //标记脏区
             EditorUtility.SetDirty(_generateBaseWindowData);
-            // 保存所有修改
-            AssetDatabase.SaveAssets();
         }
 
         public override void OnLoadConfig()

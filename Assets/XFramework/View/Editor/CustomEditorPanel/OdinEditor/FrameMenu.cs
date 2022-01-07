@@ -48,6 +48,9 @@ namespace XFramework
         //资源服务
         ResSvcEditor resSvcEditor = new ResSvcEditor();
 
+        //下载服务
+        DownSvcEditor downSvcEditor = new DownSvcEditor();
+
         //监听服务
         ListenerSvcEditor listenerSvcEditor = new ListenerSvcEditor();
 
@@ -75,13 +78,17 @@ namespace XFramework
         //场景工具
         SceneTools sceneTools = new SceneTools();
 
+        //动画工具
+        AnimTools animTools = new AnimTools();
+
         //生成配置
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
             tree.Selection.SupportsMultiSelect = false;
             //框架配置
-            gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
+            gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, downSvcEditor, audioSvcEditor,
+                listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
                 circuitSvcEditor, mouseSvcEditor);
             sceneLoad.OnInit();
             customBuild.OnInit();
@@ -97,16 +104,18 @@ namespace XFramework
             tree.Add("生成配置", generateBaseWindowEditor);
             tree.Add("资源统一化", resourceUnification);
             tree.Add("场景工具", sceneTools);
+            tree.Add("动画工具", animTools);
             return tree;
         }
 
         private void OnDisable()
         {
-            customBuild.OnDisable();
             audioSvcEditor.OnDisable();
+            customBuild.OnDisable();
             gameRootEditor.OnDisable();
             generateBaseWindowEditor.OnDisable();
             sceneLoad.OnDisable();
+            AssetDatabase.SaveAssets();
         }
     }
 }

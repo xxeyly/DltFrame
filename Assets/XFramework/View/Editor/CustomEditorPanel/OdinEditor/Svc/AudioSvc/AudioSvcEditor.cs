@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -35,12 +36,14 @@ namespace XFramework
             _customAudioData = AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
             if (_customAudioData == null)
             {
+                if (!Directory.Exists(General.assetRootPath))
+                {
+                    Directory.CreateDirectory(General.assetRootPath);
+                }
                 //创建数据
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AudioSvcData>(),
-                    General.customAudioDataPath);
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AudioSvcData>(), General.customAudioDataPath);
                 //读取数据
-                _customAudioData =
-                    AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
+                _customAudioData = AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
             }
         }
 
@@ -50,7 +53,7 @@ namespace XFramework
             //标记脏区
             EditorUtility.SetDirty(_customAudioData);
             // 保存所有修改
-            AssetDatabase.SaveAssets();
+            // AssetDatabase.SaveAssets();
         }
 
         public override void OnLoadConfig()

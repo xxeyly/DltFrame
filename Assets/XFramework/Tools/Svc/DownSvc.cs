@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using LitJson;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -20,9 +21,15 @@ namespace XFramework
         private ResSvc.DownFile _downSceneFile;
         private UnityWebRequest _request;
 
+        //下载委托
+        public delegate void DownTaskDelegate(float progress, bool downOver);
+
+        public DownTaskDelegate downTaskDelegate;
+
         public override void StartSvc()
         {
             Instance = GetComponent<DownSvc>();
+            // StartCoroutine(DownLoadTest());
         }
 
         /// <summary>
@@ -63,22 +70,114 @@ namespace XFramework
             {
                 DownData downData = new DownData
                 {
-                    downName = fileInfo.fileName, downFileOriginalName = fileInfo.fileOriginalName, downPath = fileInfo.filePath, downCurrentSize = 0,
+                    downName = fileInfo.fileName, downFileOriginalName = fileInfo.fileOriginalName,
+                    downPath = fileInfo.filePath, downCurrentSize = 0,
                     downTotalSize = fileInfo.fileSize
                 };
+                //Android或者PC平台检测下载存档
+                if (Application.platform == RuntimePlatform.Android ||
+                    Application.platform == RuntimePlatform.WindowsPlayer ||
+                    Application.platform == RuntimePlatform.WindowsEditor)
+                {
+                    string downPath = General.GetPlatformDownLoadDataPath() + fileInfo.filePath;
+                    if (File.Exists(downPath))
+                    {
+                        int fileSize = File.ReadAllBytes(downPath).Length;
+                        string MD5 = FileOperation.GetMD5HashFromFile(downPath);
+                        if (fileSize != fileInfo.fileSize || MD5 != fileInfo.fileMd5)
+                        {
+                            downData.downCurrentSize = fileSize;
+                            allDownSvcData.Add(downData);
+                        }
+                        else
+                        {
+                            downData.downOver = true;
+                            Debug.Log(downData.downName + "已有缓存");
+                        }
+                    }
+                }
+                else
+                {
+                }
+
                 allDownSvcData.Add(downData);
             }
 
-            //如果开启下载,直接下载任务
+            /*//如果开启下载,直接下载任务
             if (isOnDown)
             {
                 StartCoroutine(DownFileData(GetNotDownOverTask()));
-            }
+            }*/
         }
 
         public override void EndSvc()
         {
-            Instance = null;
+            UpdateDownFile();
+        }
+
+        /// <summary>
+        /// 获得场景文件缓存
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <returns></returns>
+        public bool GetSceneFileCacheState(string sceneName)
+        {
+            foreach (DownData downData in allDownSvcData)
+            {
+                if (downData.downFileOriginalName == sceneName)
+                {
+                    return downData.downOver;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 获得场景文件的缓存路径
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <returns></returns>
+        public string GetGetSceneFileCachePath(string sceneName)
+        {
+            foreach (DownData downData in allDownSvcData)
+            {
+                if (downData.downFileOriginalName == sceneName)
+                {
+                    return downData.downPath;
+                }
+            }
+
+            return string.Empty;
+        }
+
+
+        /// <summary>
+        /// 下载场景任务
+        /// </summary>
+        /// <param name="sceneName"></param>
+        public void DownSceneTask(string sceneName)
+        {
+            _currentDownDataTask = GetSceneDownTaskDownData(sceneName);
+            StartCoroutine(StartDownFile(_currentDownDataTask));
+        }
+
+        /// <summary>
+        /// 获得下载任务
+        /// </summary>
+        /// <param name="sceneName"></param>
+        /// <returns></returns>
+        private DownData GetSceneDownTaskDownData(string sceneName)
+        {
+            foreach (DownData downData in allDownSvcData)
+            {
+                if (downData.downFileOriginalName == sceneName)
+                {
+                    return downData;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -99,6 +198,50 @@ namespace XFramework
             _currentDownDataTask = GetDownOverTaskByFileName(downName);
             StartCoroutine(DownFileData(_currentDownDataTask));
         }
+
+        private IEnumerator StartDownFile(DownData downData)
+        {
+            _currentDownDataTask = downData;
+            //文件地址
+            string filePath = General.GetFileDataPath(downData.downPath);
+            Debug.Log("当前下载路径" + filePath);
+            //开启下载文件
+            _request = UnityWebRequest.Get(filePath);
+            //定义下载头文件
+            _request.SetRequestHeader("Range",
+                "bytes=" + _currentDownDataTask.downCurrentSize + "-" + _currentDownDataTask.downTotalSize);
+            yield return _request.SendWebRequest();
+
+            if (_request.responseCode == 404)
+            {
+                Debug.Log("文件下载错误路径不存在:" + General.GetFileDataPath(downData.downPath));
+            }
+            else
+            {
+                _currentDownDataTask.downCurrentSize = _currentDownDataTask.downTotalSize;
+                Debug.Log("当前文件下载完毕:" + filePath);
+                Debug.Log("当前文件下载完毕:" + _currentDownDataTask.downName);
+                if (Application.platform == RuntimePlatform.WindowsEditor ||
+                    Application.platform == RuntimePlatform.Android ||
+                    Application.platform == RuntimePlatform.WindowsPlayer)
+                {
+                    string downPath = General.GetPlatformDownLoadDataPath() +
+                                      downData.downPath.Replace(downData.downName, "");
+                    Debug.Log("文件追加:" + downPath);
+                    FileOperation.SaveFileToLocal(downPath, downData.downName, _request.downloadHandler.data,
+                        FileMode.Append);
+                }
+                else
+                {
+                    _currentDownDataTask.downContent = _request.downloadHandler.data;
+                }
+
+                _request = null;
+                downTaskDelegate.Invoke(1, true);
+                _currentDownDataTask.downOver = true;
+            }
+        }
+
 
         /// <summary>
         /// 下载文件
@@ -128,42 +271,26 @@ namespace XFramework
                 }
 
                 _currentDownDataTask.downOver = true;
-                _currentDownDataTask.downCurrentSize = _currentDownDataTask.downTotalSize;
-                _currentDownDataTask.downContent = _request.downloadHandler.data;
                 downloading = false;
-                _request = null;
-                StartCoroutine(DownFileData(GetNotDownOverTask()));
-            }
-
-            /*//未下载完毕
-            if (_downIndex < _downSceneFile.fileInfoList.Count)
-            {
-                //文件地址
-                string filePath = _downSceneFile.fileInfoList[_downIndex].filePath;
-                //下载文件
-                _request = UnityWebRequest.Get(General.GetFileDataPath(filePath));
-                Debug.Log("开始下载数据:" + General.GetFileDataPath(filePath));
-                yield return _request.SendWebRequest();
-                UpdateDownProgress();
-                if (_request.responseCode != 200)
+                _currentDownDataTask.downCurrentSize = _currentDownDataTask.downTotalSize;
+                if (Application.platform == RuntimePlatform.WindowsEditor ||
+                    Application.platform == RuntimePlatform.Android ||
+                    Application.platform == RuntimePlatform.WindowsPlayer)
                 {
-                    Debug.Log("文件下载错误路径不存在:" + General.GetFileDataPath(filePath));
+                    string downPath = General.GetPlatformDownLoadDataPath() +
+                                      downData.downPath.Replace(downData.downName, "");
+                    FileOperation.SaveFileToLocal(downPath, downData.downName, _request.downloadHandler.data,
+                        FileMode.Append);
                 }
                 else
                 {
-                    Debug.Log("当前文件下载完毕:" + General.GetFileDataPath(filePath));
+                    _currentDownDataTask.downContent = _request.downloadHandler.data;
                 }
 
-                allDownSvcData[_downIndex].downOver = true;
-                allDownSvcData[_downIndex].downContent = _request.downloadHandler.data;
-                _downIndex += 1;
-                StartCoroutine(DownFileData());
+                _request = null;
+
+                StartCoroutine(DownFileData(GetNotDownOverTask()));
             }
-            else
-            {
-                downOver = true;
-                Debug.Log("所有文件下载完毕");
-            }*/
         }
 
         /// <summary>
@@ -207,6 +334,11 @@ namespace XFramework
             {
                 UpdateDownProgress();
             }
+
+            if (_request != null)
+            {
+                downTaskDelegate.Invoke(_request.downloadProgress, _request.isDone);
+            }
         }
 
         /// <summary>
@@ -217,6 +349,19 @@ namespace XFramework
             if (_request != null && _currentDownDataTask != null)
             {
                 UpdateDownProgress(_currentDownDataTask.downName, (long) _request.downloadedBytes);
+            }
+        }
+
+        /// <summary>
+        /// 更新下载文件
+        /// </summary>
+        private void UpdateDownFile()
+        {
+            if (_request != null && _currentDownDataTask != null)
+            {
+                FileOperation.SaveFileToLocal(
+                    _currentDownDataTask.downPath.Replace(_currentDownDataTask.downName, ""),
+                    _currentDownDataTask.downName, _request.downloadHandler.data, FileMode.Append);
             }
         }
 
