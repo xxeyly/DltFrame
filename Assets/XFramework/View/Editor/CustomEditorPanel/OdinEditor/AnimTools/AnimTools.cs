@@ -63,13 +63,9 @@ namespace XFramework
             }
             else
             {
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AnimControllerConfig>(),
-                    NewExportConfigPath + "/" + NewAnimControllerConfigName + ".asset");
-                AnimControllerConfig animControllerConfig = AssetDatabase.LoadAssetAtPath<AnimControllerConfig>(
-                    NewExportConfigPath + "/" + NewAnimControllerConfigName + ".asset");
-                AnimatorController animatorController =
-                    AnimatorController.CreateAnimatorControllerAtPath(
-                        NewExportControllerPath + "/" + NewAnimatorControllerName + ".controller");
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AnimControllerConfig>(), NewExportConfigPath + "/" + NewAnimControllerConfigName + ".asset");
+                AnimControllerConfig animControllerConfig = AssetDatabase.LoadAssetAtPath<AnimControllerConfig>(NewExportConfigPath + "/" + NewAnimControllerConfigName + ".asset");
+                AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(NewExportControllerPath + "/" + NewAnimatorControllerName + ".controller");
                 animControllerConfig.animFbxConfig = new List<AnimControllerConfig.AnimFbxConfig>();
                 animControllerConfig.LoadAnimatorControllerName = NewAnimatorControllerName;
                 animControllerConfig.LoadExportPath = NewExportConfigPath;
@@ -127,8 +123,7 @@ namespace XFramework
             List<string> animNames = new List<string>();
             foreach (AnimControllerConfig.AnimFbxConfig animFbxAndAnimClipData in AnimControllerConfig.animFbxConfig)
             {
-                foreach (AnimControllerConfig.AnimClipSplitData animClipSplitData in animFbxAndAnimClipData
-                    .animClipSplitData)
+                foreach (AnimControllerConfig.AnimClipSplitData animClipSplitData in animFbxAndAnimClipData.animClipSplitData)
                 {
                     animNames.Add(animClipSplitData.animatorClipName);
                 }
@@ -143,8 +138,7 @@ namespace XFramework
 
         private ModelImporterClipAnimation SetClipAnimation(string clipName, int firstFrame, int lastFrame, bool isLoop)
         {
-            ModelImporterClipAnimation clip = new ModelImporterClipAnimation
-                {name = clipName, firstFrame = firstFrame, lastFrame = lastFrame, loopTime = isLoop};
+            ModelImporterClipAnimation clip = new ModelImporterClipAnimation {name = clipName, firstFrame = firstFrame, lastFrame = lastFrame, loopTime = isLoop};
 
             if (isLoop)
             {
@@ -167,19 +161,16 @@ namespace XFramework
         {
             if (Directory.Exists(LoadExportPath) && LoadAnimatorControllerName != "")
             {
-                AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(
-                    LoadExportPath + "/" + LoadAnimatorControllerName + ".controller");
+                AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(LoadExportPath + "/" + LoadAnimatorControllerName + ".controller");
                 AnimatorStateMachine rootStateMachine = animatorController.layers[0].stateMachine;
                 foreach (AnimControllerConfig.AnimFbxConfig animFbxAndAnimClipData in AnimClipConfigs)
                 {
-                    _modelImporter = (ModelImporter) AssetImporter.GetAtPath(
-                        AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx));
+                    _modelImporter = (ModelImporter) AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx));
                     if (_modelImporter != null)
                     {
                         _modelImporter.animationType = ModelImporterAnimationType.Generic;
                         _modelImporter.generateAnimations = ModelImporterGenerateAnimations.GenerateAnimations;
-                        ModelImporterClipAnimation[] animations =
-                            new ModelImporterClipAnimation[animFbxAndAnimClipData.animClipSplitData.Count];
+                        ModelImporterClipAnimation[] animations = new ModelImporterClipAnimation[animFbxAndAnimClipData.animClipSplitData.Count];
 
                         for (int i = 0; i < animFbxAndAnimClipData.animClipSplitData.Count; i++)
                         {
@@ -193,39 +184,27 @@ namespace XFramework
                         _modelImporter.clipAnimations = animations;
                         _modelImporter.SaveAndReimport();
                         //该动画文件下的所有文件
-                        List<Object> allAnimObject = new List<Object>(AssetDatabase.LoadAllAssetsAtPath(
-                            AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx)));
+                        List<Object> allAnimObject = new List<Object>(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx)));
                         List<string> allAnimClipName = GetAllAnimClipName();
-                        Dictionary<string, AnimationClip> animationClipDic =
-                            BuildingAnimationClips(allAnimObject, allAnimClipName);
+                        Dictionary<string, AnimationClip> animationClipDic = BuildingAnimationClips(allAnimObject, allAnimClipName);
 
                         for (int i = 0; i < animFbxAndAnimClipData.animClipSplitData.Count; i++)
                         {
                             //添加 参数
-                            animatorController.AddParameter(
-                                animFbxAndAnimClipData.animClipSplitData[i]
-                                    .animatorClipName,
-                                animFbxAndAnimClipData.animClipSplitData[i]
-                                    .animatorControllerParameterType);
+                            animatorController.AddParameter(animFbxAndAnimClipData.animClipSplitData[i].animatorClipName, animFbxAndAnimClipData.animClipSplitData[i].animatorControllerParameterType);
                             //添加 片段
-                            AnimatorState state = rootStateMachine.AddState(animFbxAndAnimClipData
-                                .animClipSplitData[i].animatorClipName);
+                            AnimatorState state = rootStateMachine.AddState(animFbxAndAnimClipData.animClipSplitData[i].animatorClipName);
                             //动画是否倒放
                             state.speed = animFbxAndAnimClipData.animClipSplitData[i].animatorClipIsRewind ? -1 : 1;
                             //设置动画
-                            state.motion = animationClipDic[
-                                animFbxAndAnimClipData.animClipSplitData[i].animatorClipName];
+                            state.motion = animationClipDic[animFbxAndAnimClipData.animClipSplitData[i].animatorClipName];
                             // 关联片段 
-                            AnimatorStateTransition animatorStateTransition =
-                                rootStateMachine.AddAnyStateTransition(state);
+                            AnimatorStateTransition animatorStateTransition = rootStateMachine.AddAnyStateTransition(state);
                             //设置关联参数
-                            animatorStateTransition.AddCondition(AnimatorConditionMode.If, 0,
-                                animFbxAndAnimClipData.animClipSplitData[i].animatorClipName);
+                            animatorStateTransition.AddCondition(AnimatorConditionMode.If, 0, animFbxAndAnimClipData.animClipSplitData[i].animatorClipName);
                             //设置持续时间
-                            animatorStateTransition.duration =
-                                animFbxAndAnimClipData.animClipSplitData[i].transitionDuration;
-                            animatorStateTransition.hasFixedDuration =
-                                animFbxAndAnimClipData.animClipSplitData[i].fixedDuration;
+                            animatorStateTransition.duration = animFbxAndAnimClipData.animClipSplitData[i].transitionDuration;
+                            animatorStateTransition.hasFixedDuration = animFbxAndAnimClipData.animClipSplitData[i].fixedDuration;
                         }
                     }
                     else

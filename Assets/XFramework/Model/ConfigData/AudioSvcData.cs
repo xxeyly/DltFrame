@@ -8,7 +8,7 @@ namespace XFramework
     public class AudioSvcData : ScriptableObject
     {
         [Searchable] [TableList(AlwaysExpanded = true)] [LabelText("音频内容")]
-        public List<AudioInfo> audioInfos;
+        public List<AudioInfo> audioInfos = new List<AudioInfo>();
 
         [Serializable]
         public struct AudioInfo

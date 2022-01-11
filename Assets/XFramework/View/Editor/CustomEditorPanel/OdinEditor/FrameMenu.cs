@@ -1,4 +1,5 @@
-﻿using Sirenix.OdinInspector.Editor;
+﻿using System;
+using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,10 +11,22 @@ namespace XFramework
         {
         }
 
+
         [MenuItem("Xframe/框架界面")]
         private static void OpenWindow()
         {
             GetWindow<FrameMenu>().Show();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            audioSvcEditor.OnDisable();
+            customBuild.OnDisable();
+            gameRootEditor.OnDisable();
+            generateBaseWindowEditor.OnDisable();
+            sceneLoad.OnDisable();
+            AssetDatabase.SaveAssets();
         }
 
         [MenuItem("Xframe/监听生成 &l")]
@@ -87,8 +100,7 @@ namespace XFramework
             var tree = new OdinMenuTree();
             tree.Selection.SupportsMultiSelect = false;
             //框架配置
-            gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, downSvcEditor, audioSvcEditor,
-                listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
+            gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, downSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
                 circuitSvcEditor, mouseSvcEditor);
             sceneLoad.OnInit();
             customBuild.OnInit();
@@ -108,14 +120,10 @@ namespace XFramework
             return tree;
         }
 
+
         private void OnDisable()
         {
-            audioSvcEditor.OnDisable();
-            customBuild.OnDisable();
-            gameRootEditor.OnDisable();
-            generateBaseWindowEditor.OnDisable();
-            sceneLoad.OnDisable();
-            AssetDatabase.SaveAssets();
+            
         }
     }
 }
