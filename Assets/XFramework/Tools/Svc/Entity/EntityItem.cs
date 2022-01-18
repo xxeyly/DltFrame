@@ -6,7 +6,7 @@ using UnityEngine;
 namespace XFramework
 {
     [Serializable]
-    public class EntityItem : StartSingleton
+    public class EntityItem : SceneComponent
     {
         [LabelText("实体名称")] public string entityName;
         [LabelText("日志输出")] public bool isLog;

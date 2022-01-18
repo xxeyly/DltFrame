@@ -1,6 +1,6 @@
 ﻿namespace XFramework
 {
-    public interface IStartSingleton
+    public interface ISceneComponent
     {
         void StartSvc();
         void Init();

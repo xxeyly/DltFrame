@@ -501,7 +501,7 @@ namespace XFramework
             }
 
 #if UNITY_EDITOR
-            AssetDatabase.Refresh();
+                AssetDatabase.Refresh();
 #endif
         }
 

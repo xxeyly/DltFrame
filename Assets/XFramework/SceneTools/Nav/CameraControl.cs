@@ -9,7 +9,7 @@ using XFramework;
 /// 相机控制
 /// </summary>
 [RequireComponent(typeof(ControllerSelfRotate))]
-public class CameraControl : StartSingleton
+public class CameraControl : SceneComponent
 {
     public static CameraControl Instance;
     public NavMeshAgent navMeshAgent;

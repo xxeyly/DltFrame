@@ -242,7 +242,7 @@ namespace XFramework
         private void InitSceneStartSingletons()
         {
             // GameRootStart.Instance.sceneStartSingletons = new List<StartSingleton>(FindObjectsOfType<StartSingleton>());
-            GameRootStart.Instance.sceneStartSingletons = DataSvc.GetAllObjectsInScene<StartSingleton>();
+            GameRootStart.Instance.sceneStartSingletons = DataSvc.GetAllObjectsInScene<SceneComponent>();
 
             //所有条件都加载完毕后,开始视图的初始化
             foreach (SvcBase svcBase in GameRootStart.Instance.activeSvcBase)
@@ -258,6 +258,10 @@ namespace XFramework
             for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
             {
                 GameRootStart.Instance.sceneStartSingletons[i].StartSvc();
+            }
+
+            for (int i = 0; i < GameRootStart.Instance.sceneStartSingletons.Count; i++)
+            {
                 GameRootStart.Instance.sceneStartSingletons[i].Init();
             }
 

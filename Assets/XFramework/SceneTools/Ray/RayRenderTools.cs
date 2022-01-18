@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace XFramework
 {
-    public class RayRenderTools : StartSingleton
+    public class RayRenderTools : SceneComponent
     {
         public static RayRenderTools Instance;
         [LabelText("射线相机")] public Camera currentRayCamera;

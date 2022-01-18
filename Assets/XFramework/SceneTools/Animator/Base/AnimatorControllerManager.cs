@@ -10,7 +10,7 @@ namespace XFramework
     /// <summary>
     /// 动画控制管理器
     /// </summary>
-    public class AnimatorControllerManager : StartSingleton
+    public class AnimatorControllerManager : SceneComponent
     {
         public static AnimatorControllerManager Instance;
         [LabelText("当前播放动画名称")] public string currentPlayAnim;

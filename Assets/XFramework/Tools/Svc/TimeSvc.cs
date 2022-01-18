@@ -85,7 +85,14 @@ namespace XFramework
                 UpdateCurrentSystemTime();
             }
 
-            Time.timeScale = systemSpeed;
+            if (pause)
+            {
+                Time.timeScale = 0;
+            }
+            else
+            {
+                Time.timeScale = systemSpeed;
+            }
         }
 
         public override void InitSvc()

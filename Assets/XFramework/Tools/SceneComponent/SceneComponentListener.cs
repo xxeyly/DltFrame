@@ -2,7 +2,7 @@
 
 namespace XFramework
 {
-    public partial class StartSingleton
+    public partial class SceneComponent
     {
         /// <summary>
         /// 添加事件监听

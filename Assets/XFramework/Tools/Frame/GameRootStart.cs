@@ -12,7 +12,7 @@ namespace XFramework
         public static GameRootStart Instance;
 #pragma warning disable 649
         [LabelText("激活的服务")] [Searchable] public List<SvcBase> activeSvcBase;
-        [LabelText("场景服务")] [Searchable] public List<StartSingleton> sceneStartSingletons;
+        [LabelText("场景服务")] [Searchable] public List<SceneComponent> sceneStartSingletons;
         [LabelText("禁止摧毁")] [BoxGroup] public bool dontDestroyOnLoad;
 
         private void OnEnable()

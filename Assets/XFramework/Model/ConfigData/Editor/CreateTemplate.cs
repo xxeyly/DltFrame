@@ -32,7 +32,8 @@ namespace XFramework
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
                 ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewChildBaseWindow.cs", null,
                 General.ChildBaseWindowTemplatePath);
-        }  
+        }
+
         [MenuItem("Assets/Create/XFramework/C# CircuitBaseData", false, 72)]
         public static void OnCreateCircuitBaseDataTemplate()
         {
@@ -46,6 +47,7 @@ namespace XFramework
                 ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewCircuitBaseData.cs", null,
                 General.CircuitBaseDataTemplatePath);
         }
+
         [MenuItem("Assets/Create/XFramework/C# ListenerSvcData", false, 73)]
         public static void OnCreateListenerSvcDataTemplate()
         {
@@ -59,8 +61,23 @@ namespace XFramework
                 ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/ListenerSvcData.cs", null,
                 General.ListenerSvcDataTemplatePath);
         }
-        
-        [MenuItem("Assets/Create/XFramework/C# AnimatorControllerParameterData", false, 74)]
+
+        [MenuItem("Assets/Create/XFramework/C# SceneComponent", false, 74)]
+        public static void OnCreateStartSingletonTemplate()
+        {
+            string path = GetSelectedPath();
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
+                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewSceneComponent.cs", null,
+                General.SceneComponentTemplatePath);
+        }
+
+
+        [MenuItem("Assets/Create/XFramework/C# AnimatorControllerParameterData", false, 75)]
         public static void OnCreateAnimatorControllerParameterDataTemplate()
         {
             string path = GetSelectedPath();
@@ -73,7 +90,7 @@ namespace XFramework
                 ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/AnimatorControllerParameterData.cs", null,
                 General.AnimatorControllerParameterDataTemplatePath);
         }
-        
+
         /// <summary>
         /// 获得选择文件地址
         /// </summary>

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
 namespace XFramework
 {
     /// <summary>
@@ -54,11 +55,14 @@ namespace XFramework
 
             //音效初始化
             _audioDlc = new Dictionary<string, AudioClip>();
-            foreach (AudioSvcData.AudioInfo audioDataInfo in audioData.audioInfos)
+            if (audioData != null)
             {
-                if (!_audioDlc.ContainsKey(audioDataInfo.audioName) && audioDataInfo.audioClip != null)
+                foreach (AudioSvcData.AudioInfo audioDataInfo in audioData.audioInfos)
                 {
-                    _audioDlc.Add(audioDataInfo.audioName, audioDataInfo.audioClip);
+                    if (!_audioDlc.ContainsKey(audioDataInfo.audioName) && audioDataInfo.audioClip != null)
+                    {
+                        _audioDlc.Add(audioDataInfo.audioName, audioDataInfo.audioClip);
+                    }
                 }
             }
 
