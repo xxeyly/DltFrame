@@ -4,6 +4,8 @@ namespace XFramework
 {
     partial class BaseWindow
     {
+        #region 无返回方法
+
         /// <summary>
         /// 添加事件监听
         /// </summary>
@@ -76,5 +78,82 @@ namespace XFramework
         {
             ListenerSvc.Instance.DeleteListenerEvent(GetType() + "_" + eventType, unityAction);
         }
+
+        #endregion
+
+        #region 返回方法
+
+        /// <summary>
+        /// 添加事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="returnCallBack"></param>
+        protected void AddReturnListenerEvent<R>(string eventType, ListenerSvc.ReturnCallBack<R> returnCallBack)
+        {
+            ListenerSvc.Instance.AddReturnListenerEvent(GetType() + "_" + eventType, returnCallBack);
+        }
+
+        /// <summary>
+        /// 添加事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="returnCallBack"></param>
+        protected void AddReturnListenerEvent<T, R>(string eventType, ListenerSvc.ReturnCallBack<T, R> returnCallBack)
+        {
+            ListenerSvc.Instance.AddReturnListenerEvent(GetType() + "_" + eventType, returnCallBack);
+        }
+
+        /// <summary>
+        /// 添加事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="returnCallBack"></param>
+        protected void AddReturnListenerEvent<T, X, R>(string eventType, ListenerSvc.ReturnCallBack<T, X, R> returnCallBack)
+        {
+            ListenerSvc.Instance.AddReturnListenerEvent(GetType() + "_" + eventType, returnCallBack);
+        }
+
+        /// <summary>
+        /// 添加事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="returnCallBack"></param>
+        protected void AddReturnListenerEvent<T, X, Y, R>(string eventType, ListenerSvc.ReturnCallBack<T, X, Y, R> returnCallBack)
+        {
+            ListenerSvc.Instance.AddReturnListenerEvent(GetType() + "_" + eventType, returnCallBack);
+        }
+
+        /// <summary>
+        /// 添加事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="returnCallBack"></param>
+        public void AddReturnListenerEvent<T, X, Y, Z, R>(string eventType, ListenerSvc.ReturnCallBack<T, X, Y, Z, R> returnCallBack)
+        {
+            ListenerSvc.Instance.AddReturnListenerEvent(GetType() + "_" + eventType, returnCallBack);
+        }
+
+        /// <summary>
+        /// 添加事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="returnCallBack"></param>
+        public void AddReturnListenerEvent<T, X, Y, Z, W, R>(string eventType, ListenerSvc.ReturnCallBack<T, X, Y, Z, W, R> returnCallBack)
+        {
+            ListenerSvc.Instance.AddReturnListenerEvent(GetType() + "_" + eventType, returnCallBack);
+        }
+
+
+        /// <summary>
+        /// 删除事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="unityAction"></param>
+        public void DeleteReturnListenerEvent(string eventType, UnityAction unityAction)
+        {
+            ListenerSvc.Instance.DeleteReturnListenerEvent(GetType() + "_" + eventType, unityAction);
+        }
+
+        #endregion
     }
 }

@@ -58,20 +58,6 @@ namespace XFramework
             Instance = GetComponent<ViewSvc>();
         }
 
-        /// <summary>
-        /// 静态视图初始化
-        /// </summary>
-        public void StateViewInit()
-        {
-            foreach (BaseWindow window in allViewWind)
-            {
-                if (window.GetViewShowType() == ViewShowType.Static)
-                {
-                    window.Init();
-                }
-            }
-        }
-
         public override void InitSvc()
         {
             // List<BaseWindow> tempSceneBaseWindow = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
@@ -93,8 +79,6 @@ namespace XFramework
             {
                 window.ViewStartInit();
             }
-
-            StateViewInit();
 
             //关闭全体禁止响应
             CloseNoAllResponse();
