@@ -54,7 +54,10 @@ namespace XFramework
 
         public override void InitSvc()
         {
-            DownSvc.Instance.downTaskDelegate += DownSceneTaskOver;
+            if (DownSvc.Instance != null)
+            {
+                DownSvc.Instance.downTaskDelegate += DownSceneTaskOver;
+            }
         }
 
 
@@ -81,7 +84,10 @@ namespace XFramework
         public override void EndSvc()
         {
             SceneManager.sceneLoaded -= SceneLoadOverCallBack;
-            DownSvc.Instance.downTaskDelegate -= DownSceneTaskOver;
+            if (DownSvc.Instance != null)
+            {
+                DownSvc.Instance.downTaskDelegate -= DownSceneTaskOver;
+            }
         }
 
         private void Update()

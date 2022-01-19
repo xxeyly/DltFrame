@@ -24,9 +24,9 @@ namespace XFramework
         [LabelText("音频配置")] public List<AudioSvcData.AudioInfo> audioInfos;
 
         private AudioSvcData _customAudioData;
+        [BoxGroup] [LabelText("服务索引")] public int svcIndex;
 
 
-        
         public override void OnDisable()
         {
             OnSaveConfig();
@@ -41,6 +41,7 @@ namespace XFramework
                 {
                     Directory.CreateDirectory(General.assetRootPath);
                 }
+
                 //创建数据
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AudioSvcData>(), General.customAudioDataPath);
                 //读取数据

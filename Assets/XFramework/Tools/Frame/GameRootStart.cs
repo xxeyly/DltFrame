@@ -26,6 +26,8 @@ namespace XFramework
             {
                 Instance = GetComponent<GameRootStart>();
                 dontDestroyOnLoad = true;
+                //服务排序
+                SvcSort();
                 //服务开启
                 SvcStart();
                 Debug.Log("服务开启");
@@ -33,7 +35,6 @@ namespace XFramework
                 SvcInit();
                 Debug.Log("框架服务加载完毕");
             }
-            
         }
 
         /// <summary>
@@ -63,6 +64,28 @@ namespace XFramework
         {
         }
 
+        /// <summary>
+        /// 服务排序
+        /// </summary>
+        private void SvcSort()
+        {
+            for (int i = 0; i < activeSvcBase.Count; i++)
+            {
+                for (int j = 0; j < activeSvcBase.Count; j++)
+                {
+                    if (activeSvcBase[i].svcIndex <= activeSvcBase[j].svcIndex)
+                    {
+                        SvcBase tempSvcBase = activeSvcBase[i];
+                        activeSvcBase[i] = activeSvcBase[j];
+                        activeSvcBase[j] = tempSvcBase;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// 开启服务
+        /// </summary>
         private void SvcStart()
         {
             foreach (SvcBase svcBase in activeSvcBase)
@@ -71,6 +94,9 @@ namespace XFramework
             }
         }
 
+        /// <summary>
+        /// 服务初始化
+        /// </summary>
         private void SvcInit()
         {
             foreach (SvcBase svcBase in activeSvcBase)

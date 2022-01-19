@@ -83,3 +83,7 @@ Packages/manifest.json
 Assets/SceneAssetBundle/
 
 Assets/SceneAssetBundle.meta
+Assets/Config
+Assets/AnimConfig.meta
+ProjectSettings/EditorBuildSettings.asset
+ProjectSettings/ProjectSettings.asset

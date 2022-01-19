@@ -84,8 +84,9 @@ namespace XFramework
                 GameObject tempSvcObj = new GameObject("RuntimeDataSvc");
                 RuntimeDataSvc tempSvc = tempSvcObj.AddComponent<RuntimeDataSvc>();
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempSvc.frameInit = resSvcEditor.isFrameInit;
-                tempSvc.sceneInit = resSvcEditor.isSceneInit;
+                tempSvc.frameInit = RuntimeDataSvcEditor.isFrameInit;
+                tempSvc.sceneInit = RuntimeDataSvcEditor.isSceneInit;
+                tempSvc.svcIndex = RuntimeDataSvcEditor.svcIndex;
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
 
@@ -96,6 +97,8 @@ namespace XFramework
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempSvc.frameInit = resSvcEditor.isFrameInit;
                 tempSvc.sceneInit = resSvcEditor.isSceneInit;
+                tempSvc.svcIndex = resSvcEditor.svcIndex;
+
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
 
@@ -106,6 +109,7 @@ namespace XFramework
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempSvc.frameInit = resSvcEditor.isFrameInit;
                 tempSvc.sceneInit = resSvcEditor.isSceneInit;
+                tempSvc.sceneInit = resSvcEditor.isSceneInit;
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
 
@@ -115,6 +119,7 @@ namespace XFramework
                 AudioSvc tempSvc = tempSvcObj.AddComponent<AudioSvc>();
                 tempSvc.frameInit = audioSvcEditor.isFrameInit;
                 tempSvc.sceneInit = audioSvcEditor.isSceneInit;
+                tempSvc.svcIndex = audioSvcEditor.svcIndex;
                 tempSvc.audioData =
                     AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
@@ -127,6 +132,7 @@ namespace XFramework
                 ListenerSvc tempSvc = tempSvcObj.AddComponent<ListenerSvc>();
                 tempSvc.frameInit = listenerSvcEditorSvc.isFrameInit;
                 tempSvc.sceneInit = listenerSvcEditorSvc.isSceneInit;
+                tempSvc.svcIndex = listenerSvcEditorSvc.svcIndex;
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
@@ -137,6 +143,7 @@ namespace XFramework
                 SceneSvc tempSvc = tempSvcObj.AddComponent<SceneSvc>();
                 tempSvc.frameInit = customSceneSvc.isFrameInit;
                 tempSvc.sceneInit = customSceneSvc.isSceneInit;
+                tempSvc.svcIndex = customSceneSvc.svcIndex;
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
@@ -147,6 +154,7 @@ namespace XFramework
                 TimeSvc tempSvc = tempSvcObj.AddComponent<TimeSvc>();
                 tempSvc.frameInit = timeSvcEditorSvc.isFrameInit;
                 tempSvc.sceneInit = timeSvcEditorSvc.isSceneInit;
+                tempSvc.svcIndex = timeSvcEditorSvc.svcIndex;
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
@@ -157,6 +165,7 @@ namespace XFramework
                 EntitySvc tempSvc = tempSvcObj.AddComponent<EntitySvc>();
                 tempSvc.frameInit = entitySvcEditorSvc.isFrameInit;
                 tempSvc.sceneInit = entitySvcEditorSvc.isSceneInit;
+                tempSvc.svcIndex = entitySvcEditorSvc.svcIndex;
                 tempSvc.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
@@ -167,6 +176,7 @@ namespace XFramework
                 CircuitSvc tempSvc = tempSvcObj.AddComponent<CircuitSvc>();
                 tempSvc.frameInit = viewSvcEditorSvc.isFrameInit;
                 tempSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
+                tempSvc.svcIndex = viewSvcEditorSvc.svcIndex;
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
@@ -177,6 +187,7 @@ namespace XFramework
                 MouseSvc tempSvc = tempSvcObj.AddComponent<MouseSvc>();
                 tempSvc.frameInit = viewSvcEditorSvc.isFrameInit;
                 tempSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
+                tempSvc.svcIndex = viewSvcEditorSvc.svcIndex;
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
@@ -187,6 +198,7 @@ namespace XFramework
                 ViewSvc tempSvc = tempSvcObj.AddComponent<ViewSvc>();
                 tempSvc.frameInit = viewSvcEditorSvc.isFrameInit;
                 tempSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
+                tempSvc.svcIndex = viewSvcEditorSvc.svcIndex;
                 tempSvcObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeSvcBase.Add(tempSvc);
             }
@@ -217,6 +229,7 @@ namespace XFramework
                 {
                     Directory.CreateDirectory(General.assetRootPath);
                 }
+
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GameRootEditorEditorData>(), General.customFrameDataPath);
                 _gameRootEditorEditorData = AssetDatabase.LoadAssetAtPath<GameRootEditorEditorData>(General.customFrameDataPath);
             }

@@ -14,5 +14,7 @@ namespace XFramework
 
         [ToggleLeft] [BoxGroup] [LabelText("场景初始化")]
         public bool isSceneInit;
+
+        [BoxGroup] [LabelText("服务索引")] public int svcIndex;
     }
 }
