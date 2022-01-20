@@ -9,7 +9,7 @@ namespace XFramework
         /// <param name="sceneName"></param>
         protected void SceneLoad(string sceneName)
         {
-            SceneSvc.Instance.NewSceneLoad(sceneName);
+            SceneSvc.Instance.SceneLoad(sceneName);
         }
     }
 }

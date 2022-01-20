@@ -88,9 +88,6 @@ namespace XFramework
         //资源统一化
         ResourceUnification resourceUnification = new ResourceUnification();
 
-        //场景工具
-        SceneTools sceneTools = new SceneTools();
-
         //动画工具
         AnimTools animTools = new AnimTools();
 
@@ -115,7 +112,6 @@ namespace XFramework
             tree.Add("音频配置", audioSvcEditor);
             tree.Add("生成配置", generateBaseWindowEditor);
             tree.Add("资源统一化", resourceUnification);
-            tree.Add("场景工具", sceneTools);
             tree.Add("动画工具", animTools);
             return tree;
         }
@@ -123,7 +119,6 @@ namespace XFramework
 
         private void OnDisable()
         {
-            
         }
     }
 }

@@ -83,7 +83,6 @@ namespace XFramework
             }
 
             Debug.Log(outPath);
-
             buildPlayerOptions.locationPathName = outPath;
             buildPlayerOptions.target = buildTarget;
             buildPlayerOptions.options = buildCompressType;
@@ -103,6 +102,12 @@ namespace XFramework
 
         private void CopySceneFile()
         {
+            if (_sceneLoad.sceneAssetBundlePath == string.Empty)
+            {
+                Debug.LogError("拷贝场景文件路径不正确");
+                return;
+            }
+
             //场景配置文件清空
             ResSvc.DownFile sceneFile =
                 JsonMapper.ToObject<ResSvc.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
@@ -140,7 +145,6 @@ namespace XFramework
                                        exportCnProjectName, exportEnProjectName) + buildTargetPlatformPath + "/" +
                                    fileInfo.filePath.Replace("/" + fileInfo.fileName, "");
 
-                Debug.Log(pastePath);
                 CustomBuildFileOperation.Copy(copyAssetPath, pastePath);
             }
         }
@@ -204,6 +208,7 @@ namespace XFramework
                 {
                     Directory.CreateDirectory(General.assetRootPath);
                 }
+
                 //创建数据
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<CustomBuildData>(),
                     General.customBuildDataPath);

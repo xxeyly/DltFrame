@@ -51,7 +51,7 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, X, Y, Z>(string eventType,
+        protected void AddListenerEvent<T, X, Y, Z>(string eventType,
             ListenerSvc.CallBack<T, X, Y, Z> callBack)
         {
             ListenerSvc.Instance.AddListenerEvent(GetType() + "_" + eventType, callBack);
@@ -62,7 +62,7 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, X, Y, Z, W>(string eventType,
+        protected void AddListenerEvent<T, X, Y, Z, W>(string eventType,
             ListenerSvc.CallBack<T, X, Y, Z, W> callBack)
         {
             ListenerSvc.Instance.AddListenerEvent(GetType() + "_" + eventType, callBack);
@@ -74,7 +74,7 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="unityAction"></param>
-        public void DeleteListenerEvent(string eventType, UnityAction unityAction)
+        protected void DeleteListenerEvent(string eventType, UnityAction unityAction)
         {
             ListenerSvc.Instance.DeleteListenerEvent(GetType() + "_" + eventType, unityAction);
         }
@@ -128,7 +128,7 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="returnCallBack"></param>
-        public void AddReturnListenerEvent<T, X, Y, Z, R>(string eventType, ListenerSvc.ReturnCallBack<T, X, Y, Z, R> returnCallBack)
+        protected void AddReturnListenerEvent<T, X, Y, Z, R>(string eventType, ListenerSvc.ReturnCallBack<T, X, Y, Z, R> returnCallBack)
         {
             ListenerSvc.Instance.AddReturnListenerEvent(GetType() + "_" + eventType, returnCallBack);
         }
@@ -138,7 +138,7 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="returnCallBack"></param>
-        public void AddReturnListenerEvent<T, X, Y, Z, W, R>(string eventType, ListenerSvc.ReturnCallBack<T, X, Y, Z, W, R> returnCallBack)
+        protected void AddReturnListenerEvent<T, X, Y, Z, W, R>(string eventType, ListenerSvc.ReturnCallBack<T, X, Y, Z, W, R> returnCallBack)
         {
             ListenerSvc.Instance.AddReturnListenerEvent(GetType() + "_" + eventType, returnCallBack);
         }
@@ -149,7 +149,7 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="unityAction"></param>
-        public void DeleteReturnListenerEvent(string eventType, UnityAction unityAction)
+        protected void DeleteReturnListenerEvent(string eventType, UnityAction unityAction)
         {
             ListenerSvc.Instance.DeleteReturnListenerEvent(GetType() + "_" + eventType, unityAction);
         }

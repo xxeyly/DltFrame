@@ -117,37 +117,7 @@ namespace XFramework
             }
         }
 
-        /// <summary>
-        /// 加载场景
-        /// </summary>
-        /// <param name="sceneName"></param>
         public void SceneLoad(string sceneName)
-        {
-            _sceneName = sceneName;
-            SceneLoadBeforeInit();
-            if (Application.CanStreamedLevelBeLoaded(sceneName))
-            {
-                Debug.Log("加载同步场景");
-                if (!GameRootStart.Instance.dontDestroyOnLoad)
-                {
-                    Destroy(GameRootStart.Instance.gameObject);
-                }
-
-                SceneManager.LoadScene(sceneName);
-            }
-            else
-            {
-                _currentSceneDownData = DownSvc.Instance.GetDownSvcDataByFileName(sceneName);
-                if (_currentSceneDownData != null)
-                {
-                    DownSvc.Instance.InsertDownTask(sceneName);
-                    ViewSvc.Instance.ShowView(typeof(DownProgress));
-                    _asyncLoad = true;
-                }
-            }
-        }
-
-        public void NewSceneLoad(string sceneName)
         {
             _sceneName = sceneName;
             _sceneInfo = GetSceneLoadTypeBySceneName(sceneName);
