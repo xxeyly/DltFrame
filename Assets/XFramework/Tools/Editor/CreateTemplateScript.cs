@@ -5,7 +5,7 @@ using UnityEditor.ProjectWindowCallback;
 
 namespace XFramework
 {
-    public class DoCreateScriptAsset : EndNameEditAction
+    public class CreateTemplateScript : EndNameEditAction
     {
         private GenerateBaseWindowData _generateBaseWindowData;
 

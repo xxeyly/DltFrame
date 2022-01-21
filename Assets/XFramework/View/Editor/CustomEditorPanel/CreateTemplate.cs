@@ -16,7 +16,7 @@ namespace XFramework
             }
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewBaseWindow.cs", null,
+                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/NewBaseWindow.cs", null,
                 General.BaseWindowTemplatePath);
         }
 
@@ -30,7 +30,7 @@ namespace XFramework
             }
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewChildBaseWindow.cs", null,
+                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/NewChildBaseWindow.cs", null,
                 General.ChildBaseWindowTemplatePath);
         }
 
@@ -44,7 +44,7 @@ namespace XFramework
             }
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewCircuitBaseData.cs", null,
+                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/NewCircuitBaseData.cs", null,
                 General.CircuitBaseDataTemplatePath);
         }
 
@@ -58,7 +58,7 @@ namespace XFramework
             }
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/ListenerSvcData.cs", null,
+                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/ListenerSvcData.cs", null,
                 General.ListenerSvcDataTemplatePath);
         }
 
@@ -72,7 +72,7 @@ namespace XFramework
             }
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/NewSceneComponent.cs", null,
+                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/NewSceneComponent.cs", null,
                 General.SceneComponentTemplatePath);
         }
 
@@ -87,7 +87,7 @@ namespace XFramework
             }
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<DoCreateScriptAsset>(), path + "/AnimatorControllerParameterData.cs", null,
+                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/AnimatorControllerParameterData.cs", null,
                 General.AnimatorControllerParameterDataTemplatePath);
         }
 

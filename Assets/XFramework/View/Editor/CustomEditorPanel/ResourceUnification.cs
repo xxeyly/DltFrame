@@ -83,24 +83,11 @@ namespace XFramework
         public void TextMeshProCompress()
         {
             ExtractTexture(AssetDatabase.GetAssetPath(TargetFontAsset));
-            /*Texture2D texture2D = new Texture2D(TargetFontAsset.atlasTexture.width, TargetFontAsset.atlasTexture.height, TextureFormat.Alpha8, false);
-            Graphics.CopyTexture(TargetFontAsset.atlasTexture, texture2D);
-            byte[] dataBytes = texture2D.EncodeToPNG();
-            FileStream fs = File.Open(AssetDatabase.GetAssetPath(TargetFontAsset).Replace(".asset", ".png"), FileMode.OpenOrCreate);
-            fs.Write(dataBytes, 0, dataBytes.Length);
-            fs.Flush();
-            fs.Close();
-            AssetDatabase.Refresh();
-            Texture2D atlas = AssetDatabase.LoadAssetAtPath<Texture2D>(AssetDatabase.GetAssetPath(TargetFontAsset));
-            AssetDatabase.RemoveObjectFromAsset(TargetFontAsset.atlasTexture);
-            TargetFontAsset.atlasTextures[0] = atlas;
-            TargetFontAsset.material.mainTexture = atlas;
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();*/
         }
-        
+
         //这里的fontPath是绝对路径
-        public void ExtractTexture(string fontPath){
+        public void ExtractTexture(string fontPath)
+        {
             string texturePath = fontPath.Replace(".asset", ".png");
             TMP_FontAsset targeFontAsset = AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(fontPath.Replace(Application.dataPath, "Assets"));
             Texture2D texture2D = new Texture2D(targeFontAsset.atlasTexture.width, targeFontAsset.atlasTexture.height, TextureFormat.Alpha8, false);
