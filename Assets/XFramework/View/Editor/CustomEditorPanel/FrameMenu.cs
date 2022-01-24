@@ -45,7 +45,7 @@ namespace XFramework
         }
 
         //打包
-        private static OdinCustomBuild customBuild = new OdinCustomBuild();
+        private static CustomBuild customBuild = new CustomBuild();
 
         //音频服务
         private AudioSvcEditor audioSvcEditor = new AudioSvcEditor();

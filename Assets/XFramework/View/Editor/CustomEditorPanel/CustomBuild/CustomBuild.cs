@@ -12,7 +12,7 @@ namespace XFramework
 {
 #if UNITY_EDITOR
 
-    public class OdinCustomBuild : BaseEditor
+    public class CustomBuild : BaseEditor
     {
         [LabelText("当前打包方式:")] public General.BuildTargetPlatform buildTargetPlatform;
         [LabelText("压缩类型")] public BuildOptions buildCompressType;
