@@ -19,7 +19,7 @@ namespace XFramework
         private string _sceneName;
         private bool _asyncLoad;
         private AssetBundle _sceneAssetBundle;
-        [SerializeField] private SceneFile.SceneInfo _sceneInfo;
+        private SceneFile.SceneInfo _sceneInfo;
 
         #region 异步加载场景
 

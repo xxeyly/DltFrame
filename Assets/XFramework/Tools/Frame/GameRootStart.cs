@@ -107,5 +107,21 @@ namespace XFramework
                 }
             }
         }
+
+        [Button(ButtonSizes.Large)]
+        [GUIColor(0, 1, 0)]
+        [LabelText("ListenerSvc代码生成")]
+        public void ListenerSvcGenerateData()
+        {
+            GetComponentInChildren<ListenerSvcGenerateData>()?.OnGenerate();
+        }
+
+        [LabelText("场景道具初始化")]
+        [Button(ButtonSizes.Large)]
+        [GUIColor(0, 1, 0)]
+        public void EntityInit()
+        {
+            GetComponentInChildren<EntitySvc>()?.EntityInit();
+        }
     }
 }

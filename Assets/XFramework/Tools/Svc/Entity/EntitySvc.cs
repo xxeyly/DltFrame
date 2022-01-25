@@ -110,7 +110,7 @@ namespace XFramework
         }
 
         [LabelText("场景道具初始化")]
-        [Button(ButtonSizes.Medium)]
+        [Button(ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
         public void EntityInit()
         {
