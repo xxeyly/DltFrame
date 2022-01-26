@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,94 @@ namespace XFramework
 {
     public static class DataSvc
     {
+        [LabelText("字符长度")] public static Dictionary<string, int> CharacterLengthDic = new Dictionary<string, int>()
+        {
+            {"A", 8},
+            {"B", 8},
+            {"C", 9},
+            {"D", 9},
+            {"E", 7},
+            {"F", 7},
+            {"G", 9},
+            {"H", 9},
+            {"I", 3},
+            {"J", 7},
+            {"K", 8},
+            {"L", 7},
+            {"M", 11},
+            {"N", 9},
+            {"O", 9},
+            {"P", 8},
+            {"Q", 9},
+            {"R", 8},
+            {"S", 8},
+            {"T", 8},
+            {"U", 9},
+            {"V", 8},
+            {"W", 11},
+            {"X", 8},
+            {"Y", 8},
+            {"Z", 8},
+            {"a", 7},
+            {"b", 7},
+            {"c", 7},
+            {"d", 7},
+            {"e", 7},
+            {"f", 4},
+            {"g", 7},
+            {"h", 7},
+            {"i", 3},
+            {"j", 3},
+            {"k", 7},
+            {"l", 3},
+            {"m", 10},
+            {"n", 7},
+            {"o", 7},
+            {"p", 7},
+            {"q", 7},
+            {"r", 4},
+            {"s", 6},
+            {"t", 4},
+            {"u", 7},
+            {"v", 7},
+            {"w", 10},
+            {"x", 6},
+            {"y", 7},
+            {"z", 7},
+            {"!", 3},
+            {"@", 11},
+            {"#", 8},
+            {"$", 8},
+            {"%", 10},
+            {"^", 6},
+            {"&", 8},
+            {"*", 6},
+            {"(", 4},
+            {")", 4},
+            {"-", 6},
+            {"_", 5},
+            {"=", 8},
+            {"+", 8},
+            {"[", 4},
+            {"]", 4},
+            {"{", 4},
+            {"}", 4},
+            {@"\", 4},
+            {"|", 4},
+            {";", 3},
+            {":", 3},
+            {"'", 3},
+            {"\"", 5},
+            {",", 3},
+            {"<", 8},
+            {".", 3},
+            {">", 8},
+            {"/", 4},
+            {"?", 6},
+            {" ", 3},
+            {"汉", 12},
+        };
+
         /// <summary>
         /// 随机排序
         /// </summary>
@@ -120,6 +209,22 @@ namespace XFramework
             }
 
             return objectsInScene;
+        }
+
+        /// <summary>
+        /// 获得物体所在跟目录成绩
+        /// </summary>
+        /// <returns></returns>
+        public static int GetObjWhereRootLevel(Transform target)
+        {
+            int level = 0;
+            while (target.parent != null)
+            {
+                target = target.parent;
+                level += 1;
+            }
+
+            return level;
         }
 
         /// <summary>
@@ -284,6 +389,57 @@ namespace XFramework
             }
 
             return mergeList;
+        }
+
+        /// <summary>
+        /// 计算Hierarchy内容长度
+        /// </summary>
+        /// <param name="hierarchyContent"></param>
+        /// <returns></returns>
+        public static float CalculationHierarchyContentLength(string hierarchyContent)
+        {
+            int length = 0;
+
+            for (int i = 0; i < hierarchyContent.Length; i++)
+            {
+                if (CheckStringIsChinese(hierarchyContent[i].ToString()))
+                {
+                    length += CharacterLengthDic["汉"];
+                }
+                else
+                {
+                    length += CharacterLengthDic[hierarchyContent[i].ToString()];
+                }
+            }
+
+            return length;
+        }
+
+        /// <summary>
+        /// 检查String是否是汉字
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static bool CheckStringIsChinese(string str)
+        {
+            char[] ch = str.ToCharArray();
+            if (str != null)
+            {
+                for (int i = 0; i < ch.Length; i++)
+                {
+                    if (CharisChinese(ch[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public static bool CharisChinese(char c)
+        {
+            return c >= 0x4E00 && c <= 0x9FA5;
         }
 
         /// <summary>
@@ -501,7 +657,7 @@ namespace XFramework
             }
 
 #if UNITY_EDITOR
-                AssetDatabase.Refresh();
+            AssetDatabase.Refresh();
 #endif
         }
 

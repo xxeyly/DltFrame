@@ -27,17 +27,27 @@ namespace XFramework
                     {
                         GUI.Label(SetRect(selectionrect, 0, 18), "S");
                     }
+
                     #endregion
 
                     #region 描述
 
                     if (!string.IsNullOrEmpty(tempBaseWindow.viewName))
                     {
-                        string viewName = tempBaseWindow.viewName;
-                        Rect viewNameRect = SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
+                        string viewName = " --- " + tempBaseWindow.viewName;
+                        Rect viewNameRect;
+                        if (General.HierarchyContentFollow)
+                        {
+                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataSvc.CalculationHierarchyContentLength(obj.name) , 0), selectionrect.size);
+                        }
+                        else
+                        {
+                            viewNameRect = SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
+                        }
+
                         GUI.Label(viewNameRect, viewName, new GUIStyle()
                         {
-                            fontStyle = FontStyle.Normal
+                            fontStyle = FontStyle.Italic
                         });
                     }
 

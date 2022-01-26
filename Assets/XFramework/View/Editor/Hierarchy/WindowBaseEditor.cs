@@ -59,7 +59,7 @@ namespace XFramework
             }
         }
 
-        [MenuItem("GameObject/生成 /@(Alt+U) 绑定UI类型  &u", false, 0)]
+        [MenuItem("GameObject/生成 /@(Alt+V) 绑定UI类型  &v", false, 0)]
         public static void BindComponent()
         {
             GameObject uiObj = Selection.objects.First() as GameObject;

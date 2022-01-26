@@ -64,6 +64,13 @@ namespace XFramework
         {
         }
 
+        public Transform t;
+        [Button]
+        public void Test()
+        {
+            Debug.Log(DataSvc.GetObjWhereRootLevel(t));
+        }
+
         /// <summary>
         /// 服务排序
         /// </summary>

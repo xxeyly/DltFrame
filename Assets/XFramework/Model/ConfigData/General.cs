@@ -40,7 +40,8 @@ namespace XFramework
         [LabelText("文件下载路径")] public const string DownFilePath = "/XFramework/Resources/DownFile/DownFileInfo.Json";
 
         #endregion
-
+        [LabelText("Hierarchy内容跟随")]
+        public static bool HierarchyContentFollow = true;
         [LabelText("获得网页跟目录地址")]
         public static string GetUrlRootPath()
         {
