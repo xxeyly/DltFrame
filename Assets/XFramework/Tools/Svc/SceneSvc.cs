@@ -15,7 +15,9 @@ namespace XFramework
     public class SceneSvc : SvcBase
     {
         public static SceneSvc Instance;
+#pragma warning disable 649
         private DownSvc.DownData _currentSceneDownData;
+#pragma warning restore 649
         private string _sceneName;
         private bool _asyncLoad;
         private AssetBundle _sceneAssetBundle;

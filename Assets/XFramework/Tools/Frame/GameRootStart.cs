@@ -65,6 +65,7 @@ namespace XFramework
         }
 
         public Transform t;
+
         [Button]
         public void Test()
         {
@@ -95,9 +96,9 @@ namespace XFramework
         /// </summary>
         private void SvcStart()
         {
-            foreach (SvcBase svcBase in activeSvcBase)
+            for (int i = 0; i < activeSvcBase.Count; i++)
             {
-                svcBase.StartSvc();
+                activeSvcBase[i].StartSvc();
             }
         }
 
@@ -106,11 +107,11 @@ namespace XFramework
         /// </summary>
         private void SvcInit()
         {
-            foreach (SvcBase svcBase in activeSvcBase)
+            for (int i = 0; i < activeSvcBase.Count; i++)
             {
-                if (svcBase.frameInit)
+                if (activeSvcBase[i].frameInit)
                 {
-                    svcBase.InitSvc();
+                    activeSvcBase[i].InitSvc();
                 }
             }
         }
