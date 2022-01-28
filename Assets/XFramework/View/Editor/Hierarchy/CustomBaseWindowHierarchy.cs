@@ -38,7 +38,7 @@ namespace XFramework
                         Rect viewNameRect;
                         if (General.HierarchyContentFollow)
                         {
-                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataSvc.CalculationHierarchyContentLength(obj.name) , 0), selectionrect.size);
+                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataComponent.CalculationHierarchyContentLength(obj.name) , 0), selectionrect.size);
                         }
                         else
                         {

@@ -11,8 +11,8 @@ namespace XFramework
     {
         public static GameRootStart Instance;
 #pragma warning disable 649
-        [LabelText("激活的服务")] [Searchable] public List<SvcBase> activeSvcBase;
-        [LabelText("场景服务")] [Searchable] public List<SceneComponent> sceneStartSingletons;
+        [LabelText("激活的组件")] [Searchable] public List<ComponentBase> activeComponentBase;
+        [LabelText("场景组件")] [Searchable] public List<SceneComponent> sceneStartSingletons;
         [LabelText("禁止摧毁")] [BoxGroup] public bool dontDestroyOnLoad;
 
         private void OnEnable()
@@ -26,14 +26,14 @@ namespace XFramework
             {
                 Instance = GetComponent<GameRootStart>();
                 dontDestroyOnLoad = true;
-                //服务排序
-                SvcSort();
-                //服务开启
-                SvcStart();
-                Debug.Log("服务开启");
-                //服务初始化
-                SvcInit();
-                Debug.Log("框架服务加载完毕");
+                //组件排序
+                ComponentSort();
+                //组件开启
+                ComponentStart();
+                Debug.Log("组件开启");
+                //组件初始化
+                ComponentInit();
+                Debug.Log("框架组件加载完毕");
             }
         }
 
@@ -53,9 +53,9 @@ namespace XFramework
         {
             if (dontDestroyOnLoad)
             {
-                foreach (SvcBase svcBase in activeSvcBase)
+                foreach (ComponentBase componentBase in activeComponentBase)
                 {
-                    svcBase.EndSvc();
+                    componentBase.EndComponent();
                 }
             }
         }
@@ -63,65 +63,57 @@ namespace XFramework
         protected void Awake()
         {
         }
-
-        public Transform t;
-
-        [Button]
-        public void Test()
-        {
-            Debug.Log(DataSvc.GetObjWhereRootLevel(t));
-        }
-
+      
         /// <summary>
-        /// 服务排序
+        /// 组件排序
         /// </summary>
-        private void SvcSort()
+        private void ComponentSort()
         {
-            for (int i = 0; i < activeSvcBase.Count; i++)
+            for (int i = 0; i < activeComponentBase.Count; i++)
             {
-                for (int j = 0; j < activeSvcBase.Count; j++)
+                for (int j = 0; j < activeComponentBase.Count; j++)
                 {
-                    if (activeSvcBase[i].svcIndex <= activeSvcBase[j].svcIndex)
+                    if (activeComponentBase[i].componentIndex <= activeComponentBase[j].componentIndex)
                     {
-                        SvcBase tempSvcBase = activeSvcBase[i];
-                        activeSvcBase[i] = activeSvcBase[j];
-                        activeSvcBase[j] = tempSvcBase;
+                        ComponentBase tempComponentBase = activeComponentBase[i];
+                        activeComponentBase[i] = activeComponentBase[j];
+                        activeComponentBase[j] = tempComponentBase;
                     }
                 }
             }
         }
 
         /// <summary>
-        /// 开启服务
+        /// 开启组件
         /// </summary>
-        private void SvcStart()
+        private void ComponentStart()
         {
-            for (int i = 0; i < activeSvcBase.Count; i++)
+            for (int i = 0; i < activeComponentBase.Count; i++)
             {
-                activeSvcBase[i].StartSvc();
+                activeComponentBase[i].StartComponent();
             }
         }
 
         /// <summary>
-        /// 服务初始化
+        /// 组件初始化
         /// </summary>
-        private void SvcInit()
+        private void ComponentInit()
         {
-            for (int i = 0; i < activeSvcBase.Count; i++)
+            for (int i = 0; i < activeComponentBase.Count; i++)
             {
-                if (activeSvcBase[i].frameInit)
+                if (activeComponentBase[i].frameInit)
                 {
-                    activeSvcBase[i].InitSvc();
+                    activeComponentBase[i].InitComponent();
                 }
             }
         }
 
         [Button(ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
-        [LabelText("ListenerSvc代码生成")]
-        public void ListenerSvcGenerateData()
+        [LabelText("ListenerComponent代码生成")]
+        public void ListenerComponentGenerateData()
         {
-            GetComponentInChildren<ListenerSvcGenerateData>()?.OnGenerate();
+            GetComponentInChildren<ListenerComponentGenerateData>()?.OnGenerate();
         }
 
         [LabelText("场景道具初始化")]
@@ -129,7 +121,7 @@ namespace XFramework
         [GUIColor(0, 1, 0)]
         public void EntityInit()
         {
-            GetComponentInChildren<EntitySvc>()?.EntityInit();
+            GetComponentInChildren<EntityComponent>()?.EntityInit();
         }
     }
 }

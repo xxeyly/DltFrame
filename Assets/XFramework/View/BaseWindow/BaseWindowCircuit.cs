@@ -10,7 +10,7 @@ namespace XFramework
         /// <param name="circuitBaseData"></param>
         public void StartCircuit(Type circuitBaseData)
         {
-            CircuitSvc.Instance.StartCircuit(circuitBaseData);
+            CircuitComponent.Instance.StartCircuit(circuitBaseData);
         }
 
         /// <summary>
@@ -18,7 +18,7 @@ namespace XFramework
         /// </summary>
         public void EndCircuit()
         {
-            CircuitSvc.Instance.EndCircuit();
+            CircuitComponent.Instance.EndCircuit();
         }
     }
 }

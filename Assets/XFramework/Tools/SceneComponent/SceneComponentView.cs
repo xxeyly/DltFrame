@@ -11,7 +11,7 @@ namespace XFramework
         /// <returns></returns>
         protected bool GetViewState(Type view)
         {
-            return ViewSvc.Instance.GetViewState(view);
+            return ViewComponent.Instance.GetViewState(view);
         }
 
 
@@ -21,7 +21,7 @@ namespace XFramework
         /// <returns></returns>
         protected int GetCurrentActiveViewCount()
         {
-            return ViewSvc.Instance.GetCurrentActiveViewCount();
+            return ViewComponent.Instance.GetCurrentActiveViewCount();
         }
 
 
@@ -33,7 +33,7 @@ namespace XFramework
         /// <param name="type"></param>
         protected void ShowView(Type type)
         {
-            ViewSvc.Instance.ShowView(type);
+            ViewComponent.Instance.ShowView(type);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace XFramework
         /// <param name="types"></param>
         protected void ShowView(params Type[] types)
         {
-            ViewSvc.Instance.ShowView(types);
+            ViewComponent.Instance.ShowView(types);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace XFramework
         /// <param name="time">切换所需时间</param>
         protected void ShowView(Type type, float time)
         {
-            ViewSvc.Instance.ShowView(type, time);
+            ViewComponent.Instance.ShowView(type, time);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace XFramework
         /// <param name="time">切换所需时间</param>
         protected void ShowView(float time, params Type[] typeList)
         {
-            ViewSvc.Instance.ShowView(time, typeList);
+            ViewComponent.Instance.ShowView(time, typeList);
         }
 
         #endregion
@@ -75,7 +75,7 @@ namespace XFramework
         /// <param name="type"></param>
         protected void HideView(Type type)
         {
-            ViewSvc.Instance.HideView(type);
+            ViewComponent.Instance.HideView(type);
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace XFramework
         /// <param name="types"></param>
         protected void HideView(params Type[] types)
         {
-            ViewSvc.Instance.HideView(types);
+            ViewComponent.Instance.HideView(types);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace XFramework
         /// <param name="time">切换所需时间</param>
         protected void HideView(Type type, float time)
         {
-            ViewSvc.Instance.HideView(type, time);
+            ViewComponent.Instance.HideView(type, time);
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace XFramework
         /// <param name="time">切换所需时间</param>
         protected void HideView(float time, params Type[] types)
         {
-            ViewSvc.Instance.HideView(time, types);
+            ViewComponent.Instance.HideView(time, types);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace XFramework
         /// </summary>
         protected void HideAllView()
         {
-            ViewSvc.Instance.HideAllView();
+            ViewComponent.Instance.HideAllView();
         }
 
         #endregion

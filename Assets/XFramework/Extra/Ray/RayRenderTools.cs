@@ -147,7 +147,7 @@ namespace XFramework
         }
 
 
-        public override void StartSvc()
+        public override void StartComponent()
         {
             Instance = GetComponent<RayRenderTools>();
             _tidList = new List<int>();
@@ -190,7 +190,7 @@ namespace XFramework
         }
 
 
-        public override void Init()
+        public override void InitComponent()
         {
         }
 
@@ -622,7 +622,7 @@ namespace XFramework
                             else
                             {
                                 _leftDoubleClickRay.Add(hit.collider.gameObject);
-                                TimeSvc.Instance.AddTimeTask(() =>
+                                TimeComponent.Instance.AddTimeTask(() =>
                                 {
                                     if (_leftDoubleClickRay.Contains(hit.collider.gameObject))
                                     {
@@ -641,7 +641,7 @@ namespace XFramework
                             else
                             {
                                 _centerDoubleClickRay.Add(hit.collider.gameObject);
-                                TimeSvc.Instance.AddTimeTask(() =>
+                                TimeComponent.Instance.AddTimeTask(() =>
                                 {
                                     if (_centerDoubleClickRay.Contains(hit.collider.gameObject))
                                     {
@@ -660,7 +660,7 @@ namespace XFramework
                             else
                             {
                                 _rightDoubleClickRay.Add(hit.collider.gameObject);
-                                TimeSvc.Instance.AddTimeTask(() =>
+                                TimeComponent.Instance.AddTimeTask(() =>
                                 {
                                     if (_rightDoubleClickRay.Contains(hit.collider.gameObject))
                                     {

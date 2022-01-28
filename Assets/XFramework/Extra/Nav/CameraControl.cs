@@ -31,12 +31,12 @@ public class CameraControl : SceneComponent
 #pragma warning restore 0649
     private ControllerSelfRotate _controllerSelfRotate;
 
-    public override void StartSvc()
+    public override void StartComponent()
     {
         Instance = GetComponent<CameraControl>();
     }
 
-    public override void Init()
+    public override void InitComponent()
     {
         navMeshAgent = GetComponentInChildren<NavMeshAgent>();
         currentCamera = GetComponentInChildren<Camera>();
@@ -224,11 +224,11 @@ public class CameraControl : SceneComponent
         }
         else
         {
-            _navMeshAgentMoveTimeTask = TimeSvc.Instance.MoveTargetPos(navMeshAgent.transform, navMeshAgent.transform.position, targetPos, time, false);
-            _currentCameraMoveTimeTask = TimeSvc.Instance.RotateTargetPos(currentCamera.transform, targetRotate, time, false);
+            _navMeshAgentMoveTimeTask = TimeComponent.Instance.MoveTargetPos(navMeshAgent.transform, navMeshAgent.transform.position, targetPos, time, false);
+            _currentCameraMoveTimeTask = TimeComponent.Instance.RotateTargetPos(currentCamera.transform, targetRotate, time, false);
             _currentCameraRotateTimeTask =
-                TimeSvc.Instance.MoveTargetPos(currentCamera.transform, new Vector3(0, currentCamera.transform.localPosition.y, 0), new Vector3(0, targetHigh.y, 0), time, false);
-            _currentCameraReSetTimeTask = TimeSvc.Instance.AddTimeTask(() =>
+                TimeComponent.Instance.MoveTargetPos(currentCamera.transform, new Vector3(0, currentCamera.transform.localPosition.y, 0), new Vector3(0, targetHigh.y, 0), time, false);
+            _currentCameraReSetTimeTask = TimeComponent.Instance.AddTimeTask(() =>
                 {
                     _controllerSelfRotate.enabled = true;
                     this.isControl = isControl;
@@ -292,10 +292,10 @@ public class CameraControl : SceneComponent
 
     public void StopMove()
     {
-        TimeSvc.Instance.DeleteTimeTask(_navMeshAgentMoveTimeTask);
-        TimeSvc.Instance.DeleteTimeTask(_currentCameraMoveTimeTask);
-        TimeSvc.Instance.DeleteTimeTask(_currentCameraRotateTimeTask);
-        TimeSvc.Instance.DeleteTimeTask(_currentCameraReSetTimeTask);
+        TimeComponent.Instance.DeleteTimeTask(_navMeshAgentMoveTimeTask);
+        TimeComponent.Instance.DeleteTimeTask(_currentCameraMoveTimeTask);
+        TimeComponent.Instance.DeleteTimeTask(_currentCameraRotateTimeTask);
+        TimeComponent.Instance.DeleteTimeTask(_currentCameraReSetTimeTask);
     }
 
     /// <summary>
@@ -333,6 +333,6 @@ public class CameraControl : SceneComponent
     {
         gameObject.SetActive(false);
         rotateCamera.SetActive(true);
-        rotateCamera.transform.GetComponentInChildren<CameraControl>().Init();
+        rotateCamera.transform.GetComponentInChildren<CameraControl>().InitComponent();
     }
 }

@@ -6,12 +6,12 @@ using XFramework;
 public class SceneComponentTemplate : SceneComponent
 {
 
-    public override void StartSvc()
+    public override void StartComponent()
     {
         
     }
 
-    public override void Init()
+    public override void InitComponent()
     {
     }
 }

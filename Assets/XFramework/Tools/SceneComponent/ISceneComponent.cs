@@ -2,7 +2,7 @@
 {
     public interface ISceneComponent
     {
-        void StartSvc();
-        void Init();
+        void StartComponent();
+        void InitComponent();
     }
 }

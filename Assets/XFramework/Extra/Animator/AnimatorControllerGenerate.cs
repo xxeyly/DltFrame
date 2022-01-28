@@ -19,8 +19,8 @@ namespace XFramework
         public List<string> GetReplaceContent()
         {
             List<string> replaceContent = new List<string>();
-            List<string> animatorPath = DataSvc.GetSpecifyTypeOnlyInAssetsPath("controller");
-            List<RuntimeAnimatorController> animators = DataSvc.GetSpecifyTypeOnlyInAssetsByFilePath<RuntimeAnimatorController>(animatorPath);
+            List<string> animatorPath = DataComponent.GetSpecifyTypeOnlyInAssetsPath("controller");
+            List<RuntimeAnimatorController> animators = DataComponent.GetSpecifyTypeOnlyInAssetsByFilePath<RuntimeAnimatorController>(animatorPath);
             foreach (RuntimeAnimatorController animator in animators)
             {
                 foreach (AnimationClip animatorAnimationClip in animator.animationClips)
@@ -40,8 +40,8 @@ namespace XFramework
         [LabelText("代码生成")]
         public void Generate()
         {
-            string listenerSvcDataPath = GenerateGeneral.GetPath(loadScriptsName);
-            if (listenerSvcDataPath == null)
+            string listenerComponentDataPath = GenerateGeneral.GetPath(loadScriptsName);
+            if (listenerComponentDataPath == null)
             {
                 Debug.LogWarning("AnimatorControllerData脚本未创建");
                 return;

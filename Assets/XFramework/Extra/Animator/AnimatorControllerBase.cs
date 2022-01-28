@@ -25,7 +25,7 @@ namespace XFramework
         private List<AnimatorControllerParameter> _allParameter;
         [LabelText("动画初始化")] public bool isLoadParameter;
 
-        public virtual void StartSvc()
+        public virtual void StartComponent()
         {
             _animator = GetComponent<Animator>();
             animatorControllerParameterName = new List<string>();
@@ -132,7 +132,7 @@ namespace XFramework
         {
             if (ContainsParameter(animationType))
             {
-                return _playAnimTimeTask = TimeSvc.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType));
+                return _playAnimTimeTask = TimeComponent.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType));
             }
 
             return 0;
@@ -216,7 +216,7 @@ namespace XFramework
         public void StopAnimTaskTime()
         {
             StopAnim();
-            TimeSvc.Instance.DeleteTimeTask(_playAnimTimeTask);
+            TimeComponent.Instance.DeleteTimeTask(_playAnimTimeTask);
         }
     }
 }

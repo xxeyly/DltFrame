@@ -107,7 +107,7 @@ namespace XFramework
 
             distance = Vector3.Distance(centerTarget.position, rotateTarget.transform.position);
             targetDistance = Vector3.Distance(centerTarget.position, rotateTarget.transform.position);
-            _startPos = DataSvc.GetInspectorEuler(rotateTarget.transform);
+            _startPos = DataComponent.GetInspectorEuler(rotateTarget.transform);
             x = _startPos.y;
             y = _startPos.x;
         }
@@ -191,7 +191,7 @@ namespace XFramework
                     _yDis = (_currentMousePos.y - _oldMousePos.y) * movSpeed;
                     _xDis = (_currentMousePos.x - _oldMousePos.x) * movSpeed;
                     _oldMousePos = _currentMousePos;
-                    Vector3 cameraValue = DataSvc.GetInspectorEuler(rotateTarget.transform);
+                    Vector3 cameraValue = DataComponent.GetInspectorEuler(rotateTarget.transform);
                     Quaternion rot = Quaternion.Euler(cameraValue.x, cameraValue.y, 0);
                     if (moveReversal)
                     {

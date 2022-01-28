@@ -65,7 +65,7 @@ namespace XFramework
                                     AssetDatabase.GetAssetPath(sceneInfo.sceneAsset));
                             sceneAssetBundleInfo.sceneAbPath =
                                 _sceneLoadEditorData.sceneAssetBundlePath + "/" +
-                                DataSvc.AllCharToLower(sceneInfo.sceneAsset.name);
+                                DataComponent.AllCharToLower(sceneInfo.sceneAsset.name);
                         }
 
                         break;
@@ -96,7 +96,7 @@ namespace XFramework
                                     AssetDatabase.GetAssetPath(sceneInfo.sceneAsset)),
                             sceneAbPath =
                                 _sceneLoadEditorData.sceneAssetBundlePath + "/" +
-                                DataSvc.AllCharToLower(sceneInfo.sceneAsset.name)
+                                DataComponent.AllCharToLower(sceneInfo.sceneAsset.name)
                         });
                 }
 
@@ -139,16 +139,16 @@ namespace XFramework
         /// </summary>
         private void EditorDownFileConfig()
         {
-            ResSvc.DownFile downFile =
-                JsonMapper.ToObject<ResSvc.DownFile>(Resources.Load<TextAsset>("DownFile/DownFileInfo").text);
+            ResComponent.DownFile downFile =
+                JsonMapper.ToObject<ResComponent.DownFile>(Resources.Load<TextAsset>("DownFile/DownFileInfo").text);
             foreach (BuildSceneAssetBundleEditorData.SceneAssetBundleInfo sceneAssetBundleInfo in
                 _buildSceneAssetBundleEditorData.sceneAssetBundleInfos)
             {
                 bool isCon = false;
-                foreach (ResSvc.DownFile.FileInfo fileInfo in downFile.fileInfoList)
+                foreach (ResComponent.DownFile.FileInfo fileInfo in downFile.fileInfoList)
                 {
                     //查找到相同文件
-                    if (fileInfo.fileName == DataSvc.AllCharToLower(sceneAssetBundleInfo.sceneAsset.name))
+                    if (fileInfo.fileName == DataComponent.AllCharToLower(sceneAssetBundleInfo.sceneAsset.name))
                     {
                         isCon = true;
                         break;
@@ -157,11 +157,11 @@ namespace XFramework
 
                 if (!isCon)
                 {
-                    downFile.fileInfoList.Add(new ResSvc.DownFile.FileInfo()
+                    downFile.fileInfoList.Add(new ResComponent.DownFile.FileInfo()
                     {
-                        fileName = DataSvc.AllCharToLower(sceneAssetBundleInfo.sceneAsset.name),
+                        fileName = DataComponent.AllCharToLower(sceneAssetBundleInfo.sceneAsset.name),
                         filePath = _sceneLoadEditorData.sceneAssetBundlePath.Replace("Assets/", "") + "/" +
-                                   DataSvc.AllCharToLower(sceneAssetBundleInfo.sceneAsset.name),
+                                   DataComponent.AllCharToLower(sceneAssetBundleInfo.sceneAsset.name),
                         fileSize = File.ReadAllBytes(sceneAssetBundleInfo.sceneAbPath).Length
                     });
                 }

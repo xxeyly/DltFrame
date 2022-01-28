@@ -11,56 +11,58 @@ namespace XFramework
 
     {
         [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("持久化")]
-        public RuntimeDataSvcEditor RuntimeDataSvcEditor;
+        public RuntimeDataComponentEditor RuntimeDataComponentEditor;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("资源服务")]
-        public ResSvcEditor resSvcEditor;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("资源组件")]
+        public ResComponentEditor ResComponentEditor;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("下载服务")]
-        public DownSvcEditor downSvcEditor;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("下载组件")]
+        public DownComponentEditor DownComponentEditor;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("音频服务")]
-        public AudioSvcEditor audioSvcEditor;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("音频组件")]
+        public AudioComponentEditor AudioComponentEditor;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("监听服务")]
-        public ListenerSvcEditor listenerSvcEditorSvc;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("监听组件")]
+        public ListenerComponentEditor ListenerComponentEditorComponent;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("场景服务")]
-        public SceneSvcEditor customSceneSvc;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("场景组件")]
+        public SceneLoadComponentEditor CustomSceneLoadComponent;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("计时器服务")]
-        public TimeSvcEditor timeSvcEditorSvc;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("计时器组件")]
+        public TimeComponentEditor TimeComponentEditorComponent;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("视图服务")]
-        public ViewSvcEditor viewSvcEditorSvc;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("视图组件")]
+        public ViewComponentEditor ViewComponentEditorComponent;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("实体服务")]
-        public EntitySvcEditor entitySvcEditorSvc;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("实体组件")]
+        public EntityComponentEditor EntityComponentEditorComponent;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("流程服务")]
-        public CircuitSvcEditor circuitSvcEditor;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("流程组件")]
+        public CircuitComponentEditor CircuitComponentEditor;
 
-        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("鼠标服务")]
-        public MouseSvcEditor mouseSvcEditor;
+        [BoxGroup("Generate")] [Toggle("Enabled")] [LabelText("鼠标组件")]
+        public MouseComponentEditor MouseComponentEditor;
 
 
         private GameRootEditorEditorData _gameRootEditorEditorData;
 
-        public GameRootEditor(RuntimeDataSvcEditor runtimeDataSvcEditor, ResSvcEditor resSvcEditor, DownSvcEditor downSvcEditor, AudioSvcEditor audioSvcEditor, ListenerSvcEditor listenerSvcEditorSvc,
-            SceneSvcEditor customSceneSvc, TimeSvcEditor timeSvcEditorSvc, EntitySvcEditor entitySvcSvc, ViewSvcEditor viewSvcEditorSvc, CircuitSvcEditor circuitSvcEditor,
-            MouseSvcEditor mouseSvcEditor)
+        public GameRootEditor(RuntimeDataComponentEditor runtimeDataComponentEditor, ResComponentEditor resComponentEditor, DownComponentEditor downComponentEditor,
+            AudioComponentEditor audioComponentEditor, ListenerComponentEditor listenerComponentEditorComponent,
+            SceneLoadComponentEditor customSceneLoadComponent, TimeComponentEditor timeComponentEditorComponent, EntityComponentEditor entityComponentComponent,
+            ViewComponentEditor viewComponentEditorComponent, CircuitComponentEditor circuitComponentEditor,
+            MouseComponentEditor mouseComponentEditor)
         {
-            this.RuntimeDataSvcEditor = runtimeDataSvcEditor;
-            this.resSvcEditor = resSvcEditor;
-            this.downSvcEditor = downSvcEditor;
-            this.audioSvcEditor = audioSvcEditor;
-            this.listenerSvcEditorSvc = listenerSvcEditorSvc;
-            this.customSceneSvc = customSceneSvc;
-            this.timeSvcEditorSvc = timeSvcEditorSvc;
-            this.viewSvcEditorSvc = viewSvcEditorSvc;
-            this.entitySvcEditorSvc = entitySvcSvc;
-            this.circuitSvcEditor = circuitSvcEditor;
-            this.mouseSvcEditor = mouseSvcEditor;
+            this.RuntimeDataComponentEditor = runtimeDataComponentEditor;
+            this.ResComponentEditor = resComponentEditor;
+            this.DownComponentEditor = downComponentEditor;
+            this.AudioComponentEditor = audioComponentEditor;
+            this.ListenerComponentEditorComponent = listenerComponentEditorComponent;
+            this.CustomSceneLoadComponent = customSceneLoadComponent;
+            this.TimeComponentEditorComponent = timeComponentEditorComponent;
+            this.ViewComponentEditorComponent = viewComponentEditorComponent;
+            this.EntityComponentEditorComponent = entityComponentComponent;
+            this.CircuitComponentEditor = circuitComponentEditor;
+            this.MouseComponentEditor = mouseComponentEditor;
         }
 
         [BoxGroup("Generate")]
@@ -76,131 +78,131 @@ namespace XFramework
             GameObject gameRootStart = new GameObject("GameRootStart");
             Undo.RegisterCreatedObjectUndo(gameRootStart, "UndoCreate");
             GameRootStart tempGameRootStart = gameRootStart.AddComponent<GameRootStart>();
-            tempGameRootStart.activeSvcBase = new List<SvcBase>();
+            tempGameRootStart.activeComponentBase = new List<ComponentBase>();
 
 
-            if (RuntimeDataSvcEditor.Enabled)
+            if (RuntimeDataComponentEditor.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("RuntimeDataSvc");
-                RuntimeDataSvc tempSvc = tempSvcObj.AddComponent<RuntimeDataSvc>();
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempSvc.frameInit = RuntimeDataSvcEditor.isFrameInit;
-                tempSvc.sceneInit = RuntimeDataSvcEditor.isSceneInit;
-                tempSvc.svcIndex = RuntimeDataSvcEditor.svcIndex;
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("RuntimeDataComponent");
+                RuntimeDataComponent tempComponent = tempComponentObj.AddComponent<RuntimeDataComponent>();
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempComponent.frameInit = RuntimeDataComponentEditor.isFrameInit;
+                tempComponent.sceneInit = RuntimeDataComponentEditor.isSceneInit;
+                tempComponent.componentIndex = RuntimeDataComponentEditor.componentIndex;
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (resSvcEditor.Enabled)
+            if (ResComponentEditor.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("ResSvc");
-                ResSvc tempSvc = tempSvcObj.AddComponent<ResSvc>();
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempSvc.frameInit = resSvcEditor.isFrameInit;
-                tempSvc.sceneInit = resSvcEditor.isSceneInit;
-                tempSvc.svcIndex = resSvcEditor.svcIndex;
+                GameObject tempComponentObj = new GameObject("ResComponent");
+                ResComponent tempComponent = tempComponentObj.AddComponent<ResComponent>();
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempComponent.frameInit = ResComponentEditor.isFrameInit;
+                tempComponent.sceneInit = ResComponentEditor.isSceneInit;
+                tempComponent.componentIndex = ResComponentEditor.componentIndex;
 
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (downSvcEditor.Enabled)
+            if (DownComponentEditor.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("DownSvc");
-                DownSvc tempSvc = tempSvcObj.AddComponent<DownSvc>();
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempSvc.frameInit = resSvcEditor.isFrameInit;
-                tempSvc.sceneInit = resSvcEditor.isSceneInit;
-                tempSvc.sceneInit = resSvcEditor.isSceneInit;
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("DownComponent");
+                DownComponent tempComponent = tempComponentObj.AddComponent<DownComponent>();
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempComponent.frameInit = ResComponentEditor.isFrameInit;
+                tempComponent.sceneInit = ResComponentEditor.isSceneInit;
+                tempComponent.sceneInit = ResComponentEditor.isSceneInit;
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (audioSvcEditor.Enabled)
+            if (AudioComponentEditor.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("AudioSvc");
-                AudioSvc tempSvc = tempSvcObj.AddComponent<AudioSvc>();
-                tempSvc.frameInit = audioSvcEditor.isFrameInit;
-                tempSvc.sceneInit = audioSvcEditor.isSceneInit;
-                tempSvc.svcIndex = audioSvcEditor.svcIndex;
-                tempSvc.audioData =
-                    AssetDatabase.LoadAssetAtPath<AudioSvcData>(General.customAudioDataPath);
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("AudioComponent");
+                AudioComponent tempComponent = tempComponentObj.AddComponent<AudioComponent>();
+                tempComponent.frameInit = AudioComponentEditor.isFrameInit;
+                tempComponent.sceneInit = AudioComponentEditor.isSceneInit;
+                tempComponent.componentIndex = AudioComponentEditor.componentIndex;
+                tempComponent.audioData =
+                    AssetDatabase.LoadAssetAtPath<AudioComponentData>(General.customAudioDataPath);
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (listenerSvcEditorSvc.Enabled)
+            if (ListenerComponentEditorComponent.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("ListenerSvc");
-                ListenerSvc tempSvc = tempSvcObj.AddComponent<ListenerSvc>();
-                tempSvc.frameInit = listenerSvcEditorSvc.isFrameInit;
-                tempSvc.sceneInit = listenerSvcEditorSvc.isSceneInit;
-                tempSvc.svcIndex = listenerSvcEditorSvc.svcIndex;
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("ListenerComponent");
+                ListenerComponent tempComponent = tempComponentObj.AddComponent<ListenerComponent>();
+                tempComponent.frameInit = ListenerComponentEditorComponent.isFrameInit;
+                tempComponent.sceneInit = ListenerComponentEditorComponent.isSceneInit;
+                tempComponent.componentIndex = ListenerComponentEditorComponent.componentIndex;
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (customSceneSvc.Enabled)
+            if (CustomSceneLoadComponent.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("SceneSvc");
-                SceneSvc tempSvc = tempSvcObj.AddComponent<SceneSvc>();
-                tempSvc.frameInit = customSceneSvc.isFrameInit;
-                tempSvc.sceneInit = customSceneSvc.isSceneInit;
-                tempSvc.svcIndex = customSceneSvc.svcIndex;
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("SceneLoadComponent");
+                SceneLoadComponent tempComponent = tempComponentObj.AddComponent<SceneLoadComponent>();
+                tempComponent.frameInit = CustomSceneLoadComponent.isFrameInit;
+                tempComponent.sceneInit = CustomSceneLoadComponent.isSceneInit;
+                tempComponent.componentIndex = CustomSceneLoadComponent.componentIndex;
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (timeSvcEditorSvc.Enabled)
+            if (TimeComponentEditorComponent.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("TimeSvc");
-                TimeSvc tempSvc = tempSvcObj.AddComponent<TimeSvc>();
-                tempSvc.frameInit = timeSvcEditorSvc.isFrameInit;
-                tempSvc.sceneInit = timeSvcEditorSvc.isSceneInit;
-                tempSvc.svcIndex = timeSvcEditorSvc.svcIndex;
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("TimeComponent");
+                TimeComponent tempComponent = tempComponentObj.AddComponent<TimeComponent>();
+                tempComponent.frameInit = TimeComponentEditorComponent.isFrameInit;
+                tempComponent.sceneInit = TimeComponentEditorComponent.isSceneInit;
+                tempComponent.componentIndex = TimeComponentEditorComponent.componentIndex;
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (entitySvcEditorSvc.Enabled)
+            if (EntityComponentEditorComponent.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("EntitySvc");
-                EntitySvc tempSvc = tempSvcObj.AddComponent<EntitySvc>();
-                tempSvc.frameInit = entitySvcEditorSvc.isFrameInit;
-                tempSvc.sceneInit = entitySvcEditorSvc.isSceneInit;
-                tempSvc.svcIndex = entitySvcEditorSvc.svcIndex;
-                tempSvc.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("EntityComponent");
+                EntityComponent tempComponent = tempComponentObj.AddComponent<EntityComponent>();
+                tempComponent.frameInit = EntityComponentEditorComponent.isFrameInit;
+                tempComponent.sceneInit = EntityComponentEditorComponent.isSceneInit;
+                tempComponent.componentIndex = EntityComponentEditorComponent.componentIndex;
+                tempComponent.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (circuitSvcEditor.Enabled)
+            if (CircuitComponentEditor.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("CircuitSvc");
-                CircuitSvc tempSvc = tempSvcObj.AddComponent<CircuitSvc>();
-                tempSvc.frameInit = viewSvcEditorSvc.isFrameInit;
-                tempSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
-                tempSvc.svcIndex = viewSvcEditorSvc.svcIndex;
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("CircuitComponent");
+                CircuitComponent tempComponent = tempComponentObj.AddComponent<CircuitComponent>();
+                tempComponent.frameInit = ViewComponentEditorComponent.isFrameInit;
+                tempComponent.sceneInit = ViewComponentEditorComponent.isSceneInit;
+                tempComponent.componentIndex = ViewComponentEditorComponent.componentIndex;
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (mouseSvcEditor.Enabled)
+            if (MouseComponentEditor.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("MouseSvc");
-                MouseSvc tempSvc = tempSvcObj.AddComponent<MouseSvc>();
-                tempSvc.frameInit = viewSvcEditorSvc.isFrameInit;
-                tempSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
-                tempSvc.svcIndex = viewSvcEditorSvc.svcIndex;
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("MouseComponent");
+                MouseComponent tempComponent = tempComponentObj.AddComponent<MouseComponent>();
+                tempComponent.frameInit = ViewComponentEditorComponent.isFrameInit;
+                tempComponent.sceneInit = ViewComponentEditorComponent.isSceneInit;
+                tempComponent.componentIndex = ViewComponentEditorComponent.componentIndex;
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
 
-            if (viewSvcEditorSvc.Enabled)
+            if (ViewComponentEditorComponent.Enabled)
             {
-                GameObject tempSvcObj = new GameObject("ViewSvc");
-                ViewSvc tempSvc = tempSvcObj.AddComponent<ViewSvc>();
-                tempSvc.frameInit = viewSvcEditorSvc.isFrameInit;
-                tempSvc.sceneInit = viewSvcEditorSvc.isSceneInit;
-                tempSvc.svcIndex = viewSvcEditorSvc.svcIndex;
-                tempSvcObj.transform.SetParent(gameRootStart.transform);
-                tempGameRootStart.activeSvcBase.Add(tempSvc);
+                GameObject tempComponentObj = new GameObject("ViewComponent");
+                ViewComponent tempComponent = tempComponentObj.AddComponent<ViewComponent>();
+                tempComponent.frameInit = ViewComponentEditorComponent.isFrameInit;
+                tempComponent.sceneInit = ViewComponentEditorComponent.isSceneInit;
+                tempComponent.componentIndex = ViewComponentEditorComponent.componentIndex;
+                tempComponentObj.transform.SetParent(gameRootStart.transform);
+                tempGameRootStart.activeComponentBase.Add(tempComponent);
             }
         }
 
@@ -237,49 +239,49 @@ namespace XFramework
 
         public override void OnSaveConfig()
         {
-            _gameRootEditorEditorData.persistentDataSvcEditor = RuntimeDataSvcEditor.Enabled;
-            _gameRootEditorEditorData.persistentDataSvcEditorFrameInit = RuntimeDataSvcEditor.isFrameInit;
-            _gameRootEditorEditorData.persistentDataSvcEditorSceneInit = RuntimeDataSvcEditor.isSceneInit;
+            _gameRootEditorEditorData.persistentDataComponentEditor = RuntimeDataComponentEditor.Enabled;
+            _gameRootEditorEditorData.persistentDataComponentEditorFrameInit = RuntimeDataComponentEditor.isFrameInit;
+            _gameRootEditorEditorData.persistentDataComponentEditorSceneInit = RuntimeDataComponentEditor.isSceneInit;
 
-            _gameRootEditorEditorData.resSvcEditor = resSvcEditor.Enabled;
-            _gameRootEditorEditorData.resSvcEditorFrameInit = resSvcEditor.isFrameInit;
-            _gameRootEditorEditorData.resSvcEditorSceneInit = resSvcEditor.isSceneInit;
+            _gameRootEditorEditorData.resComponentEditor = ResComponentEditor.Enabled;
+            _gameRootEditorEditorData.resComponentEditorFrameInit = ResComponentEditor.isFrameInit;
+            _gameRootEditorEditorData.resComponentEditorSceneInit = ResComponentEditor.isSceneInit;
 
-            _gameRootEditorEditorData.downSvcEditor = downSvcEditor.Enabled;
-            _gameRootEditorEditorData.downSvcEditorFrameInit = downSvcEditor.isFrameInit;
-            _gameRootEditorEditorData.downSvcEditorSceneInit = downSvcEditor.isSceneInit;
+            _gameRootEditorEditorData.downComponentEditor = DownComponentEditor.Enabled;
+            _gameRootEditorEditorData.downComponentEditorFrameInit = DownComponentEditor.isFrameInit;
+            _gameRootEditorEditorData.downComponentEditorSceneInit = DownComponentEditor.isSceneInit;
 
-            _gameRootEditorEditorData.audioSvcEditor = audioSvcEditor.Enabled;
-            _gameRootEditorEditorData.audioSvcEditorFrameInit = audioSvcEditor.isFrameInit;
-            _gameRootEditorEditorData.audioSvcEditorSceneInit = audioSvcEditor.isSceneInit;
+            _gameRootEditorEditorData.audioComponentEditor = AudioComponentEditor.Enabled;
+            _gameRootEditorEditorData.audioComponentEditorFrameInit = AudioComponentEditor.isFrameInit;
+            _gameRootEditorEditorData.audioComponentEditorSceneInit = AudioComponentEditor.isSceneInit;
 
-            _gameRootEditorEditorData.listenerSvcEditorSvc = listenerSvcEditorSvc.Enabled;
-            _gameRootEditorEditorData.listenerSvcEditorFrameInit = listenerSvcEditorSvc.isFrameInit;
-            _gameRootEditorEditorData.listenerSvcEditorSceneInit = listenerSvcEditorSvc.isSceneInit;
+            _gameRootEditorEditorData.listenerComponentEditorComponent = ListenerComponentEditorComponent.Enabled;
+            _gameRootEditorEditorData.listenerComponentEditorFrameInit = ListenerComponentEditorComponent.isFrameInit;
+            _gameRootEditorEditorData.listenerComponentEditorSceneInit = ListenerComponentEditorComponent.isSceneInit;
 
-            _gameRootEditorEditorData.customSceneSvc = customSceneSvc.Enabled;
-            _gameRootEditorEditorData.customSceneSvcEditorFrameInit = customSceneSvc.isFrameInit;
-            _gameRootEditorEditorData.customSceneSvcEditorSceneInit = customSceneSvc.isSceneInit;
+            _gameRootEditorEditorData.customSceneComponent = CustomSceneLoadComponent.Enabled;
+            _gameRootEditorEditorData.customSceneComponentEditorFrameInit = CustomSceneLoadComponent.isFrameInit;
+            _gameRootEditorEditorData.customSceneComponentEditorSceneInit = CustomSceneLoadComponent.isSceneInit;
 
-            _gameRootEditorEditorData.timeSvcEditorSvc = timeSvcEditorSvc.Enabled;
-            _gameRootEditorEditorData.timeSvcEditorFrameInit = timeSvcEditorSvc.isFrameInit;
-            _gameRootEditorEditorData.timeSvcEditorSceneInit = timeSvcEditorSvc.isSceneInit;
+            _gameRootEditorEditorData.timeComponentEditorComponent = TimeComponentEditorComponent.Enabled;
+            _gameRootEditorEditorData.timeComponentEditorFrameInit = TimeComponentEditorComponent.isFrameInit;
+            _gameRootEditorEditorData.timeComponentEditorSceneInit = TimeComponentEditorComponent.isSceneInit;
 
-            _gameRootEditorEditorData.viewSvcEditorSvc = viewSvcEditorSvc.Enabled;
-            _gameRootEditorEditorData.viewSvcEditorFrameInit = viewSvcEditorSvc.isFrameInit;
-            _gameRootEditorEditorData.viewSvcEditorSceneInit = viewSvcEditorSvc.isSceneInit;
+            _gameRootEditorEditorData.viewComponentEditorComponent = ViewComponentEditorComponent.Enabled;
+            _gameRootEditorEditorData.viewComponentEditorFrameInit = ViewComponentEditorComponent.isFrameInit;
+            _gameRootEditorEditorData.viewComponentEditorSceneInit = ViewComponentEditorComponent.isSceneInit;
 
-            _gameRootEditorEditorData.entitySvcEditorSvc = entitySvcEditorSvc.Enabled;
-            _gameRootEditorEditorData.entityDataSvcEditorFrameInit = entitySvcEditorSvc.isFrameInit;
-            _gameRootEditorEditorData.entityDataSvcEditorSceneInit = entitySvcEditorSvc.isSceneInit;
+            _gameRootEditorEditorData.entityComponentEditorComponent = EntityComponentEditorComponent.Enabled;
+            _gameRootEditorEditorData.entityDataComponentEditorFrameInit = EntityComponentEditorComponent.isFrameInit;
+            _gameRootEditorEditorData.entityDataComponentEditorSceneInit = EntityComponentEditorComponent.isSceneInit;
 
-            _gameRootEditorEditorData.circuitSvcEditorSvc = circuitSvcEditor.Enabled;
-            _gameRootEditorEditorData.circuitDataSvcEditorFrameInit = circuitSvcEditor.isFrameInit;
-            _gameRootEditorEditorData.circuitDataSvcEditorSceneInit = circuitSvcEditor.isSceneInit;
+            _gameRootEditorEditorData.circuitComponentEditorComponent = CircuitComponentEditor.Enabled;
+            _gameRootEditorEditorData.circuitDataComponentEditorFrameInit = CircuitComponentEditor.isFrameInit;
+            _gameRootEditorEditorData.circuitDataComponentEditorSceneInit = CircuitComponentEditor.isSceneInit;
 
-            _gameRootEditorEditorData.mouseSvcEditorSvc = mouseSvcEditor.Enabled;
-            _gameRootEditorEditorData.mouseSvcEditorFrameInit = mouseSvcEditor.isFrameInit;
-            _gameRootEditorEditorData.mouseSvcEditorSceneInit = mouseSvcEditor.isSceneInit;
+            _gameRootEditorEditorData.mouseComponentEditorComponent = MouseComponentEditor.Enabled;
+            _gameRootEditorEditorData.mouseComponentEditorFrameInit = MouseComponentEditor.isFrameInit;
+            _gameRootEditorEditorData.mouseComponentEditorSceneInit = MouseComponentEditor.isSceneInit;
 
             //标记脏区
             EditorUtility.SetDirty(_gameRootEditorEditorData);
@@ -290,49 +292,49 @@ namespace XFramework
             _gameRootEditorEditorData =
                 AssetDatabase.LoadAssetAtPath<GameRootEditorEditorData>(General.customFrameDataPath);
 
-            RuntimeDataSvcEditor.Enabled = _gameRootEditorEditorData.persistentDataSvcEditor;
-            RuntimeDataSvcEditor.isFrameInit = _gameRootEditorEditorData.persistentDataSvcEditorFrameInit;
-            RuntimeDataSvcEditor.isSceneInit = _gameRootEditorEditorData.persistentDataSvcEditorSceneInit;
+            RuntimeDataComponentEditor.Enabled = _gameRootEditorEditorData.persistentDataComponentEditor;
+            RuntimeDataComponentEditor.isFrameInit = _gameRootEditorEditorData.persistentDataComponentEditorFrameInit;
+            RuntimeDataComponentEditor.isSceneInit = _gameRootEditorEditorData.persistentDataComponentEditorSceneInit;
 
-            downSvcEditor.Enabled = _gameRootEditorEditorData.downSvcEditor;
-            downSvcEditor.isFrameInit = _gameRootEditorEditorData.downSvcEditorFrameInit;
-            downSvcEditor.isSceneInit = _gameRootEditorEditorData.downSvcEditorSceneInit;
+            DownComponentEditor.Enabled = _gameRootEditorEditorData.downComponentEditor;
+            DownComponentEditor.isFrameInit = _gameRootEditorEditorData.downComponentEditorFrameInit;
+            DownComponentEditor.isSceneInit = _gameRootEditorEditorData.downComponentEditorSceneInit;
 
-            resSvcEditor.Enabled = _gameRootEditorEditorData.resSvcEditor;
-            resSvcEditor.isFrameInit = _gameRootEditorEditorData.resSvcEditorFrameInit;
-            resSvcEditor.isSceneInit = _gameRootEditorEditorData.resSvcEditorSceneInit;
+            ResComponentEditor.Enabled = _gameRootEditorEditorData.resComponentEditor;
+            ResComponentEditor.isFrameInit = _gameRootEditorEditorData.resComponentEditorFrameInit;
+            ResComponentEditor.isSceneInit = _gameRootEditorEditorData.resComponentEditorSceneInit;
 
-            audioSvcEditor.Enabled = _gameRootEditorEditorData.audioSvcEditor;
-            audioSvcEditor.isFrameInit = _gameRootEditorEditorData.audioSvcEditorFrameInit;
-            audioSvcEditor.isSceneInit = _gameRootEditorEditorData.audioSvcEditorSceneInit;
+            AudioComponentEditor.Enabled = _gameRootEditorEditorData.audioComponentEditor;
+            AudioComponentEditor.isFrameInit = _gameRootEditorEditorData.audioComponentEditorFrameInit;
+            AudioComponentEditor.isSceneInit = _gameRootEditorEditorData.audioComponentEditorSceneInit;
 
-            listenerSvcEditorSvc.Enabled = _gameRootEditorEditorData.listenerSvcEditorSvc;
-            listenerSvcEditorSvc.isFrameInit = _gameRootEditorEditorData.listenerSvcEditorFrameInit;
-            listenerSvcEditorSvc.isSceneInit = _gameRootEditorEditorData.listenerSvcEditorSceneInit;
+            ListenerComponentEditorComponent.Enabled = _gameRootEditorEditorData.listenerComponentEditorComponent;
+            ListenerComponentEditorComponent.isFrameInit = _gameRootEditorEditorData.listenerComponentEditorFrameInit;
+            ListenerComponentEditorComponent.isSceneInit = _gameRootEditorEditorData.listenerComponentEditorSceneInit;
 
-            customSceneSvc.Enabled = _gameRootEditorEditorData.customSceneSvc;
-            customSceneSvc.isFrameInit = _gameRootEditorEditorData.customSceneSvcEditorFrameInit;
-            customSceneSvc.isSceneInit = _gameRootEditorEditorData.customSceneSvcEditorSceneInit;
+            CustomSceneLoadComponent.Enabled = _gameRootEditorEditorData.customSceneComponent;
+            CustomSceneLoadComponent.isFrameInit = _gameRootEditorEditorData.customSceneComponentEditorFrameInit;
+            CustomSceneLoadComponent.isSceneInit = _gameRootEditorEditorData.customSceneComponentEditorSceneInit;
 
-            timeSvcEditorSvc.Enabled = _gameRootEditorEditorData.timeSvcEditorSvc;
-            timeSvcEditorSvc.isFrameInit = _gameRootEditorEditorData.timeSvcEditorFrameInit;
-            timeSvcEditorSvc.isSceneInit = _gameRootEditorEditorData.timeSvcEditorSceneInit;
+            TimeComponentEditorComponent.Enabled = _gameRootEditorEditorData.timeComponentEditorComponent;
+            TimeComponentEditorComponent.isFrameInit = _gameRootEditorEditorData.timeComponentEditorFrameInit;
+            TimeComponentEditorComponent.isSceneInit = _gameRootEditorEditorData.timeComponentEditorSceneInit;
 
-            viewSvcEditorSvc.Enabled = _gameRootEditorEditorData.viewSvcEditorSvc;
-            viewSvcEditorSvc.isFrameInit = _gameRootEditorEditorData.viewSvcEditorFrameInit;
-            viewSvcEditorSvc.isSceneInit = _gameRootEditorEditorData.viewSvcEditorSceneInit;
+            ViewComponentEditorComponent.Enabled = _gameRootEditorEditorData.viewComponentEditorComponent;
+            ViewComponentEditorComponent.isFrameInit = _gameRootEditorEditorData.viewComponentEditorFrameInit;
+            ViewComponentEditorComponent.isSceneInit = _gameRootEditorEditorData.viewComponentEditorSceneInit;
 
-            entitySvcEditorSvc.Enabled = _gameRootEditorEditorData.entitySvcEditorSvc;
-            entitySvcEditorSvc.isFrameInit = _gameRootEditorEditorData.entityDataSvcEditorFrameInit;
-            entitySvcEditorSvc.isSceneInit = _gameRootEditorEditorData.entityDataSvcEditorSceneInit;
+            EntityComponentEditorComponent.Enabled = _gameRootEditorEditorData.entityComponentEditorComponent;
+            EntityComponentEditorComponent.isFrameInit = _gameRootEditorEditorData.entityDataComponentEditorFrameInit;
+            EntityComponentEditorComponent.isSceneInit = _gameRootEditorEditorData.entityDataComponentEditorSceneInit;
 
-            circuitSvcEditor.Enabled = _gameRootEditorEditorData.circuitSvcEditorSvc;
-            circuitSvcEditor.isFrameInit = _gameRootEditorEditorData.circuitDataSvcEditorFrameInit;
-            circuitSvcEditor.isSceneInit = _gameRootEditorEditorData.circuitDataSvcEditorSceneInit;
+            CircuitComponentEditor.Enabled = _gameRootEditorEditorData.circuitComponentEditorComponent;
+            CircuitComponentEditor.isFrameInit = _gameRootEditorEditorData.circuitDataComponentEditorFrameInit;
+            CircuitComponentEditor.isSceneInit = _gameRootEditorEditorData.circuitDataComponentEditorSceneInit;
 
-            mouseSvcEditor.Enabled = _gameRootEditorEditorData.mouseSvcEditorSvc;
-            mouseSvcEditor.isFrameInit = _gameRootEditorEditorData.mouseSvcEditorFrameInit;
-            mouseSvcEditor.isSceneInit = _gameRootEditorEditorData.mouseSvcEditorSceneInit;
+            MouseComponentEditor.Enabled = _gameRootEditorEditorData.mouseComponentEditorComponent;
+            MouseComponentEditor.isFrameInit = _gameRootEditorEditorData.mouseComponentEditorFrameInit;
+            MouseComponentEditor.isSceneInit = _gameRootEditorEditorData.mouseComponentEditorSceneInit;
         }
 
         public override void OnInit()

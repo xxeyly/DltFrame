@@ -10,7 +10,6 @@ namespace XFramework
         public override void ViewStartInit()
         {
             window = gameObject;
-            SvcInit();
             InitView();
             InitListener();
             OnlyOnceInit();

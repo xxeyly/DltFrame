@@ -96,7 +96,6 @@ namespace XFramework
         {
             window = transform.Find("Window").gameObject;
             canvasGroup = window.GetComponent<CanvasGroup>();
-            SvcInit();
             InitView();
             InitListener();
             OnlyOnceInit();
@@ -150,7 +149,7 @@ namespace XFramework
         /// </summary>
         protected void HideThisView()
         {
-            ViewSvc.Instance.HideView(viewType);
+            ViewComponent.Instance.HideView(viewType);
         }
 
         /// <summary>
@@ -158,7 +157,7 @@ namespace XFramework
         /// </summary>
         protected void ShowView()
         {
-            ViewSvc.Instance.ShowView(viewType);
+            ViewComponent.Instance.ShowView(viewType);
         }
 
         /// <summary>

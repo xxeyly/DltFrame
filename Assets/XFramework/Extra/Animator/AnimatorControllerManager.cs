@@ -24,18 +24,18 @@ namespace XFramework
         /// </summary>
         private int _animatorTimeTask;
 
-        public override void StartSvc()
+        public override void StartComponent()
         {
             Instance = GetComponent<AnimatorControllerManager>();
         }
 
-        public override void Init()
+        public override void InitComponent()
         {
             // allAnimController = new List<AnimatorControllerBase>(FindObjectsOfType<AnimatorControllerBase>());
-            allAnimController = DataSvc.GetAllObjectsInScene<AnimatorControllerBase>();
+            allAnimController = DataComponent.GetAllObjectsInScene<AnimatorControllerBase>();
             foreach (AnimatorControllerBase animatorControllerBase in allAnimController)
             {
-                animatorControllerBase.StartSvc();
+                animatorControllerBase.StartComponent();
             }
         }
 
@@ -105,10 +105,10 @@ namespace XFramework
             currentPlayAnim = animType;
             eventChange = false;
 
-            TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
+            TimeComponent.Instance.DeleteTimeTask(_animatorTimeTask);
             AnimatorControllerBase fistController = GetPlayAnimFirstController(animType);
 
-            _animatorTimeTask = TimeSvc.Instance.AddTimeTask(
+            _animatorTimeTask = TimeComponent.Instance.AddTimeTask(
                 () =>
                 {
                     if (fistController == null)
@@ -132,7 +132,7 @@ namespace XFramework
 
         public void StopAnimAction()
         {
-            TimeSvc.Instance.DeleteTimeTask(_animatorTimeTask);
+            TimeComponent.Instance.DeleteTimeTask(_animatorTimeTask);
             foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.StopAnim();

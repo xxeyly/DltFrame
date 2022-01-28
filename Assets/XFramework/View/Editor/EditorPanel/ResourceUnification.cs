@@ -25,7 +25,7 @@ namespace XFramework
                 return;
             }
 
-            List<Text> sceneAllText = DataSvc.GetAllObjectsInScene<Text>();
+            List<Text> sceneAllText = DataComponent.GetAllObjectsInScene<Text>();
             foreach (Text text in sceneAllText)
             {
                 text.font = changeFont;
@@ -44,7 +44,7 @@ namespace XFramework
         [Button("替换文字", ButtonSizes.Medium)]
         public void OnReplaceSceneGameObjectName()
         {
-            foreach (GameObject sceneObj in DataSvc.GetAllObjectsOnlyInScene())
+            foreach (GameObject sceneObj in DataComponent.GetAllObjectsOnlyInScene())
             {
                 string replace = sceneObj.name.Replace(sceneReplaceBeforeName, sceneReplaceAfterName);
                 sceneObj.name = replace;
@@ -62,13 +62,13 @@ namespace XFramework
         [Button("替换文字", ButtonSizes.Medium)]
         public void OnReplaceTextContent()
         {
-            foreach (Text text in DataSvc.GetAllObjectsInScene<Text>())
+            foreach (Text text in DataComponent.GetAllObjectsInScene<Text>())
             {
                 string replace = text.text.Replace(textReplaceBeforeName, textReplaceAfterName);
                 text.text = replace;
             }
 
-            foreach (TextMeshProUGUI text in DataSvc.GetAllObjectsInScene<TextMeshProUGUI>())
+            foreach (TextMeshProUGUI text in DataComponent.GetAllObjectsInScene<TextMeshProUGUI>())
             {
                 string replace = text.text.Replace(textReplaceBeforeName, textReplaceAfterName);
                 text.text = replace;
@@ -127,11 +127,11 @@ namespace XFramework
         [Button("图片压缩(Png.Jpg.Tif.Tiff.Tga)", ButtonSizes.Medium)]
         public void OnTextureCompress()
         {
-            List<string> pngPaths = DataSvc.GetSpecifyTypeOnlyInAssetsPath("png");
-            List<string> jpgPaths = DataSvc.GetSpecifyTypeOnlyInAssetsPath("jpg");
-            List<string> tifPaths = DataSvc.GetSpecifyTypeOnlyInAssetsPath("tif");
-            List<string> tiffPaths = DataSvc.GetSpecifyTypeOnlyInAssetsPath("tiff");
-            List<string> tgaPaths = DataSvc.GetSpecifyTypeOnlyInAssetsPath("tga");
+            List<string> pngPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("png");
+            List<string> jpgPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("jpg");
+            List<string> tifPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("tif");
+            List<string> tiffPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("tiff");
+            List<string> tgaPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("tga");
             OnTextureCompressByPath(pngPaths);
             OnTextureCompressByPath(jpgPaths);
             OnTextureCompressByPath(tifPaths);

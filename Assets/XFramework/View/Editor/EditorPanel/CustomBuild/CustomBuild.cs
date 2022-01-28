@@ -109,8 +109,8 @@ namespace XFramework
             }
 
             //场景配置文件清空
-            ResSvc.DownFile sceneFile =
-                JsonMapper.ToObject<ResSvc.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
+            ResComponent.DownFile sceneFile =
+                JsonMapper.ToObject<ResComponent.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
             //打包后场景文件地址
             string sceneLoadAssetBundlePath =
                 CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName,
@@ -124,7 +124,7 @@ namespace XFramework
                 // Debug.Log("地址不存在:" + sceneLoadAssetBundlePath);
             }
 
-            foreach (ResSvc.DownFile.FileInfo fileInfo in sceneFile.fileInfoList)
+            foreach (ResComponent.DownFile.FileInfo fileInfo in sceneFile.fileInfoList)
             {
                 string buildTargetPlatformPath = String.Empty;
                 switch (buildTargetPlatform)

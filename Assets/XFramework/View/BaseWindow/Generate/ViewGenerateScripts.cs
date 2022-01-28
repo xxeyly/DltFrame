@@ -382,100 +382,100 @@ namespace XFramework
                         case General.UiType.GameObject:
 
                             allUiVariableName.Add(Indents(4) + "private GameObject _" +
-                                                  DataSvc.FirstCharToLower(child.name) + Semicolon);
+                                                  DataComponent.FirstCharToLower(child.name) + Semicolon);
                             AddUsing("using UnityEngine;");
                             break;
                         case General.UiType.Button:
 
                             allUiVariableName.Add(
-                                Indents(4) + "private Button _" + DataSvc.FirstCharToLower(child.name) + Semicolon
+                                Indents(4) + "private Button _" + DataComponent.FirstCharToLower(child.name) + Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.Image:
                             allUiVariableName.Add(Indents(4) + "private Image _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.Text:
                             allUiVariableName.Add(Indents(4) + "private Text _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon);
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.Toggle:
                             allUiVariableName.Add(
-                                Indents(4) + "private Toggle _" + DataSvc.FirstCharToLower(child.name) +
+                                Indents(4) + "private Toggle _" + DataComponent.FirstCharToLower(child.name) +
                                 Semicolon);
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.RawImage:
                             allUiVariableName.Add(Indents(4) + "private RawImage _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.Scrollbar:
                             allUiVariableName.Add(Indents(4) + "private Scrollbar _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.ScrollRect:
                             allUiVariableName.Add(Indents(4) + "private ScrollRect _" +
-                                                  DataSvc.FirstCharToLower(child.name) + Semicolon
+                                                  DataComponent.FirstCharToLower(child.name) + Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.InputField:
 
                             allUiVariableName.Add(Indents(4) + "private InputField _" +
-                                                  DataSvc.FirstCharToLower(child.name) + Semicolon
+                                                  DataComponent.FirstCharToLower(child.name) + Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.Dropdown:
                             allUiVariableName.Add(Indents(4) + "private Dropdown _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.Slider:
                             allUiVariableName.Add(Indents(4) + "private Slider _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.VideoPlayer:
                             allUiVariableName.Add(Indents(4) + "private VideoPlayer _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using UnityEngine.UI;");
                             break;
                         case General.UiType.TextMeshProUGUI:
                             allUiVariableName.Add(Indents(4) + "private TextMeshProUGUI _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using TMPro;");
                             break;
                         case General.UiType.TMP_Dropdown:
                             allUiVariableName.Add(Indents(4) + "private TMP_Dropdown _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using TMPro;");
                             break;
                         case General.UiType.TMP_InputField:
                             allUiVariableName.Add(Indents(4) + "private TMP_InputField _" +
-                                                  DataSvc.FirstCharToLower(child.name) +
+                                                  DataComponent.FirstCharToLower(child.name) +
                                                   Semicolon
                             );
                             AddUsing("using TMPro;");
@@ -502,7 +502,7 @@ namespace XFramework
                                 childTypeName = childTypeName.Split('.')[childTypeName.Split('.').Length - 1];
 
                                 allUiVariableName.Add(Indents(4) + "private List<" + childTypeName + "> _" +
-                                                      DataSvc.FirstCharToLower(child.name) + Semicolon);
+                                                      DataComponent.FirstCharToLower(child.name) + Semicolon);
                             }
 
                             break;
@@ -523,7 +523,7 @@ namespace XFramework
             {
                 if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
                 {
-                    allUiVariableBind.Add(Indents(8) + "BindUi(ref _" + DataSvc.FirstCharToLower(child.name) + ",\"" +
+                    allUiVariableBind.Add(Indents(8) + "BindUi(ref _" + DataComponent.FirstCharToLower(child.name) + ",\"" +
                                           GetUiComponentPath(child, "") + "\");");
                 }
             }
@@ -552,7 +552,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.PointerClick & uiEventTriggerType) ==
                             General.UIEventTriggerType.PointerClick)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerClick" + "," + "On" + child.name + "Click" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -560,7 +560,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
                             General.UIEventTriggerType.PointerEnter)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerEnter" + "," + "On" + child.name + "Enter" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -568,7 +568,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.PointerExit & uiEventTriggerType) ==
                             General.UIEventTriggerType.PointerExit)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerExit" + "," + "On" + child.name + "Exit" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -576,7 +576,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.PointerDown & uiEventTriggerType) ==
                             General.UIEventTriggerType.PointerDown)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerDown" + "," + "On" + child.name + "Down" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -584,7 +584,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.PointerUp & uiEventTriggerType) ==
                             General.UIEventTriggerType.PointerUp)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.PointerUp" + "," + "On" + child.name + "Up" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -592,7 +592,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.Drag & uiEventTriggerType) ==
                             General.UIEventTriggerType.Drag)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.Drag" + "," + "On" + child.name + "Drag" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -600,7 +600,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
                             General.UIEventTriggerType.BeginDrag)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.BeginDrag" + "," + "On" + child.name + "BeginDrag" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -608,7 +608,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.EndDrag & uiEventTriggerType) ==
                             General.UIEventTriggerType.EndDrag)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.EndDrag" + "," + "On" + child.name + "EndDrag" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -616,7 +616,7 @@ namespace XFramework
                         if ((General.UIEventTriggerType.Scroll & uiEventTriggerType) ==
                             General.UIEventTriggerType.Scroll)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataSvc.FirstCharToLower(child.name) + "," +
+                            bindStr = Indents(8) + "BindListener(_" + DataComponent.FirstCharToLower(child.name) + "," +
                                       "EventTriggerType.Scroll" + "," + "On" + child.name + "Scroll" + ");";
                             allUiVariableBindListener.Add(bindStr);
                         }
@@ -625,7 +625,7 @@ namespace XFramework
                     }
                     else if (bindUiType.type == General.UiType.Toggle)
                     {
-                        bindStr = Indents(8) + "_" + DataSvc.FirstCharToLower(child.name) +
+                        bindStr = Indents(8) + "_" + DataComponent.FirstCharToLower(child.name) +
                                   ".onValueChanged.AddListener(" +
                                   "On" +
                                   child.name + ");";

@@ -15,7 +15,7 @@ namespace XFramework
         /// <returns></returns>
         protected int AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
-            int timeTaskId = TimeSvc.Instance.AddTimeTask(callback, taskName, delay, count);
+            int timeTaskId = TimeComponent.Instance.AddTimeTask(callback, taskName, delay, count);
             return timeTaskId;
         }
 
@@ -29,7 +29,7 @@ namespace XFramework
         /// <returns></returns>
         protected int AddSwitchTask(List<UnityAction> callbackList, string taskName, float delay, int count = 1)
         {
-            int timeTaskId = TimeSvc.Instance.AddSwitchTask(callbackList, taskName, delay, count);
+            int timeTaskId = TimeComponent.Instance.AddSwitchTask(callbackList, taskName, delay, count);
             return timeTaskId;
         }
 
@@ -43,7 +43,7 @@ namespace XFramework
         /// <returns></returns>
         protected int AddImmortalTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
-            int timeTaskId = TimeSvc.Instance.AddImmortalTimeTask(callback, taskName, delay, count);
+            int timeTaskId = TimeComponent.Instance.AddImmortalTimeTask(callback, taskName, delay, count);
             return timeTaskId;
         }
 
@@ -53,7 +53,7 @@ namespace XFramework
         /// <param name="timeTaskId"></param>
         protected void DeleteTimeTask(int timeTaskId)
         {
-            TimeSvc.Instance.DeleteTimeTask(timeTaskId);
+            TimeComponent.Instance.DeleteTimeTask(timeTaskId);
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace XFramework
         /// <param name="timeTaskId"></param>
         protected void DeleteSwitchTask(int timeTaskId)
         {
-            TimeSvc.Instance.DeleteSwitchTask(timeTaskId);
+            TimeComponent.Instance.DeleteSwitchTask(timeTaskId);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace XFramework
         /// <param name="timeTaskId"></param>
         protected void DeleteImmortalTimeTask(int timeTaskId)
         {
-            TimeSvc.Instance.DeleteImmortalTimeTask(timeTaskId);
+            TimeComponent.Instance.DeleteImmortalTimeTask(timeTaskId);
         }
     }
 }

@@ -48,8 +48,8 @@ namespace XFramework
                 General.CircuitBaseDataTemplatePath);
         }
 
-        [MenuItem("Assets/Create/XFramework/C# ListenerSvcData", false, 73)]
-        public static void OnCreateListenerSvcDataTemplate()
+        [MenuItem("Assets/Create/XFramework/C# ListenerComponentData", false, 73)]
+        public static void OnCreateListenerComponentDataTemplate()
         {
             string path = GetSelectedPath();
             if (string.IsNullOrEmpty(path))
@@ -58,8 +58,8 @@ namespace XFramework
             }
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
-                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/ListenerSvcData.cs", null,
-                General.ListenerSvcDataTemplatePath);
+                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/ListenerComponentData.cs", null,
+                General.ListenerComponentDataTemplatePath);
         }
 
         [MenuItem("Assets/Create/XFramework/C# SceneComponent", false, 74)]

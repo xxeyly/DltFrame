@@ -44,7 +44,7 @@ namespace XFramework
             allCustomAttributes.Add(Indents(4) + "{" + LineFeed);
 
             allUiVariableName.Add(Indents(4) + "[TableList]" + "[LabelText(\"数据\")]" + "public List<" + dataName + "Data" + "> " +
-                                  DataSvc.FirstCharToLower(dataName) + "Data" + Semicolon);
+                                  DataComponent.FirstCharToLower(dataName) + "Data" + Semicolon);
             AddUsing("using Sirenix.OdinInspector;");
             AddUsing("using UnityEngine;");
             allCustomAttributes.Add(Indents(8) + "[HorizontalGroup(" + "\"索引\")]" + Indents(1) + "[HideLabel]" + " public int itemIndex;" + LineFeed);

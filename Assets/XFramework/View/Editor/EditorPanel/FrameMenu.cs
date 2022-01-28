@@ -21,7 +21,7 @@ namespace XFramework
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            audioSvcEditor.OnDisable();
+            _audioComponentEditor.OnDisable();
             customBuild.OnDisable();
             gameRootEditor.OnDisable();
             generateBaseWindowEditor.OnDisable();
@@ -32,23 +32,23 @@ namespace XFramework
         [MenuItem("Xframe/监听生成 &l")]
         private static void OnListenerGenerate()
         {
-            ListenerSvcGenerateData listenerSvcGenerateData = DataSvc.GetObjectsInScene<ListenerSvcGenerateData>();
-            if (listenerSvcGenerateData != null)
+            ListenerComponentGenerateData listenerComponentGenerateData = DataComponent.GetObjectsInScene<ListenerComponentGenerateData>();
+            if (listenerComponentGenerateData != null)
             {
-                listenerSvcGenerateData.OnGenerate();
+                listenerComponentGenerateData.OnGenerate();
                 Debug.Log("监听生成完毕");
             }
             else
             {
-                Debug.LogWarning(" ListenerSvc未添加");
+                Debug.LogWarning(" ListenerComponent未添加");
             }
         }
 
         //打包
         private static CustomBuild customBuild = new CustomBuild();
 
-        //音频服务
-        private AudioSvcEditor audioSvcEditor = new AudioSvcEditor();
+        //音频组件
+        private AudioComponentEditor _audioComponentEditor = new AudioComponentEditor();
 
         //框架配置
         private static GameRootEditor gameRootEditor;
@@ -56,34 +56,34 @@ namespace XFramework
         private static SceneLoad sceneLoad = new SceneLoad();
 
         //可持久化
-        RuntimeDataSvcEditor runtimeDataSvcEditor = new RuntimeDataSvcEditor();
+        RuntimeDataComponentEditor _runtimeDataComponentEditor = new RuntimeDataComponentEditor();
 
-        //资源服务
-        ResSvcEditor resSvcEditor = new ResSvcEditor();
+        //资源组件
+        ResComponentEditor _resComponentEditor = new ResComponentEditor();
 
-        //下载服务
-        DownSvcEditor downSvcEditor = new DownSvcEditor();
+        //下载组件
+        DownComponentEditor _downComponentEditor = new DownComponentEditor();
 
-        //监听服务
-        ListenerSvcEditor listenerSvcEditor = new ListenerSvcEditor();
+        //监听组件
+        ListenerComponentEditor _listenerComponentEditor = new ListenerComponentEditor();
 
-        //场景服务
-        SceneSvcEditor sceneSvcEditor = new SceneSvcEditor();
+        //场景组件
+        SceneLoadComponentEditor _sceneLoadComponentEditor = new SceneLoadComponentEditor();
 
-        //计时器服务
-        TimeSvcEditor timeSvcEditor = new TimeSvcEditor();
+        //计时器组件
+        TimeComponentEditor _timeComponentEditor = new TimeComponentEditor();
 
-        //视图服务
-        ViewSvcEditor viewSvcEditor = new ViewSvcEditor();
+        //视图组件
+        ViewComponentEditor _viewComponentEditor = new ViewComponentEditor();
 
-        //实体服务
-        EntitySvcEditor entitySvcEditor = new EntitySvcEditor();
+        //实体组件
+        EntityComponentEditor _entityComponentEditor = new EntityComponentEditor();
 
-        //流程服务
-        CircuitSvcEditor circuitSvcEditor = new CircuitSvcEditor();
+        //流程组件
+        CircuitComponentEditor _circuitComponentEditor = new CircuitComponentEditor();
 
-        //鼠标服务
-        MouseSvcEditor mouseSvcEditor = new MouseSvcEditor();
+        //鼠标组件
+        MouseComponentEditor _mouseComponentEditor = new MouseComponentEditor();
 
         //资源统一化
         ResourceUnification resourceUnification = new ResourceUnification();
@@ -97,19 +97,19 @@ namespace XFramework
             var tree = new OdinMenuTree();
             tree.Selection.SupportsMultiSelect = false;
             //框架配置
-            gameRootEditor = new GameRootEditor(runtimeDataSvcEditor, resSvcEditor, downSvcEditor, audioSvcEditor, listenerSvcEditor, sceneSvcEditor, timeSvcEditor, entitySvcEditor, viewSvcEditor,
-                circuitSvcEditor, mouseSvcEditor);
+            gameRootEditor = new GameRootEditor(_runtimeDataComponentEditor, _resComponentEditor, _downComponentEditor, _audioComponentEditor, _listenerComponentEditor, _sceneLoadComponentEditor, _timeComponentEditor, _entityComponentEditor, _viewComponentEditor,
+                _circuitComponentEditor, _mouseComponentEditor);
             sceneLoad.OnInit();
             customBuild.OnInit();
             gameRootEditor.OnInit();
-            audioSvcEditor.OnInit();
+            _audioComponentEditor.OnInit();
             generateBaseWindowEditor.OnInit();
             resourceUnification.OnInit();
             customBuild.AfferentSceneLoad(sceneLoad);
             tree.Add("打包工具", customBuild);
             tree.Add("场景编辑", sceneLoad);
-            tree.Add("框架服务", gameRootEditor);
-            tree.Add("音频配置", audioSvcEditor);
+            tree.Add("框架组件", gameRootEditor);
+            tree.Add("音频配置", _audioComponentEditor);
             tree.Add("生成配置", generateBaseWindowEditor);
             tree.Add("资源统一化", resourceUnification);
             tree.Add("动画工具", animTools);

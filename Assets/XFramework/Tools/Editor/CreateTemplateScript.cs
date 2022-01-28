@@ -47,9 +47,9 @@ namespace XFramework
                 text = text.Replace("CircuitBaseDataTemplate", className);
             }
 
-            if (resourceFile == General.ListenerSvcDataTemplatePath)
+            if (resourceFile == General.ListenerComponentDataTemplatePath)
             {
-                text = text.Replace("ListenerSvcDataTemplate", "ListenerSvc");
+                text = text.Replace("ListenerComponentDataTemplate", "ListenerComponent");
             }
 
             if (resourceFile == General.SceneComponentTemplatePath)

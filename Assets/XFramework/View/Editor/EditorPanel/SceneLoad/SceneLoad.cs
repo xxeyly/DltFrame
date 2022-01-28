@@ -121,13 +121,13 @@ namespace XFramework
             //同步到Unity需要打包的场景
             EditorBuildSettings.scenes = editorBuildSettingsScenes;
             //记录场景加载方式
-            SceneSvc.SceneFile sceneFile = new SceneSvc.SceneFile();
-            sceneFile.sceneInfoList = new List<SceneSvc.SceneFile.SceneInfo>();
+            SceneLoadComponent.SceneFile sceneFile = new SceneLoadComponent.SceneFile();
+            sceneFile.sceneInfoList = new List<SceneLoadComponent.SceneFile.SceneInfo>();
             for (int i = 0; i < sceneInfos.Count; i++)
             {
-                SceneSvc.SceneFile.SceneInfo sceneInfo = new SceneSvc.SceneFile.SceneInfo();
+                SceneLoadComponent.SceneFile.SceneInfo sceneInfo = new SceneLoadComponent.SceneFile.SceneInfo();
                 sceneInfo.sceneName = sceneInfos[i].sceneAsset.name;
-                sceneInfo.sceneLoadType = (SceneSvc.SceneFile.SceneLoadType) sceneInfos[i].sceneLoadType;
+                sceneInfo.sceneLoadType = (SceneLoadComponent.SceneFile.SceneLoadType) sceneInfos[i].sceneLoadType;
                 sceneFile.sceneInfoList.Add(sceneInfo);
             }
 
@@ -158,7 +158,7 @@ namespace XFramework
             }
 
             FileOperation.SaveTextToLoad(Application.dataPath + "/XFramework/Resources/DownFile/SceneFileInfo.json",
-                JsonMapper.ToJson(new ResSvc.DownFile {fileInfoList = new List<ResSvc.DownFile.FileInfo>()}));
+                JsonMapper.ToJson(new ResComponent.DownFile {fileInfoList = new List<ResComponent.DownFile.FileInfo>()}));
         }
 
         /// <summary>
@@ -234,8 +234,8 @@ namespace XFramework
         private void EditorSceneFileConfig()
         {
             //场景配置文件清空
-            ResSvc.DownFile sceneFile =
-                JsonMapper.ToObject<ResSvc.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
+            ResComponent.DownFile sceneFile =
+                JsonMapper.ToObject<ResComponent.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
             sceneFile.fileInfoList.Clear();
             //遍历所有异步场景,并存储
             foreach (SceneLoadEditorData.SceneInfo sceneInfo in sceneInfos)
@@ -245,11 +245,11 @@ namespace XFramework
                     string filePath =
                         (_sceneLoadEditorData.sceneAssetBundlePath + "/" + platformPath).Replace("Assets/", "") + "/" +
                         sceneInfo.sceneAsset.name + "Path" + "/" +
-                        DataSvc.AllCharToLower(sceneInfo.sceneAsset.name);
-                    sceneFile.fileInfoList.Add(new ResSvc.DownFile.FileInfo()
+                        DataComponent.AllCharToLower(sceneInfo.sceneAsset.name);
+                    sceneFile.fileInfoList.Add(new ResComponent.DownFile.FileInfo()
                     {
                         fileOriginalName = sceneInfo.sceneAsset.name,
-                        fileName = DataSvc.AllCharToLower(sceneInfo.sceneAsset.name),
+                        fileName = DataComponent.AllCharToLower(sceneInfo.sceneAsset.name),
                         filePath = filePath,
                         fileSize = File.ReadAllBytes(Application.dataPath + "/" + filePath).Length,
                         fileMd5 = FileOperation.GetMD5HashFromFile(Application.dataPath + "/" + filePath)
