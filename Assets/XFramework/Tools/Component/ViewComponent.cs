@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+
 namespace XFramework
 {
     /// <summary>
@@ -189,7 +190,7 @@ namespace XFramework
                 _allActiveView.Add(type);
             }
 
-            onShowView.Invoke(type);
+            onShowView?.Invoke(type);
         }
 
         /// <summary>
@@ -248,10 +249,11 @@ namespace XFramework
             if (baseWindow != null) baseWindow.DisPlay(false);
             if (_allActiveView.Contains(type))
             {
+                baseWindow.OnViewDestroy();
                 _allActiveView.Remove(type);
             }
 
-            onHideView.Invoke(type);
+            onHideView?.Invoke(type);
         }
 
         /// <summary>

@@ -206,7 +206,7 @@ namespace XFramework
                 loopType = TimeTaskList.TimeLoopType.Once,
                 endTime = destTime
             });
-            onAddTimeTask.Invoke(tid, taskName);
+            onAddTimeTask?.Invoke(tid, taskName);
 
             return tid;
         }
@@ -294,7 +294,7 @@ namespace XFramework
                 }
             }
 
-            onDeleteTimeTask.Invoke(tid);
+            onDeleteTimeTask?.Invoke(tid);
 
             return exist;
         }
@@ -442,7 +442,7 @@ namespace XFramework
                 tidName = switchTask.TaskName,
                 loopType = TimeTaskList.TimeLoopType.Loop
             });
-            onAddSwitchTask.Invoke(tid, taskName);
+            onAddSwitchTask?.Invoke(tid, taskName);
             return tid;
         }
 
@@ -485,7 +485,7 @@ namespace XFramework
                 }
             }
 
-            onDeleteSwitchTask.Invoke(tid);
+            onDeleteSwitchTask?.Invoke(tid);
 
             return exist;
         }

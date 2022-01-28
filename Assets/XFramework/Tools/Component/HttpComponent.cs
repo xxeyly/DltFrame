@@ -12,7 +12,7 @@ namespace XFramework
         private UnityWebRequest _request;
 
         /// <summary>
-        /// Http请求模式哦
+        /// Http请求模式
         /// </summary>
         public enum HttpRequestMethod
         {

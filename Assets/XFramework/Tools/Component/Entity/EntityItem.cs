@@ -45,7 +45,7 @@ namespace XFramework
 
             if (Application.isPlaying)
             {
-                EntityComponent.Instance.onShowEntity.Invoke(entityName);
+                EntityComponent.Instance.onShowEntity?.Invoke(entityName);
             }
         }
 
@@ -63,7 +63,7 @@ namespace XFramework
 
             if (Application.isPlaying)
             {
-                EntityComponent.Instance.onHideEntity.Invoke(entityName);
+                EntityComponent.Instance.onHideEntity?.Invoke(entityName);
             }
         }
     }

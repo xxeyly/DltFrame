@@ -10,7 +10,6 @@
         /// <summary>
         /// 组件初始化
         /// </summary>
-        /// <param name="onTimeAddTimeTask"></param>
         void InitComponent();
     }
 }
