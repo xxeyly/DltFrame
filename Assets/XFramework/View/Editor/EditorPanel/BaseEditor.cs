@@ -1,4 +1,6 @@
-﻿namespace XFramework
+﻿#if UNITY_EDITOR
+
+namespace XFramework
 {
     public abstract class BaseEditor
     {
@@ -11,3 +13,4 @@
         public abstract void OnInit();
     }
 }
+#endif

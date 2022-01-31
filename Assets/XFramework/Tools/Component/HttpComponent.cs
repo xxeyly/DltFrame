@@ -43,13 +43,15 @@ namespace XFramework
         /// <param name="requestMethod">请求方式</param>
         /// <param name="action">返回数据执行事件</param>
         /// <param name="requestData">请求数据</param>
-        public void SendHttpUnityWebRequest(string url, HttpRequestMethod requestMethod, Action<string> action, string requestData = "")
+        public void SendHttpUnityWebRequest(string url, HttpRequestMethod requestMethod, Action<string> action,
+            string requestData = "")
         {
             StartCoroutine(UnityHttpWebRequest(url, requestMethod, action, requestData));
         }
 
 
-        IEnumerator UnityHttpWebRequest(string url, HttpRequestMethod requestMethod, Action<string> action, string requestData = "")
+        IEnumerator UnityHttpWebRequest(string url, HttpRequestMethod requestMethod, Action<string> action,
+            string requestData = "")
         {
             if (requestData.Length == 0)
             {
@@ -63,7 +65,9 @@ namespace XFramework
             _request.SetRequestHeader("Content-Type", "application/json;charset=utf-8");
             yield return _request.SendWebRequest();
 
+#pragma warning disable 618
             if (_request.isHttpError || _request.isNetworkError)
+#pragma warning restore 618
             {
                 Debug.Log(_request.responseCode);
                 Debug.LogError(_request.error);

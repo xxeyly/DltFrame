@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -136,3 +138,4 @@ namespace XFramework
         [LabelText("粘贴文件夹路径")] public string pasteFolderPath;
     }
 }
+#endif

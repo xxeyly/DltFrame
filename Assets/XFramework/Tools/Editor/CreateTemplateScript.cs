@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿#if UNITY_EDITOR
+using System.IO;
 using System.Text;
 using UnityEditor;
 using UnityEditor.ProjectWindowCallback;
@@ -74,3 +75,4 @@ namespace XFramework
         }
     }
 }
+#endif

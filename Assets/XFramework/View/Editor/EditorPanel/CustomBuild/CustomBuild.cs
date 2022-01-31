@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using System.Collections.Generic;
 using LitJson;
 using Sirenix.OdinInspector;
@@ -255,3 +257,4 @@ namespace XFramework
     }
 #endif
 }
+#endif

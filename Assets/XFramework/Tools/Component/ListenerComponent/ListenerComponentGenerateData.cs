@@ -9,8 +9,12 @@ namespace XFramework
 {
     public class ListenerComponentGenerateData : MonoBehaviour
     {
-        [LabelText("生成脚本内容")] private Dictionary<string, Dictionary<string, List<List<string>>>> _callDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
-        [LabelText("生成脚本内容")] private Dictionary<string, Dictionary<string, List<List<string>>>> _returnCallDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
+        [LabelText("生成脚本内容")] private Dictionary<string, Dictionary<string, List<List<string>>>> _callDic =
+            new Dictionary<string, Dictionary<string, List<List<string>>>>();
+
+        [LabelText("生成脚本内容")] private Dictionary<string, Dictionary<string, List<List<string>>>> _returnCallDic =
+            new Dictionary<string, Dictionary<string, List<List<string>>>>();
+
         [LabelText("所有脚本内容")] private Dictionary<string, string> _allScriptsContentDic;
         [LabelText("加载脚本路径")] public string loadScriptsPath = "Scripts";
         [LabelText("所有脚本")] [SerializeField] private List<string> allScriptPath;
@@ -44,7 +48,8 @@ namespace XFramework
                 for (int i = 0; i < files.Length; i++)
                 {
                     //忽略关联文件与特殊类
-                    if (files[i].Name.EndsWith(".meta") || files[i].Name == "BaseWidnow.cs" || files[i].Name == "ListenerComponentData.cs")
+                    if (files[i].Name.EndsWith(".meta") || files[i].Name == "BaseWidnow.cs" ||
+                        files[i].Name == "ListenerComponentData.cs")
                     {
                         continue;
                     }
@@ -52,7 +57,8 @@ namespace XFramework
                     //添加类名称
                     allScriptPath.Add(files[i].Name);
                     //读取类内容
-                    _allScriptsContentDic.Add(files[i].Name.Replace(".cs", ""), FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName)));
+                    _allScriptsContentDic.Add(files[i].Name.Replace(".cs", ""),
+                        FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName)));
                 }
             }
 
@@ -137,6 +143,10 @@ namespace XFramework
 
                     _callDic.Add(pair.Key, funGroup);
                 }
+                else
+                {
+                    Debug.Log("1");
+                }
             }
 
             foreach (KeyValuePair<string, string> pair in _allScriptsContentDic)
@@ -147,7 +157,8 @@ namespace XFramework
                     string functionName = String.Empty;
 
                     Dictionary<string, List<List<string>>> funGroup = new Dictionary<string, List<List<string>>>();
-                    while ((index = pair.Value.IndexOf("AddReturnListenerEvent", index, StringComparison.Ordinal)) != -1)
+                    while ((index = pair.Value.IndexOf("AddReturnListenerEvent", index, StringComparison.Ordinal)) !=
+                           -1)
                     {
                         string parameter = String.Empty;
                         index = index + "AddReturnListenerEvent".Length;
@@ -213,7 +224,12 @@ namespace XFramework
 
                         functionName = String.Empty;
                     }
+
                     _returnCallDic.Add(pair.Key, funGroup);
+                }
+                else
+                {
+                    Debug.Log(2);
                 }
             }
 
@@ -223,7 +239,8 @@ namespace XFramework
 
             string oldContent = GenerateGeneral.GetOldScriptsContent("ListenerComponentData");
             oldContent =
-                GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(_callDic, _returnCallDic), "//监听生成开始", "//监听生成结束");
+                GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(_callDic, _returnCallDic), "//监听生成开始",
+                    "//监听生成结束");
             FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), oldContent);
 
             #endregion
@@ -234,12 +251,14 @@ namespace XFramework
         /// </summary>
         /// <param name="method"></param>
         /// <returns></returns>
-        private string GenerationMethod(Dictionary<string, Dictionary<string, List<List<string>>>> method, Dictionary<string, Dictionary<string, List<List<string>>>> returnMethod)
+        private string GenerationMethod(Dictionary<string, Dictionary<string, List<List<string>>>> method,
+            Dictionary<string, Dictionary<string, List<List<string>>>> returnMethod)
         {
             //类方法组
             Dictionary<string, List<string>> classMethodGroup = new Dictionary<string, List<string>>();
             //生成类
             string generateClassContent = String.Empty;
+            string methodName = String.Empty;
 
             #region 无返回值
 
@@ -251,7 +270,6 @@ namespace XFramework
                     for (int i = 0; i < valuePair.Value.Count; i++)
                     {
                         //方法名称
-                        string methodName;
                         //方法属性
                         string methodParameter = String.Empty;
                         //监听属性
@@ -269,7 +287,8 @@ namespace XFramework
                             }
                         }
 
-                        methodName += methodParameter + ")" + GenerateGeneral.LineFeed + GenerateGeneral.Indents(12) + "{" +
+                        methodName += methodParameter + ")" + GenerateGeneral.LineFeed + GenerateGeneral.Indents(12) +
+                                      "{" +
                                       GenerateGeneral.LineFeed;
                         listenePparameter = String.Empty;
 
@@ -302,27 +321,17 @@ namespace XFramework
                     }
                 }
 
-                classMethodGroup.Add(pair.Key, classMethod);
-            }
-
-            //生成类
-            foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
-            {
-                generateClassContent += GenerateGeneral.Indents(8) + "public " + pair.Key + " " + DataComponent.FirstCharToLower(pair.Key) +
-                                        " = new " + pair.Key + "()" + ";" + GenerateGeneral.LineFeed;
-            }
-
-            //生成类方法
-            foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
-            {
-                generateClassContent += GenerateGeneral.Indents(8) + "public class " + pair.Key + GenerateGeneral.LineFeed;
-                generateClassContent += GenerateGeneral.Indents(8) + "{" + GenerateGeneral.LineFeed;
-                foreach (string moth in pair.Value)
+                if (!classMethodGroup.ContainsKey(pair.Key))
                 {
-                    generateClassContent += moth;
+                    classMethodGroup.Add(pair.Key, classMethod);
                 }
-
-                generateClassContent += GenerateGeneral.Indents(8) + "}" + GenerateGeneral.LineFeed;
+                else
+                {
+                    for (int i = 0; i < classMethod.Count; i++)
+                    {
+                        classMethodGroup[pair.Key].Add(classMethod[i]);
+                    }
+                }
             }
 
             #endregion
@@ -337,7 +346,6 @@ namespace XFramework
                     for (int i = 0; i < valuePair.Value.Count; i++)
                     {
                         //方法名称
-                        string methodName;
                         //方法属性
                         string methodParameter = String.Empty;
                         //监听属性
@@ -370,7 +378,8 @@ namespace XFramework
                             }
                         }
 
-                        methodName += methodParameter + ")" + GenerateGeneral.LineFeed + GenerateGeneral.Indents(12) + "{" +
+                        methodName += methodParameter + ")" + GenerateGeneral.LineFeed + GenerateGeneral.Indents(12) +
+                                      "{" +
                                       GenerateGeneral.LineFeed;
                         listenePparameter = String.Empty;
 
@@ -396,27 +405,43 @@ namespace XFramework
                             temp = ",";
                         }
 
-                        methodName += GenerateGeneral.Indents(16) + "return Instance.ExecuteReturnEvent" + variable + "(\"" + pair.Key + "_" +
+                        methodName += GenerateGeneral.Indents(16) + "return Instance.ExecuteReturnEvent" + variable +
+                                      "(\"" + pair.Key + "_" +
                                       valuePair.Key + "\"" + temp + listenePparameter + ");" + GenerateGeneral.LineFeed;
                         methodName += GenerateGeneral.Indents(12) + "}" + GenerateGeneral.LineFeed;
                         classMethod.Add(methodName);
+                        // Debug.Log(methodName);
                     }
                 }
 
-                classMethodGroup.Add(pair.Key, classMethod);
+                if (!classMethodGroup.ContainsKey(pair.Key))
+                {
+                    classMethodGroup.Add(pair.Key, classMethod);
+                }
+                else
+                {
+                    for (int i = 0; i < classMethod.Count; i++)
+                    {
+                        classMethodGroup[pair.Key].Add(classMethod[i]);
+                    }
+                }
             }
 
-            //
+            #endregion
+
+            //生成类
             foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
             {
-                generateClassContent += GenerateGeneral.Indents(8) + "public " + pair.Key + " " + DataComponent.FirstCharToLower(pair.Key) +
+                generateClassContent += GenerateGeneral.Indents(8) + "public " + pair.Key + " " +
+                                        DataComponent.FirstCharToLower(pair.Key) +
                                         " = new " + pair.Key + "()" + ";" + GenerateGeneral.LineFeed;
             }
 
             //生成类方法
             foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
             {
-                generateClassContent += GenerateGeneral.Indents(8) + "public class " + pair.Key + GenerateGeneral.LineFeed;
+                generateClassContent +=
+                    GenerateGeneral.Indents(8) + "public class " + pair.Key + GenerateGeneral.LineFeed;
                 generateClassContent += GenerateGeneral.Indents(8) + "{" + GenerateGeneral.LineFeed;
                 foreach (string moth in pair.Value)
                 {
@@ -425,8 +450,6 @@ namespace XFramework
 
                 generateClassContent += GenerateGeneral.Indents(8) + "}" + GenerateGeneral.LineFeed;
             }
-
-            #endregion
 
 
             return generateClassContent;

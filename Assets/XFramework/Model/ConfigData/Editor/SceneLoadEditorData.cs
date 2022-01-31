@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -16,7 +18,9 @@ namespace XFramework
 
         [LabelText("场景AssetBundle存放位置")] [FolderPath]
         public string sceneAssetBundlePath;
+
         [LabelText("当前打包方式:")] public General.BuildTargetPlatform buildTargetPlatform;
+
         [Serializable]
         public class SceneInfo
         {
@@ -29,3 +33,4 @@ namespace XFramework
         }
     }
 }
+#endif

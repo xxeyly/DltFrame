@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using Sirenix.OdinInspector;
 
 namespace XFramework
@@ -18,3 +20,4 @@ namespace XFramework
         [BoxGroup] [LabelText("组件索引")] public int componentIndex;
     }
 }
+#endif

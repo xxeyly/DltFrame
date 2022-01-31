@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -50,3 +52,4 @@ namespace XFramework
         [LabelText("鼠标场景初始化")] public bool mouseComponentEditorSceneInit;
     }
 }
+#endif

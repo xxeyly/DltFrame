@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 
 namespace XFramework
 {
@@ -7,3 +9,4 @@ namespace XFramework
     {
     }
 }
+#endif

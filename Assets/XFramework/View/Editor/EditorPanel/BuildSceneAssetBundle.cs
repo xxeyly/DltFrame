@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using LitJson;
 using UnityEditor;
 using UnityEngine;
@@ -173,3 +175,4 @@ namespace XFramework
         }
     }
 }
+#endif

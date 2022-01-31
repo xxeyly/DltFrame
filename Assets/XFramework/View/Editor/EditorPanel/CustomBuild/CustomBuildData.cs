@@ -1,4 +1,6 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -24,3 +26,4 @@ namespace XFramework
         [LabelText("文件拷贝输出路径")] public List<FolderCopy> folderCopy;
     }
 }
+#endif

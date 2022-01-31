@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -32,7 +33,8 @@ namespace XFramework
         [MenuItem("Xframe/监听生成 &l")]
         private static void OnListenerGenerate()
         {
-            ListenerComponentGenerateData listenerComponentGenerateData = DataComponent.GetObjectsInScene<ListenerComponentGenerateData>();
+            ListenerComponentGenerateData listenerComponentGenerateData =
+                DataComponent.GetObjectsInScene<ListenerComponentGenerateData>();
             if (listenerComponentGenerateData != null)
             {
                 listenerComponentGenerateData.OnGenerate();
@@ -97,7 +99,9 @@ namespace XFramework
             var tree = new OdinMenuTree();
             tree.Selection.SupportsMultiSelect = false;
             //框架配置
-            gameRootEditor = new GameRootEditor(_runtimeDataComponentEditor, _resComponentEditor, _downComponentEditor, _audioComponentEditor, _listenerComponentEditor, _sceneLoadComponentEditor, _timeComponentEditor, _entityComponentEditor, _viewComponentEditor,
+            gameRootEditor = new GameRootEditor(_runtimeDataComponentEditor, _resComponentEditor, _downComponentEditor,
+                _audioComponentEditor, _listenerComponentEditor, _sceneLoadComponentEditor, _timeComponentEditor,
+                _entityComponentEditor, _viewComponentEditor,
                 _circuitComponentEditor, _mouseComponentEditor);
             sceneLoad.OnInit();
             customBuild.OnInit();
@@ -122,3 +126,4 @@ namespace XFramework
         }
     }
 }
+#endif
