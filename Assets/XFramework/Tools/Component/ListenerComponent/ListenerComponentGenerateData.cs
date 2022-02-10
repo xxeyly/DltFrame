@@ -145,7 +145,6 @@ namespace XFramework
                 }
                 else
                 {
-                    Debug.Log("1");
                 }
             }
 
@@ -157,8 +156,7 @@ namespace XFramework
                     string functionName = String.Empty;
 
                     Dictionary<string, List<List<string>>> funGroup = new Dictionary<string, List<List<string>>>();
-                    while ((index = pair.Value.IndexOf("AddReturnListenerEvent", index, StringComparison.Ordinal)) !=
-                           -1)
+                    while ((index = pair.Value.IndexOf("AddReturnListenerEvent", index, StringComparison.Ordinal)) != -1)
                     {
                         string parameter = String.Empty;
                         index = index + "AddReturnListenerEvent".Length;
@@ -229,7 +227,6 @@ namespace XFramework
                 }
                 else
                 {
-                    Debug.Log(2);
                 }
             }
 
@@ -244,6 +241,8 @@ namespace XFramework
             FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), oldContent);
 
             #endregion
+
+            Debug.Log("代码生成完毕");
         }
 
         /// <summary>
@@ -432,16 +431,14 @@ namespace XFramework
             //生成类
             foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
             {
-                generateClassContent += GenerateGeneral.Indents(8) + "public " + pair.Key + " " +
-                                        DataComponent.FirstCharToLower(pair.Key) +
-                                        " = new " + pair.Key + "()" + ";" + GenerateGeneral.LineFeed;
+                generateClassContent += GenerateGeneral.Indents(8) + "public " + pair.Key + " " + DataComponent.FirstCharToLower(pair.Key) + " = new " + pair.Key + "()" + ";" +
+                                        GenerateGeneral.LineFeed;
             }
 
             //生成类方法
             foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
             {
-                generateClassContent +=
-                    GenerateGeneral.Indents(8) + "public class " + pair.Key + GenerateGeneral.LineFeed;
+                generateClassContent += GenerateGeneral.Indents(8) + "public class " + pair.Key + GenerateGeneral.LineFeed;
                 generateClassContent += GenerateGeneral.Indents(8) + "{" + GenerateGeneral.LineFeed;
                 foreach (string moth in pair.Value)
                 {
