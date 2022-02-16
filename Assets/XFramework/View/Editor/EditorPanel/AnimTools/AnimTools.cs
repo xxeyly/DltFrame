@@ -13,10 +13,7 @@ namespace XFramework
 {
     public class AnimTools : BaseEditor
     {
-        [TabGroup("AnimConfig", "加载配置")]
-        [AssetList]
-        [LabelText("动画配置文件")]
-        [OnValueChanged("AnimatorControllerOnValueChanged")]
+        [TabGroup("AnimConfig", "加载配置")] [AssetList] [LabelText("动画配置文件")] [OnValueChanged("AnimatorControllerOnValueChanged")]
         public AnimControllerConfig AnimControllerConfig;
 
         [TabGroup("AnimConfig", "加载配置")] [LabelText("动画控制器")] [ReadOnly]
@@ -25,12 +22,13 @@ namespace XFramework
         [TabGroup("AnimConfig", "加载配置")] [LabelText("动画控制器名字")] [ReadOnly]
         public string LoadAnimatorControllerName;
 
-        [TabGroup("AnimConfig", "加载配置")] [LabelText("输出文件夹")] [FolderPath] [ReadOnly]
-        public string LoadExportPath;
+        [TabGroup("AnimConfig", "加载配置")] [LabelText("输出表文件夹")] [FolderPath] [ReadOnly]
+        public string LoadExportTablePath;
 
-        [TabGroup("AnimConfig", "加载配置")]
-        [TableList(AlwaysExpanded = true, DrawScrollView = false)]
-        [LabelText("动画配置内容")]
+        [TabGroup("AnimConfig", "加载配置")] [LabelText("输出控制器文件夹")] [FolderPath] [ReadOnly]
+        public string LoadExportControllerPath;
+
+        [TabGroup("AnimConfig", "加载配置")] [TableList(AlwaysExpanded = true, DrawScrollView = false)] [LabelText("动画配置内容")]
         public List<AnimControllerConfig.AnimFbxConfig> AnimClipConfigs;
 
         private ModelImporter _modelImporter;
@@ -65,14 +63,21 @@ namespace XFramework
             }
             else
             {
+                //创建配置表
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AnimControllerConfig>(), NewExportConfigPath + "/" + NewAnimControllerConfigName + ".asset");
-                AnimControllerConfig animControllerConfig = AssetDatabase.LoadAssetAtPath<AnimControllerConfig>(NewExportConfigPath + "/" + NewAnimControllerConfigName + ".asset");
+                //加载配置表
+                AnimControllerConfig = AssetDatabase.LoadAssetAtPath<AnimControllerConfig>(NewExportConfigPath + "/" + NewAnimControllerConfigName + ".asset");
+                //创建控制器
                 AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(NewExportControllerPath + "/" + NewAnimatorControllerName + ".controller");
-                animControllerConfig.animFbxConfig = new List<AnimControllerConfig.AnimFbxConfig>();
-                animControllerConfig.LoadAnimatorControllerName = NewAnimatorControllerName;
-                animControllerConfig.LoadExportPath = NewExportConfigPath;
-                animControllerConfig.LoadAnimatorController = animatorController;
-                EditorUtility.SetDirty(animControllerConfig);
+                //初始化数据
+                AnimControllerConfig.animFbxConfig = new List<AnimControllerConfig.AnimFbxConfig>();
+                AnimControllerConfig.LoadAnimatorControllerName = NewAnimatorControllerName;
+                AnimControllerConfig.LoadExportTablePath = NewExportConfigPath;
+                AnimControllerConfig.LoadExportControllerPath = NewExportControllerPath;
+                AnimControllerConfig.LoadAnimatorController = animatorController;
+                //保存数据
+                EditorUtility.SetDirty(AnimControllerConfig);
+                AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
         }
@@ -84,7 +89,8 @@ namespace XFramework
             {
                 LoadAnimatorController = AnimControllerConfig.LoadAnimatorController;
                 LoadAnimatorControllerName = AnimControllerConfig.LoadAnimatorControllerName;
-                LoadExportPath = AnimControllerConfig.LoadExportPath;
+                LoadExportTablePath = AnimControllerConfig.LoadExportTablePath;
+                LoadExportControllerPath = AnimControllerConfig.LoadExportControllerPath;
                 AnimClipConfigs = AnimControllerConfig.animFbxConfig;
             }
             else
@@ -161,58 +167,66 @@ namespace XFramework
         [Button(ButtonSizes.Large), GUIColor(0, 1, 0)]
         private void BuildAnim()
         {
-            if (Directory.Exists(LoadExportPath) && LoadAnimatorControllerName != "")
+            if (!Directory.Exists(LoadExportTablePath) || !Directory.Exists(LoadExportControllerPath) || LoadAnimatorControllerName == string.Empty)
             {
-                AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(LoadExportPath + "/" + LoadAnimatorControllerName + ".controller");
-                AnimatorStateMachine rootStateMachine = animatorController.layers[0].stateMachine;
-                foreach (AnimControllerConfig.AnimFbxConfig animFbxAndAnimClipData in AnimClipConfigs)
+                return;
+            }
+
+            AnimatorController animatorController = AnimatorController.CreateAnimatorControllerAtPath(LoadExportControllerPath + "/" + LoadAnimatorControllerName + ".controller");
+            AnimatorStateMachine rootStateMachine = animatorController.layers[0].stateMachine;
+            foreach (AnimControllerConfig.AnimFbxConfig animFbxAndAnimClipData in AnimClipConfigs)
+            {
+                _modelImporter = (ModelImporter) AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx));
+                if (_modelImporter != null)
                 {
-                    _modelImporter = (ModelImporter) AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx));
-                    if (_modelImporter != null)
+                    _modelImporter.animationType = ModelImporterAnimationType.Generic;
+                    _modelImporter.generateAnimations = ModelImporterGenerateAnimations.GenerateAnimations;
+                    ModelImporterClipAnimation[] animations = new ModelImporterClipAnimation[animFbxAndAnimClipData.animClipSplitData.Count];
+
+                    for (int i = 0; i < animFbxAndAnimClipData.animClipSplitData.Count; i++)
                     {
-                        _modelImporter.animationType = ModelImporterAnimationType.Generic;
-                        _modelImporter.generateAnimations = ModelImporterGenerateAnimations.GenerateAnimations;
-                        ModelImporterClipAnimation[] animations = new ModelImporterClipAnimation[animFbxAndAnimClipData.animClipSplitData.Count];
-
-                        for (int i = 0; i < animFbxAndAnimClipData.animClipSplitData.Count; i++)
-                        {
-                            animations[i] = SetClipAnimation(
-                                animFbxAndAnimClipData.animClipSplitData[i].animatorClipName,
-                                animFbxAndAnimClipData.animClipSplitData[i].animatorClipFirstFrame,
-                                animFbxAndAnimClipData.animClipSplitData[i].animatorClipLastFrame,
-                                animFbxAndAnimClipData.animClipSplitData[i].animatorClipIsLoop);
-                        }
-
-                        _modelImporter.clipAnimations = animations;
-                        _modelImporter.SaveAndReimport();
-                        //该动画文件下的所有文件
-                        List<Object> allAnimObject = new List<Object>(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx)));
-                        List<string> allAnimClipName = GetAllAnimClipName();
-                        Dictionary<string, AnimationClip> animationClipDic = BuildingAnimationClips(allAnimObject, allAnimClipName);
-
-                        for (int i = 0; i < animFbxAndAnimClipData.animClipSplitData.Count; i++)
-                        {
-                            //添加 参数
-                            animatorController.AddParameter(animFbxAndAnimClipData.animClipSplitData[i].animatorClipName, animFbxAndAnimClipData.animClipSplitData[i].animatorControllerParameterType);
-                            //添加 片段
-                            AnimatorState state = rootStateMachine.AddState(animFbxAndAnimClipData.animClipSplitData[i].animatorClipName);
-                            //动画是否倒放
-                            state.speed = animFbxAndAnimClipData.animClipSplitData[i].animatorClipIsRewind ? -1 : 1;
-                            //设置动画
-                            state.motion = animationClipDic[animFbxAndAnimClipData.animClipSplitData[i].animatorClipName];
-                            // 关联片段 
-                            AnimatorStateTransition animatorStateTransition = rootStateMachine.AddAnyStateTransition(state);
-                            //设置关联参数
-                            animatorStateTransition.AddCondition(AnimatorConditionMode.If, 0, animFbxAndAnimClipData.animClipSplitData[i].animatorClipName);
-                            //设置持续时间
-                            animatorStateTransition.duration = animFbxAndAnimClipData.animClipSplitData[i].transitionDuration;
-                            animatorStateTransition.hasFixedDuration = animFbxAndAnimClipData.animClipSplitData[i].fixedDuration;
-                        }
+                        animations[i] = SetClipAnimation(
+                            animFbxAndAnimClipData.animClipSplitData[i].animatorClipName,
+                            animFbxAndAnimClipData.animClipSplitData[i].animatorClipFirstFrame,
+                            animFbxAndAnimClipData.animClipSplitData[i].animatorClipLastFrame,
+                            animFbxAndAnimClipData.animClipSplitData[i].animatorClipIsLoop);
                     }
-                    else
+
+                    _modelImporter.clipAnimations = animations;
+                    _modelImporter.SaveAndReimport();
+                    //该动画文件下的所有文件
+                    List<Object> allAnimObject = new List<Object>(AssetDatabase.LoadAllAssetsAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx)));
+                    List<string> allAnimClipName = GetAllAnimClipName();
+                    Dictionary<string, AnimationClip> animationClipDic = BuildingAnimationClips(allAnimObject, allAnimClipName);
+
+                    for (int i = 0; i < animFbxAndAnimClipData.animClipSplitData.Count; i++)
                     {
-                        Debug.LogError("当前Fbx文件没有选择");
+                        //添加 参数
+                        animatorController.AddParameter(animFbxAndAnimClipData.animClipSplitData[i].animatorClipName, animFbxAndAnimClipData.animClipSplitData[i].animatorControllerParameterType);
+                        //添加 片段
+                        AnimatorState state = rootStateMachine.AddState(animFbxAndAnimClipData.animClipSplitData[i].animatorClipName);
+                        //动画是否倒放
+                        state.speed = animFbxAndAnimClipData.animClipSplitData[i].animatorClipIsRewind ? -1 : 1;
+                        //设置动画
+                        state.motion = animationClipDic[animFbxAndAnimClipData.animClipSplitData[i].animatorClipName];
+                        // 关联片段 
+                        AnimatorStateTransition animatorStateTransition = rootStateMachine.AddAnyStateTransition(state);
+                        //设置关联参数
+                        animatorStateTransition.AddCondition(AnimatorConditionMode.If, 0, animFbxAndAnimClipData.animClipSplitData[i].animatorClipName);
+                        //设置持续时间
+                        animatorStateTransition.duration = animFbxAndAnimClipData.animClipSplitData[i].transitionDuration;
+                        animatorStateTransition.hasFixedDuration = animFbxAndAnimClipData.animClipSplitData[i].fixedDuration;
                     }
+
+                    LoadAnimatorController = animatorController;
+                    AnimControllerConfig.LoadAnimatorController = animatorController;
+                    EditorUtility.SetDirty(AnimControllerConfig);
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                }
+                else
+                {
+                    Debug.LogError("当前Fbx文件没有选择");
                 }
             }
         }

@@ -12,7 +12,8 @@ namespace XFramework
     {
         [LabelText("动画控制器")] public AnimatorController LoadAnimatorController;
         [LabelText("动画控制器名字")] public string LoadAnimatorControllerName;
-        [LabelText("输出文件夹")] [FolderPath] public string LoadExportPath;
+        [LabelText("输出表文件夹")] [FolderPath] public string LoadExportTablePath;
+        [LabelText("输出控制器文件夹")] [FolderPath] public string LoadExportControllerPath;
 
         public List<AnimFbxConfig> animFbxConfig;
 
@@ -20,10 +21,10 @@ namespace XFramework
         [LabelText("动画片段配置")]
         public class AnimFbxConfig
         {
-            [LabelText("分割的动画文件")] [VerticalGroup()]
+            [LabelText("分割的动画文件")] [VerticalGroup("动画分割数据")]
             public GameObject animFbx;
 
-            [LabelText("动画分割数据")] [VerticalGroup()] [TableList(AlwaysExpanded = true)]
+            [LabelText("动画分割数据")] [VerticalGroup("动画分割数据")] [TableList(AlwaysExpanded = true)]
             public List<AnimClipSplitData> animClipSplitData;
         }
 
