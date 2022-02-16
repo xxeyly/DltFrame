@@ -40,8 +40,10 @@ namespace XFramework
         [LabelText("文件下载路径")] public const string DownFilePath = "/XFramework/Resources/DownFile/DownFileInfo.Json";
 
         #endregion
-        [LabelText("Hierarchy内容跟随")]
-        public static bool HierarchyContentFollow = true;
+
+        [LabelText("Hierarchy内容跟随")] public static bool HierarchyContentFollow = true;
+        [LabelText("包导入地址")] public static string ComponentPackageServerPath = @"\\192.168.1.3\ZhShare\Software\Unity\Import";
+
         [LabelText("获得网页跟目录地址")]
         public static string GetUrlRootPath()
         {
@@ -123,9 +125,13 @@ namespace XFramework
 
         [LabelText("CircuitBaseData模板地址")] public static string CircuitBaseDataTemplatePath = "Assets/XFramework/Model/Template/CircuitBaseDataTemplate.cs";
 
-        [LabelText("ListenerComponentData模板地址")] public static string ListenerComponentDataTemplatePath = "Assets/XFramework/Model/Template/ListenerComponentDataTemplate.cs";
+        [LabelText("ListenerComponentData模板地址")]
+        public static string ListenerComponentDataTemplatePath = "Assets/XFramework/Model/Template/ListenerComponentDataTemplate.cs";
+
         [LabelText("SceneLoadComponent模板地址")] public static string SceneComponentTemplatePath = "Assets/XFramework/Model/Template/SceneComponentTemplate.cs";
-        [LabelText("SceneLoadComponentInit模板地址")] public static string SceneComponentInitTemplatePath = "Assets/XFramework/Model/Template/SceneComponentInitTemplate.cs";
+
+        [LabelText("SceneLoadComponentInit模板地址")]
+        public static string SceneComponentInitTemplatePath = "Assets/XFramework/Model/Template/SceneComponentInitTemplate.cs";
 
         [LabelText("AnimatorControllerParameterData模板地址")]
         public static string AnimatorControllerParameterDataTemplatePath = "Assets/XFramework/Model/Template/AnimatorControllerParameterDataTemplate.cs";

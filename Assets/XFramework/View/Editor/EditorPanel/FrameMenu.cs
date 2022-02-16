@@ -110,10 +110,11 @@ namespace XFramework
             _audioComponentEditor.OnInit();
             generateBaseWindowEditor.OnInit();
             resourceUnification.OnInit();
+            frameComponent.OnInit();
             customBuild.AfferentSceneLoad(sceneLoad);
             tree.Add("打包工具", customBuild);
             tree.Add("场景编辑", sceneLoad);
-            tree.Add("框架组件", gameRootEditor);
+            tree.Add("框架配置", gameRootEditor);
             tree.Add("音频配置", _audioComponentEditor);
             tree.Add("生成配置", generateBaseWindowEditor);
             tree.Add("资源统一化", resourceUnification);

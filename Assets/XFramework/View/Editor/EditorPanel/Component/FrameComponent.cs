@@ -1,10 +1,32 @@
-﻿namespace XFramework
+﻿using System.Collections.Generic;
+using System.IO;
+using LitJson;
+using Sirenix.OdinInspector;
+using UnityEditor;
+using UnityEngine;
+
+namespace XFramework
 {
     public class FrameComponent : BaseEditor
     {
+        [HorizontalGroup("地址")] [LabelText("包地址")]
+        public string ComponentPackageServerPath;
+
+        [LabelText("动画分割数据")] [VerticalGroup("动画分割数据")] [TableList(AlwaysExpanded = true)]
+        public List<FrameComponentData> FrameComponentData = new List<FrameComponentData>();
+
+        private static List<string> _directoryPath = new List<string>();
+        private List<FrameComponentImportData> _frameComponentImportData = new List<FrameComponentImportData>();
+
+        [HorizontalGroup("地址")]
+        [Button("刷新")]
+        public void Refresh()
+        {
+            OnLoadConfig();
+        }
+
         public override void OnDisable()
         {
-            
         }
 
         public override void OnCreateConfig()
@@ -17,10 +39,69 @@
 
         public override void OnLoadConfig()
         {
+            ComponentPackageServerPath = General.ComponentPackageServerPath;
+            _frameComponentImportData.Clear();
+            _directoryPath = new List<string>(Directory.GetDirectories(ComponentPackageServerPath));
+
+            foreach (string directory in _directoryPath)
+            {
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    if (file.Contains("json"))
+                    {
+                        FileStream fileStream = new FileStream(file, FileMode.OpenOrCreate);
+                        StreamReader sr = new StreamReader(fileStream);
+                        string textData = sr.ReadToEnd();
+                        _frameComponentImportData.Add(JsonMapper.ToObject<FrameComponentImportData>(textData));
+                        sr.Close();
+                    }
+                }
+            }
+
+            FrameComponentData.Clear();
+            foreach (FrameComponentImportData frameComponentImportData in _frameComponentImportData)
+            {
+                // Debug.Log(frameComponentImportData.packageScriptName);
+                List<string> allScripts = DataComponent.GetAllScriptsNameOnlyInAssetsPath();
+                bool localScripts = false;
+                for (int i = 0; i < allScripts.Count; i++)
+                {
+                    if (allScripts[i].Equals(frameComponentImportData.packageScriptName + ".cs"))
+                    {
+                        localScripts = true;
+                        break;
+                    }
+                }
+
+                FrameComponentData.Add(new FrameComponentData()
+                {
+                    importState = localScripts ? XFramework.FrameComponentData.ImportState.重新导入 : XFramework.FrameComponentData.ImportState.导入,
+                    packageName = frameComponentImportData.packageName
+                });
+            }
         }
 
         public override void OnInit()
         {
+            OnCreateConfig();
+            OnLoadConfig();
+        }
+
+        public static void Import(string packageName)
+        {
+            foreach (string directory in _directoryPath)
+            {
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    if (file.Contains(packageName + ".unitypackage"))
+                    {
+                        AssetDatabase.ImportPackage(file, true);
+                        return;
+                    }
+                }
+            }
+
+            Debug.Log(packageName);
         }
     }
 }

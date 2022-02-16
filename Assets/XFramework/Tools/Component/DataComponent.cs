@@ -296,6 +296,42 @@ namespace XFramework
         }
 
         /// <summary>
+        /// 返回所有类路径
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetAllScriptsPathOnlyInAssetsPath()
+        {
+            Dictionary<string, List<string>> allObject = GetAllObjectsOnlyInAssetsPath();
+            if (allObject.ContainsKey("cs"))
+            {
+                return allObject["cs"];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// 返回所有类路径
+        /// </summary>
+        /// <returns></returns>
+        public static List<string> GetAllScriptsNameOnlyInAssetsPath()
+        {
+            List<string> scriptsPath = GetAllScriptsPathOnlyInAssetsPath();
+            List<string> scriptName = new List<string>();
+            if (scriptsPath != null)
+            {
+                foreach (string scriptPath in scriptsPath)
+                {
+                    List<string> scriptPathSpice = new List<string>(scriptPath.Split('\\'));
+                    scriptName.Add(scriptPathSpice[scriptPathSpice.Count - 1]);
+                }
+            }
+
+            return scriptName;
+        }
+
+
+        /// <summary>
         /// 获得指定类型文件路径
         /// </summary>
         /// <returns></returns>
