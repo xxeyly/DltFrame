@@ -92,6 +92,7 @@ namespace XFramework
 
         //动画工具
         AnimTools animTools = new AnimTools();
+        FrameComponent frameComponent = new FrameComponent();
 
         //生成配置
         protected override OdinMenuTree BuildMenuTree()
@@ -117,6 +118,7 @@ namespace XFramework
             tree.Add("生成配置", generateBaseWindowEditor);
             tree.Add("资源统一化", resourceUnification);
             tree.Add("动画工具", animTools);
+            tree.Add("框架组件", frameComponent);
             return tree;
         }
 

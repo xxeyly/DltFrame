@@ -58,6 +58,11 @@ namespace XFramework
                 text = text.Replace("SceneComponentTemplate", className);
             }
 
+            if (resourceFile == General.SceneComponentInitTemplatePath)
+            {
+                text = text.Replace("SceneComponentInitTemplate", className);
+            }
+
             if (resourceFile == General.AnimatorControllerParameterDataTemplatePath)
             {
                 text = text.Replace("AnimatorControllerParameterDataTemplate", "AnimatorControllerData");

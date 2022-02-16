@@ -65,7 +65,7 @@ namespace XFramework
         }
 
         [MenuItem("Assets/Create/XFramework/C# SceneComponent", false, 74)]
-        public static void OnCreateStartSingletonTemplate()
+        public static void OnCreateSceneComponentTemplate()
         {
             string path = GetSelectedPath();
             if (string.IsNullOrEmpty(path))
@@ -77,9 +77,23 @@ namespace XFramework
                 ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/NewSceneComponent.cs", null,
                 General.SceneComponentTemplatePath);
         }
+        
+        [MenuItem("Assets/Create/XFramework/C# SceneComponentInit", false, 75)]
+        public static void OnCreateSceneComponentInitTemplate()
+        {
+            string path = GetSelectedPath();
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0,
+                ScriptableObject.CreateInstance<CreateTemplateScript>(), path + "/NewSceneComponentInit.cs", null,
+                General.SceneComponentInitTemplatePath);
+        }
 
 
-        [MenuItem("Assets/Create/XFramework/C# AnimatorControllerParameterData", false, 75)]
+        [MenuItem("Assets/Create/XFramework/C# AnimatorControllerParameterData", false, 76)]
         public static void OnCreateAnimatorControllerParameterDataTemplate()
         {
             string path = GetSelectedPath();

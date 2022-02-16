@@ -185,7 +185,12 @@ namespace XFramework
         {
             // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
             GameObject objectsInScene = GetObjectsOnlyInScene<T>();
-            return objectsInScene.GetComponent<T>();
+            if (objectsInScene != null)
+            {
+                return objectsInScene.GetComponent<T>();
+            }
+
+            return default;
         }
 
         /// <summary>

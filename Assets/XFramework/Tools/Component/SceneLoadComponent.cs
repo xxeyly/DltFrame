@@ -244,6 +244,8 @@ namespace XFramework
             }
 
             Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景工具加载完毕");
+            
+            DataComponent.GetObjectsInScene<SceneComponentInit>()?.InitComponent();
             GameRootStart.Instance.FrameSceneLoadEnd();
         }
 

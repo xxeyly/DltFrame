@@ -125,6 +125,7 @@ namespace XFramework
 
         [LabelText("ListenerComponentData模板地址")] public static string ListenerComponentDataTemplatePath = "Assets/XFramework/Model/Template/ListenerComponentDataTemplate.cs";
         [LabelText("SceneLoadComponent模板地址")] public static string SceneComponentTemplatePath = "Assets/XFramework/Model/Template/SceneComponentTemplate.cs";
+        [LabelText("SceneLoadComponentInit模板地址")] public static string SceneComponentInitTemplatePath = "Assets/XFramework/Model/Template/SceneComponentInitTemplate.cs";
 
         [LabelText("AnimatorControllerParameterData模板地址")]
         public static string AnimatorControllerParameterDataTemplatePath = "Assets/XFramework/Model/Template/AnimatorControllerParameterDataTemplate.cs";
