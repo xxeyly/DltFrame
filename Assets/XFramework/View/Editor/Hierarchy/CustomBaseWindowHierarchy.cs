@@ -46,7 +46,6 @@ namespace XFramework
                         {
                             viewNameRect = SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
                         }
-
                         GUI.Label(viewNameRect, viewName, new GUIStyle()
                         {
                             fontStyle = FontStyle.Italic

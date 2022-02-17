@@ -101,6 +101,16 @@ namespace XFramework
             {"?", 6},
             {" ", 3},
             {"汉", 12},
+            {"0", 8},
+            {"1", 6},
+            {"2", 7},
+            {"3", 8},
+            {"4", 8},
+            {"5", 7},
+            {"6", 7},
+            {"7", 7},
+            {"8", 7},
+            {"9", 7},
         };
 
         /// <summary>
@@ -443,6 +453,12 @@ namespace XFramework
 
             for (int i = 0; i < hierarchyContent.Length; i++)
             {
+                if (!CharacterLengthDic.ContainsKey(hierarchyContent[i].ToString()))
+                {
+                    // Debug.Log(hierarchyContent[i]);
+                    return 0;
+                }
+
                 if (CheckStringIsChinese(hierarchyContent[i].ToString()))
                 {
                     length += CharacterLengthDic["汉"];
