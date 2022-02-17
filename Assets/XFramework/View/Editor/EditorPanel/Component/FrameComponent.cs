@@ -12,7 +12,7 @@ namespace XFramework
         [HorizontalGroup("地址")] [LabelText("包地址")]
         public string ComponentPackageServerPath;
 
-        [LabelText("动画分割数据")] [VerticalGroup("动画分割数据")] [TableList(AlwaysExpanded = true)]
+        [LabelText("框架模块")] [VerticalGroup("框架模块")] [TableList(AlwaysExpanded = true, IsReadOnly = true)]
         public List<FrameComponentData> FrameComponentData = new List<FrameComponentData>();
 
         private static List<string> _directoryPath = new List<string>();
@@ -22,7 +22,7 @@ namespace XFramework
         [Button("刷新")]
         public void Refresh()
         {
-            OnLoadConfig();
+            RefreshComponent();
         }
 
         public override void OnDisable()
@@ -37,9 +37,11 @@ namespace XFramework
         {
         }
 
-        public override void OnLoadConfig()
+        /// <summary>
+        /// 刷新资源
+        /// </summary>
+        private void RefreshComponent()
         {
-            ComponentPackageServerPath = General.ComponentPackageServerPath;
             _frameComponentImportData.Clear();
             _directoryPath = new List<string>(Directory.GetDirectories(ComponentPackageServerPath));
 
@@ -61,7 +63,6 @@ namespace XFramework
             FrameComponentData.Clear();
             foreach (FrameComponentImportData frameComponentImportData in _frameComponentImportData)
             {
-                // Debug.Log(frameComponentImportData.packageScriptName);
                 List<string> allScripts = DataComponent.GetAllScriptsNameOnlyInAssetsPath();
                 bool localScripts = false;
                 for (int i = 0; i < allScripts.Count; i++)
@@ -79,6 +80,17 @@ namespace XFramework
                     packageName = frameComponentImportData.packageName
                 });
             }
+        }
+
+        public override void OnLoadConfig()
+        {
+            ComponentPackageServerPath = General.ComponentPackageServerPath;
+            if (!Directory.Exists(ComponentPackageServerPath))
+            {
+                return;
+            }
+
+            RefreshComponent();
         }
 
         public override void OnInit()
