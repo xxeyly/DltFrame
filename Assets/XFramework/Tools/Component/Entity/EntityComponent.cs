@@ -95,12 +95,12 @@ namespace XFramework
 #endif
         }
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<EntityComponent>();
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
             EntityInit();
         }

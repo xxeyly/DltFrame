@@ -5,11 +5,11 @@
         /// <summary>
         /// 开启组件
         /// </summary>
-        void StartComponent();
+        void FrameInitComponent();
 
         /// <summary>
         /// 组件初始化
         /// </summary>
-        void InitComponent();
+        void SceneInitComponent();
     }
 }

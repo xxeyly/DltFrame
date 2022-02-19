@@ -22,12 +22,12 @@ namespace XFramework
             POST
         }
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<HttpComponent>();
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
         }
 

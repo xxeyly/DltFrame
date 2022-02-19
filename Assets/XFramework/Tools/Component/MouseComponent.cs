@@ -57,12 +57,12 @@ namespace XFramework
         [LabelText("鼠标按下")]
         public bool mouseDown;
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<MouseComponent>();
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
         }
 

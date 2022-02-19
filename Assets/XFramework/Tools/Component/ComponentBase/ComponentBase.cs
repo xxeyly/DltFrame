@@ -13,10 +13,8 @@ namespace XFramework
 
         [BoxGroup] [LabelText("组件索引")] public int componentIndex;
 
-        public abstract void StartComponent();
-
-
-        public abstract void InitComponent();
+        public abstract void FrameInitComponent();
+        public abstract void SceneInitComponent();
         public abstract void EndComponent();
     }
 }

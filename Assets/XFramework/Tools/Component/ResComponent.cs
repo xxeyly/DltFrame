@@ -22,12 +22,12 @@ namespace XFramework
 
         [SerializeField] [LabelText("资源池")] private Dictionary<string, Object> objDic;
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<ResComponent>();
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
             objDic = new Dictionary<string, Object>();
         }

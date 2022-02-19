@@ -19,7 +19,7 @@ namespace XFramework
 
         private Dictionary<string, AudioClip> _audioDlc;
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<AudioComponent>();
         }
@@ -28,7 +28,7 @@ namespace XFramework
         {
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
             //创建音效组件
             if (_effectAudioSource == null)

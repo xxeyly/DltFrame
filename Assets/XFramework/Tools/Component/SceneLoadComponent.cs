@@ -38,7 +38,7 @@ namespace XFramework
         private static extern void WindowClose();
 #endif
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<SceneLoadComponent>();
             SceneManager.sceneLoaded += SceneLoadOverCallBack;
@@ -54,7 +54,7 @@ namespace XFramework
             InitSceneStartSingletons();
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
             if (DownComponent.Instance != null)
             {
@@ -198,22 +198,6 @@ namespace XFramework
         }
 
         /// <summary>
-        /// 场景跳转之前的初始化操作
-        /// </summary>
-        private void SceneLoadBeforeInit()
-        {
-            //全局禁止响应,不能继续点击
-            ViewComponent.Instance.NoAllResponse();
-            ViewComponent.Instance.AllViewDestroy();
-            //删除所有计时任务
-            TimeComponent.Instance.DeleteSwitchTask();
-            TimeComponent.Instance.DeleteTimeTask();
-            //音频停止播放
-            AudioComponent.Instance.StopEffectAudio();
-            AudioComponent.Instance.StopTipAndDialogAudio();
-        }
-
-        /// <summary>
         /// 加载场景初始化单例
         /// 加载顺序 场景组件-场景工具-View静态界面
         /// </summary>
@@ -227,7 +211,7 @@ namespace XFramework
             {
                 if (componentBase.sceneInit)
                 {
-                    componentBase.InitComponent();
+                    componentBase.SceneInitComponent();
                 }
             }
 

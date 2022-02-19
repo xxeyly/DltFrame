@@ -39,13 +39,12 @@ namespace XFramework
 
         [SerializeField] private Dictionary<string, List<Delegate>> listenerReturnCallBackDic;
 
-
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<ListenerComponent>();
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
             listenerCallBackDic = new Dictionary<string, List<Delegate>>();
             listenerReturnCallBackDic = new Dictionary<string, List<Delegate>>();
@@ -244,36 +243,89 @@ namespace XFramework
         #region 移除监听
 
         /// <summary>
-        /// 删除事件监听
+        /// 移除事件监听
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void DeleteListenerEvent(string eventType, UnityAction callBack)
+        public void RemoveListenerEvent(string eventType, CallBack callBack)
         {
-            if (listenerCallBackDic.ContainsKey(eventType))
-            {
-                listenerCallBackDic[eventType].Remove(callBack);
-            }
-            else
-            {
-                Debug.LogError("该事件没有被绑定过");
-            }
+            RemoveDelegateToListenerEvent(eventType, callBack);
         }
 
         /// <summary>
-        /// 删除事件监听
+        /// 移除事件监听
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void DeleteReturnListenerEvent(string eventType, UnityAction callBack)
+        public void RemoveListenerEvent<T>(string eventType, CallBack<T> callBack)
         {
-            if (listenerReturnCallBackDic.ContainsKey(eventType))
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        /// <summary>
+        /// 移除事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="callBack"></param>
+        public void RemoveListenerEvent<T, X>(string eventType, CallBack<T, X> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        /// <summary>
+        /// 移除事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="callBack"></param>
+        public void RemoveListenerEvent<T, X, Y>(string eventType, CallBack<T, X, Y> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        /// <summary>
+        /// 移除事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="callBack"></param>
+        public void RemoveListenerEvent<T, X, Y, Z>(string eventType, CallBack<T, X, Y, Z> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        /// <summary>
+        /// 移除事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="callBack"></param>
+        public void RemoveListenerEvent<T, X, Y, Z, W>(string eventType,
+            CallBack<T, X, Y, Z, W> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        /// <summary>
+        /// 移除监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="customDelegate"></param>
+        private void RemoveDelegateToListenerEvent(string eventType, Delegate customDelegate)
+        {
+            if (!listenerCallBackDic.ContainsKey(eventType))
             {
-                listenerReturnCallBackDic[eventType].Remove(callBack);
+                List<Delegate> delegates = new List<Delegate> {customDelegate};
+                listenerCallBackDic.Add(eventType, delegates);
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过");
+                List<Delegate> delegates = listenerCallBackDic[eventType];
+                if (!delegates.Contains(customDelegate))
+                {
+                    delegates.Add(customDelegate);
+                }
+                else
+                {
+                    Debug.LogError(eventType + "该事件已经被绑定了");
+                }
             }
         }
 

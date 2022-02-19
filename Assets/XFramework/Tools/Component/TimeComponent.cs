@@ -45,7 +45,7 @@ namespace XFramework
         public List<int> expireDate;
 
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<TimeComponent>();
             if (isExpire)
@@ -95,7 +95,7 @@ namespace XFramework
             }
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
             _taskTimeList = new List<TimeTask>();
             _taskSwitchList = new List<SwitchTask>();
@@ -108,7 +108,7 @@ namespace XFramework
 
         public override void EndComponent()
         {
-            // _timer.Close();
+            
         }
 
         /// <summary>

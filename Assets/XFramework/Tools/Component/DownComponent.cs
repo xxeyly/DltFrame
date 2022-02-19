@@ -26,7 +26,7 @@ namespace XFramework
 
         public DownTaskDelegate downTaskDelegate;
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<DownComponent>();
             // StartCoroutine(DownLoadTest());
@@ -60,7 +60,7 @@ namespace XFramework
         }
 
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
             //获得下载场景配置信息
             _downSceneFile =

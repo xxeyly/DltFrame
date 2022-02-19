@@ -17,7 +17,7 @@ namespace XFramework
         [LabelText("当前质量")] public QualitySettingType qualitySettingType = QualitySettingType.High;
         [LabelText("鼠标状态")] public bool mouseState;
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
         }
 
@@ -26,7 +26,7 @@ namespace XFramework
         }
 
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<RuntimeDataComponent>();
         }

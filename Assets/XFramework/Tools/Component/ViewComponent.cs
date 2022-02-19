@@ -54,17 +54,15 @@ namespace XFramework
         public DelegateHideView onHideView;
 
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<ViewComponent>();
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
-            // List<BaseWindow> tempSceneBaseWindow = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
             List<BaseWindow> tempSceneBaseWindow = DataComponent.GetAllObjectsInScene<BaseWindow>();
             allViewWind = new List<BaseWindow>();
-            // allViewWind = new List<BaseWindow>(FindObjectsOfType<BaseWindow>());
             for (int i = 0; i < tempSceneBaseWindow.Count; i++)
             {
                 if (!tempSceneBaseWindow[i].GetComponent<ChildBaseWindow>())
@@ -80,9 +78,6 @@ namespace XFramework
             {
                 window.ViewStartInit();
             }
-
-            //关闭全体禁止响应
-            CloseNoAllResponse();
         }
 
         public override void EndComponent()
@@ -299,22 +294,6 @@ namespace XFramework
                     HideView(pair.Key);
                 }
             }
-        }
-
-        /// <summary>
-        /// 全局禁止响应
-        /// </summary>
-        public void NoAllResponse()
-        {
-            //TODO 未开发
-        }
-
-        /// <summary>
-        /// 关闭全局禁止响应
-        /// </summary>
-        public void CloseNoAllResponse()
-        {
-            //TODO 未开发
         }
 
         /// <summary>

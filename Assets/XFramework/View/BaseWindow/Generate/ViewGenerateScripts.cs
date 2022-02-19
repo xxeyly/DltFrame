@@ -526,6 +526,18 @@ namespace XFramework
                     allUiVariableBind.Add(Indents(8) + "BindUi(ref _" + DataComponent.FirstCharToLower(child.name) + ",\"" +
                                           GetUiComponentPath(child, "") + "\");");
                 }
+
+                if (child.GetComponent<BindUiType>() && child.GetComponent<BindUiType>().type == General.UiType.ChildList)
+                {
+                    string listChildBaseWindowContent = String.Empty;
+                    listChildBaseWindowContent += Indents(8) + "for" + Indents(1) + "(" + "int" + Indents(1) + "i" + Indents(1) + "=" + Indents(1) + "0" + Semicolon +
+                                                  Indents(1) + "i" + Indents(1) + "<" + Indents(1) + "_" + DataComponent.FirstCharToLower(child.name) + ".Count" + Semicolon + Indents(1) + "i++" +
+                                                  ")" + LineFeed + Indents(8) + "{"
+                                                  + LineFeed + Indents(12) + "_" + DataComponent.FirstCharToLower(child.name) + "[i]" + "." + "ViewStartInit();"
+                                                  + LineFeed + Indents(12) + "_" + DataComponent.FirstCharToLower(child.name) + "[i]" + "." + "InitData(i);" + LineFeed + Indents(8) + "}";
+
+                    allUiVariableBind.Add(listChildBaseWindowContent);
+                }
             }
         }
 

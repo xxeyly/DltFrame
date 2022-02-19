@@ -19,12 +19,12 @@ namespace XFramework
         private Dictionary<Type, CircuitBaseData> _allCircuitBaseDataDic;
         [LabelText("流程执行中")] private bool _inExecution;
 
-        public override void StartComponent()
+        public override void FrameInitComponent()
         {
             Instance = GetComponent<CircuitComponent>();
         }
 
-        public override void InitComponent()
+        public override void SceneInitComponent()
         {
             ViewComponent.Instance.onShowView += OnViewShow;
             ViewComponent.Instance.onHideView += OnHideShow;

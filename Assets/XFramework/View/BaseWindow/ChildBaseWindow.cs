@@ -1,4 +1,5 @@
 ﻿using Sirenix.OdinInspector;
+
 namespace XFramework
 {
     /// <summary>
@@ -7,6 +8,7 @@ namespace XFramework
     public abstract class ChildBaseWindow : BaseWindow
     {
         [LabelText("索引")] public int itemIndex;
+
         public override void ViewStartInit()
         {
             window = gameObject;
@@ -27,6 +29,25 @@ namespace XFramework
         /// </summary>
         public virtual void OnUnSelect()
         {
+        }
+
+        /// <summary>
+        /// 数据初始化
+        /// </summary>
+        /// <param name="itemIndex"></param>
+        public virtual void InitData(int itemIndex)
+        {
+            this.itemIndex = itemIndex;
+        }
+
+        /// <summary>
+        /// 数据初始化
+        /// </summary>
+        /// <param name="itemIndex"></param>
+        /// <param name="content"></param>
+        public virtual void InitData(int itemIndex, string content)
+        {
+            this.itemIndex = itemIndex;
         }
     }
 }

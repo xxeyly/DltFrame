@@ -90,7 +90,7 @@ namespace XFramework
         {
             for (int i = 0; i < activeComponentBase.Count; i++)
             {
-                activeComponentBase[i].StartComponent();
+                activeComponentBase[i].FrameInitComponent();
             }
         }
 
@@ -103,7 +103,7 @@ namespace XFramework
             {
                 if (activeComponentBase[i].frameInit)
                 {
-                    activeComponentBase[i].InitComponent();
+                    activeComponentBase[i].SceneInitComponent();
                 }
             }
         }
