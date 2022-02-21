@@ -17,24 +17,45 @@ namespace XFramework
 
         private static List<string> _directoryPath = new List<string>();
         private List<FrameComponentImportData> _frameComponentImportData = new List<FrameComponentImportData>();
+        private FrameComponentEditorData _frameComponentEditorData;
 
         [HorizontalGroup("地址")]
         [Button("刷新")]
         public void Refresh()
         {
-            RefreshComponent();
+            if (Directory.Exists(ComponentPackageServerPath))
+            {
+                RefreshComponent();
+            }
         }
 
         public override void OnDisable()
         {
+            OnSaveConfig();
         }
 
         public override void OnCreateConfig()
         {
+            _frameComponentEditorData = AssetDatabase.LoadAssetAtPath<FrameComponentEditorData>(General.frameComponentEditorDataPath);
+            if (_frameComponentEditorData == null)
+            {
+                if (!Directory.Exists(General.assetRootPath))
+                {
+                    Directory.CreateDirectory(General.assetRootPath);
+                }
+
+                //创建数据
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<FrameComponentEditorData>(), General.frameComponentEditorDataPath);
+                //读取数据
+                _frameComponentEditorData = AssetDatabase.LoadAssetAtPath<FrameComponentEditorData>(General.frameComponentEditorDataPath);
+            }
         }
 
         public override void OnSaveConfig()
         {
+            _frameComponentEditorData.componentPackageServerPath = ComponentPackageServerPath;
+            //标记脏区
+            EditorUtility.SetDirty(_frameComponentEditorData);
         }
 
         /// <summary>
@@ -84,13 +105,7 @@ namespace XFramework
 
         public override void OnLoadConfig()
         {
-            ComponentPackageServerPath = General.ComponentPackageServerPath;
-            if (!Directory.Exists(ComponentPackageServerPath))
-            {
-                return;
-            }
-
-            RefreshComponent();
+            ComponentPackageServerPath = _frameComponentEditorData.componentPackageServerPath;
         }
 
         public override void OnInit()
@@ -98,6 +113,7 @@ namespace XFramework
             OnCreateConfig();
             OnLoadConfig();
         }
+        
 
         public static void Import(string packageName)
         {
@@ -112,8 +128,6 @@ namespace XFramework
                     }
                 }
             }
-
-            Debug.Log(packageName);
         }
     }
 }

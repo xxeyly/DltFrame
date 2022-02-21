@@ -26,7 +26,7 @@ namespace XFramework
         {
             [HorizontalGroup] [HideLabel] public SceneAsset sceneAsset;
 
-            [HorizontalGroup] [HideLabel] [EnumToggleButtons] [LabelWidth(60)]
+            [HorizontalGroup] [HideLabel] /*[EnumToggleButtons]*/ [LabelWidth(60)][EnumPaging]
             public SceneLoad.SceneLoadType sceneLoadType;
 
             [HideInInspector] public string Md5;

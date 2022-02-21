@@ -42,7 +42,6 @@ namespace XFramework
         #endregion
 
         [LabelText("Hierarchy内容跟随")] public static bool HierarchyContentFollow = true;
-        [LabelText("包导入地址")] public static string ComponentPackageServerPath = @"\\192.168.1.3\ZhShare\Software\Unity\Import";
 
         [LabelText("获得网页跟目录地址")]
         public static string GetUrlRootPath()
@@ -148,6 +147,7 @@ namespace XFramework
         [LabelText("场景配置存放路径")] public static string sceneLoadPath = assetRootPath + "SceneLoadData.asset";
 
         [LabelText("场景配置存放路径")] public static string buildSceneAssetBundleDataPath = assetRootPath + "BuildSceneAssetBundleData.asset";
+        [LabelText("框架配置存放路径")] public static string frameComponentEditorDataPath = assetRootPath + "FrameComponentEditorData.asset";
 
         /// <summary>
         /// 生成属性类型

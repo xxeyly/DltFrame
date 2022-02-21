@@ -27,6 +27,7 @@ namespace XFramework
             gameRootEditor.OnDisable();
             generateBaseWindowEditor.OnDisable();
             sceneLoad.OnDisable();
+            frameComponent.OnDisable();
             AssetDatabase.SaveAssets();
         }
 
