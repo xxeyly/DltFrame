@@ -139,10 +139,6 @@ namespace XFramework
         /// <summary>
         /// 视图摧毁
         /// </summary>
-        public void OnViewDestroy()
-        {
-            ViewDestroy();
-        }
 
         /// <summary>
         /// 隐藏视图

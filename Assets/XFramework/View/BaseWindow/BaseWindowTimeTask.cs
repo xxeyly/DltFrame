@@ -130,7 +130,7 @@ namespace XFramework
         /// <summary>
         /// 界面摧毁
         /// </summary>
-        protected virtual void ViewDestroy()
+        public virtual void OnViewDestroy()
         {
             for (int i = 0; i < timeTaskInfoList.Count; i++)
             {

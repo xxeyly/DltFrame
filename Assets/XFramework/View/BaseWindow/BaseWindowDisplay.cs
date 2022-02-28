@@ -199,7 +199,7 @@ namespace XFramework
                         throw new ArgumentOutOfRangeException();
                 }
 
-                ViewDestroy();
+                OnViewDestroy();
             }
         }
       
