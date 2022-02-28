@@ -31,6 +31,11 @@ namespace XFramework
         {
         }
 
+        public override void EndComponent()
+        {
+            
+        }
+
         public void Show()
         {
             if (isLog)

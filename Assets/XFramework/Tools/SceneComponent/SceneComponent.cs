@@ -6,5 +6,6 @@ namespace XFramework
     {
         public abstract void StartComponent();
         public abstract void InitComponent();
+        public abstract void EndComponent();
     }
 }

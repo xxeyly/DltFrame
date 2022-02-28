@@ -63,7 +63,7 @@ namespace XFramework
         protected void Awake()
         {
         }
-      
+
         /// <summary>
         /// 组件排序
         /// </summary>
@@ -105,6 +105,15 @@ namespace XFramework
                 {
                     activeComponentBase[i].SceneInitComponent();
                 }
+            }
+        }
+
+        //场景组件结束
+        public void ComponentEnd()
+        {
+            for (int i = 0; i < sceneStartSingletons.Count; i++)
+            {
+                sceneStartSingletons[i].EndComponent();
             }
         }
 

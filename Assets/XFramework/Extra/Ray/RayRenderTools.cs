@@ -194,6 +194,11 @@ namespace XFramework
         {
         }
 
+        public override void EndComponent()
+        {
+            
+        }
+
 
         /// <summary>
         /// 执行射线事件

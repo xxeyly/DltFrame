@@ -175,6 +175,10 @@ namespace XFramework
                 Destroy(GameRootStart.Instance.gameObject);
             }
 
+            //处理场景加载时需要卸载的逻辑
+            GameRootStart.Instance.ComponentEnd();
+            ViewComponent.Instance.AllViewDestroy();
+
             SceneManager.LoadScene(sceneName);
         }
 
@@ -228,7 +232,7 @@ namespace XFramework
             }
 
             Debug.Log(SceneManager.GetActiveScene().name + ":" + "场景工具加载完毕");
-            
+
             DataComponent.GetObjectsInScene<SceneComponentInit>()?.InitComponent();
             GameRootStart.Instance.FrameSceneLoadEnd();
         }

@@ -39,6 +39,11 @@ namespace XFramework
             }
         }
 
+        public override void EndComponent()
+        {
+            
+        }
+
 
         /// <summary>
         /// 播放动画

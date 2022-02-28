@@ -51,6 +51,11 @@ public class CameraControl : SceneComponent
         transform.position = Vector3.zero;
     }
 
+    public override void EndComponent()
+    {
+        
+    }
+
 
     void LateUpdate()
     {
