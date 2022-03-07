@@ -18,6 +18,7 @@ namespace XFramework
         [TabGroup("UI", "属性")] [LabelText("UI变量名称")] [ReadOnly]
         public List<string> allCustomAttributes;
 
+
         #endregion
 
         protected override void GenerateCustomData()
