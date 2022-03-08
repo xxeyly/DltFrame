@@ -1,9 +1,12 @@
-﻿using UnityEngine.Events;
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine.Events;
 
 namespace XFramework
 {
     partial class BaseWindow
     {
+
         #region 无返回方法
 
         /// <summary>
@@ -11,9 +14,9 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="unityAction"></param>
-        protected void AddListenerEvent(string eventType, ListenerComponent.CallBack unityAction)
+        protected void AddListenerEvent(string eventType, ListenerComponent.CallBack callBack)
         {
-            ListenerComponent.Instance.AddListenerEvent(GetType() + "_" + eventType, unityAction);
+            ListenerComponent.Instance.AddListenerEvent(GetType() + "_" + eventType, callBack);
         }
 
         /// <summary>
@@ -197,6 +200,7 @@ namespace XFramework
         {
             ListenerComponent.Instance.RemoveListenerEvent(GetType() + "_" + eventType, callBack);
         }
+      
 
         #endregion
     }

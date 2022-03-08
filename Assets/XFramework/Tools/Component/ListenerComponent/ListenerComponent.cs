@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -38,6 +39,7 @@ namespace XFramework
         public delegate R ReturnCallBack<T, X, Y, Z, W, R>(T t, X x, Y y, Z z, W w);
 
         [SerializeField] private Dictionary<string, List<Delegate>> listenerReturnCallBackDic;
+        [LabelText("所有触发事件")] public List<string> allListener;
 
         public override void FrameInitComponent()
         {
@@ -48,6 +50,7 @@ namespace XFramework
         {
             listenerCallBackDic = new Dictionary<string, List<Delegate>>();
             listenerReturnCallBackDic = new Dictionary<string, List<Delegate>>();
+            allListener = new List<string>();
         }
 
         public override void EndComponent()
@@ -77,6 +80,7 @@ namespace XFramework
             {
                 List<Delegate> delegates = new List<Delegate> {customDelegate};
                 listenerCallBackDic.Add(eventType, delegates);
+                allListener.Add(eventType);
             }
             else
             {
@@ -312,19 +316,19 @@ namespace XFramework
         {
             if (!listenerCallBackDic.ContainsKey(eventType))
             {
-                List<Delegate> delegates = new List<Delegate> {customDelegate};
-                listenerCallBackDic.Add(eventType, delegates);
+                Debug.Log(eventType + "没有被绑定过");
             }
             else
             {
                 List<Delegate> delegates = listenerCallBackDic[eventType];
-                if (!delegates.Contains(customDelegate))
+                if (delegates.Contains(customDelegate))
                 {
-                    delegates.Add(customDelegate);
+                    allListener.Remove(eventType);
+                    delegates.Remove(customDelegate);
                 }
                 else
                 {
-                    Debug.LogError(eventType + "该事件已经被绑定了");
+                    Debug.Log(eventType + "没有被绑定过");
                 }
             }
         }
