@@ -279,6 +279,20 @@ namespace XFramework
             return null;
         }
 
+        public List<EntityItem> GetEntityItemByEntityName(string entityName)
+        {
+            List<EntityItem> entityItems = new List<EntityItem>();
+            foreach (EntityItem tempSceEntityItem in sceneEntity)
+            {
+                if (tempSceEntityItem.entityName == entityName)
+                {
+                    entityItems.Add(tempSceEntityItem);
+                }
+            }
+
+            return entityItems;
+        }
+
         /// <summary>
         /// 实体全部隐藏
         /// </summary>
