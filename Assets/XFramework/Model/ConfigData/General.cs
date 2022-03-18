@@ -163,6 +163,7 @@ namespace XFramework
             @Transform,
             @Camera,
             @Color,
+            @Texture,
             [LabelText("List<int>")] @List_int,
             [LabelText("List<float>")] @List_float,
             [LabelText("List<string>")] @List_string,
@@ -172,6 +173,7 @@ namespace XFramework
             [LabelText("List<Transform>")] @List_Transform,
             [LabelText("List<Camera>")] @List_Camera,
             [LabelText("List<Color>")] @List_Color,
+            [LabelText("List<Texture>")] @List_Texture,
         }
 
         /// <summary>

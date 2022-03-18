@@ -1,4 +1,6 @@
 ﻿
+using UnityEngine;
+
 namespace XFramework
 {
     partial class BaseWindow

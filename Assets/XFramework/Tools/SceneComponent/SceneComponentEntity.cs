@@ -54,7 +54,7 @@ namespace XFramework
         /// <param name="entityName"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected T GetFirstEntityItemByName<T>(string entityName) where T : MonoBehaviour
+        protected T GetFirstEntityItemByName<T>(string entityName) 
         {
             return EntityComponent.Instance.GetFirstEntityItemByName<T>(entityName);
         }

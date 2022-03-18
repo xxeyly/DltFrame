@@ -325,7 +325,7 @@ namespace XFramework
         /// <param name="entityName"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T GetFirstEntityItemByName<T>(string entityName) where T : MonoBehaviour
+        public T GetFirstEntityItemByName<T>(string entityName)
         {
             foreach (EntityItem entityItem in sceneEntity)
             {
@@ -335,7 +335,7 @@ namespace XFramework
                 }
             }
 
-            return null;
+            return default;
         }
 
         public EntityItem GetFirstEntityItemByName(string entityName)

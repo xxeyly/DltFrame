@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -698,6 +699,7 @@ namespace XFramework
 
             FileStream aFile = new FileStream(path, FileMode.Create);
             //得到字符串的UTF8 数据流
+            information = Regex.Unescape(information);
             byte[] bts = System.Text.Encoding.UTF8.GetBytes(information);
             // StreamWriter sw = new StreamWriter(aFile, Encoding.UTF8);
             // sw.WriteLine(information);

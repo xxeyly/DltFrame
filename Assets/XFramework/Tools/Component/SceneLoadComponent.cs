@@ -123,6 +123,7 @@ namespace XFramework
         {
             _sceneName = sceneName;
             _sceneInfo = GetSceneLoadTypeBySceneName(sceneName);
+            Debug.Log(_sceneInfo.sceneLoadType);
             switch (_sceneInfo.sceneLoadType)
             {
                 case SceneFile.SceneLoadType.不加载:
@@ -178,7 +179,6 @@ namespace XFramework
             //处理场景加载时需要卸载的逻辑
             GameRootStart.Instance.ComponentEnd();
             ViewComponent.Instance.AllViewDestroy();
-
             SceneManager.LoadScene(sceneName);
         }
 
@@ -198,6 +198,7 @@ namespace XFramework
                 }
             }
 
+            Debug.LogError("场景" + sceneName + "未定义");
             return new SceneFile.SceneInfo();
         }
 

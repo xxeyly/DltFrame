@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using LitJson;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -132,7 +133,6 @@ namespace XFramework
                 sceneInfo.sceneLoadType = (SceneLoadComponent.SceneFile.SceneLoadType) sceneInfos[i].sceneLoadType;
                 sceneFile.sceneInfoList.Add(sceneInfo);
             }
-
             //保存到文件
             FileOperation.SaveTextToLoad(Application.dataPath + "/XFramework/Resources/DownFile/SceneLoadInfo.json",
                 JsonMapper.ToJson(sceneFile));
