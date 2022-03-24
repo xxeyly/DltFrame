@@ -12,12 +12,15 @@ using UnityEngine.Windows;
 
 namespace XFramework
 {
-    public class SceneLoad : BaseEditor
+    public class SceneLoadEditor : BaseEditor
     {
         private SceneLoadEditorData _sceneLoadEditorData;
+        private SceneLoadData _sceneLoadData;
+        private DownFileData _sceneDownFileData;
 
         [FolderPath] [LabelText("场景AssetBundle存放位置")]
         public string sceneAssetBundlePath;
+
         [LabelText("当前打包方式:")] public General.BuildTargetPlatform buildTargetPlatform;
         [LabelText("场景加载配置")] public List<SceneLoadEditorData.SceneInfo> sceneInfos;
         string platformPath = string.Empty;
@@ -29,7 +32,9 @@ namespace XFramework
 
         public override void OnCreateConfig()
         {
-            _sceneLoadEditorData = AssetDatabase.LoadAssetAtPath<SceneLoadEditorData>(General.sceneLoadPath);
+            #region 场景编辑数据
+
+            _sceneLoadEditorData = AssetDatabase.LoadAssetAtPath<SceneLoadEditorData>(General.sceneLoadEditorPath);
             if (_sceneLoadEditorData == null)
             {
                 if (!Directory.Exists(General.assetRootPath))
@@ -38,10 +43,50 @@ namespace XFramework
                 }
 
                 //创建数据
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<SceneLoadEditorData>(), General.sceneLoadPath);
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<SceneLoadEditorData>(), General.sceneLoadEditorPath);
                 //读取数据
-                _sceneLoadEditorData = AssetDatabase.LoadAssetAtPath<SceneLoadEditorData>(General.sceneLoadPath);
+                _sceneLoadEditorData = AssetDatabase.LoadAssetAtPath<SceneLoadEditorData>(General.sceneLoadEditorPath);
             }
+
+            #endregion
+
+            #region 场景加载数据
+
+            //场景加载数据
+            _sceneLoadData = AssetDatabase.LoadAssetAtPath<SceneLoadData>(General.sceneLoadPath);
+
+            if (_sceneLoadData == null)
+            {
+                if (!Directory.Exists(General.assetRootPath))
+                {
+                    Directory.CreateDirectory(General.assetRootPath);
+                }
+
+                //创建数据
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<SceneLoadData>(), General.sceneLoadPath);
+                //读取数据
+                _sceneLoadData = AssetDatabase.LoadAssetAtPath<SceneLoadData>(General.sceneLoadPath);
+            }
+
+            #endregion
+
+            //场景加载数据
+            _sceneDownFileData = AssetDatabase.LoadAssetAtPath<DownFileData>(General.sceneDownFileDataPath);
+
+            if (_sceneDownFileData == null)
+            {
+                if (!Directory.Exists(General.assetRootPath))
+                {
+                    Directory.CreateDirectory(General.assetRootPath);
+                }
+
+                //创建数据
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<DownFileData>(), General.sceneDownFileDataPath);
+                //读取数据
+                _sceneDownFileData = AssetDatabase.LoadAssetAtPath<DownFileData>(General.sceneDownFileDataPath);
+            }
+            
+            
         }
 
         public override void OnSaveConfig()
@@ -51,8 +96,22 @@ namespace XFramework
             _sceneLoadEditorData.buildTargetPlatform = buildTargetPlatform;
 
             SyncToUnity();
+            //记录场景加载方式
+            SceneLoadData.SceneFile sceneFile = new SceneLoadData.SceneFile();
+            sceneFile.sceneInfoList = new List<SceneLoadData.SceneFile.SceneInfo>();
+            for (int i = 0; i < sceneInfos.Count; i++)
+            {
+                SceneLoadData.SceneFile.SceneInfo sceneInfo = new SceneLoadData.SceneFile.SceneInfo();
+                sceneInfo.sceneName = sceneInfos[i].sceneAsset != null ? sceneInfos[i].sceneAsset.name : String.Empty;
+                sceneInfo.sceneLoadType = (SceneLoadData.SceneFile.SceneLoadType) sceneInfos[i].sceneLoadType;
+                sceneFile.sceneInfoList.Add(sceneInfo);
+            }
+
+            _sceneLoadData.sceneFile = sceneFile;
             //标记脏区
             EditorUtility.SetDirty(_sceneLoadEditorData);
+            EditorUtility.SetDirty(_sceneLoadData);
+            EditorUtility.SetDirty(_sceneDownFileData);
         }
 
         public override void OnLoadConfig()
@@ -90,27 +149,32 @@ namespace XFramework
         [LabelText("同步到Unity")]
         public void SyncToUnity()
         {
-            EditorBuildSettingsScene[] editorBuildSettingsScenes = new EditorBuildSettingsScene[sceneInfos.Count];
+            List<EditorBuildSettingsScene> editorBuildSettingsScenes = new List<EditorBuildSettingsScene>();
             for (int i = 0; i < sceneInfos.Count; i++)
             {
+                if (sceneInfos[i].sceneAsset == null)
+                {
+                    break;
+                }
+
                 string scenePath = AssetDatabase.GetAssetPath(sceneInfos[i].sceneAsset);
                 bool sceneEnable = false;
                 switch (sceneInfos[i].sceneLoadType)
                 {
-                    case SceneLoadType.不加载:
+                    case General.SceneLoadType.不加载:
                         sceneEnable = false;
                         break;
-                    case SceneLoadType.同步:
+                    case General.SceneLoadType.同步:
                         sceneEnable = true;
 
                         break;
-                    case SceneLoadType.异步:
+                    case General.SceneLoadType.异步:
                         sceneEnable = true;
                         break;
-                    case SceneLoadType.下载同步:
+                    case General.SceneLoadType.下载同步:
                         sceneEnable = false;
                         break;
-                    case SceneLoadType.下载异步:
+                    case General.SceneLoadType.下载异步:
                         sceneEnable = false;
                         break;
 
@@ -118,24 +182,11 @@ namespace XFramework
                         throw new ArgumentOutOfRangeException();
                 }
 
-                editorBuildSettingsScenes[i] = new EditorBuildSettingsScene(scenePath, sceneEnable);
+                editorBuildSettingsScenes.Add(new EditorBuildSettingsScene(scenePath, sceneEnable));
             }
 
             //同步到Unity需要打包的场景
-            EditorBuildSettings.scenes = editorBuildSettingsScenes;
-            //记录场景加载方式
-            SceneLoadComponent.SceneFile sceneFile = new SceneLoadComponent.SceneFile();
-            sceneFile.sceneInfoList = new List<SceneLoadComponent.SceneFile.SceneInfo>();
-            for (int i = 0; i < sceneInfos.Count; i++)
-            {
-                SceneLoadComponent.SceneFile.SceneInfo sceneInfo = new SceneLoadComponent.SceneFile.SceneInfo();
-                sceneInfo.sceneName = sceneInfos[i].sceneAsset.name;
-                sceneInfo.sceneLoadType = (SceneLoadComponent.SceneFile.SceneLoadType) sceneInfos[i].sceneLoadType;
-                sceneFile.sceneInfoList.Add(sceneInfo);
-            }
-            //保存到文件
-            FileOperation.SaveTextToLoad(Application.dataPath + "/XFramework/Resources/DownFile/SceneLoadInfo.json",
-                JsonMapper.ToJson(sceneFile));
+            EditorBuildSettings.scenes = editorBuildSettingsScenes.ToArray();
         }
 
         [Button(ButtonSizes.Medium)]
@@ -145,8 +196,8 @@ namespace XFramework
         {
             SyncToUnity();
             OnBuildChangeScene();
-            AssetDatabase.Refresh();
             EditorSceneFileConfig();
+            AssetDatabase.Refresh();
         }
 
         [Button(ButtonSizes.Medium)]
@@ -159,8 +210,8 @@ namespace XFramework
                 sceneInfo.Md5 = String.Empty;
             }
 
-            FileOperation.SaveTextToLoad(Application.dataPath + "/XFramework/Resources/DownFile/SceneFileInfo.json",
-                JsonMapper.ToJson(new ResComponent.DownFile {fileInfoList = new List<ResComponent.DownFile.FileInfo>()}));
+            FileOperation.SaveTextToLoad(Application.dataPath + General.sceneDownFileDataPath,
+                JsonMapper.ToJson(new DownFileData.DownFile {fileInfoList = new List<DownFileData.DownFile.FileInfo>()}));
         }
 
         /// <summary>
@@ -170,10 +221,9 @@ namespace XFramework
         {
             foreach (SceneLoadEditorData.SceneInfo sceneInfo in sceneInfos)
             {
-                if (sceneInfo.sceneLoadType == SceneLoadType.下载同步 || sceneInfo.sceneLoadType == SceneLoadType.下载异步)
+                if (sceneInfo.sceneLoadType == General.SceneLoadType.下载同步 || sceneInfo.sceneLoadType == General.SceneLoadType.下载异步)
                 {
-                    string currentSceneMd5 =
-                        FileOperation.GetMD5HashFromFile(AssetDatabase.GetAssetPath(sceneInfo.sceneAsset));
+                    string currentSceneMd5 = FileOperation.GetMD5HashFromFile(AssetDatabase.GetAssetPath(sceneInfo.sceneAsset));
                     //场景已经更新了
                     if (currentSceneMd5 != sceneInfo.Md5)
                     {
@@ -193,8 +243,7 @@ namespace XFramework
         {
             AssetImporter importer = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(sceneAsset));
             importer.assetBundleName = sceneAsset.name;
-            string assetBundleDirPath = _sceneLoadEditorData.sceneAssetBundlePath + "/" + platformPath + "/" +
-                                        sceneAsset.name + "Path";
+            string assetBundleDirPath = _sceneLoadEditorData.sceneAssetBundlePath + "/" + platformPath + "/" + sceneAsset.name + "Path";
             if (!Directory.Exists(_sceneLoadEditorData.sceneAssetBundlePath + "/" + platformPath))
             {
                 Directory.CreateDirectory(_sceneLoadEditorData.sceneAssetBundlePath + "/" + platformPath);
@@ -236,19 +285,16 @@ namespace XFramework
         private void EditorSceneFileConfig()
         {
             //场景配置文件清空
-            ResComponent.DownFile sceneFile =
-                JsonMapper.ToObject<ResComponent.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
-            sceneFile.fileInfoList.Clear();
+
+            _sceneDownFileData.downFile.fileInfoList.Clear();
             //遍历所有异步场景,并存储
             foreach (SceneLoadEditorData.SceneInfo sceneInfo in sceneInfos)
             {
-                if (sceneInfo.sceneLoadType == SceneLoadType.下载同步 || sceneInfo.sceneLoadType == SceneLoadType.下载异步)
+                if (sceneInfo.sceneLoadType == General.SceneLoadType.下载同步 || sceneInfo.sceneLoadType == General.SceneLoadType.下载异步)
                 {
-                    string filePath =
-                        (_sceneLoadEditorData.sceneAssetBundlePath + "/" + platformPath).Replace("Assets/", "") + "/" +
-                        sceneInfo.sceneAsset.name + "Path" + "/" +
-                        DataComponent.AllCharToLower(sceneInfo.sceneAsset.name);
-                    sceneFile.fileInfoList.Add(new ResComponent.DownFile.FileInfo()
+                    string filePath = (_sceneLoadEditorData.sceneAssetBundlePath + "/" + platformPath).Replace("Assets/", "") + "/" +
+                                      sceneInfo.sceneAsset.name + "Path" + "/" + DataComponent.AllCharToLower(sceneInfo.sceneAsset.name);
+                    _sceneDownFileData.downFile.fileInfoList.Add(new DownFileData.DownFile.FileInfo()
                     {
                         fileOriginalName = sceneInfo.sceneAsset.name,
                         fileName = DataComponent.AllCharToLower(sceneInfo.sceneAsset.name),
@@ -258,21 +304,6 @@ namespace XFramework
                     });
                 }
             }
-
-            //保存场景配置信息
-            FileOperation.SaveTextToLoad(
-                Application.dataPath + "/XFramework/Resources/DownFile/SceneFileInfo.json",
-                JsonMapper.ToJson(sceneFile));
-        }
-
-        [LabelText("场景加载方式")]
-        public enum SceneLoadType
-        {
-            不加载,
-            同步,
-            异步,
-            下载同步,
-            下载异步
         }
     }
 }

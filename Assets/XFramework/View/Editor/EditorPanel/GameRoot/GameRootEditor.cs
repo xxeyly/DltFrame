@@ -150,6 +150,8 @@ namespace XFramework
                 tempComponent.componentIndex = CustomSceneLoadComponent.componentIndex;
                 tempComponentObj.transform.SetParent(gameRootStart.transform);
                 tempGameRootStart.activeComponentBase.Add(tempComponent);
+                tempComponent.sceneLoadData = AssetDatabase.LoadAssetAtPath<SceneLoadData>(General.sceneLoadPath);
+                tempComponent.sceneDownLoadData = AssetDatabase.LoadAssetAtPath<DownFileData>(General.sceneDownFileDataPath);
             }
 
             if (TimeComponentEditorComponent.Enabled)

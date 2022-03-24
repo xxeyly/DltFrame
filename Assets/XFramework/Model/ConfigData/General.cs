@@ -37,8 +37,6 @@ namespace XFramework
 
         [LabelText("视图错误时间")] public const float ViewErrorTime = 1f;
 
-        [LabelText("文件下载路径")] public const string DownFilePath = "/XFramework/Resources/DownFile/DownFileInfo.Json";
-
         #endregion
 
         [LabelText("Hierarchy内容跟随")] public static bool HierarchyContentFollow = true;
@@ -112,7 +110,7 @@ namespace XFramework
 
             else if (Application.platform == RuntimePlatform.Android)
             {
-                return "http://192.168.1.111/ZiYanGuDingYiChi/" + relativePath;
+                return "/" + relativePath;
             }
 
             return "";
@@ -144,10 +142,19 @@ namespace XFramework
 
         [LabelText("生成配置存放路径")] public static string generateBaseWindowPath = assetRootPath + "GenerateBaseWindowData.asset";
 
-        [LabelText("场景配置存放路径")] public static string sceneLoadPath = assetRootPath + "SceneLoadData.asset";
+
+        [LabelText("框架配置存放路径")] public static string frameComponentEditorDataPath = assetRootPath + "FrameComponentEditorData.asset";
+
+        [LabelText("文件下载路径")] public static string downFilePath = assetRootPath + "DownFileData.asset";
+
+        #region 场景相关
 
         [LabelText("场景配置存放路径")] public static string buildSceneAssetBundleDataPath = assetRootPath + "BuildSceneAssetBundleData.asset";
-        [LabelText("框架配置存放路径")] public static string frameComponentEditorDataPath = assetRootPath + "FrameComponentEditorData.asset";
+        [LabelText("场景配置编辑器存放路径")] public static string sceneLoadEditorPath = assetRootPath + "SceneLoadEditorData.asset";
+        [LabelText("场景文件下载路径")] public static string sceneDownFileDataPath = assetRootPath + "SceneDownFileData.asset";
+        [LabelText("场景配置存放路径")] public static string sceneLoadPath = assetRootPath + "SceneLoadData.asset";
+
+        #endregion
 
         /// <summary>
         /// 生成属性类型

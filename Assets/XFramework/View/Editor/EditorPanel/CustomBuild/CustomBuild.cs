@@ -32,13 +32,13 @@ namespace XFramework
 
         [LabelText("自定义打包数据")] private CustomBuildData _customBuildData;
 
-        private SceneLoad _sceneLoad;
+        private SceneLoadEditor _sceneLoadEditor;
 
         [LabelText("开始打包")]
         [Button(ButtonSizes.Large)]
         public void StartBuild()
         {
-            _sceneLoad.BuildSyncScene();
+            _sceneLoadEditor.BuildSyncScene();
             Build();
             CopySceneFile();
             if (buildTargetPlatform == General.BuildTargetPlatform.WebGL)
@@ -104,19 +104,18 @@ namespace XFramework
 
         private void CopySceneFile()
         {
-            if (_sceneLoad.sceneAssetBundlePath == string.Empty)
+            if (_sceneLoadEditor.sceneAssetBundlePath == string.Empty)
             {
                 Debug.LogError("拷贝场景文件路径不正确");
                 return;
             }
 
             //场景配置文件清空
-            ResComponent.DownFile sceneFile =
-                JsonMapper.ToObject<ResComponent.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
+            DownFileData.DownFile sceneFile = AssetDatabase.LoadAssetAtPath<DownFileData>(General.sceneDownFileDataPath).downFile;
             //打包后场景文件地址
             string sceneLoadAssetBundlePath =
                 CustomBuildFileOperation.GetProjectPath(buildPackagePath, chineseShell, exportCnProjectName,
-                    exportEnProjectName) + "/" + _sceneLoad.sceneAssetBundlePath.Replace("Assets/", "");
+                    exportEnProjectName) + "/" + _sceneLoadEditor.sceneAssetBundlePath.Replace("Assets/", "");
             if (Directory.Exists(sceneLoadAssetBundlePath))
             {
                 Directory.Delete(sceneLoadAssetBundlePath);
@@ -126,7 +125,7 @@ namespace XFramework
                 // Debug.Log("地址不存在:" + sceneLoadAssetBundlePath);
             }
 
-            foreach (ResComponent.DownFile.FileInfo fileInfo in sceneFile.fileInfoList)
+            foreach (DownFileData.DownFile.FileInfo fileInfo in sceneFile.fileInfoList)
             {
                 string buildTargetPlatformPath = String.Empty;
                 switch (buildTargetPlatform)
@@ -250,9 +249,9 @@ namespace XFramework
             OnLoadConfig();
         }
 
-        public void AfferentSceneLoad(SceneLoad sceneLoad)
+        public void AfferentSceneLoad(SceneLoadEditor sceneLoadEditor)
         {
-            _sceneLoad = sceneLoad;
+            _sceneLoadEditor = sceneLoadEditor;
         }
     }
 #endif

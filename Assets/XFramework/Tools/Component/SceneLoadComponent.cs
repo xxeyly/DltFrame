@@ -21,7 +21,9 @@ namespace XFramework
         private string _sceneName;
         private bool _asyncLoad;
         private AssetBundle _sceneAssetBundle;
-        private SceneFile.SceneInfo _sceneInfo;
+        private SceneLoadData.SceneFile.SceneInfo _sceneInfo;
+        [LabelText("场景加载数据")] public SceneLoadData sceneLoadData;
+        [LabelText("场景下载数据")] public DownFileData sceneDownLoadData;
 
         #region 异步加载场景
 
@@ -71,10 +73,10 @@ namespace XFramework
                 AssetBundle.LoadFromFile(General.GetPlatformDownLoadDataPath() + DownComponent.Instance.GetGetSceneFileCachePath(_sceneInfo.sceneName));
                 switch (_sceneInfo.sceneLoadType)
                 {
-                    case SceneFile.SceneLoadType.下载同步:
+                    case SceneLoadData.SceneFile.SceneLoadType.下载同步:
                         LoadSynchronizationScene(_sceneInfo.sceneName);
                         break;
-                    case SceneFile.SceneLoadType.下载异步:
+                    case SceneLoadData.SceneFile.SceneLoadType.下载异步:
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -126,15 +128,15 @@ namespace XFramework
             Debug.Log(_sceneInfo.sceneLoadType);
             switch (_sceneInfo.sceneLoadType)
             {
-                case SceneFile.SceneLoadType.不加载:
+                case SceneLoadData.SceneFile.SceneLoadType.不加载:
                     break;
-                case SceneFile.SceneLoadType.同步:
+                case SceneLoadData.SceneFile.SceneLoadType.同步:
                     LoadSynchronizationScene(sceneName);
                     break;
-                case SceneFile.SceneLoadType.异步:
+                case SceneLoadData.SceneFile.SceneLoadType.异步:
                     _sceneAsyncOperation = SceneManager.LoadSceneAsync(sceneName);
                     break;
-                case SceneFile.SceneLoadType.下载同步:
+                case SceneLoadData.SceneFile.SceneLoadType.下载同步:
                     if (Application.CanStreamedLevelBeLoaded(sceneName))
                     {
                         LoadSynchronizationScene(sceneName);
@@ -158,7 +160,7 @@ namespace XFramework
 
 
                     break;
-                case SceneFile.SceneLoadType.下载异步:
+                case SceneLoadData.SceneFile.SceneLoadType.下载异步:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -187,10 +189,9 @@ namespace XFramework
         /// </summary>
         /// <param name="sceneName"></param>
         /// <returns></returns>
-        private SceneFile.SceneInfo GetSceneLoadTypeBySceneName(string sceneName)
+        private SceneLoadData.SceneFile.SceneInfo GetSceneLoadTypeBySceneName(string sceneName)
         {
-            SceneFile sceneFile = JsonMapper.ToObject<SceneFile>(Resources.Load<TextAsset>("DownFile/SceneLoadInfo").text);
-            foreach (SceneFile.SceneInfo sceneInfo in sceneFile.sceneInfoList)
+            foreach (SceneLoadData.SceneFile.SceneInfo sceneInfo in sceneLoadData.sceneFile.sceneInfoList)
             {
                 if (sceneInfo.sceneName == sceneName)
                 {
@@ -199,7 +200,7 @@ namespace XFramework
             }
 
             Debug.LogError("场景" + sceneName + "未定义");
-            return new SceneFile.SceneInfo();
+            return new SceneLoadData.SceneFile.SceneInfo();
         }
 
         /// <summary>
@@ -266,36 +267,6 @@ namespace XFramework
             }
         }
 
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        [Serializable]
-        public class SceneFile
-        {
-            /// <summary>
-            /// 场景文件列表
-            /// </summary>
-            [Header("版本信息列表")] public List<SceneInfo> sceneInfoList;
-
-            /// <summary>
-            /// 场景文件信息
-            /// </summary>
-            [Serializable]
-            public struct SceneInfo
-            {
-                [Header("场景名称")] public string sceneName;
-                [Header("场景加载方式")] public SceneLoadType sceneLoadType;
-            }
-
-            [LabelText("场景加载方式")]
-            public enum SceneLoadType
-            {
-                不加载,
-                同步,
-                异步,
-                下载同步,
-                下载异步
-            }
-        }
+     
     }
 }

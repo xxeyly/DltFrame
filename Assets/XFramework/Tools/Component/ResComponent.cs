@@ -89,32 +89,7 @@ namespace XFramework
             action.Invoke();
         }
        
-        /// <summary>
-        /// 下载文件
-        /// </summary>
-        [Serializable]
-        public class DownFile
-        {
-            /// <summary>
-            /// 下载文件列表
-            /// </summary>
-            [Header("版本信息列表")] public List<FileInfo> fileInfoList;
-
-            /// <summary>
-            /// 下载文件信息
-            /// </summary>
-            [Serializable]
-            public struct FileInfo
-            {
-                [Header("文件名称")] public string fileName;
-                [Header("文件原名称")] public string fileOriginalName;
-
-                [Header("文件路径")] public string filePath;
-                [Header("文件大小")] public long fileSize;
-                [Header("文件MD5")] public string fileMd5;
-            }
-        }
-
+       
      
     }
 }

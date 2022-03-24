@@ -26,7 +26,7 @@ namespace XFramework
             customBuild.OnDisable();
             gameRootEditor.OnDisable();
             generateBaseWindowEditor.OnDisable();
-            sceneLoad.OnDisable();
+            _sceneLoadEditor.OnDisable();
             frameComponent.OnDisable();
             AssetDatabase.SaveAssets();
         }
@@ -56,7 +56,7 @@ namespace XFramework
         //框架配置
         private static GameRootEditor gameRootEditor;
         private GenerateBaseWindowEditor generateBaseWindowEditor = new GenerateBaseWindowEditor();
-        private static SceneLoad sceneLoad = new SceneLoad();
+        private static SceneLoadEditor _sceneLoadEditor = new SceneLoadEditor();
 
         //可持久化
         RuntimeDataComponentEditor _runtimeDataComponentEditor = new RuntimeDataComponentEditor();
@@ -105,16 +105,16 @@ namespace XFramework
                 _audioComponentEditor, _listenerComponentEditor, _sceneLoadComponentEditor, _timeComponentEditor,
                 _entityComponentEditor, _viewComponentEditor,
                 _circuitComponentEditor, _mouseComponentEditor);
-            sceneLoad.OnInit();
+            _sceneLoadEditor.OnInit();
             customBuild.OnInit();
             gameRootEditor.OnInit();
             _audioComponentEditor.OnInit();
             generateBaseWindowEditor.OnInit();
             resourceUnification.OnInit();
             frameComponent.OnInit();
-            customBuild.AfferentSceneLoad(sceneLoad);
+            customBuild.AfferentSceneLoad(_sceneLoadEditor);
             tree.Add("打包工具", customBuild);
-            tree.Add("场景编辑", sceneLoad);
+            tree.Add("场景编辑", _sceneLoadEditor);
             tree.Add("框架配置", gameRootEditor);
             tree.Add("音频配置", _audioComponentEditor);
             tree.Add("生成配置", generateBaseWindowEditor);

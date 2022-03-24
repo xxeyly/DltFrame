@@ -1,6 +1,4 @@
-﻿#if UNITY_EDITOR
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -26,11 +24,10 @@ namespace XFramework
         {
             [HorizontalGroup] [HideLabel] public SceneAsset sceneAsset;
 
-            [HorizontalGroup] [HideLabel] /*[EnumToggleButtons]*/ [LabelWidth(60)][EnumPaging]
-            public SceneLoad.SceneLoadType sceneLoadType;
+            [HorizontalGroup] [HideLabel] /*[EnumToggleButtons]*/ [LabelWidth(60)] [EnumPaging]
+            public General.SceneLoadType sceneLoadType;
 
             [HideInInspector] public string Md5;
         }
     }
 }
-#endif

@@ -18,7 +18,7 @@ namespace XFramework
         [LabelText("当前下载中任务")] private DownData _currentDownDataTask;
         [LabelText("下载文件")] public List<DownData> allDownComponentData;
         [LabelText("下载文件更新信息间隔")] private float _downFileUpdateInterval;
-        private ResComponent.DownFile _downSceneFile;
+        private DownFileData.DownFile _downSceneFile;
         private UnityWebRequest _request;
 
         //下载委托
@@ -63,10 +63,9 @@ namespace XFramework
         public override void SceneInitComponent()
         {
             //获得下载场景配置信息
-            _downSceneFile =
-                JsonMapper.ToObject<ResComponent.DownFile>(Resources.Load<TextAsset>("DownFile/SceneFileInfo").text);
+            _downSceneFile = SceneLoadComponent.Instance.sceneDownLoadData.downFile;
             //存储下载信息
-            foreach (ResComponent.DownFile.FileInfo fileInfo in _downSceneFile.fileInfoList)
+            foreach (DownFileData.DownFile.FileInfo fileInfo in _downSceneFile.fileInfoList)
             {
                 DownData downData = new DownData
                 {
