@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace XFramework
 {
@@ -24,6 +25,21 @@ namespace XFramework
             return ViewComponent.Instance.GetCurrentActiveViewCount();
         }
 
+        /// <summary>
+        /// 隐藏视图
+        /// </summary>
+        protected void HideThisView()
+        {
+            ViewComponent.Instance.HideView(viewType);
+        }
+
+        /// <summary>
+        /// 显示视图
+        /// </summary>
+        protected void ShowView()
+        {
+            ViewComponent.Instance.ShowView(viewType);
+        }
 
         #region 显示视图
 
@@ -118,6 +134,33 @@ namespace XFramework
         protected void HideAllView()
         {
             ViewComponent.Instance.HideAllView();
+        }
+
+        /// <summary>
+        /// 除其全部隐藏
+        /// </summary>
+        /// <param name="types"></param>
+        public void ExceptForHideAllView(params Type[] types)
+        {
+            ViewComponent.Instance.ExceptForHideAllView(types);
+        }
+
+        /// <summary>
+        /// 除其父类全部隐藏
+        /// </summary>
+        public void ExceptForParentHideAllView()
+        {
+            Type[] parentBaseWindowType = new Type[parentBaseWindow.Count];
+
+            for (int i = 0; i < parentBaseWindow.Count; i++)
+            {
+                if (parentBaseWindow[i] != null)
+                {
+                    parentBaseWindowType[i] = parentBaseWindow[i].viewType;
+                }
+            }
+
+            ViewComponent.Instance.ExceptForHideAllView(parentBaseWindowType);
         }
 
         #endregion

@@ -57,6 +57,8 @@ namespace XFramework
         [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("类名称")] [LabelWidth(50)]
         public string typeName;
 
+        [LabelText("父级界面[隐藏全部界面时,忽略父级菜单]")] public List<BaseWindow> parentBaseWindow;
+
         [BoxGroup("标签/命名")]
         [Button(ButtonSizes.Medium)]
         [LabelText("重命名")]
@@ -134,26 +136,6 @@ namespace XFramework
         /// </summary>
         protected virtual void OnlyOnceInit()
         {
-        }
-
-        /// <summary>
-        /// 视图摧毁
-        /// </summary>
-
-        /// <summary>
-        /// 隐藏视图
-        /// </summary>
-        protected void HideThisView()
-        {
-            ViewComponent.Instance.HideView(viewType);
-        }
-
-        /// <summary>
-        /// 显示视图
-        /// </summary>
-        protected void ShowView()
-        {
-            ViewComponent.Instance.ShowView(viewType);
         }
 
         /// <summary>

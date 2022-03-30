@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -290,6 +291,17 @@ namespace XFramework
             foreach (KeyValuePair<Type, BaseWindow> pair in _activeViewDlc)
             {
                 if (pair.Value.GetViewShowType() == ViewShowType.Activity)
+                {
+                    HideView(pair.Key);
+                }
+            }
+        }
+
+        public void ExceptForHideAllView( params Type[] types)
+        {
+            foreach (KeyValuePair<Type, BaseWindow> pair in _activeViewDlc)
+            {
+                if (pair.Value.GetViewShowType() == ViewShowType.Activity && !types.Contains(pair.Value.viewType))
                 {
                     HideView(pair.Key);
                 }
