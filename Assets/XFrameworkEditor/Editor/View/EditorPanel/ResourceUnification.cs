@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,7 +26,7 @@ namespace XFramework
                 return;
             }
 
-            List<Text> sceneAllText = DataComponent.GetAllObjectsInScene<Text>();
+            List<Text> sceneAllText = DataFrameComponent.GetAllObjectsInScene<Text>();
             foreach (Text text in sceneAllText)
             {
                 text.font = changeFont;
@@ -46,7 +45,7 @@ namespace XFramework
         [Button("替换文字", ButtonSizes.Medium)]
         public void OnReplaceSceneGameObjectName()
         {
-            foreach (GameObject sceneObj in DataComponent.GetAllObjectsOnlyInScene())
+            foreach (GameObject sceneObj in DataFrameComponent.GetAllObjectsOnlyInScene())
             {
                 string replace = sceneObj.name.Replace(sceneReplaceBeforeName, sceneReplaceAfterName);
                 sceneObj.name = replace;
@@ -64,29 +63,31 @@ namespace XFramework
         [Button("替换文字", ButtonSizes.Medium)]
         public void OnReplaceTextContent()
         {
-            foreach (Text text in DataComponent.GetAllObjectsInScene<Text>())
+            foreach (Text text in DataFrameComponent.GetAllObjectsInScene<Text>())
             {
                 string replace = text.text.Replace(textReplaceBeforeName, textReplaceAfterName);
                 text.text = replace;
             }
 
-            foreach (TextMeshProUGUI text in DataComponent.GetAllObjectsInScene<TextMeshProUGUI>())
+            /*foreach (TextMeshProUGUI text in DataComponent.GetAllObjectsInScene<TextMeshProUGUI>())
             {
                 string replace = text.text.Replace(textReplaceBeforeName, textReplaceAfterName);
                 text.text = replace;
-            }
+            }*/
         }
 
-        [BoxGroup("字体压缩")] [LabelText("要压缩的字体")]
-        public TMP_FontAsset TargetFontAsset;
+        [BoxGroup("字体压缩")]
+        /*public TMP_FontAsset TargetFontAsset;*/
 
+        /*
         [BoxGroup("字体压缩")]
         [Button("TextMeshPro字体压缩", ButtonSizes.Medium)]
         public void TextMeshProCompress()
         {
             ExtractTexture(AssetDatabase.GetAssetPath(TargetFontAsset));
-        }
+        }*/
 
+        /*
         //这里的fontPath是绝对路径
         public void ExtractTexture(string fontPath)
         {
@@ -106,7 +107,7 @@ namespace XFramework
             targeFontAsset.material.mainTexture = atlas;
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-        }
+        }*/
 
         [BoxGroup("图片压缩")]
         [LabelText("平台类型")]
@@ -129,11 +130,11 @@ namespace XFramework
         [Button("图片压缩(Png.Jpg.Tif.Tiff.Tga)", ButtonSizes.Medium)]
         public void OnTextureCompress()
         {
-            List<string> pngPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("png");
-            List<string> jpgPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("jpg");
-            List<string> tifPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("tif");
-            List<string> tiffPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("tiff");
-            List<string> tgaPaths = DataComponent.GetSpecifyTypeOnlyInAssetsPath("tga");
+            List<string> pngPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("png");
+            List<string> jpgPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("jpg");
+            List<string> tifPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tif");
+            List<string> tiffPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tiff");
+            List<string> tgaPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tga");
             OnTextureCompressByPath(pngPaths);
             OnTextureCompressByPath(jpgPaths);
             OnTextureCompressByPath(tifPaths);

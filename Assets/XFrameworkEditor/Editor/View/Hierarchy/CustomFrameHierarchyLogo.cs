@@ -18,13 +18,13 @@ namespace XFramework
             HierarchyIconStyle = new GUIStyle();
             HierarchyIconStyle.alignment = TextAnchor.MiddleRight;
             HierarchyIconStyle.normal.textColor = Color.cyan;
-            XFrameworkLOGO = AssetDatabase.LoadAssetAtPath<Texture>("Assets/XFramework/View/Editor/Texture/Root.png");
+            XFrameworkLOGO = AssetDatabase.LoadAssetAtPath<Texture>("Assets/XFrameworkEditor/Editor/View/Texture/Root.png");
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyShow;
 
             ProjectIconStyle = new GUIStyle();
             ProjectIconStyle.alignment = TextAnchor.MiddleRight;
             ProjectIconStyle.normal.textColor = Color.cyan;
-            XFrameworkLOGOTitle = AssetDatabase.LoadAssetAtPath<Texture>("Assets/XFramework/View/Editor/Texture/XFramework.png");
+            XFrameworkLOGOTitle = AssetDatabase.LoadAssetAtPath<Texture>("Assets/XFrameworkEditor/Editor/View/Texture/XFramework.png");
 
             
             EditorApplication.projectWindowItemOnGUI += OnProjectWindowItemOnGUI;

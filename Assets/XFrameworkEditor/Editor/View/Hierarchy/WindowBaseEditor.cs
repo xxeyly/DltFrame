@@ -1,6 +1,9 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
+
+#if UNITY_2019_1_OR_NEWER
 using TMPro;
+#endif
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -88,9 +91,9 @@ namespace XFramework
                          !uiObj.GetComponent<Scrollbar>() &&
                          !uiObj.GetComponent<ScrollRect>() &&
                          !uiObj.GetComponent<RawImage>() &&
-                         !uiObj.GetComponent<TMP_InputField>() &&
+                         // !uiObj.GetComponent<TMP_InputField>() &&
                          !uiObj.GetComponent<InputField>() &&
-                         !uiObj.GetComponent<TMP_Dropdown>() &&
+                         // !uiObj.GetComponent<TMP_Dropdown>() &&
                          !uiObj.GetComponent<Dropdown>())
                 {
                     uiObj.GetComponent<BindUiType>().type = General.UiType.Image;
@@ -136,6 +139,7 @@ namespace XFramework
                     uiObj.GetComponent<BindUiType>().type = General.UiType.ChildList;
                     uiObj.GetComponent<BindUiType>().childType = uiObj.GetComponentInChildren<ChildBaseWindow>();
                 }
+#if UNITY_2019_1_OR_NEWER
                 else if (uiObj.GetComponentInChildren<TMP_Dropdown>())
                 {
                     uiObj.GetComponent<BindUiType>().type = General.UiType.TMP_Dropdown;
@@ -148,6 +152,7 @@ namespace XFramework
                 {
                     uiObj.GetComponent<BindUiType>().type = General.UiType.TextMeshProUGUI;
                 }
+#endif
                 else
                 {
                     uiObj.GetComponent<BindUiType>().type = General.UiType.GameObject;

@@ -40,12 +40,13 @@ namespace XFramework
                         Rect viewNameRect;
                         if (General.HierarchyContentFollow)
                         {
-                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataComponent.CalculationHierarchyContentLength(obj.name) , 0), selectionrect.size);
+                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataFrameComponent.CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
                         }
                         else
                         {
                             viewNameRect = SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
                         }
+
                         GUI.Label(viewNameRect, viewName, new GUIStyle()
                         {
                             fontStyle = FontStyle.Italic
@@ -67,7 +68,7 @@ namespace XFramework
                     {
                         Debug.Log(window.transform.parent.name);
                     }
-#if UNITY_2019
+#if UNITY_2019_1_OR_NEWER
                     SceneVisibilityManager.instance.DisablePicking(obj, false);
                     SceneVisibilityManager.instance.DisablePicking(window, false);
 #endif

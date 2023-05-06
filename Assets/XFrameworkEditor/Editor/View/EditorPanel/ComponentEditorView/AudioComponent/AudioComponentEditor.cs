@@ -9,25 +9,11 @@ using UnityEngine;
 
 namespace XFramework
 {
-#if UNITY_EDITOR
-
     [Serializable]
     public class AudioComponentEditor : BaseEditor
     {
-        private bool hideView;
-        [ShowIf("hideView")] public bool Enabled;
-
-        [ToggleLeft] [BoxGroup] [LabelText("框架初始化")]
-        public bool isFrameInit;
-
-        [ToggleLeft] [BoxGroup] [LabelText("场景初始化")]
-        public bool isSceneInit;
-
         [LabelText("音频配置")] public List<AudioComponentData.AudioInfo> audioInfos;
-
         private AudioComponentData _customAudioData;
-        [BoxGroup] [LabelText("组件索引")] public int componentIndex;
-
 
         public override void OnDisable()
         {
@@ -56,8 +42,6 @@ namespace XFramework
             _customAudioData.audioInfos = audioInfos;
             //标记脏区
             EditorUtility.SetDirty(_customAudioData);
-            // 保存所有修改
-            // AssetDatabase.SaveAssets();
         }
 
         public override void OnLoadConfig()
@@ -71,6 +55,5 @@ namespace XFramework
             OnLoadConfig();
         }
     }
-#endif
 }
 #endif

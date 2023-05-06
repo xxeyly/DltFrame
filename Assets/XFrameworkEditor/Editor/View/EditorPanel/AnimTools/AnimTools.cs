@@ -2,11 +2,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.Windows;
+using Directory = System.IO.Directory;
 using Object = UnityEngine.Object;
 
 namespace XFramework
@@ -57,7 +59,7 @@ namespace XFramework
             }
 
             if (AssetDatabase.LoadAssetAtPath<AnimControllerConfig>(
-                NewExportConfigPath + "/" + NewAnimControllerConfigName) != null)
+                    NewExportConfigPath + "/" + NewAnimControllerConfigName) != null)
             {
                 Debug.Log("已存在相同项目");
             }
@@ -146,7 +148,7 @@ namespace XFramework
 
         private ModelImporterClipAnimation SetClipAnimation(string clipName, int firstFrame, int lastFrame, bool isLoop)
         {
-            ModelImporterClipAnimation clip = new ModelImporterClipAnimation {name = clipName, firstFrame = firstFrame, lastFrame = lastFrame, loopTime = isLoop};
+            ModelImporterClipAnimation clip = new ModelImporterClipAnimation { name = clipName, firstFrame = firstFrame, lastFrame = lastFrame, loopTime = isLoop };
 
             if (isLoop)
             {
@@ -176,7 +178,7 @@ namespace XFramework
             AnimatorStateMachine rootStateMachine = animatorController.layers[0].stateMachine;
             foreach (AnimControllerConfig.AnimFbxConfig animFbxAndAnimClipData in AnimClipConfigs)
             {
-                _modelImporter = (ModelImporter) AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx));
+                _modelImporter = (ModelImporter)AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(animFbxAndAnimClipData.animFbx));
                 if (_modelImporter != null)
                 {
                     _modelImporter.animationType = ModelImporterAnimationType.Generic;
