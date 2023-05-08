@@ -32,7 +32,6 @@ namespace XFramework
             {
                 animatorControllerBase.Init();
             }
-            // allAnimController = new List<AnimatorControllerBase>(FindObjectsOfType<AnimatorControllerBase>());
         }
 
         public override void EndComponent()
@@ -97,9 +96,17 @@ namespace XFramework
 
             foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
-                if (controllerBase.gameObject.activeInHierarchy)
+                try
                 {
-                    controllerBase.PlayAnim(animType, animSpeedProgress);
+                    if (controllerBase.gameObject.activeInHierarchy)
+                    {
+                        controllerBase.PlayAnim(animType, animSpeedProgress);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(controllerBase.name);
+                    throw;
                 }
             }
         }

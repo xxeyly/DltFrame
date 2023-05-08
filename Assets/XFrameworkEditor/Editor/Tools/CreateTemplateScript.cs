@@ -15,25 +15,27 @@ namespace XFramework
             var text = File.ReadAllText(resourceFile);
 
             var className = Path.GetFileNameWithoutExtension(pathName);
+            _generateBaseWindowData =
+                AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(General.generateBaseWindowPath);
             className = className.Replace(" ", "");
 
 
-            text = text.Replace("#region StartUsing", GenerateBaseWindowData.startUsing);
-            text = text.Replace("#endregion EndUsing", GenerateBaseWindowData.endUsing);
-            text = text.Replace("#region StartUIVariable", GenerateBaseWindowData.startUiVariable);
-            text = text.Replace("#endregion EndUIVariable", GenerateBaseWindowData.endUiVariable);
-            text = text.Replace("#region StartVariableBindPath", GenerateBaseWindowData.startVariableBindPath);
-            text = text.Replace("#endregion EndVariableBindPath", GenerateBaseWindowData.endVariableBindPath);
-            text = text.Replace("#region StartVariableBindListener", GenerateBaseWindowData.startVariableBindListener);
-            text = text.Replace("#endregion EndVariableBindListener", GenerateBaseWindowData.endVariableBindListener);
-            text = text.Replace("#region StartVariableBindEvent", GenerateBaseWindowData.startVariableBindEvent);
-            text = text.Replace("#endregion EndVariableBindEvent", GenerateBaseWindowData.endVariableBindEvent);
+            text = text.Replace("#region StartUsing", _generateBaseWindowData.startUsing);
+            text = text.Replace("#endregion EndUsing", _generateBaseWindowData.endUsing);
+            text = text.Replace("#region StartUIVariable", _generateBaseWindowData.startUiVariable);
+            text = text.Replace("#endregion EndUIVariable", _generateBaseWindowData.endUiVariable);
+            text = text.Replace("#region StartVariableBindPath", _generateBaseWindowData.startVariableBindPath);
+            text = text.Replace("#endregion EndVariableBindPath", _generateBaseWindowData.endVariableBindPath);
+            text = text.Replace("#region StartVariableBindListener", _generateBaseWindowData.startVariableBindListener);
+            text = text.Replace("#endregion EndVariableBindListener", _generateBaseWindowData.endVariableBindListener);
+            text = text.Replace("#region StartVariableBindEvent", _generateBaseWindowData.startVariableBindEvent);
+            text = text.Replace("#endregion EndVariableBindEvent", _generateBaseWindowData.endVariableBindEvent);
 
             if (resourceFile == General.BaseWindowTemplatePath)
             {
                 text = text.Replace("BaseWindowTemplate", className);
-                text = text.Replace("#region StartCustomAttributesStart", GenerateBaseWindowData.startCustomAttributesStart);
-                text = text.Replace("#endregion EndCustomAttributesStart", GenerateBaseWindowData.endCustomAttributesStart);
+                text = text.Replace("#region StartCustomAttributesStart", _generateBaseWindowData.startCustomAttributesStart);
+                text = text.Replace("#endregion EndCustomAttributesStart", _generateBaseWindowData.endCustomAttributesStart);
             }
 
             if (resourceFile == General.ChildBaseWindowTemplatePath)
@@ -48,7 +50,7 @@ namespace XFramework
 
             if (resourceFile == General.ListenerComponentDataTemplatePath)
             {
-                text = text.Replace("ListenerComponentDataTemplate", "ListenerFrameComponent");
+                text = text.Replace("ListenerComponentDataTemplate", "ListenerComponent");
             }
 
             if (resourceFile == General.SceneComponentTemplatePath)

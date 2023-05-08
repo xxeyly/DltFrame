@@ -24,6 +24,7 @@ namespace XFramework
         [TabGroup("UI", "事件")] [LabelText("UI变量绑定事件声明")] [ReadOnly]
         public List<string> allUiVariableBindListenerEvent;
 #pragma warning disable 0649
+        protected GenerateBaseWindowData GenerateBaseWindowData;
         private string _currentScriptsContent;
         [LabelText("分号")] protected string Semicolon = ";";
 #pragma warning disable 0414
@@ -39,6 +40,14 @@ namespace XFramework
         {
 #if UNITY_EDITOR
             _currentScriptsContent = GetOldScriptsContent();
+
+            if (GenerateBaseWindowData == null)
+            {
+                GenerateBaseWindowData =
+                    UnityEditor.AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(
+                        General.generateBaseWindowPath);
+            }
+
             _listenerActionList = new Dictionary<string, string>();
             GenerateUsing();
             GenerateUi();

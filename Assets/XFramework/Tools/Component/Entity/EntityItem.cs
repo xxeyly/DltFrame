@@ -23,12 +23,6 @@ namespace XFramework
             entityName = gameObject.name;
         }
 
-        //后生成得物体,会自动添加到实体列表中
-        private void OnEnable()
-        {
-            AddToEntityList();
-        }
-
         public void AddToEntityList()
         {
             if (EntityFrameComponent.Instance == null)
@@ -90,33 +84,6 @@ namespace XFramework
 
                 EntityFrameComponent.Instance.onHideEntity.Invoke(entityName);
             }
-        }
-
-        /// <summary>
-        /// 实体组控制
-        /// </summary>
-        /// <param name="groupTag"></param>
-        /// <param name="display"></param>
-        /// <param name="hideOther"></param>
-        protected void DisplayEntityGroup(string groupTag, bool display, bool hideOther = false)
-        {
-            EntityFrameComponent.Instance.DisplayEntityGroup(groupTag, display, hideOther);
-        }
-
-        /// <summary>
-        /// 实体组控制
-        /// </summary>
-        /// <param name="groupTag"></param>
-        /// <param name="display"></param>
-        /// <param name="hideOther"></param>
-        protected void DisplayEntityGroup(bool display, params string[] groupTag)
-        {
-            EntityFrameComponent.Instance.DisplayEntityGroup(display, groupTag);
-        }
-
-        protected List<EntityItem> GetEntityItemByEntityGroupName(string groupName)
-        {
-            return EntityFrameComponent.Instance.GetEntityItemByEntityGroupName(groupName);
         }
 
         /// <summary>

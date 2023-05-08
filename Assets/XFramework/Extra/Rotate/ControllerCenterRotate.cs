@@ -24,8 +24,12 @@ namespace XFramework
         [BoxGroup("缩放")] [LabelText("最近距离")] public float nearLimit = 0.8f;
         [BoxGroup("缩放")] [LabelText("最远距离")] public float farLimit = 4f;
         float smoothTime = 0.3f;
-        [BoxGroup("缩放/触屏")] private Touch oldTouch1; //上次触摸点1(手指1)  
-        [BoxGroup("缩放/触屏")] private Touch oldTouch2; //上次触摸点2(手指2) 
+
+        [BoxGroup("缩放/触屏")] [SerializeField] [LabelText("上一次第一个触摸点位置")]
+        private Vector2 oldTouch1Pos; //上次触摸点1(手指1)  
+
+        [BoxGroup("缩放/触屏")] [SerializeField] [LabelText("上一次第二个触摸点位置")]
+        private Vector2 oldTouch2Pos; //上次触摸点2(手指2) 
 
         #endregion
 
@@ -33,7 +37,8 @@ namespace XFramework
 
         [BoxGroup("旋转")] [LabelText("是否可旋转")] public bool canManualRotate = true;
         [BoxGroup("旋转")] [LabelText("旋转按键")] public KeyCode rotateCode = KeyCode.Mouse1;
-        [BoxGroup("旋转")] [LabelText("仅水平旋转")] public bool onlyX = false;
+        [BoxGroup("旋转")] [LabelText("开启水平轴向")] public bool isHorizontal = false;
+        [BoxGroup("旋转")] [LabelText("开启垂直轴向")] public bool isVertical = false;
         [BoxGroup("旋转")] [LabelText("水平旋转速度")] public float xSpeed = 250.0f;
         [BoxGroup("旋转")] [LabelText("垂直旋转速度")] public float ySpeed = 120.0f;
 
@@ -107,7 +112,7 @@ namespace XFramework
             y = rotateTarget.transform.localEulerAngles.x;
         }
 
-        private void LateUpdate()
+        private void FixedUpdate()
         {
             if (!playing)
             {
@@ -116,53 +121,84 @@ namespace XFramework
 
             if (uiOcclusion)
             {
-                if (RuntimeDataFrameComponent.Instance.uiOcclusion)
+                /*if (RuntimeDataFrameComponent.Instance.uiOcclusion)
                 {
                     return;
-                }
+                }*/
             }
 
             MouseFunction();
+            // Debug.Log(x);
             x = ClampAngle(x, xMinLimit, xMaxLimit);
             y = ClampAngle(y, yMinLimit, yMaxLimit);
+            
+            
             if (canManualRotate)
             {
                 Quaternion rotation = Quaternion.Euler(y, x, 0);
 
-                rotateTarget.transform.rotation = Quaternion.Lerp(rotateTarget.transform.rotation, rotation, Time.deltaTime * 4);
+                rotateTarget.transform.rotation = Quaternion.Slerp(rotateTarget.transform.rotation, rotation, 0.2f);
+                // transform.localRotation = Quaternion.Euler(x, y, 0.0f);
+
+                // rotateTarget.transform.position = Vector3.Lerp(rotateTarget.transform.position, targetPos, Time.deltaTime * 50);
+            }
+
+            if (canManualZoom)
+            {
                 Vector3 targetPos = rotateTarget.transform.rotation * new Vector3(0, 0, -distance) + centerTarget.position + targetOffset;
                 rotateTarget.transform.position = targetPos;
-                // rotateTarget.transform.position = Vector3.Lerp(rotateTarget.transform.position, targetPos, Time.deltaTime * 50);
             }
         }
 
+        public static float DampenFactor(float speed, float elapsed)
+        {
+            if (speed < 0.0f)
+            {
+                return 1.0f;
+            }
+
+#if UNITY_EDITOR
+            if (Application.isPlaying == false)
+            {
+                return 1.0f;
+            }
+#endif
+
+            return 1.0f - Mathf.Pow((float)System.Math.E, -speed * elapsed);
+        }
 
         /// <summary>
         /// 鼠标控制相机
         /// </summary>
         private void MouseFunction()
         {
+            // Debug.Log(Input.touchCount);
             //旋转
             if (canManualRotate && !Input.GetKey(moveCode))
             {
-                if (Input.GetKey(rotateCode))
+                #region 鼠标键盘
+
+                if (Input.GetKey(rotateCode) && Input.touchCount == 0)
                 {
+                    // Debug.Log("旋转");
                     // Debug.Log(Input.GetAxis("Mouse X"));
-                    if (Mathf.Abs(Input.GetAxis("Mouse X")) > 0.3f)
+
+                    if (isHorizontal)
                     {
-                        x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
+                        if (Mathf.Abs(Input.GetAxis("Mouse X")) > 0.1f)
+                        {
+                            x += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
+                        }
                     }
 
-                    if (onlyX == false)
+                    if (isVertical)
                     {
-                        if (Mathf.Abs(Input.GetAxis("Mouse Y")) > 0.3f)
+                        if (Mathf.Abs(Input.GetAxis("Mouse Y")) > 0.1f)
                         {
                             y -= Input.GetAxis("Mouse Y") * xSpeed * 0.02f;
                         }
                     }
                 }
-
-                #region 触屏操作
 
                 if (Input.touchCount == 1)
                 {
@@ -170,9 +206,16 @@ namespace XFramework
                     Vector2 deltaPos = touch.deltaPosition;
                     // Debug.Log("手指操作" + deltaPos.x + ":" + deltaPos.y);
                     // Debug.Log(Input.GetAxis("Mouse X"));
-                    x -= -deltaPos.x * xSpeed * 0.001f;
 
-                    if (onlyX == false)
+                    if (isHorizontal)
+                    {
+                        float rotateValue = -deltaPos.x * xSpeed * 0.1f;
+                        float factor = DampenFactor(1, Time.deltaTime);
+                        x = Mathf.Lerp(x, x - rotateValue, factor);
+                        // x -= rotateValue;
+                    }
+
+                    if (isVertical)
                     {
                         y -= deltaPos.y * xSpeed * 0.001f;
                     }
@@ -184,8 +227,10 @@ namespace XFramework
             //移动
             if (canManualMove)
             {
-                if (Input.GetKey(moveCode))
+                //双指会触发移动操作,这里要进行屏蔽
+                if ((Input.GetKey(moveCode) && Input.touchCount == 0) || Input.touchCount == 3)
                 {
+                    // Debug.Log("移动");
                     _currentMousePos = Input.mousePosition;
                     if (!_firstMove)
                     {
@@ -226,36 +271,6 @@ namespace XFramework
                         // targetSelfPos = new Vector3(-targetSelfPos.x, targetSelfPos.y, targetSelfPos.z);
                         //局部坐标增加限制
                         targetSelfPos = LimitTargetPos(targetSelfPos);
-                        /*if (targetSelfPos.x < xTargetLimit.x && selfRightDirectionLimit)
-                        {
-                            targetSelfPos = new Vector3(xTargetLimit.x, targetSelfPos.y, targetSelfPos.z);
-                        }
-
-                        if (targetSelfPos.x > xTargetLimit.x && selfLeftDirectionLimit)
-                        {
-                            targetSelfPos = new Vector3(xTargetLimit.x, targetSelfPos.y, targetSelfPos.z);
-                        }
-
-                        if (targetSelfPos.y < yTargetLimit.y && selfDownDirectionLimit)
-                        {
-                            targetSelfPos = new Vector3(targetSelfPos.x, yTargetLimit.x, targetSelfPos.z);
-                        }
-
-                        if (targetSelfPos.y > yTargetLimit.y && selfUpDirectionLimit)
-                        {
-                            targetSelfPos = new Vector3(targetSelfPos.x, yTargetLimit.y, targetSelfPos.z);
-                        }
-
-                        if (targetSelfPos.z < zTargetLimit.x && selfBackDirectionLimit)
-                        {
-                            targetSelfPos = new Vector3(targetSelfPos.x, targetSelfPos.y, zTargetLimit.x);
-                        }
-
-                        if (targetSelfPos.z > zTargetLimit.y && selfForwardDirectionLimit)
-                        {
-                            targetSelfPos = new Vector3(targetSelfPos.x, targetSelfPos.y, zTargetLimit.y);
-                        }*/
-
                         centerTarget.localPosition = targetSelfPos;
                         movingIncrement = targetSelfPos - _oldTargetPos;
                         _oldTargetPos = targetSelfPos;
@@ -283,43 +298,48 @@ namespace XFramework
                 _oldMousePos = Vector3.zero;
             }
 
-            //镜头远近
-            if (Input.GetAxis("Mouse ScrollWheel") != 0)
-            {
-                targetDistance -= Input.GetAxis("Mouse ScrollWheel") * movSpeedScroll;
-                targetDistance = Mathf.Clamp(targetDistance, nearLimit, farLimit);
-            }
-
-            #region 触屏操作
-
-            if (Input.touchCount == 2)
-            {
-                //多点触摸, 放大缩小  
-                Touch newTouch1 = Input.GetTouch(0);
-                Touch newTouch2 = Input.GetTouch(1);
-
-                //第2点刚开始接触屏幕, 只记录，不做处理  
-                if (newTouch2.phase == TouchPhase.Began)
-                {
-                    oldTouch2 = newTouch2;
-                    oldTouch1 = newTouch1;
-                    return;
-                }
-
-                //计算老的两点距离和新的两点间距离，变大要放大模型，变小要缩放模型  
-                float oldDistance = Vector2.Distance(oldTouch1.position, oldTouch2.position);
-                float newDistance = Vector2.Distance(newTouch1.position, newTouch2.position);
-
-                //两个距离之差，为正表示放大手势， 为负表示缩小手势  
-                float offset = newDistance - oldDistance;
-                targetDistance -= offset * movSpeedScroll;
-                targetDistance = Mathf.Clamp(targetDistance, nearLimit, farLimit);
-            }
-
-            #endregion
-
+            //缩放
             if (canManualZoom)
             {
+                //鼠标
+                if (Input.touchCount == 0 && Input.GetAxis("Mouse ScrollWheel") != 0)
+                {
+                    targetDistance -= Input.GetAxis("Mouse ScrollWheel") * movSpeedScroll;
+                    targetDistance = Mathf.Clamp(targetDistance, nearLimit, farLimit);
+                }
+
+                //触屏
+                if (Input.touchCount == 2)
+                {
+                    //多点触摸, 放大缩小  
+                    Touch newTouch1 = Input.GetTouch(0);
+                    Touch newTouch2 = Input.GetTouch(1);
+
+                    //第2点刚开始接触屏幕, 只记录，不做处理  
+                    if (newTouch2.phase == TouchPhase.Began)
+                    {
+                        oldTouch1Pos = newTouch1.position;
+                        oldTouch2Pos = newTouch2.position;
+                        return;
+                    }
+
+                    //计算老的两点距离和新的两点间距离，变大要放大模型，变小要缩放模型  
+                    float oldDistance = Vector2.Distance(oldTouch1Pos, oldTouch2Pos);
+                    float newDistance = Vector2.Distance(newTouch1.position, newTouch2.position);
+                    float offset = 0;
+                    //两手指之间距离过小不进行操作
+                    if (newDistance > 150)
+                    {
+                        offset = (newDistance - oldDistance) * movSpeedScroll * 0.01f;
+                    }
+
+                    //两个距离之差，为正表示放大手势， 为负表示缩小手势  
+                    targetDistance -= offset;
+                    targetDistance = Mathf.Clamp(targetDistance, nearLimit, farLimit);
+                    oldTouch1Pos = newTouch1.position;
+                    oldTouch2Pos = newTouch2.position;
+                }
+
                 distance = Mathf.SmoothDamp(distance, targetDistance, ref _velocity, smoothTime);
                 distance = Mathf.Clamp(distance, nearLimit, farLimit);
             }

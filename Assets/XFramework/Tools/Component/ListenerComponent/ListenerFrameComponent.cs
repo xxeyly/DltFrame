@@ -23,7 +23,8 @@ namespace XFramework
 
         public delegate void CallBack<T, X, Y, Z, W>(T t, X x, Y y, Z z, W w);
 
-        [SerializeField] private Dictionary<string, List<Delegate>> listenerCallBackDic = new Dictionary<string, List<Delegate>>();
+        [LabelText("不带返回值的监听")] [SerializeField]
+        private Dictionary<string, List<Delegate>> listenerCallBackDic = new Dictionary<string, List<Delegate>>();
 
         public delegate R ReturnCallBack<R>();
 
@@ -37,8 +38,11 @@ namespace XFramework
 
         public delegate R ReturnCallBack<T, X, Y, Z, W, R>(T t, X x, Y y, Z z, W w);
 
-        [SerializeField] private Dictionary<string, List<Delegate>> listenerReturnCallBackDic = new Dictionary<string, List<Delegate>>();
-        [LabelText("所有触发事件")] public List<string> allListener = new List<string>();
+        [LabelText("带返回值的监听")] [SerializeField]
+        private Dictionary<string, List<Delegate>> listenerReturnCallBackDic = new Dictionary<string, List<Delegate>>();
+
+        // [LabelText("所有触发事件")] public List<string> allListener = new List<string>();
+        [LabelText("所有触发事件")] public Dictionary<string, List<string>> allListener = new Dictionary<string, List<string>>();
 
         public override void FrameInitComponent()
         {
@@ -47,9 +51,6 @@ namespace XFramework
 
         public override void FrameSceneInitComponent()
         {
-            listenerCallBackDic.Clear();
-            listenerReturnCallBackDic.Clear();
-            allListener.Clear();
         }
 
         public override void FrameEndComponent()
@@ -75,22 +76,36 @@ namespace XFramework
         /// <param name="customDelegate"></param>
         private void AddDelegateToListenerEvent(string eventType, Delegate customDelegate)
         {
-            if (!listenerCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+            if (!listenerCallBackDic.ContainsKey(eventClassName))
             {
                 List<Delegate> delegates = new List<Delegate> { customDelegate };
-                listenerCallBackDic.Add(eventType, delegates);
-                allListener.Add(eventType);
+                listenerCallBackDic.Add(eventClassName, delegates);
+                if (!allListener.ContainsKey(eventClassName))
+                {
+                    allListener.Add(eventClassName, new List<string>() { });
+                }
+
+                if (allListener[eventClassName].Contains(eventName))
+                {
+                    Debug.Log("当前事件已经绑定过,即时清理");
+                }
+                else
+                {
+                    allListener[eventClassName].Add(eventName);
+                }
             }
             else
             {
-                List<Delegate> delegates = listenerCallBackDic[eventType];
+                List<Delegate> delegates = listenerCallBackDic[eventClassName];
                 if (!delegates.Contains(customDelegate))
                 {
                     delegates.Add(customDelegate);
                 }
                 else
                 {
-                    Debug.LogError(eventType + "该事件已经被绑定了");
+                    Debug.LogWarning(eventType + "该事件已经被绑定了");
                 }
             }
         }
@@ -157,22 +172,36 @@ namespace XFramework
         /// <param name="customDelegate"></param>
         private void AddReturnDelegateToListenerEvent(string eventType, Delegate customDelegate)
         {
-            if (!listenerReturnCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+            if (!listenerReturnCallBackDic.ContainsKey(eventClassName))
             {
                 List<Delegate> delegates = new List<Delegate> { customDelegate };
-                listenerReturnCallBackDic.Add(eventType, delegates);
-                allListener.Add(eventType);
+                listenerReturnCallBackDic.Add(eventClassName, delegates);
+                if (!allListener.ContainsKey(eventClassName))
+                {
+                    allListener.Add(eventClassName, new List<string>() { });
+                }
+
+                if (allListener[eventClassName].Contains(eventName))
+                {
+                    Debug.Log(eventClassName + "_" + eventName + ":当前事件已经绑定过,即时清理");
+                }
+                else
+                {
+                    allListener[eventClassName].Add(eventName);
+                }
             }
             else
             {
-                List<Delegate> delegates = listenerReturnCallBackDic[eventType];
+                List<Delegate> delegates = listenerReturnCallBackDic[eventClassName];
                 if (!delegates.Contains(customDelegate))
                 {
                     delegates.Add(customDelegate);
                 }
                 else
                 {
-                    Debug.LogError(eventType + "该事件已经被绑定了");
+                    Debug.LogWarning(eventType + "该事件已经被绑定了");
                 }
             }
         }
@@ -252,6 +281,16 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
+        public void RemoveListenerEvent(string eventType)
+        {
+            RemoveDelegateToListenerEvent(eventType);
+        }
+
+        /// <summary>
+        /// 移除事件监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="callBack"></param>
         public void RemoveListenerEvent(string eventType, CallBack callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
@@ -313,6 +352,34 @@ namespace XFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="customDelegate"></param>
+        public void RemoveDelegateToListenerEvent(string eventType)
+        {
+            if (!listenerCallBackDic.ContainsKey(eventType) && !listenerReturnCallBackDic.ContainsKey(eventType))
+            {
+                Debug.Log(eventType + "没有被绑定过");
+            }
+
+            if (listenerCallBackDic.ContainsKey(eventType))
+            {
+                listenerCallBackDic.Remove(eventType);
+            }
+
+            if (listenerReturnCallBackDic.ContainsKey(eventType))
+            {
+                listenerReturnCallBackDic.Remove(eventType);
+            }
+
+            if (allListener.ContainsKey(eventType))
+            {
+                allListener.Remove(eventType);
+            }
+        }
+
+        /// <summary>
+        /// 移除监听
+        /// </summary>
+        /// <param name="eventType"></param>
+        /// <param name="customDelegate"></param>
         private void RemoveDelegateToListenerEvent(string eventType, Delegate customDelegate)
         {
             if (!listenerCallBackDic.ContainsKey(eventType))
@@ -344,11 +411,13 @@ namespace XFramework
         /// <param name="eventType"></param>
         private void ExecuteEvent(string eventType)
         {
-            if (listenerCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+            if (listenerCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerCallBackDic[eventClassName])
                 {
-                    if (customDelegate.Method.GetParameters().Length == 0)
+                    if (customDelegate.Method.GetParameters().Length == 0 && customDelegate.Method.Name == eventName)
                     {
                         ((CallBack)customDelegate)();
                         return;
@@ -357,7 +426,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -368,9 +437,12 @@ namespace XFramework
         /// <param name="t"></param>
         private void ExecuteEvent<T>(string eventType, T t)
         {
-            if (listenerCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerCallBackDic[eventClassName])
                 {
                     if (t == null)
                     {
@@ -379,7 +451,7 @@ namespace XFramework
                     }
 
                     if (customDelegate.Method.GetParameters().Length == 1 &&
-                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType())
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() && customDelegate.Method.Name == eventName)
                     {
                         ((CallBack<T>)customDelegate)(t);
                         return;
@@ -388,7 +460,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -400,13 +472,16 @@ namespace XFramework
         /// <param name="x"></param>
         private void ExecuteEvent<T, X>(string eventType, T t, X x)
         {
-            if (listenerCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 2 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType())
+                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() && customDelegate.Method.Name == eventName)
                     {
                         ((CallBack<T, X>)customDelegate)(t, x);
                         return;
@@ -415,7 +490,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -427,14 +502,17 @@ namespace XFramework
         /// <param name="y"></param>
         private void ExecuteEvent<T, X, Y>(string eventType, T t, X x, Y y)
         {
-            if (listenerCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 3 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
                         customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
-                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType())
+                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() && customDelegate.Method.Name == eventName)
                     {
                         ((CallBack<T, X, Y>)customDelegate)(t, x, y);
                         return;
@@ -443,7 +521,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -455,15 +533,18 @@ namespace XFramework
         /// <param name="y"></param>
         private void ExecuteEvent<T, X, Y, Z>(string eventType, T t, X x, Y y, Z z)
         {
-            if (listenerCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 4 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
                         customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
                         customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
-                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType())
+                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() && customDelegate.Method.Name == eventName)
                     {
                         ((CallBack<T, X, Y, Z>)customDelegate)(t, x, y, z);
                         return;
@@ -472,7 +553,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -484,16 +565,19 @@ namespace XFramework
         /// <param name="y"></param>
         private void ExecuteEvent<T, X, Y, Z, W>(string eventType, T t, X x, Y y, Z z, W w)
         {
-            if (listenerCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 5 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
                         customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
                         customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
                         customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() &&
-                        customDelegate.Method.GetParameters()[4].ParameterType == w.GetType())
+                        customDelegate.Method.GetParameters()[4].ParameterType == w.GetType() && customDelegate.Method.Name == eventName)
                     {
                         ((CallBack<T, X, Y, Z, W>)customDelegate)(t, x, y, z, w);
                         return;
@@ -502,7 +586,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -516,11 +600,14 @@ namespace XFramework
         /// <param name="eventType"></param>
         private R ExecuteReturnEvent<R>(string eventType)
         {
-            if (listenerReturnCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerReturnCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventClassName])
                 {
-                    if (customDelegate.Method.GetParameters().Length == 0)
+                    if (customDelegate.Method.GetParameters().Length == 0 && customDelegate.Method.Name == eventName)
                     {
                         return ((ReturnCallBack<R>)customDelegate)();
                     }
@@ -528,7 +615,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -541,12 +628,15 @@ namespace XFramework
         /// <param name="t"></param>
         private R ExecuteReturnEvent<T, R>(string eventType, T t)
         {
-            if (listenerReturnCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerReturnCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 1 &&
-                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType())
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() && customDelegate.Method.Name == eventName)
                     {
                         return ((ReturnCallBack<T, R>)customDelegate)(t);
                     }
@@ -554,7 +644,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -568,13 +658,16 @@ namespace XFramework
         /// <param name="x"></param>
         private R ExecuteReturnEvent<T, X, R>(string eventType, T t, X x)
         {
-            if (listenerReturnCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerReturnCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 2 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType())
+                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() && customDelegate.Method.Name == eventName)
                     {
                         return ((ReturnCallBack<T, X, R>)customDelegate)(t, x);
                     }
@@ -582,7 +675,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -596,14 +689,17 @@ namespace XFramework
         /// <param name="y"></param>
         private R ExecuteReturnEvent<T, X, Y, R>(string eventType, T t, X x, Y y)
         {
-            if (listenerReturnCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerReturnCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 3 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
                         customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
-                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType())
+                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() && customDelegate.Method.Name == eventName)
                     {
                         return ((ReturnCallBack<T, X, Y, R>)customDelegate)(t, x, y);
                     }
@@ -611,7 +707,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -625,15 +721,18 @@ namespace XFramework
         /// <param name="y"></param>
         private R ExecuteReturnEvent<T, X, Y, Z, R>(string eventType, T t, X x, Y y, Z z)
         {
-            if (listenerReturnCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerReturnCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 4 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
                         customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
                         customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
-                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType())
+                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() && customDelegate.Method.Name == eventName)
                     {
                         return ((ReturnCallBack<T, X, Y, Z, R>)customDelegate)(t, x, y, z);
                     }
@@ -641,7 +740,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -655,16 +754,19 @@ namespace XFramework
         /// <param name="y"></param>
         private R ExecuteReturnEvent<T, X, Y, Z, W, R>(string eventType, T t, X x, Y y, Z z, W w)
         {
-            if (listenerReturnCallBackDic.ContainsKey(eventType))
+            string eventClassName = eventType.Split("-")[0];
+            string eventName = eventType.Split("-")[1];
+
+            if (listenerReturnCallBackDic.ContainsKey(eventClassName))
             {
-                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventType])
+                foreach (Delegate customDelegate in listenerReturnCallBackDic[eventClassName])
                 {
                     if (customDelegate.Method.GetParameters().Length == 5 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
                         customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
                         customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
                         customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() &&
-                        customDelegate.Method.GetParameters()[4].ParameterType == w.GetType())
+                        customDelegate.Method.GetParameters()[4].ParameterType == w.GetType() && customDelegate.Method.Name == eventName)
                     {
                         return ((ReturnCallBack<T, X, Y, Z, W, R>)customDelegate)(t, x, y, z, w);
                     }
@@ -672,7 +774,7 @@ namespace XFramework
             }
             else
             {
-                Debug.LogError("该事件没有被绑定过:" + eventType);
+                Debug.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);

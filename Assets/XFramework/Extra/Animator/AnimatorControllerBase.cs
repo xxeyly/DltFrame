@@ -26,7 +26,7 @@ namespace XFramework
 
         private Animator _animator;
         [LabelText("动画属性")] [SerializeField] private List<string> animatorControllerParameterName;
-        [SerializeField] private List<AnimatorControllerParameter> _allParameter;
+        [SerializeField] private List<AnimatorControllerParameter> _allParameter = new List<AnimatorControllerParameter>();
         [LabelText("动画初始化")] public bool isLoadParameter;
 
 
@@ -155,6 +155,10 @@ namespace XFramework
             {
                 PlayAnim(animationType);
                 return _playAnimTimeTask = TimeFrameComponent.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType));
+            }
+            else
+            {
+                Debug.Log("不包含当前动画:" + animationType);
             }
 
             return 0;

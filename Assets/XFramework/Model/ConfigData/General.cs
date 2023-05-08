@@ -60,6 +60,7 @@ namespace XFramework
             typeof(MouseFrameComponent),
             typeof(TimeFrameComponent),
             typeof(ViewFrameComponent),
+            typeof(HotFixFrameComponent),
         };
 
 

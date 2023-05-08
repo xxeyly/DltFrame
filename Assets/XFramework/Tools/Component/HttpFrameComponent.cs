@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
@@ -9,12 +10,14 @@ using UnityEngine.Networking;
 
 namespace XFramework
 {
-#pragma warning disable CS0618
-
     public class HttpFrameComponent : FrameComponent
     {
         public static HttpFrameComponent Instance;
         private UnityWebRequest _request;
+        [LabelText("是否联网")] public bool notReachable;
+
+        [DllImport("winInet.dll")] //引用外部库
+        private static extern bool InternetGetConnectedState(ref int dwFlag, int dwReserved); //库中函数
 
         /// <summary>
         /// Http请求模式
@@ -25,6 +28,48 @@ namespace XFramework
             PUT,
             DELETE,
             POST
+        }
+
+        private void Update()
+        {
+            notReachable = IsConnected();
+        }
+
+
+        /// <summary>
+        /// 判断连接状态
+        /// </summary>
+        private bool IsConnected()
+        {
+            int dwFlag = new int();
+            if (!InternetGetConnectedState(ref dwFlag, 0))
+            {
+                if ((dwFlag & 0x14) == 0)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if ((dwFlag & 0x01) != 0)
+                {
+                    return true;
+                }
+                else if ((dwFlag & 0x02) != 0)
+                {
+                    return true;
+                }
+                else if ((dwFlag & 0x04) != 0)
+                {
+                    return true;
+                }
+                else if ((dwFlag & 0x40) != 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public override void FrameInitComponent()
@@ -105,7 +150,7 @@ namespace XFramework
                 yield return webRequest.SendWebRequest();
                 if (webRequest.isHttpError || webRequest.isNetworkError)
                 {
-                    errorAction.Invoke(webRequest.url + "访问错误");
+                    errorAction.Invoke(webRequest.error);
                 }
                 else
                 {
@@ -305,5 +350,4 @@ namespace XFramework
             }
         }
     }
-#pragma warning restore CS0618
 }

@@ -78,7 +78,6 @@ namespace XFramework
 
         [BoxGroup("字体压缩")]
         /*public TMP_FontAsset TargetFontAsset;*/
-
         /*
         [BoxGroup("字体压缩")]
         [Button("TextMeshPro字体压缩", ButtonSizes.Medium)]
@@ -86,7 +85,6 @@ namespace XFramework
         {
             ExtractTexture(AssetDatabase.GetAssetPath(TargetFontAsset));
         }*/
-
         /*
         //这里的fontPath是绝对路径
         public void ExtractTexture(string fontPath)
@@ -108,13 +106,13 @@ namespace XFramework
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }*/
-
         [BoxGroup("图片压缩")]
         [LabelText("平台类型")]
         public enum PlatformType
         {
             WebGl,
-            Android
+            Android,
+            PC
         }
 
         [BoxGroup("图片压缩/信息")] [LabelText("平台")]
@@ -159,7 +157,7 @@ namespace XFramework
                         case PlatformType.WebGl:
                             textureImporter.SetPlatformTextureSettings(new TextureImporterPlatformSettings()
                             {
-                                maxTextureSize = 1024,
+                                maxTextureSize = 2048,
                                 compressionQuality = 50,
                                 name = "WebGL",
                                 overridden = true,
@@ -174,6 +172,16 @@ namespace XFramework
                                 maxTextureSize = 2048,
                                 compressionQuality = 50,
                                 name = "Android",
+                                overridden = true,
+                                format = TextureImporterFormat.DXT5Crunched
+                            });
+                            break;
+                        case PlatformType.PC:
+                            textureImporter.SetPlatformTextureSettings(new TextureImporterPlatformSettings()
+                            {
+                                maxTextureSize = 1024,
+                                compressionQuality = 50,
+                                name = "Standalone",
                                 overridden = true,
                                 format = TextureImporterFormat.DXT5Crunched
                             });

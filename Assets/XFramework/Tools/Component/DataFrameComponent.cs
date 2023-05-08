@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -164,7 +165,6 @@ namespace XFramework
             string str = input.First().ToString().ToLower() + input.Substring(1);
             return str;
         }
-#pragma warning disable CS0618
 
         /// <summary>
         /// 加载图片
@@ -216,6 +216,31 @@ namespace XFramework
         }
 
         /// <summary>
+        /// 查找场景中所有类型
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static List<T> GetAllObjectsInScene<T>(string sceneName)
+        {
+            // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
+            List<GameObject> objectsInScene = GetAllObjectsOnlyInScene(sceneName);
+            List<T> specifiedType = new List<T>();
+            foreach (GameObject go in objectsInScene)
+            {
+                List<T> ts = new List<T>(go.GetComponents<T>());
+                for (int i = 0; i < ts.Count; i++)
+                {
+                    if (ts[i] != null)
+                    {
+                        specifiedType.Add(ts[i]);
+                    }
+                }
+            }
+
+            return specifiedType;
+        }
+
+        /// <summary>
         /// 查找场景中第一个类型
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -242,13 +267,42 @@ namespace XFramework
             foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
             {
 #if UNITY_EDITOR
-                if (!UnityEditor.EditorUtility.IsPersistent(go.transform.root.gameObject) &&
+                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) &&
                     !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
                 {
                     objectsInScene.Add(go);
                 }
 #else
                 objectsInScene.Add(go);
+#endif
+            }
+
+            return objectsInScene;
+        }
+
+        /// <summary>
+        /// 获得场景中所有物体
+        /// </summary>
+        /// <returns></returns>
+        public static List<GameObject> GetAllObjectsOnlyInScene(string sceneName)
+        {
+            List<GameObject> objectsInScene = new List<GameObject>();
+            foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
+            {
+#if UNITY_EDITOR
+                if (!UnityEditor.EditorUtility.IsPersistent(go.transform.root.gameObject) &&
+                    !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+                {
+                    if (go.scene.name == sceneName)
+                    {
+                        objectsInScene.Add(go);
+                    }
+                }
+#else
+                if (go.scene.name == sceneName)
+                {
+                    objectsInScene.Add(go);
+                }
 #endif
             }
 
@@ -385,6 +439,32 @@ namespace XFramework
         }
 
         /// <summary>
+        /// 获得指定路径下指定类型的所有物体路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static List<string> GetGetSpecifyPathInAllTypePath(string path, string type)
+        {
+            List<string> allPath = new List<string>();
+            foreach (KeyValuePair<string, List<string>> pair in GetAllObjectsOnlyInAssetsPath())
+            {
+                if (pair.Key == type)
+                {
+                    foreach (string filePath in pair.Value)
+                    {
+                        if (GetPathDontContainFileName(filePath).Contains(path))
+                        {
+                            allPath.Add(filePath);
+                        }
+                    }
+                }
+            }
+
+            return allPath;
+        }
+
+        /// <summary>
         /// 获得指定类型文件
         /// </summary>
         /// <param name="filePath"></param>
@@ -404,6 +484,11 @@ namespace XFramework
             return specifyType;
         }
 
+        /// <summary>
+        /// 获得文件类型
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string GetPathFileType(string path)
         {
             List<string> split = new List<string>(path.Split('.'));
@@ -411,11 +496,73 @@ namespace XFramework
             return split[split.Count - 1];
         }
 
+        /// <summary>
+        /// 获得文件名称
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string GetPathFileName(string path)
         {
-            List<string> split = new List<string>(path.Split('/'));
+            FileInfo fileInfo = new FileInfo(path);
+            return fileInfo.Name;
+        }
 
-            return split[split.Count - 1];
+        /// <summary>
+        /// 返回文件名称,不包含类型
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetPathFileNameDontContainFileType(string path)
+        {
+            // return GetPathFileName(path).Replace("." + GetPathFileType(path), "");
+            return Path.GetFileNameWithoutExtension(path);
+        }
+
+        /// <summary>
+        /// 获得文件路径,不包包含文件名称
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string GetPathDontContainFileName(string path)
+        {
+            return Path.GetDirectoryName(path).Replace(@"\", "/");
+        }
+
+        /// <summary>
+        /// 设置文件夹内Prefab的AssetBundle名称,路径名称不带/
+        /// </summary>
+        /// <param name="prefabPath"></param>
+        /// <param name="buildPath"></param>
+        public static void SetFolderFileBuildAssetBundleName(string prefabPath, string buildPath, string variant = "")
+        {
+#if UNITY_EDITOR
+            DirectoryInfo uiDirection = new DirectoryInfo(prefabPath);
+            foreach (FileInfo fileInfo in uiDirection.GetFiles("*.prefab"))
+            {
+                AssetImporter assetImporter = AssetImporter.GetAtPath(prefabPath + "/" + fileInfo.Name);
+                string assetBundleName = GetPathFileNameDontContainFileType(fileInfo.Name);
+                string buildAssetBundlePath = buildPath.Replace("Assets/StreamingAssets/", "") + "/" + assetBundleName;
+
+                assetImporter.SetAssetBundleNameAndVariant(buildAssetBundlePath, variant);
+                assetImporter.SaveAndReimport();
+            }
+#endif
+        }
+
+        /// <summary>
+        /// 移除所有AssetBundle名称
+        /// </summary>
+        public static void RemoveAllAssetBundleName()
+        {
+#if UNITY_EDITOR
+
+            List<string> allAsstBundleName = new List<string>(AssetDatabase.GetAllAssetBundleNames());
+
+            foreach (string assetName in allAsstBundleName)
+            {
+                AssetDatabase.RemoveAssetBundleName(assetName, true);
+            }
+#endif
         }
 
         /// <summary>
@@ -690,6 +837,16 @@ namespace XFramework
         }
 
         /// <summary>
+        /// 左斜杠转右斜杠
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static string LeftSlashChangeRightSlash(string path)
+        {
+            return path.Replace("/", "\\");
+        }
+
+        /// <summary>
         /// 获得上级目录
         /// </summary>
         /// <param name="path"></param>
@@ -706,6 +863,68 @@ namespace XFramework
             }
 
             return newPath;
+        }
+
+        /// <summary>
+        /// 获得路径
+        /// </summary>
+        /// <returns></returns>
+        public static string GetComponentPath(Transform target, bool containThis = true)
+        {
+            string path = String.Empty;
+            Transform defaultUiTr = target;
+            int hierarchy = 0;
+            while (target.parent != null)
+            {
+                hierarchy++;
+                target = target.parent;
+            }
+
+
+            for (int i = 1; i <= hierarchy; i++)
+            {
+                target = GetParentByHierarchy(defaultUiTr, i);
+                if (containThis)
+                {
+                    path = target.name + "/" + path;
+                }
+                else
+                {
+                    if (i == 1)
+                    {
+                        path = target.name;
+                    }
+                    else
+                    {
+                        path = target.name + "/" + path;
+                    }
+                }
+            }
+
+            if (containThis)
+            {
+                return path + defaultUiTr.name;
+            }
+            else
+            {
+                return path;
+            }
+        }
+
+        /// <summary>
+        /// 根据UI层级获得父物体
+        /// </summary>
+        /// <param name="uiTr"></param>
+        /// <param name="hierarchy"></param>
+        /// <returns></returns>
+        private static Transform GetParentByHierarchy(Transform uiTr, int hierarchy)
+        {
+            for (int i = 0; i < hierarchy; i++)
+            {
+                uiTr = uiTr.parent;
+            }
+
+            return uiTr;
         }
 
         /// <summary>
@@ -775,7 +994,7 @@ namespace XFramework
             }
 
             FileStream aFile = new FileStream(path + "/" + fileName, FileMode.Create);
-            StreamWriter sw = new StreamWriter(aFile, Encoding.UTF8);
+            StreamWriter sw = new StreamWriter(aFile, Encoding.Default);
             sw.WriteLine(information);
             sw.Close();
 #if UNITY_EDITOR
@@ -825,7 +1044,6 @@ namespace XFramework
             int buffSize = 1024 * 1024)
         {
             FileStream aFile = new FileStream(path + "/" + fileName, fileMode, FileAccess.Write);
-            ;
             if (File.Exists(path))
             {
             }
@@ -944,6 +1162,18 @@ namespace XFramework
 
             return null;
         }
+
+        public static long GetFileSize(string fileName)
+        {
+            if (File.Exists(fileName))
+            {
+                FileStream file = new FileStream(fileName, FileMode.Open);
+                long size = file.Length;
+                file.Dispose();
+                return size;
+            }
+
+            return 0;
+        }
     }
-#pragma warning restore CS0618
 }

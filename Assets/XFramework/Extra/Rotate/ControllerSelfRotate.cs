@@ -15,10 +15,6 @@ namespace XFramework
 
         // Start is called before the first frame update
         [LabelText("是否开启旋转")] public bool isOpenMouseOperation;
-        [BoxGroup("基础")] [LabelText("开启UI遮挡")] public bool uiOcclusion = true;
-
-        [BoxGroup("旋转")] [LabelText("旋转按键")] public KeyCode rotateCode = KeyCode.Mouse1;
-
         [LabelText("开启水平轴向")] public bool isHorizontal;
         [LabelText("开启垂直轴向")] public bool isVertical;
         [LabelText("目标物体")] [SerializeField] public Transform targetTri;
@@ -48,16 +44,6 @@ namespace XFramework
             {
                 SetRotateObj(targetTri);
             }
-        }
-
-        public void Play()
-        {
-            isOpenMouseOperation = true;
-        }
-
-        public void Stop()
-        {
-            isOpenMouseOperation = false;
         }
 
         public void SetRotateObj(Transform target)
@@ -144,21 +130,8 @@ namespace XFramework
         {
             #region 控制旋转数值
 
-            if (!isOpenMouseOperation)
+            if (isOpenMouseOperation)
             {
-                return;
-            }
-
-            if (Input.GetKey(rotateCode))
-            {
-                if (uiOcclusion)
-                {
-                    if (RuntimeDataFrameComponent.Instance.uiOcclusion)
-                    {
-                        return;
-                    }
-                }
-
                 if (isHorizontal)
                 {
                     inputX = Input.GetAxis("Mouse X");
