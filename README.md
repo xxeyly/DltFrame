@@ -19,7 +19,7 @@ Odin - Inspector and Serializer
 1.UI框架-
 
 UI界面快速显示隐藏,代码自动生成(在不改变原代码逻辑的情况下),UI组件快速绑定
-![](Documentation~\20230511084407.png)
+![输入图片说明](Documentation~/20230511084407.png)
 
 2.计时器-
 
