@@ -31,7 +31,7 @@ Odin - Inspector and Serializer
 1.Hierarchy 面板右击 Create Empty BaseWindow (如面板上没有Canvas组件会自动生成一个Canvas，默认大小为1920*1080)创建一个空的Empty WindowView GameObject
 ，该组件为最小的UI块
 
-![Empty WindowView](Documentation~/Empty WindowView.png)
+![Empty WindowView](Documentation~/EmptyWindowView.png)
 
 每次创建完会自动添加一个BaseWindowGenerateScripts的脚本，该脚本是为了实现代码生成
 
