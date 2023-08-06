@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define SFRAMEWORK
+
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -10,12 +12,6 @@ namespace XFramework
     {
         [LabelText("活动")] Activity,
         [LabelText("静态")] Static
-    }
-
-    public enum ShowType
-    {
-        [LabelText("直接")] Direct,
-        [LabelText("渐隐")] Curve
     }
 
     [Serializable]
@@ -34,17 +30,14 @@ namespace XFramework
         protected GameObject window;
         protected CanvasGroup canvasGroup;
 
-        [HorizontalGroup("标签")] [BoxGroup("标签/属性")] [LabelText("视图类型")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)]
+        [HorizontalGroup("标签")] [BoxGroup("标签/属性")] [LabelText("视图类型")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)] [Tooltip("静态模式不会影响全局视图全局操作,单独指定事件会被影响")]
         protected ViewShowType viewShowType = ViewShowType.Activity;
 
-        [BoxGroup("标签/属性")] [LabelText("显示类型")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)]
-        protected ShowType showType = ShowType.Direct;
+        [BoxGroup("标签/属性")] [LabelText("UI层级")] [LabelWidth(100)] [Tooltip("ViewFrame勾选层级排序会根据索引进行排序")]
+        public int sceneLayerIndex;
 
-        [BoxGroup("标签/属性")] [LabelText("显示时间")] [Range(0.1f, 9)] [SerializeField] /*[ShowIf("showType", ShowType.Curve)]*/[EnableIf("showType", ShowType.Curve)]
-        protected float showTime = 1;
-
-        [BoxGroup("标签/属性")] [LabelText("UI层级")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)]
-        public int layerIndex = 0;
+        [BoxGroup("标签/属性")] [LabelText("初始化")] [SerializeField] [LabelWidth(50)] [Tooltip("该属性影响是否一开始执行Init操作")]
+        public bool viewInit = false;
 
         [BoxGroup("调试")] [ToggleLeft] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("日志输出")]
         public bool isLog;
@@ -59,9 +52,9 @@ namespace XFramework
 
         [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("类名称")] [LabelWidth(50)]
         public string typeName;
+
         [BoxGroup("标签/命名")]
-        [Button(ButtonSizes.Medium)]
-        [LabelText("重命名")]
+        [Button("重命名", ButtonSizes.Medium)]
         [GUIColor(0, 1, 0)]
         public void GameNameSet()
         {
@@ -91,7 +84,6 @@ namespace XFramework
             return viewShowType;
         }
 
-        
 
         /// <summary>
         /// 视图初始化
@@ -103,13 +95,21 @@ namespace XFramework
             InitView();
             InitListener();
             OnlyOnceInit();
+            if (viewInit)
+            {
+                Init();
+            }
         }
 
         public void SetSetSiblingIndex()
         {
-            transform.SetSiblingIndex(layerIndex);
+            transform.SetSiblingIndex(sceneLayerIndex);
         }
 
+        public int GetSceneLayerIndex()
+        {
+            return sceneLayerIndex;
+        }
 
         public abstract void Init();
 
@@ -131,7 +131,10 @@ namespace XFramework
         /// <summary>
         /// UI绑定
         /// </summary>
-        protected abstract void InitView();
+        protected virtual void InitView()
+        {
+            
+        }
 
         /// <summary>
         /// 事件监听
@@ -164,7 +167,6 @@ namespace XFramework
             ViewFrameComponent.Instance.ShowView(viewType);
         }
 
-       
 
         /// <summary>
         /// 获得当前视图的显示状态

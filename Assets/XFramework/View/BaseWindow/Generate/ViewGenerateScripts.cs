@@ -24,7 +24,6 @@ namespace XFramework
         [TabGroup("UI", "事件")] [LabelText("UI变量绑定事件声明")] [ReadOnly]
         public List<string> allUiVariableBindListenerEvent;
 #pragma warning disable 0649
-        protected GenerateBaseWindowData GenerateBaseWindowData;
         private string _currentScriptsContent;
         [LabelText("分号")] protected string Semicolon = ";";
 #pragma warning disable 0414
@@ -33,21 +32,12 @@ namespace XFramework
         [LabelText("监听事件列表")] private Dictionary<string, string> _listenerActionList;
 #pragma warning restore 0649
 
-        [Button(ButtonSizes.Large)]
+        [Button("代码生成", ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
-        [LabelText("代码生成")]
         public void Generate()
         {
 #if UNITY_EDITOR
             _currentScriptsContent = GetOldScriptsContent();
-
-            if (GenerateBaseWindowData == null)
-            {
-                GenerateBaseWindowData =
-                    UnityEditor.AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(
-                        General.generateBaseWindowPath);
-            }
-
             _listenerActionList = new Dictionary<string, string>();
             GenerateUsing();
             GenerateUi();
@@ -81,21 +71,11 @@ namespace XFramework
                 allUiVariableBindListenerEvent[i] += LineFeed;
             }
 
-            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableUsing,
-               GenerateBaseWindowData.startUsing,
-                GenerateBaseWindowData.endUsing);
-            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableName,
-               GenerateBaseWindowData.startUiVariable,
-                 GenerateBaseWindowData.endUiVariable);
-            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBind,
-                GenerateBaseWindowData.startVariableBindPath,
-                GenerateBaseWindowData.endVariableBindPath);
-            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListener,
-                GenerateBaseWindowData.startVariableBindListener,
-                GenerateBaseWindowData.endVariableBindListener);
-            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListenerEvent,
-                GenerateBaseWindowData.startVariableBindEvent,
-                 GenerateBaseWindowData.endVariableBindEvent);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableUsing, GenerateBaseWindowData.startUsing, GenerateBaseWindowData.endUsing);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableName, GenerateBaseWindowData.startUiVariable, GenerateBaseWindowData.endUiVariable);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBind, GenerateBaseWindowData.startVariableBindPath, GenerateBaseWindowData.endVariableBindPath);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListener, GenerateBaseWindowData.startVariableBindListener, GenerateBaseWindowData.endVariableBindListener);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListenerEvent, GenerateBaseWindowData.startVariableBindEvent, GenerateBaseWindowData.endVariableBindEvent);
             _currentScriptsContent = CustomReplaceScriptContent(_currentScriptsContent);
             FileOperation.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
             ClearConsole();

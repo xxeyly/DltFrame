@@ -115,8 +115,11 @@ namespace XFramework
             PC
         }
 
+        [BoxGroup("图片压缩/信息")] [LabelText("指定路径压缩")] [FolderPath]
+        public string texturePath;
+
         [BoxGroup("图片压缩/信息")] [LabelText("平台")]
-        public PlatformType platformType;
+        public PlatformType platformType = PlatformType.PC;
 
         [BoxGroup("图片压缩/信息")] [LabelText("检测图片长")]
         public int textureWidth = 300;
@@ -128,11 +131,28 @@ namespace XFramework
         [Button("图片压缩(Png.Jpg.Tif.Tiff.Tga)", ButtonSizes.Medium)]
         public void OnTextureCompress()
         {
-            List<string> pngPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("png");
-            List<string> jpgPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("jpg");
-            List<string> tifPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tif");
-            List<string> tiffPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tiff");
-            List<string> tgaPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tga");
+            List<string> pngPaths;
+            List<string> jpgPaths;
+            List<string> tifPaths;
+            List<string> tiffPaths;
+            List<string> tgaPaths;
+            if (texturePath != string.Empty && Directory.Exists(texturePath))
+            {
+                pngPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "png");
+                jpgPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "jpg");
+                tifPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "tif");
+                tiffPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "tiff");
+                tgaPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "tga");
+            }
+            else
+            {
+                pngPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("png");
+                jpgPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("jpg");
+                tifPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tif");
+                tiffPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tiff");
+                tgaPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tga");
+            }
+
             OnTextureCompressByPath(pngPaths);
             OnTextureCompressByPath(jpgPaths);
             OnTextureCompressByPath(tifPaths);

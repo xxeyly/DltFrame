@@ -47,23 +47,20 @@ namespace XFramework
         private Vector3 _vec3MouseScreenSpace; // 鼠标的屏幕空间坐标  
         private Vector3 _vec3Offset; // 偏移 
 #pragma warning disable 649
-        [LabelText("鼠标常态")]
-        [SerializeField] private Texture2D _mouseNormal; // 鼠标常态
-        [LabelText("鼠标移入")]
-        [SerializeField] private Texture2D _mouseEnter; // 鼠标移入
+        [LabelText("鼠标常态")] [SerializeField] private Texture2D _mouseNormal; // 鼠标常态
+        [LabelText("鼠标移入")] [SerializeField] private Texture2D _mouseEnter; // 鼠标移入
 #pragma warning restore
         private Canvas _canvas;
         private GameObject _mouseEnterUi;
-        [LabelText("鼠标按下")]
-        public bool mouseDown;
+        [LabelText("鼠标按下")] public bool mouseDown;
 
         public override void FrameInitComponent()
         {
             Instance = GetComponent<MouseFrameComponent>();
         }
+
         public override void FrameSceneInitComponent()
         {
-            
         }
 
 
@@ -84,6 +81,8 @@ namespace XFramework
             {
                 mouseDown = false;
             }
+
+            RuntimeDataFrameComponent.Instance.mouseState = GetMouseOverUI();
         }
 
         /// <summary>
@@ -320,7 +319,7 @@ namespace XFramework
             if (EventSystem.current != null)
             {
                 PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current)
-                    {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
+                    { position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) };
                 //鼠标位置
                 //一个由光线射到的物体的List
                 List<RaycastResult> results = new List<RaycastResult>();
@@ -349,7 +348,7 @@ namespace XFramework
         public GameObject GetMouseEnterUi()
         {
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current)
-                {position = new Vector2(Input.mousePosition.x, Input.mousePosition.y)};
+                { position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) };
             //鼠标位置
             //一个由光线射到的物体的List
             List<RaycastResult> results = new List<RaycastResult>();

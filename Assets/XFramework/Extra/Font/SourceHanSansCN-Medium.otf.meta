@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a9b20be7f93d367469e8149654f8bb3c
+guid: 321f27b2ba8d1b5418db66adf9ba4723
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,7 +8,6 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Source Han Sans CN
   fontNames:
   - Source Han Sans CN
   fallbackFontReferences: []
@@ -18,5 +17,5 @@ TrueTypeFontImporter:
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1
   userData: 
-  assetBundleName: 
+  assetBundleName: hotfix/hotfixassetbundle/main/font/mainfont
   assetBundleVariant: 

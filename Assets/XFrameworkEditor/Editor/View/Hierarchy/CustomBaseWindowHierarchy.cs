@@ -16,6 +16,11 @@ namespace XFramework
 
         private static void HierarchyShow(int instanceid, Rect selectionrect)
         {
+            if (Application.platform != RuntimePlatform.WindowsEditor)
+            {
+                return;
+            }
+
             GameObject obj = EditorUtility.InstanceIDToObject(instanceid) as GameObject;
             if (obj != null)
             {
@@ -59,23 +64,6 @@ namespace XFramework
                     rectCheck.x += rectCheck.width - 20;
                     rectCheck.width = 18;
                     GameObject window = obj.transform.Find("Window").gameObject;
-                    if (obj.transform.GetSiblingIndex() != 0)
-                    {
-                        if (GUI.Button(SetRect(selectionrect, -60, 18), "上"))
-                        {
-                            obj.transform.SetSiblingIndex(obj.transform.GetSiblingIndex() - 1);
-                        }
-                    }
-
-                    if (obj.transform.GetSiblingIndex() != obj.transform.parent.childCount - 1)
-                    {
-                        if (GUI.Button(SetRect(selectionrect, -42, 18), "下"))
-                        {
-                            obj.transform.SetSiblingIndex(obj.transform.GetSiblingIndex() + 1);
-                        }
-                    }
-
-                    tempBaseWindow.layerIndex = obj.transform.GetSiblingIndex();
 
                     window.SetActive(GUI.Toggle(SetRect(selectionrect, -22, 18), window.activeSelf, string.Empty));
                     if (window.GetComponent<CanvasGroup>())

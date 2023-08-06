@@ -1,9 +1,13 @@
 ﻿using System;
+using Sirenix.OdinInspector;
 
 namespace XFramework
 {
     public partial class SceneComponent
     {
+        [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("视图名称")] [LabelWidth(50)]
+        public string viewName;
+
         /// <summary>
         /// 获得某个视图的显示状态
         /// </summary>

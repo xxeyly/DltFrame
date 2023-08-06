@@ -10,14 +10,6 @@ namespace XFramework
         public static EntityFrameComponent Instance;
         [Searchable] [LabelText("场景所有实体")] public List<EntityItem> sceneEntity;
 
-        public delegate void DelegateOnShowEntity(string entityName);
-
-        public DelegateOnShowEntity onShowEntity;
-
-        public delegate void DelegateOnHideEntity(string entityName);
-
-        public DelegateOnHideEntity onHideEntity;
-
         public GameObject Instantiate(GameObject instantiate)
         {
             GameObject tempInstantiate = GameObject.Instantiate(instantiate);
@@ -72,8 +64,7 @@ namespace XFramework
             }
         }
 
-        [LabelText("场景道具初始化")]
-        [Button(ButtonSizes.Large)]
+        [Button("场景道具初始化", ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
         public void EntityInit()
         {

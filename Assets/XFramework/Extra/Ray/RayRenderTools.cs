@@ -604,14 +604,10 @@ namespace XFramework
 
         private void SendRay(RayRenderItemInfo rayRenderItemInfo)
         {
-            SendRay(rayRenderItemInfo.rayHit, rayRenderItemInfo.unRayHit, rayRenderItemInfo.currentOperationMask,
-                rayRenderItemInfo.mouseType,
-                rayRenderItemInfo.triggerType, rayRenderItemInfo.actionId);
+            SendRay(rayRenderItemInfo.rayHit, rayRenderItemInfo.unRayHit, rayRenderItemInfo.currentOperationMask, rayRenderItemInfo.mouseType, rayRenderItemInfo.triggerType, rayRenderItemInfo.actionId);
         }
 
-        private void SendRay(Action<RaycastHit> triggerAction, Action<RaycastHit> unTriggerAction,
-            LayerMask currentOperationMask, MouseType mouseType,
-            TriggerType triggerType, int rayTask)
+        private void SendRay(Action<RaycastHit> triggerAction, Action<RaycastHit> unTriggerAction, LayerMask currentOperationMask, MouseType mouseType, TriggerType triggerType, int rayTask)
         {
             Ray ray = currentRayCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;

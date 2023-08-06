@@ -14,11 +14,17 @@ namespace XFramework
     public class TimeFrameComponent : FrameComponent
     {
         public static TimeFrameComponent Instance;
-        [SerializeField] private List<TimeTask> _taskTimeList;
-        [SerializeField] private List<TimeTask> _taskTimeImmortalList;
-        [SerializeField] private List<SwitchTask> _taskSwitchList;
+
+        [BoxGroup("计时任务")] [TableList(AlwaysExpanded = true)] [Searchable] [LabelText("所有计时任务")]
+        public List<TimeTaskList> timeTaskList;
+
+        [BoxGroup("计时任务")] [SerializeField] [LabelText("单任务计时器")]
+        private List<TimeTask> taskTimeList;
+
+        [BoxGroup("计时任务")] [SerializeField] [LabelText("多任务计时器")]
+        private List<SwitchTask> taskSwitchList;
+
         private List<int> _tidTimeList;
-        private List<int> _tidTimeImmortalList;
         private List<int> _tidSwitchList;
         private bool _clear;
 
@@ -28,9 +34,11 @@ namespace XFramework
         [BoxGroup("计时器")] [LabelText("时间暂停")] public bool pause;
         [BoxGroup("计时器")] [LabelText("系统速度")] public float systemSpeed = 1f;
 
-        [BoxGroup("计时器")] [TableList(AlwaysExpanded = true)] [Searchable] [LabelText("所有计时任务")]
-        public List<TimeTaskList> timeTaskList;
+        [BoxGroup("计时器")] [Searchable] [LabelText("当前时间")]
+        public List<string> currentTime;
 
+
+        private List<int> _timeList;
 
         [BoxGroup("日期失效")] [SerializeField] [LabelText("开启日期失效")]
         private bool isExpire = false;
@@ -38,8 +46,6 @@ namespace XFramework
         [BoxGroup("日期失效")] [SerializeField] [LabelText("更新当前时间")]
         private bool isUpdateCurrentTime = false;
 
-        [BoxGroup("日期失效")] [Searchable] [LabelText("当前时间")]
-        public List<string> currentTime;
 
         [BoxGroup("日期失效")] [Searchable] [LabelText("到期时间")]
         public List<int> expireDate;
@@ -53,12 +59,10 @@ namespace XFramework
         public override void FrameSceneInitComponent()
         {
             currentRunTime = 0;
-            _taskTimeList = new List<TimeTask>();
-            _taskSwitchList = new List<SwitchTask>();
-            _taskTimeImmortalList = new List<TimeTask>();
+            taskTimeList = new List<TimeTask>();
+            taskSwitchList = new List<SwitchTask>();
             _tidTimeList = new List<int>();
             _tidSwitchList = new List<int>();
-            _tidTimeImmortalList = new List<int>();
             currentTime = new List<string>() { "", "", "", "", "", "" };
             if (isExpire)
             {
@@ -67,8 +71,7 @@ namespace XFramework
                     return;
                 }
 
-                TimeSpan expire = new DateTime(expireDate[0], expireDate[1], expireDate[2], expireDate[3], expireDate[4], expireDate[5]).ToUniversalTime() -
-                                  new DateTime(1970, 1, 1, 0, 0, 0);
+                TimeSpan expire = new DateTime(expireDate[0], expireDate[1], expireDate[2], expireDate[3], expireDate[4], expireDate[5]).ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0);
                 TimeSpan currentTimeSpan = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0);
                 if (Convert.ToInt64(expire.TotalSeconds) > Convert.ToInt64(currentTimeSpan.TotalSeconds))
                 {
@@ -184,10 +187,6 @@ namespace XFramework
 
         #region 定时任务
 
-        public delegate void DelegateAddTimeTask(int tid, string taskName);
-
-        public DelegateAddTimeTask onAddTimeTask;
-
         /// <summary>
         /// 增加定时任务
         /// </summary>
@@ -197,21 +196,17 @@ namespace XFramework
             int tid = GetTimeTaskTid();
             TimeTask timeTask = new TimeTask
             {
-                Tid = tid, DestTime = destTime, TaskName = taskName, Callback = callback, Count = count, Delay = delay
+                tid = tid, destTime = destTime, taskName = taskName, Callback = callback, count = count, delay = delay
             };
-            _taskTimeList.Add(timeTask);
+            taskTimeList.Add(timeTask);
             timeTaskList.Add(new TimeTaskList
             {
-                tid = timeTask.Tid,
-                tidName = timeTask.TaskName,
+                tid = timeTask.tid,
+                tidName = timeTask.taskName,
                 loopType = TimeTaskList.TimeLoopType.Once,
                 waitingTime = delay,
                 endTime = destTime
             });
-            if (onAddTimeTask != null)
-            {
-                onAddTimeTask.Invoke(tid, taskName);
-            }
 
             return tid;
         }
@@ -238,28 +233,6 @@ namespace XFramework
             return AddTimeTask(callback, taskName, delay, (int)count);
         }
 
-
-        /// <summary>
-        /// 增加不摧毁定时任务
-        /// </summary>
-        public int AddImmortalTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
-        {
-            float destTime = currentRunTime + delay;
-            int tid = GetImmortalTaskTid();
-            TimeTask timeTask = new TimeTask
-            {
-                Tid = tid, DestTime = destTime, TaskName = taskName, Callback = callback, Count = count, Delay = delay
-            };
-            _taskTimeImmortalList.Add(timeTask);
-            timeTaskList.Add(new TimeTaskList
-            {
-                tid = timeTask.Tid,
-                tidName = timeTask.TaskName,
-                loopType = TimeTaskList.TimeLoopType.Immortal
-            });
-            return tid;
-        }
-
         /// <summary>
         /// 删除任务
         /// </summary>
@@ -267,18 +240,18 @@ namespace XFramework
         public bool DeleteTimeTask(int tid)
         {
             bool exist = false;
-            for (int i = 0; i < _taskTimeList.Count; i++)
+            for (int i = 0; i < taskTimeList.Count; i++)
             {
-                if (_taskTimeList[i].Tid == tid)
+                if (taskTimeList[i].tid == tid)
                 {
                     if (_tidTimeList.Contains(tid))
                     {
                         _tidTimeList.Remove(tid);
                     }
 
-                    if (_taskTimeList.Contains(_taskTimeList[i]))
+                    if (taskTimeList.Contains(taskTimeList[i]))
                     {
-                        _taskTimeList.Remove(_taskTimeList[i]);
+                        taskTimeList.Remove(taskTimeList[i]);
                     }
 
                     exist = true;
@@ -312,61 +285,6 @@ namespace XFramework
         }
 
         /// <summary>
-        /// 删除不死任务
-        /// </summary>
-        /// <param name="tid"></param>
-        /// <returns></returns>
-        public bool DeleteImmortalTimeTask(int tid)
-        {
-            bool exist = false;
-            for (int i = 0; i < _taskTimeImmortalList.Count; i++)
-            {
-                if (_taskTimeImmortalList[i].Tid == tid)
-                {
-                    if (_tidTimeList.Contains(tid))
-                    {
-                        _tidTimeList.Remove(tid);
-                    }
-
-                    if (_taskTimeImmortalList.Contains(_taskTimeImmortalList[i]))
-                    {
-                        _taskTimeImmortalList.Remove(_taskTimeImmortalList[i]);
-                    }
-
-                    exist = true;
-                    break;
-                }
-            }
-
-            foreach (TimeTaskList taskList in timeTaskList)
-            {
-                if (taskList.tid == tid)
-                {
-                    timeTaskList.Remove(taskList);
-                    break;
-                }
-            }
-
-            return exist;
-        }
-
-        public void DeleteImmortalTimeTask()
-        {
-            _clear = true;
-            for (int i = 0; i < timeTaskList.Count; i++)
-            {
-                if (timeTaskList[i].loopType == TimeTaskList.TimeLoopType.Immortal)
-                {
-                    timeTaskList.Remove(timeTaskList[i]);
-                }
-            }
-
-            _taskTimeImmortalList.Clear();
-            _clear = false;
-        }
-
-
-        /// <summary>
         /// 删除任务
         /// </summary>
         public bool DeleteTimeTask()
@@ -380,7 +298,7 @@ namespace XFramework
                 }
             }
 
-            _taskTimeList.Clear();
+            taskTimeList.Clear();
             _clear = false;
             return false;
         }
@@ -415,10 +333,6 @@ namespace XFramework
 
         #region 切换类型定时任务
 
-        public delegate void DelegateAddSwitchTask(int tid, string taskName);
-
-        public DelegateAddTimeTask onAddSwitchTask;
-
         /// <summary>
         /// 增加定时任务
         /// </summary>
@@ -428,27 +342,23 @@ namespace XFramework
             int tid = GetSwitchTaskTid();
             SwitchTask switchTask = new SwitchTask
             {
-                Tid = tid,
-                DestTime = destTime,
-                TaskName = taskName,
+                tid = tid,
+                destTime = destTime,
+                taskName = taskName,
                 CallbackList = callbackList,
-                Count = count,
-                Delay = delay
+                count = count,
+                delay = delay
             };
-            _taskSwitchList.Add(switchTask);
+            taskSwitchList.Add(switchTask);
             timeTaskList.Add(new TimeTaskList
             {
-                tid = switchTask.Tid,
-                tidName = switchTask.TaskName,
+                tid = switchTask.tid,
+                tidName = switchTask.taskName,
                 loopType = TimeTaskList.TimeLoopType.Loop
             });
-            onAddSwitchTask.Invoke(tid, taskName);
             return tid;
         }
 
-        public delegate void DelegateDeleteSwitchTask(int tid);
-
-        public DelegateDeleteSwitchTask onDeleteSwitchTask;
 
         /// <summary>
         /// 删除任务
@@ -457,18 +367,18 @@ namespace XFramework
         public bool DeleteSwitchTask(int tid)
         {
             bool exist = false;
-            for (int i = 0; i < _taskSwitchList.Count; i++)
+            for (int i = 0; i < taskSwitchList.Count; i++)
             {
-                if (_taskSwitchList[i].Tid == tid)
+                if (taskSwitchList[i].tid == tid)
                 {
                     if (_tidSwitchList.Contains(tid))
                     {
                         _tidSwitchList.Remove(tid);
                     }
 
-                    if (_taskSwitchList.Contains(_taskSwitchList[i]))
+                    if (taskSwitchList.Contains(taskSwitchList[i]))
                     {
-                        _taskSwitchList.Remove(_taskSwitchList[i]);
+                        taskSwitchList.Remove(taskSwitchList[i]);
                     }
 
                     exist = true;
@@ -485,15 +395,13 @@ namespace XFramework
                 }
             }
 
-            onDeleteSwitchTask?.Invoke(tid);
-
             return exist;
         }
 
         /// <summary>
         /// 删除任务
         /// </summary>
-        public bool DeleteSwitchTask()
+        private bool DeleteSwitchTask()
         {
             bool exist = false;
 
@@ -505,25 +413,8 @@ namespace XFramework
                 }
             }
 
-            _taskSwitchList.Clear();
+            taskSwitchList.Clear();
             return exist;
-        }
-
-        /// <summary>
-        /// 生成计时唯一ID
-        /// </summary>
-        private int GetImmortalTaskTid()
-        {
-            int tid = Random.Range(0, Int32.MaxValue);
-            if (!_tidTimeImmortalList.Contains(tid))
-            {
-                _tidTimeImmortalList.Add(tid);
-                return tid;
-            }
-            else
-            {
-                return GetImmortalTaskTid();
-            }
         }
 
         /// <summary>
@@ -549,28 +440,28 @@ namespace XFramework
         {
             if (!_clear)
             {
-                if (_taskTimeList != null)
+                if (taskTimeList != null)
                 {
-                    for (int i = 0; i < _taskTimeList.Count; i++)
+                    for (int i = 0; i < taskTimeList.Count; i++)
                     {
-                        TimeTask timeTask = _taskTimeList[i];
-                        if (timeTask.DestTime > currentRunTime)
+                        TimeTask timeTask = taskTimeList[i];
+                        if (timeTask.destTime > currentRunTime)
                         {
                             foreach (TimeTaskList taskList in timeTaskList)
                             {
-                                if (taskList.tid == timeTask.Tid)
+                                if (taskList.tid == timeTask.tid)
                                 {
-                                    taskList.waitingTime = timeTask.DestTime - currentRunTime;
+                                    taskList.waitingTime = timeTask.destTime - currentRunTime;
                                     break;
                                 }
                             }
                         }
                         else
                         {
-                            if (timeTask.Count == 1)
+                            if (timeTask.count == 1)
                             {
-                                int timeTaskTid = timeTask.Tid;
-                                _taskTimeList[i].Callback.Invoke();
+                                int timeTaskTid = timeTask.tid;
+                                taskTimeList[i].Callback.Invoke();
                                 if (_tidTimeList.Contains(timeTaskTid))
                                 {
                                     _tidTimeList.Remove(timeTaskTid);
@@ -585,102 +476,50 @@ namespace XFramework
                                     }
                                 }
 
-                                if (_taskTimeList.Contains(timeTask))
+                                if (taskTimeList.Contains(timeTask))
                                 {
-                                    _taskTimeList.Remove(timeTask);
+                                    taskTimeList.Remove(timeTask);
                                 }
                             }
                             else
                             {
                                 //不是无限循环
-                                if (timeTask.Count != 0)
+                                if (timeTask.count != 0)
                                 {
-                                    timeTask.Count -= 1;
-                                    timeTask.DestTime += timeTask.Delay;
-                                    _taskTimeList[i].Callback.Invoke();
+                                    timeTask.count -= 1;
+                                    timeTask.destTime += timeTask.delay;
+                                    taskTimeList[i].Callback.Invoke();
                                 }
                                 else
                                 {
-                                    timeTask.DestTime += timeTask.Delay;
-                                    _taskTimeList[i].Callback.Invoke();
+                                    timeTask.destTime += timeTask.delay;
+                                    taskTimeList[i].Callback.Invoke();
                                 }
                             }
                         }
                     }
                 }
 
-                if (_taskTimeImmortalList != null)
+                if (taskSwitchList != null)
                 {
-                    for (int i = 0; i < _taskTimeImmortalList.Count; i++)
+                    for (int i = 0; i < taskSwitchList.Count; i++)
                     {
-                        TimeTask timeTask = _taskTimeImmortalList[i];
-                        if (timeTask.DestTime > currentRunTime)
+                        SwitchTask switchTask = taskSwitchList[i];
+                        if (switchTask.destTime > currentRunTime)
                         {
                         }
                         else
                         {
-                            if (timeTask.Count == 1)
+                            switchTask.CallbackList[switchTask.currentTaskNumber].Invoke();
+                            if (switchTask.currentTaskNumber == switchTask.CallbackList.Count - 1)
                             {
-                                int timeTaskTid = timeTask.Tid;
-                                _taskTimeImmortalList[i].Callback.Invoke();
-                                if (_tidTimeList.Contains(timeTaskTid))
-                                {
-                                    _tidTimeList.Remove(timeTaskTid);
-                                }
-
-                                foreach (TimeTaskList taskList in timeTaskList)
-                                {
-                                    if (taskList.tid == timeTaskTid)
-                                    {
-                                        timeTaskList.Remove(taskList);
-                                        break;
-                                    }
-                                }
-
-                                if (_taskTimeImmortalList.Contains(timeTask))
-                                {
-                                    _taskTimeImmortalList.Remove(timeTask);
-                                }
-                            }
-                            else
-                            {
-                                //不是无限循环
-                                if (timeTask.Count != 0)
-                                {
-                                    timeTask.Count -= 1;
-                                    timeTask.DestTime += timeTask.Delay;
-                                    _taskTimeImmortalList[i].Callback.Invoke();
-                                }
-                                else
-                                {
-                                    timeTask.DestTime += timeTask.Delay;
-                                    _taskTimeImmortalList[i].Callback.Invoke();
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (_taskSwitchList != null)
-                {
-                    for (int i = 0; i < _taskSwitchList.Count; i++)
-                    {
-                        SwitchTask switchTask = _taskSwitchList[i];
-                        if (switchTask.DestTime > currentRunTime)
-                        {
-                        }
-                        else
-                        {
-                            switchTask.CallbackList[switchTask.CurrentTaskNumber].Invoke();
-                            if (switchTask.CurrentTaskNumber == switchTask.CallbackList.Count - 1)
-                            {
-                                switchTask.CurrentTaskNumber = 0;
-                                if (switchTask.Count == 0)
+                                switchTask.currentTaskNumber = 0;
+                                if (switchTask.count == 0)
                                 {
                                 }
-                                else if (switchTask.Count == 1)
+                                else if (switchTask.count == 1)
                                 {
-                                    int timeTaskTid = switchTask.Tid;
+                                    int timeTaskTid = switchTask.tid;
 
                                     if (_tidSwitchList.Contains(timeTaskTid))
                                     {
@@ -696,31 +535,28 @@ namespace XFramework
                                         }
                                     }
 
-                                    if (_taskSwitchList.Contains(switchTask))
+                                    if (taskSwitchList.Contains(switchTask))
                                     {
-                                        onDeleteSwitchTask.Invoke(timeTaskTid);
-
-                                        _taskSwitchList.Remove(switchTask);
+                                        taskSwitchList.Remove(switchTask);
                                     }
                                 }
                                 else
                                 {
-                                    switchTask.Count -= 1;
+                                    switchTask.count -= 1;
                                 }
                             }
                             else
                             {
-                                switchTask.CurrentTaskNumber++;
+                                switchTask.currentTaskNumber++;
                             }
 
-                            switchTask.DestTime += switchTask.Delay;
+                            switchTask.destTime += switchTask.delay;
                         }
                     }
                 }
             }
         }
 
-        private List<int> _timeList;
 
         /// <summary>
         /// 秒数转换时间
@@ -822,71 +658,6 @@ namespace XFramework
             }, "提示", twinkleInterval, 0);
             return twinkleTimeTask;
         }
-
-        #region Transform操作
-
-        public int MoveTargetPos(Transform targetTri, Vector3 startPos, Vector3 targetPos, float time,
-            bool world = true)
-        {
-            float t = 0;
-            return AddContinuedTimeTask(
-                () =>
-                {
-                    // Debug.Log("进行中:"+targetPos.y);
-                    t += 0.02f;
-                    if (t >= time)
-                    {
-                        t = 1;
-                    }
-
-                    if (world)
-                    {
-                        targetTri.position = Vector3.Lerp(startPos, targetPos, t / time);
-                    }
-                    else
-                    {
-                        targetTri.localPosition = Vector3.Lerp(startPos, targetPos, t / time);
-                    }
-                }, "移动到指定位置", 0.02f, time);
-        }
-
-
-        public int MoveTargetPos(GameObject targetObj, Vector3 startPos, Vector3 targetPos, float time,
-            bool world = true)
-        {
-            return MoveTargetPos(targetObj.transform, startPos, targetPos, time, world);
-        }
-
-        public int RotateTargetPos(GameObject targetObj, Vector3 targetPos, float time)
-        {
-            return RotateTargetPos(targetObj.transform, targetPos, time);
-        }
-
-        public int RotateTargetPos(Transform targetTri, Vector3 targetPos, float time, bool world = true)
-        {
-            float t = 0;
-            Vector3 startPos = targetTri.localEulerAngles;
-            return AddContinuedTimeTask(
-                () =>
-                {
-                    t += 0.02f;
-                    if (t >= time)
-                    {
-                        t = 1;
-                    }
-
-                    if (world)
-                    {
-                        targetTri.eulerAngles = Vector3.Lerp(startPos, targetPos, t / time);
-                    }
-                    else
-                    {
-                        targetTri.localEulerAngles = Vector3.Lerp(startPos, targetPos, t / time);
-                    }
-                }, "旋转到指定位置", 0.02f, time);
-        }
-
-        #endregion
     }
 
     /// <summary>
@@ -895,23 +666,23 @@ namespace XFramework
     [Serializable]
     public class TimeTask
     {
-        [LabelText("任务ID")] public int Tid; //任务ID
-        [LabelText("任务名称")] public string TaskName; //任务名称
-        [LabelText("执行时间")] public float DestTime; //执行时间
+        [LabelText("任务ID")] public int tid; //任务ID
+        [LabelText("任务名称")] public string taskName; //任务名称
+        [LabelText("执行时间")] public float destTime; //执行时间
         [LabelText("执行的逻辑")] public UnityAction Callback; // 执行的逻辑
-        [LabelText("执行次数")] public int Count; //执行次数
-        [LabelText("执行间隔")] public float Delay; //执行间隔
+        [LabelText("执行次数")] public int count; //执行次数
+        [LabelText("执行间隔")] public float delay; //执行间隔
     }
 
     [Serializable]
     public class SwitchTask
     {
-        public int Tid; //任务ID
-        public string TaskName; //任务名称
-        public float DestTime; //执行时间
+        public int tid; //任务ID
+        public string taskName; //任务名称
+        public float destTime; //执行时间
         public List<UnityAction> CallbackList; // 执行的逻辑
-        public int CurrentTaskNumber; //当前执行的任务索引
-        public int Count; //执行次数
-        public float Delay; //执行间隔
+        public int currentTaskNumber; //当前执行的任务索引
+        public int count; //执行次数
+        public float delay; //执行间隔
     }
 }

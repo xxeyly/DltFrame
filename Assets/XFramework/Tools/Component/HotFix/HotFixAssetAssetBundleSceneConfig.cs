@@ -7,5 +7,6 @@ using Sirenix.OdinInspector;
 public class HotFixAssetAssetBundleSceneConfig
 {
     [LabelText("场景配置")] public HotFixAssetAssetBundleAssetConfig sceneHotFixAssetAssetBundleAssetConfig = new HotFixAssetAssetBundleAssetConfig();
+    [LabelText("场景字体")] public HotFixAssetAssetBundleAssetConfig sceneFontFixAssetConfig = new HotFixAssetAssetBundleAssetConfig();
     [LabelText("场景AssetBundle")] public List<HotFixAssetAssetBundleAssetConfig> assetBundleHotFixAssetAssetBundleAssetConfigs = new List<HotFixAssetAssetBundleAssetConfig>();
 }

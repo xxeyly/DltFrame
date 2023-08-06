@@ -121,18 +121,27 @@ namespace XFramework
 
             if (uiOcclusion)
             {
+                x = rotateTarget.transform.localEulerAngles.y;
+                y = rotateTarget.transform.localEulerAngles.x;
+                rotateTarget.transform.rotation = Quaternion.Euler(y, x, 0);
+                return;
+            }
+
+
+            /*if (uiOcclusion)
+            {
                 /*if (RuntimeDataFrameComponent.Instance.uiOcclusion)
                 {
                     return;
-                }*/
-            }
+                }#1#
+            }*/
 
             MouseFunction();
             // Debug.Log(x);
             x = ClampAngle(x, xMinLimit, xMaxLimit);
             y = ClampAngle(y, yMinLimit, yMaxLimit);
-            
-            
+
+
             if (canManualRotate)
             {
                 Quaternion rotation = Quaternion.Euler(y, x, 0);
@@ -164,7 +173,7 @@ namespace XFramework
             }
 #endif
 
-            return 1.0f - Mathf.Pow((float)System.Math.E, -speed * elapsed);
+            return 1.0f - Mathf.Pow((float) System.Math.E, -speed * elapsed);
         }
 
         /// <summary>

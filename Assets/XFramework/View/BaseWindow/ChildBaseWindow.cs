@@ -1,4 +1,9 @@
-﻿using Sirenix.OdinInspector;
+﻿#define SFRAMEWORK
+using System;
+using System.Linq;
+using System.Reflection;
+using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace XFramework
 {
@@ -48,7 +53,6 @@ namespace XFramework
         public virtual void InitData(int itemIndex, string content)
         {
             this.itemIndex = itemIndex;
-            
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace XFramework
@@ -17,6 +18,9 @@ namespace XFramework
         [LabelText("加载脚本路径")] public string loadScriptsPath = "Scripts";
         [LabelText("所有脚本")] [SerializeField] private List<string> allScriptPath;
 
+        
+        
+        
         [Button(ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
         [LabelText("代码生成")]

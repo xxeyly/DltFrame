@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -17,7 +18,7 @@ namespace XFramework
         [Searchable] [TableList(AlwaysExpanded = true)] [InlineEditor()] [Required("选择音频配置文件")] [LabelText("音频数据")]
         public AudioComponentData audioData;
 
-        private Dictionary<string, AudioClip> _audioDlc;
+        private Dictionary<string, AudioClip> _audioDlc = new Dictionary<string, AudioClip>();
 
         public override void FrameInitComponent()
         {
@@ -44,24 +45,9 @@ namespace XFramework
                 _backgroundAudioSource.volume = 0.5f;
                 _backgroundAudioSource.loop = true;
             }
-
-            //音效初始化
-            _audioDlc = new Dictionary<string, AudioClip>();
-            if (audioData != null)
-            {
-                foreach (AudioComponentData.AudioInfo audioDataInfo in audioData.audioInfos)
-                {
-                    if (!_audioDlc.ContainsKey(audioDataInfo.audioName) && audioDataInfo.audioClip != null)
-                    {
-                        _audioDlc.Add(audioDataInfo.audioName, audioDataInfo.audioClip);
-                    }
-                }
-            }
-
-            //播放背景音乐
-            PlayBackgroundAudio();
         }
 
+        
         public override void FrameSceneInitComponent()
         {
         }

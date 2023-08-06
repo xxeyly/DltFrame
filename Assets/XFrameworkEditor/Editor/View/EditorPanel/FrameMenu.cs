@@ -1,10 +1,13 @@
 ﻿#if UNITY_EDITOR
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using LitJson;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace XFramework
 {
@@ -33,26 +36,10 @@ namespace XFramework
         [MenuItem("Xframe/监听生成 &l")]
         private static void OnListenerGenerate()
         {
-            ListenerComponentGenerateData listenerComponentGenerateData = new ListenerComponentGenerateData();
-            listenerComponentGenerateData.OnGenerate();
+           
+            GenerateListenerComponent.GenerateListener();
         }
-
-        [MenuItem("Xframe/生成代码配置")]
-        private static void OnGenerateBaseWindowData()
-        {
-            GenerateBaseWindowData generateBaseWindowData = AssetDatabase.LoadAssetAtPath<GenerateBaseWindowData>(General.generateBaseWindowPath);
-            if (generateBaseWindowData == null)
-            {
-                if (!Directory.Exists(General.generateBaseWindowPath))
-                {
-                    Directory.CreateDirectory(General.generateBaseWindowPath);
-                }
-
-                //创建数据
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<GenerateBaseWindowData>(), General.generateBaseWindowPath);
-            }
-        }
-
+       
         [MenuItem("Xframe/生成框架 &F")]
         public static void Generate()
         {
@@ -75,8 +62,64 @@ namespace XFramework
             }
         }
 
-        //打包
-        // private static CustomBuild customBuild = new CustomBuild();
+        [MenuItem("Xframe/视图重新排序索引")]
+        public static void ViewSortSiblingIndex()
+        {
+            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>();
+            foreach (BaseWindow baseWindow in sceneAllBaseWindow)
+            {
+                if (!baseWindow.GetComponent<ChildBaseWindow>())
+                {
+                    baseWindow.sceneLayerIndex = baseWindow.transform.GetSiblingIndex();
+                }
+            }
+        }
+
+        [MenuItem("Xframe/视图重新排序")]
+        public static void ViewSort()
+        {
+            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>();
+            List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
+
+            for (int i = 0; i < sceneAllBaseWindow.Count; i++)
+            {
+                foreach (BaseWindow baseWindow in sceneAllBaseWindow)
+                {
+                    if (baseWindow.GetSceneLayerIndex() == i)
+                    {
+                        sortBaseWindow.Add(baseWindow);
+                    }
+                }
+            }
+
+            //UI层排序
+            foreach (BaseWindow baseWindow in sortBaseWindow)
+            {
+                if (!baseWindow.GetComponent<ChildBaseWindow>())
+                {
+                    baseWindow.SetSetSiblingIndex();
+                }
+            }
+        }
+
+        [MenuItem("Xframe/移动热更文件并生成配置表")]
+        public static void MoveHotfixDll()
+        {
+            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/StandaloneWindows64/Assembly-CSharp.dll",
+                Application.streamingAssetsPath + "/HotFix/Assembly/" + "Assembly-CSharp.dll.bytes", true);
+
+            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/StandaloneWindows64/Aot.dll",
+                Application.streamingAssetsPath + "/HotFix/Assembly/" + "Aot.dll.bytes", true);
+
+            AssetDatabase.Refresh();
+            /*HotFixAssemblyConfig hotFixAssemblyConfig = new HotFixAssemblyConfig();
+            hotFixAssemblyConfig.AssemblyMd5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFix/Assembly/" + "Assembly-CSharp.dll.bytes");
+            hotFixAssemblyConfig.AssemblyName = "Assembly-CSharp.dll";
+            hotFixAssemblyConfig.AssemblySize = FileOperation.GetFileSize(Application.streamingAssetsPath + "/HotFix/Assembly/" + "Assembly-CSharp.dll.bytes").ToString();
+            hotFixAssemblyConfig.AssemblyPath = "HotFix/Assembly";
+            FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFix", "HotFixAssemblyConfig.json", JsonMapper.ToJson(hotFixAssemblyConfig));*/
+            Debug.Log("移动完毕");
+        }
 
         //音频组件
         private AudioComponentEditor _audioComponentEditor = new AudioComponentEditor();

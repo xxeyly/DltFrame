@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
@@ -12,12 +11,9 @@ namespace XFramework
 {
     public class HttpFrameComponent : FrameComponent
     {
-        public static HttpFrameComponent Instance;
+        public static HttpFrameComponent instance;
         private UnityWebRequest _request;
         [LabelText("是否联网")] public bool notReachable;
-
-        [DllImport("winInet.dll")] //引用外部库
-        private static extern bool InternetGetConnectedState(ref int dwFlag, int dwReserved); //库中函数
 
         /// <summary>
         /// Http请求模式
@@ -42,7 +38,7 @@ namespace XFramework
         private bool IsConnected()
         {
             int dwFlag = new int();
-            if (!InternetGetConnectedState(ref dwFlag, 0))
+            if (!HttpFrameComponentAot.InternetGetConnectedState(ref dwFlag, 0))
             {
                 if ((dwFlag & 0x14) == 0)
                 {
@@ -74,7 +70,7 @@ namespace XFramework
 
         public override void FrameInitComponent()
         {
-            Instance = GetComponent<HttpFrameComponent>();
+            instance = GetComponent<HttpFrameComponent>();
         }
 
         public override void FrameSceneInitComponent()
@@ -83,7 +79,7 @@ namespace XFramework
 
         public override void FrameEndComponent()
         {
-            Instance = null;
+            instance = null;
         }
 
 
@@ -110,12 +106,14 @@ namespace XFramework
             StartCoroutine(HttpUnityWebRequest(url, requestMethod, requestData, action, errorAction, t));
         }
 
-        public void SendHttpUnityWebRequest<T1, T2>(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string, T1, T2> action, Action<string> errorAction, T1 t1, T2 t2)
+        public void SendHttpUnityWebRequest<T1, T2>(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string, T1, T2> action, Action<string> errorAction,
+            T1 t1, T2 t2)
         {
             StartCoroutine(HttpUnityWebRequest(url, requestMethod, requestData, action, errorAction, t1, t2));
         }
 
-        public void SendHttpUnityWebRequest<T1, T2, T3>(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string, T1, T2, T3> action, Action<string> errorAction, T1 t1, T2 t2, T3 t3)
+        public void SendHttpUnityWebRequest<T1, T2, T3>(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string, T1, T2, T3> action,
+            Action<string> errorAction, T1 t1, T2 t2, T3 t3)
         {
             StartCoroutine(HttpUnityWebRequest(url, requestMethod, requestData, action, errorAction, t1, t2, t3));
         }
@@ -148,7 +146,7 @@ namespace XFramework
             if (webRequest != null)
             {
                 yield return webRequest.SendWebRequest();
-                if (webRequest.isHttpError || webRequest.isNetworkError)
+                if (webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
                     errorAction.Invoke(webRequest.error);
                 }
@@ -189,7 +187,7 @@ namespace XFramework
             if (webRequest != null)
             {
                 yield return webRequest.SendWebRequest();
-                if (webRequest.isHttpError || webRequest.isNetworkError)
+                if (webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
                     Debug.Log(webRequest.url + "访问错误");
                     errorAction.Invoke(webRequest.url + "访问错误");
@@ -204,7 +202,8 @@ namespace XFramework
         }
 
 
-        IEnumerator HttpUnityWebRequest<T1, T2>(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string, T1, T2> action, Action<string> errorAction, T1 t1, T2 t2)
+        IEnumerator HttpUnityWebRequest<T1, T2>(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string, T1, T2> action, Action<string> errorAction, T1 t1,
+            T2 t2)
         {
             UnityWebRequest webRequest = null;
             switch (requestMethod)
@@ -232,7 +231,7 @@ namespace XFramework
             if (webRequest != null)
             {
                 yield return webRequest.SendWebRequest();
-                if (webRequest.isHttpError || webRequest.isNetworkError)
+                if (webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
                     Debug.Log(webRequest.url + "访问错误");
                     errorAction.Invoke(webRequest.url + "访问错误");
@@ -244,7 +243,8 @@ namespace XFramework
             }
         }
 
-        IEnumerator HttpUnityWebRequest<T1, T2, T3>(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string, T1, T2, T3> action, Action<string> errorAction, T1 t1, T2 t2, T3 t3)
+        IEnumerator HttpUnityWebRequest<T1, T2, T3>(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string, T1, T2, T3> action, Action<string> errorAction,
+            T1 t1, T2 t2, T3 t3)
         {
             UnityWebRequest webRequest = null;
             switch (requestMethod)
@@ -272,7 +272,7 @@ namespace XFramework
             if (webRequest != null)
             {
                 yield return webRequest.SendWebRequest();
-                if (webRequest.isHttpError || webRequest.isNetworkError)
+                if (webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
                     Debug.Log(webRequest.url + "访问错误");
                     errorAction.Invoke(webRequest.url + "访问错误");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace XFramework
 {
@@ -15,6 +16,8 @@ namespace XFramework
 
         [LabelText("视图类型与视图窗口的键值对")] [SerializeField]
         public Dictionary<Type, BaseWindow> activeViewDlc = new Dictionary<Type, BaseWindow>();
+
+        [LabelText("层级排序")] [SerializeField] private bool isResetSetSiblingIndex;
 
         /// <summary>
         /// 视图计时任务ID
@@ -38,18 +41,21 @@ namespace XFramework
 
         public override void FrameSceneInitComponent()
         {
-            List<BaseWindow> tempSceneBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>(GameRootStart.Instance.loadScene.name);
-
+            List<BaseWindow> tempSceneBaseWindow =
+                DataFrameComponent.GetAllObjectsInScene<BaseWindow>(GameRootStart.Instance.loadScene.name);
             foreach (BaseWindow window in tempSceneBaseWindow)
             {
                 if (!window.GetComponent<ChildBaseWindow>() && !activeViewDlc.ContainsKey(window.viewType))
                 {
                     activeViewDlc.Add(window.viewType, window);
-                    // Debug.Log(window.viewType + "初始化");
                     window.ViewStartInit();
                 }
             }
-            // ResetSetSiblingIndex();
+
+            if (isResetSetSiblingIndex)
+            {
+                ResetSetSiblingIndex();
+            }
         }
 
         public void RemoveView(Type viewType)
@@ -63,11 +69,30 @@ namespace XFramework
         [Button("重置层级关系")]
         public void ResetSetSiblingIndex()
         {
-            foreach (KeyValuePair<Type, BaseWindow> window in activeViewDlc)
+            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>();
+            List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
+
+            for (int i = 0; i < sceneAllBaseWindow.Count; i++)
             {
-                window.Value.SetSetSiblingIndex();
+                foreach (BaseWindow baseWindow in sceneAllBaseWindow)
+                {
+                    if (baseWindow.GetSceneLayerIndex() == i)
+                    {
+                        sortBaseWindow.Add(baseWindow);
+                    }
+                }
+            }
+
+            //UI层排序
+            foreach (BaseWindow baseWindow in sortBaseWindow)
+            {
+                if (!baseWindow.GetComponent<ChildBaseWindow>())
+                {
+                    baseWindow.SetSetSiblingIndex();
+                }
             }
         }
+
 
         public override void FrameEndComponent()
         {
@@ -295,7 +320,8 @@ namespace XFramework
         /// <param name="time">多长时间后执行</param>
         private void ViewTimeTask<T>(UnityAction<T> viewAction, T viewType, float time)
         {
-            _viewTimeTaskId = TimeFrameComponent.Instance.AddTimeTask(() => { viewAction.Invoke(viewType); }, "视图任务", time);
+            _viewTimeTaskId =
+                TimeFrameComponent.Instance.AddTimeTask(() => { viewAction.Invoke(viewType); }, "视图任务", time);
         }
 
         /// <summary>

@@ -19,8 +19,7 @@ namespace XFramework
         public enum TimeLoopType
         {
             [LabelText("单程")] Once,
-            [LabelText("循环")] Loop,
-            [LabelText("不死")] Immortal,
+            [LabelText("循环")] Loop
         }
 
         [HideLabel] [HorizontalGroup("任务ID")] public int tid;
@@ -130,8 +129,7 @@ namespace XFramework
             "Assets/XFramework/Model/Template/CircuitBaseDataTemplate.cs";
 
         [LabelText("ListenerComponentData模板地址")]
-        public static string ListenerComponentDataTemplatePath =
-            "Assets/XFramework/Model/Template/ListenerComponentDataTemplate.cs";
+        public static string ListenerComponentDataTemplatePath = "Assets/XFramework/Model/Template/ListenerComponentDataTemplate.cs";
 
         [LabelText("SceneLoadComponent模板地址")] public static string SceneComponentTemplatePath =
             "Assets/XFramework/Model/Template/SceneComponentTemplate.cs";

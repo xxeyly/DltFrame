@@ -105,8 +105,7 @@ namespace XFramework
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(controllerBase.name);
-                    throw;
+                    Debug.Log(e + ":" + controllerBase.name);
                 }
             }
         }

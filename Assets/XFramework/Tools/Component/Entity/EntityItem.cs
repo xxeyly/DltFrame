@@ -16,8 +16,7 @@ namespace XFramework
 #endif
 
         [GUIColor(0, 1, 0)]
-        [Button(ButtonSizes.Large)]
-        [LabelText("设置为当前物体名称")]
+        [Button("设置为当前物体名称", ButtonSizes.Large)]
         public void GetCurrentGameObjectName()
         {
             entityName = gameObject.name;
@@ -51,16 +50,6 @@ namespace XFramework
             {
                 gameObject.SetActive(true);
             }
-
-            if (Application.isPlaying)
-            {
-                if (EntityFrameComponent.Instance.onShowEntity == null)
-                {
-                    return;
-                }
-
-                EntityFrameComponent.Instance.onShowEntity.Invoke(entityName);
-            }
         }
 
         public void Hide()
@@ -73,16 +62,6 @@ namespace XFramework
             if (gameObject.activeSelf)
             {
                 gameObject.SetActive(false);
-            }
-
-            if (Application.isPlaying)
-            {
-                if (EntityFrameComponent.Instance.onHideEntity == null)
-                {
-                    return;
-                }
-
-                EntityFrameComponent.Instance.onHideEntity.Invoke(entityName);
             }
         }
 
