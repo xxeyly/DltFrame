@@ -86,8 +86,8 @@ namespace XFramework
 
         public void SceneLoad(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            GameRootStart.Instance.LoadHotFixSceneConfig(sceneName);
-            GameRootStart.Instance.InstantiateTempHotFixAssetBundle();
+            HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
+            HotFixFrameComponent.Instance.InstantiateTempHotFixAssetBundle();
             LoadAssetBundleSceneToSystem(sceneName);
             LoadSynchronizationScene(sceneName, loadSceneMode);
         }
@@ -116,8 +116,8 @@ namespace XFramework
 
         private void LoadAsyncScene(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
-            GameRootStart.Instance.LoadHotFixSceneConfig(sceneName);
-            GameRootStart.Instance.InstantiateTempHotFixAssetBundle();
+            HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
+            HotFixFrameComponent.Instance.InstantiateTempHotFixAssetBundle();
             LoadAssetBundleSceneToSystem(sceneName);
             AsyncOperation tempSceneAsyncOperation = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
             tempSceneAsyncOperation.allowSceneActivation = false;
@@ -131,7 +131,7 @@ namespace XFramework
         {
             //处理场景加载时需要卸载的逻辑
             GameRootStart.Instance.SceneBeforeLoadPrepare(unSceneName);
-            GameRootStart.Instance.SceneAssetBundleUnload();
+            HotFixFrameComponent.Instance.SceneAssetBundleUnload();
             StartCoroutine(OnUnScene(unSceneName));
         }
 
@@ -147,7 +147,7 @@ namespace XFramework
             GameRootStart.Instance.unScene = SceneManager.GetSceneByName(unSceneName);
             //处理场景加载时需要卸载的逻辑
             GameRootStart.Instance.SceneBeforeLoadPrepare(unSceneName);
-            GameRootStart.Instance.SceneAssetBundleUnload();
+            HotFixFrameComponent.Instance.SceneAssetBundleUnload();
             if (_addSceneAsyncOperation.ContainsKey(unSceneName))
             {
                 _addSceneAsyncOperation.Remove(unSceneName);
@@ -173,7 +173,7 @@ namespace XFramework
         {
             //处理场景加载时需要卸载的逻辑
             GameRootStart.Instance.SceneBeforeLoadPrepare(unSceneName);
-            GameRootStart.Instance.SceneAssetBundleUnload();
+            HotFixFrameComponent.Instance.SceneAssetBundleUnload();
             AsyncOperation unSceneAsyncOperation = SceneManager.UnloadSceneAsync(unSceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
             yield return unSceneAsyncOperation;
             SceneLoad(loadSceneName, LoadSceneMode.Additive);
@@ -191,7 +191,7 @@ namespace XFramework
             {
                 //处理场景加载时需要卸载的逻辑
                 GameRootStart.Instance.SceneBeforeLoadPrepare(unSceneName);
-                GameRootStart.Instance.SceneAssetBundleUnload();
+                HotFixFrameComponent.Instance.SceneAssetBundleUnload();
                 AsyncOperation unSceneAsyncOperation = SceneManager.UnloadSceneAsync(unSceneName, UnloadSceneOptions.UnloadAllEmbeddedSceneObjects);
                 yield return unSceneAsyncOperation;
             }
@@ -210,7 +210,7 @@ namespace XFramework
             //处理场景加载时需要卸载的逻辑
             // Debug.Log("卸载的场景" + SceneManager.GetActiveScene().name);
             GameRootStart.Instance.SceneBeforeLoadPrepare(SceneManager.GetActiveScene().name);
-            GameRootStart.Instance.SceneAssetBundleUnload();
+            HotFixFrameComponent.Instance.SceneAssetBundleUnload();
             // Debug.Log("加载的场景" + sceneName);
             SceneManager.LoadScene(sceneName, loadSceneMode);
         }
@@ -223,7 +223,7 @@ namespace XFramework
                 pair.Value.allowSceneActivation = true;
             }
             _addSceneAsyncOperation.Clear();
-            GameRootStart.Instance.SceneAssetBundleUnload();
+            HotFixFrameComponent.Instance.SceneAssetBundleUnload();
         }
 
         public void StopAsyncLoad()
