@@ -34,8 +34,11 @@ public class Aot : MonoBehaviour
     [BoxGroup("HotFixView")] [LabelText("HotFixView下载速度")]
     private long _hotFixViewSpeed;
 
+    [BoxGroup("HotFixView")] [LabelText("HotFixViewFileStream")]
+    public FileStream hotFixViewFileStream;
+
     [BoxGroup("HotFixView")] [LabelText("HotFixView上一次下载大小")]
-    private long _hotFixViewLastDownSize;
+    private int _hotFixViewLastDownSize;
 
     [BoxGroup("HotFixView")] [LabelText("HotFixView上一次下载进度")]
     private long _hotFixViewLastDownProgress;
@@ -59,8 +62,11 @@ public class Aot : MonoBehaviour
     [BoxGroup("HotFixCode")] [LabelText("HotFixCode下载速度")]
     private long _hotFixCodeSpeed;
 
+    [BoxGroup("HotFixCode")] [LabelText("HotFixCodeFileStream")]
+    public FileStream hotFixCodeFileStream;
+
     [BoxGroup("HotFixCode")] [LabelText("HotFixCode上一次下载大小")]
-    private long _hotFixCodeLastDownSize;
+    private int _hotFixCodeLastDownSize;
 
     [BoxGroup("HotFixCode")] [LabelText("HotFixCode上一次下载进度")]
     private long _hotFixCodeLastDownProgress;
@@ -101,9 +107,9 @@ public class Aot : MonoBehaviour
         hotFixViewLocalCheck = false;
         //检查文件
         hotFixViewIsNeedDown = false;
-        if (File.Exists(Application.streamingAssetsPath + "HotFix/UpdateHotFix/HotFixAsset/" + hotFixViewHotFixAssetConfig.name))
+        if (File.Exists(Application.streamingAssetsPath + "/HotFix/UpdateHotFix/HotFixAsset/" + hotFixViewHotFixAssetConfig.name))
         {
-            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "HotFix/UpdateHotFix/HotFixAsset/" + hotFixViewHotFixAssetConfig.name);
+            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/UpdateHotFix/HotFixAsset/" + hotFixViewHotFixAssetConfig.name);
             yield return hotFixViewLoadLocalFile.SendWebRequest();
             currentProgress += 1;
             progress.value = currentProgress / progressMax;
@@ -123,6 +129,11 @@ public class Aot : MonoBehaviour
         else
         {
             hotFixViewIsNeedDown = true;
+        }
+
+        if (hotFixViewIsNeedDown)
+        {
+            hotFixViewFileStream = new FileStream(Application.streamingAssetsPath + "/HotFix/UpdateHotFix/HotFixAsset/" + hotFixViewHotFixAssetConfig.name, FileMode.OpenOrCreate, FileAccess.Write);
         }
 
         hotFixViewLocalCheck = true;
@@ -152,16 +163,18 @@ public class Aot : MonoBehaviour
         hotFixCodeLocalCheck = false;
         //检查文件
         hotFixCodeIsNeedDown = false;
-        if (File.Exists(Application.streamingAssetsPath + "HotFix/UpdateHotFix/HotFixAsset/" + hotFixCodeHotFixAssetConfig.name))
+        if (File.Exists(Application.streamingAssetsPath + "/HotFix/UpdateHotFix/HotFixAsset/" + hotFixCodeHotFixAssetConfig.name))
         {
-            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "HotFix/UpdateHotFix/HotFixAsset/" + hotFixCodeHotFixAssetConfig.name);
-            yield return hotFixViewLoadLocalFile.SendWebRequest();
+            UnityWebRequest hotFixCodeLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/UpdateHotFix/HotFixAsset/" + hotFixCodeHotFixAssetConfig.name);
+            yield return hotFixCodeLoadLocalFile.SendWebRequest();
+            Debug.Log(hotFixCodeLoadLocalFile.uri);
+            Debug.Log(hotFixCodeLoadLocalFile.responseCode);
             currentProgress += 1;
             progress.value = currentProgress / progressMax;
 
-            if (hotFixViewLoadLocalFile.downloadHandler.data.Length > 0)
+            if (hotFixCodeLoadLocalFile.downloadHandler.data.Length > 0)
             {
-                if (hotFixCodeHotFixAssetConfig.md5 != GetMD5HashByte(hotFixViewLoadLocalFile.downloadHandler.data))
+                if (hotFixCodeHotFixAssetConfig.md5 != GetMD5HashByte(hotFixCodeLoadLocalFile.downloadHandler.data))
                 {
                     hotFixCodeIsNeedDown = true;
                 }
@@ -174,6 +187,11 @@ public class Aot : MonoBehaviour
         else
         {
             hotFixCodeIsNeedDown = true;
+        }
+
+        if (hotFixCodeIsNeedDown)
+        {
+            hotFixCodeFileStream = new FileStream(Application.streamingAssetsPath + "/HotFix/UpdateHotFix/HotFixAsset/" + hotFixCodeHotFixAssetConfig.name, FileMode.OpenOrCreate, FileAccess.Write);
         }
 
         hotFixCodeLocalCheck = true;
@@ -189,10 +207,14 @@ public class Aot : MonoBehaviour
             yield return _hotFixViewDownUnityWebRequest.SendWebRequest();
             if (_hotFixViewDownUnityWebRequest.responseCode != 200)
             {
+                HotFixViewWriteContent();
                 StartCoroutine(HotFixViewDown());
             }
             else
             {
+                HotFixViewWriteContent();
+                hotFixViewFileStream.Dispose();
+                hotFixViewFileStream = null;
                 UpdateHotFixViewDownProgress();
                 hotFixViewDownOver = true;
                 time = 0;
@@ -219,10 +241,14 @@ public class Aot : MonoBehaviour
             yield return _hotFixCodeDownUnityWebRequest.SendWebRequest();
             if (_hotFixCodeDownUnityWebRequest.responseCode != 200)
             {
+                HotFixCodeWriteContent();
                 StartCoroutine(HotFixViewDown());
             }
             else
             {
+                HotFixCodeWriteContent();
+                hotFixCodeFileStream.Dispose();
+                hotFixCodeFileStream = null;
                 UpdateHotFixCodeDownProgress();
                 hotFixCodeDownOver = true;
                 time = 0;
@@ -250,7 +276,6 @@ public class Aot : MonoBehaviour
         yield return new WaitUntil(() => hotFixCodeAssetConfigDownOver);
         StartCoroutine(HotFixCodeLocalCheck());
         yield return new WaitUntil(() => hotFixCodeLocalCheck);
-
         StartCoroutine(HotFixViewDown());
         yield return new WaitUntil(() => hotFixViewDownOver);
         StartCoroutine(HotFixCodeDown());
@@ -349,6 +374,8 @@ public class Aot : MonoBehaviour
             time += Time.deltaTime;
             if (time >= timer)
             {
+                Debug.Log("超过下载");
+                HotFixViewWriteContent();
                 // UpdateHotFixViewDownProgress();
             }
         }
@@ -358,10 +385,73 @@ public class Aot : MonoBehaviour
             time += Time.deltaTime;
             if (time >= timer)
             {
+                Debug.Log("超过下载");
+                HotFixCodeWriteContent();
                 // UpdateHotFixCodeDownProgress();
             }
         }
     }
+
+    private void HotFixViewWriteContent()
+    {
+        if (hotFixViewFileStream != null && _hotFixViewDownUnityWebRequest != null && _hotFixViewDownUnityWebRequest.downloadHandler != null &&
+            _hotFixViewDownUnityWebRequest.downloadHandler.data != null)
+        {
+            int index = (int)hotFixViewFileStream.Length;
+            // Debug.Log("本地文件大小:" + index);
+            int downSize = _hotFixViewDownUnityWebRequest.downloadHandler.data.Length;
+            // Debug.Log("下载大小:" + downSize);
+            // Debug.Log("下载缓存:" + _oldDownSize);
+            int newDownSize = downSize - _hotFixViewLastDownSize;
+            // Debug.Log("新内容大小:" + newDownSize);
+            hotFixViewFileStream.Seek(index, SeekOrigin.Begin);
+            if (newDownSize > 0)
+            {
+                // Debug.Log("有下载更新:" + newDownSize);
+                hotFixViewFileStream.Write(_hotFixViewDownUnityWebRequest.downloadHandler.data, _hotFixViewLastDownSize, newDownSize);
+                _hotFixViewLastDownSize = downSize;
+            }
+            else
+            {
+                // Debug.Log("无更新内容");
+            }
+        }
+        else
+        {
+            _hotFixViewLastDownSize = 0;
+        }
+    }
+
+    private void HotFixCodeWriteContent()
+    {
+        if (hotFixCodeFileStream != null && _hotFixCodeDownUnityWebRequest != null && _hotFixCodeDownUnityWebRequest.downloadHandler != null &&
+            _hotFixCodeDownUnityWebRequest.downloadHandler.data != null)
+        {
+            int index = (int)hotFixCodeFileStream.Length;
+            // Debug.Log("本地文件大小:" + index);
+            int downSize = _hotFixCodeDownUnityWebRequest.downloadHandler.data.Length;
+            // Debug.Log("下载大小:" + downSize);
+            // Debug.Log("下载缓存:" + _oldDownSize);
+            int newDownSize = downSize - _hotFixCodeLastDownSize;
+            // Debug.Log("新内容大小:" + newDownSize);
+            hotFixCodeFileStream.Seek(index, SeekOrigin.Begin);
+            if (newDownSize > 0)
+            {
+                // Debug.Log("有下载更新:" + newDownSize);
+                hotFixCodeFileStream.Write(_hotFixCodeDownUnityWebRequest.downloadHandler.data, _hotFixCodeLastDownSize, newDownSize);
+                _hotFixCodeLastDownSize = downSize;
+            }
+            else
+            {
+                // Debug.Log("无更新内容");
+            }
+        }
+        else
+        {
+            _hotFixCodeLastDownSize = 0;
+        }
+    }
+
 
     private void UpdateHotFixViewDownProgress()
     {
