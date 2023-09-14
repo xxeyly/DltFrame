@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using LitJson;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -24,6 +23,13 @@ namespace XFramework
             GetWindow<FrameMenu>().Show();
         }
 
+
+        [MenuItem("Xframe/热更界面")]
+        private static void OpenHotFixWindow()
+        {
+            GetWindow<HotFixMenu>().Show();
+        }
+
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -36,10 +42,9 @@ namespace XFramework
         [MenuItem("Xframe/监听生成 &l")]
         private static void OnListenerGenerate()
         {
-           
             GenerateListenerComponent.GenerateListener();
         }
-       
+
         [MenuItem("Xframe/生成框架 &F")]
         public static void Generate()
         {
@@ -106,18 +111,12 @@ namespace XFramework
         public static void MoveHotfixDll()
         {
             File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/StandaloneWindows64/Assembly-CSharp.dll",
-                Application.streamingAssetsPath + "/HotFix/Assembly/" + "Assembly-CSharp.dll.bytes", true);
+                Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes", true);
 
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/StandaloneWindows64/Aot.dll",
-                Application.streamingAssetsPath + "/HotFix/Assembly/" + "Aot.dll.bytes", true);
+            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/StandaloneWindows64/XFrameworkHotFix.dll",
+                Application.streamingAssetsPath + "/HotFix/HotFixAsset/" + "XFrameworkHotFix.dll.bytes", true);
 
             AssetDatabase.Refresh();
-            /*HotFixAssemblyConfig hotFixAssemblyConfig = new HotFixAssemblyConfig();
-            hotFixAssemblyConfig.AssemblyMd5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFix/Assembly/" + "Assembly-CSharp.dll.bytes");
-            hotFixAssemblyConfig.AssemblyName = "Assembly-CSharp.dll";
-            hotFixAssemblyConfig.AssemblySize = FileOperation.GetFileSize(Application.streamingAssetsPath + "/HotFix/Assembly/" + "Assembly-CSharp.dll.bytes").ToString();
-            hotFixAssemblyConfig.AssemblyPath = "HotFix/Assembly";
-            FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFix", "HotFixAssemblyConfig.json", JsonMapper.ToJson(hotFixAssemblyConfig));*/
             Debug.Log("移动完毕");
         }
 

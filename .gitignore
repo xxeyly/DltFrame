@@ -89,3 +89,9 @@ ProjectSettings/EditorBuildSettings.asset
 ProjectSettings/ProjectSettings.asset
 
 HybridCLRData/
+
+Assets/Fullscreen/
+
+Assets/StreamingAssets/HotFix/
+
+Assets/StreamingAssets/HotFixRuntime/

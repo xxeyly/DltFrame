@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <linker>
-  <assembly fullname="Assembly-CSharp-firstpass">
-    <type fullname="LitJson.JsonMapper" preserve="all" />
-  </assembly>
-  <assembly fullname="NewAssembly">
-    <type fullname="HttpFrameComponentExtern" preserve="all" />
+  <assembly fullname="HybridCLR.Runtime">
+    <type fullname="HybridCLR.HomologousImageMode" preserve="all" />
+    <type fullname="HybridCLR.LoadImageErrorCode" preserve="all" />
+    <type fullname="HybridCLR.RuntimeApi" preserve="all" />
   </assembly>
   <assembly fullname="Sirenix.Serialization">
     <type fullname="Sirenix.OdinInspector.SerializedMonoBehaviour" preserve="all" />
@@ -114,6 +113,9 @@
     <type fullname="UnityEngine.Touch" preserve="all" />
     <type fullname="UnityEngine.TouchPhase" preserve="all" />
   </assembly>
+  <assembly fullname="UnityEngine.JSONSerializeModule">
+    <type fullname="UnityEngine.JsonUtility" preserve="all" />
+  </assembly>
   <assembly fullname="UnityEngine.PhysicsModule">
     <type fullname="UnityEngine.Collider" preserve="all" />
     <type fullname="UnityEngine.Physics" preserve="all" />
@@ -153,6 +155,9 @@
     <type fullname="UnityEngine.Networking.UploadHandlerRaw" preserve="all" />
     <type fullname="UnityEngine.WWWForm" preserve="all" />
   </assembly>
+  <assembly fullname="XFrameworkAot">
+    <type fullname="HttpFrameComponentExtern" preserve="all" />
+  </assembly>
   <assembly fullname="mscorlib">
     <type fullname="System.Action" preserve="all" />
     <type fullname="System.Action`1" preserve="all" />
@@ -180,6 +185,7 @@
     <type fullname="System.Collections.Generic.IEnumerator`1" preserve="all" />
     <type fullname="System.Collections.Generic.IEqualityComparer`1" preserve="all" />
     <type fullname="System.Collections.Generic.IList`1" preserve="all" />
+    <type fullname="System.Collections.Generic.IReadOnlyList`1" preserve="all" />
     <type fullname="System.Collections.Generic.KeyValuePair`2" preserve="all" />
     <type fullname="System.Collections.Generic.List`1" preserve="all" />
     <type fullname="System.Collections.Generic.List`1/Enumerator" preserve="all" />

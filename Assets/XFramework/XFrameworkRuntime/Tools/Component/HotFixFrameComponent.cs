@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using LitJson;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -91,7 +90,7 @@ namespace XFramework
         public void LoadHotFixSceneConfig(string sceneName)
         {
             string hotFixAssetConfig = FileOperation.GetTextToLoad(Application.streamingAssetsPath + "/HotFix/HotFixConfig", sceneName + ".json");
-            hotFixAssetAssetBundleSceneConfigs = JsonMapper.ToObject<HotFixAssetAssetBundleSceneConfig>(hotFixAssetConfig);
+            hotFixAssetAssetBundleSceneConfigs = JsonUtility.FromJson<HotFixAssetAssetBundleSceneConfig>(hotFixAssetConfig);
         }
 
         /// <summary>
