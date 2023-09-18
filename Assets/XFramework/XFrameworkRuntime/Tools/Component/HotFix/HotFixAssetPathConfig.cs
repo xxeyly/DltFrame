@@ -1,11 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XFramework;
-
 public class HotFixAssetPathConfig : SerializedMonoBehaviour
 {
     [LabelText("生成路径")] public string generateHierarchyPath;
@@ -19,15 +20,52 @@ public class HotFixAssetPathConfig : SerializedMonoBehaviour
     {
         generateHierarchyPath = DataFrameComponent.GetComponentPath(transform, false);
         prefabPath = UnityEditor.PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
-        assetBundlePath = "HotFix/HotFixAssetBundle" + DataFrameComponent.AllCharToLower(prefabPath.Replace("Assets/HotFixPrefabs/Scene", "").Replace(".prefab", ""));
+        string prefabPathDirectory = "Assets/HotFixPrefabs/Scene/" + SceneManager.GetActiveScene().name + "/" + GetHotFixAssetType();
+        if (prefabPath == string.Empty)
+        {
+            if (!Directory.Exists(prefabPathDirectory))
+            {
+                Directory.CreateDirectory(prefabPathDirectory);
+                UnityEditor.AssetDatabase.Refresh();
+            }
+        }
+
+        assetBundlePath = "HotFixRuntime/HotFixAssetBundle" + DataFrameComponent.AllCharToLower(prefabPath.Replace("Assets/HotFixPrefabs/Scene", "").Replace(".prefab", ""));
+        prefabPath = prefabPathDirectory + "/" + gameObject.name + ".prefab";
+        ApplyPrefab();
+    }
+
+    private string GetHotFixAssetType()
+    {
+        string HotFixAssetType = string.Empty;
+        if (gameObject.GetComponent<BaseWindow>())
+        {
+            HotFixAssetType = "UI";
+        }
+        else if (gameObject.GetComponent<SceneComponent>())
+        {
+            HotFixAssetType = "SceneComponent";
+        }
+        else if (gameObject.GetComponent<SceneComponentInit>())
+        {
+            HotFixAssetType = "SceneComponentInit";
+        }
+        else if (gameObject.GetComponent<EntityItem>())
+        {
+            HotFixAssetType = "Entity";
+        }
+        else
+        {
+            HotFixAssetType = "Env";
+        }
+
+        return HotFixAssetType;
     }
 
     [Button("保存预制体")]
-    public GameObject ApplyPrefab()
+    public void ApplyPrefab()
     {
-        UnityEditor.PrefabUtility.SaveAsPrefabAsset(gameObject, prefabPath);
-        GameObject prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-        return prefab;
+        PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
     }
 
     /// <summary>

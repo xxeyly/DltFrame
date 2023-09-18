@@ -106,19 +106,7 @@ namespace XFramework
                 }
             }
         }
-
-        [MenuItem("Xframe/移动热更文件并生成配置表")]
-        public static void MoveHotfixDll()
-        {
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/StandaloneWindows64/Assembly-CSharp.dll",
-                Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes", true);
-
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/StandaloneWindows64/XFrameworkHotFix.dll",
-                Application.streamingAssetsPath + "/HotFix/HotFixAsset/" + "XFrameworkHotFix.dll.bytes", true);
-
-            AssetDatabase.Refresh();
-            Debug.Log("移动完毕");
-        }
+        
 
         //音频组件
         private AudioComponentEditor _audioComponentEditor = new AudioComponentEditor();

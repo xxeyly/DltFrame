@@ -39,9 +39,8 @@ namespace XFramework
         [LabelText("热更加载")] [BoxGroup] public bool hotFixLoad;
         [LabelText("禁止摧毁")] [BoxGroup] public bool dontDestroyOnLoad;
 
-       
-        [LabelText("框架加载日志")] [BoxGroup] public bool frameLoadLog;
 
+        [LabelText("框架加载日志")] [BoxGroup] public bool frameLoadLog;
 
 
         private void OnEnable()
@@ -132,10 +131,11 @@ namespace XFramework
         {
             if (Instance.hotFixLoad)
             {
-                // InstantiateHotFixAssetBundle();
-                HotFixFrameComponent.Instance.ReleaseTempHotFixAssetBundle();
+                HotFixFrameComponent.Instance.InstantiateHotFixAssetBundle();
+                // HotFixFrameComponent.Instance.ReleaseTempHotFixAssetBundle();
                 Debug.Log("释放热更资源");
             }
+
             Debug.Log(scene.name + "场景加载完毕");
             FrameComponentSceneInit();
             // Debug.Log(scene.name + "框架场景初始化");

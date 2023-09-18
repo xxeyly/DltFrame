@@ -1543,7 +1543,7 @@ namespace XFramework
             }
             else
             {
-                // Directory.CreateDirectory(DataFrameComponent.GetPathDontContainFileName(path));
+                Directory.CreateDirectory(DataFrameComponent.GetPathDontContainFileName(path));
             }
 
             FileStream aFile = new FileStream(path, FileMode.Create);

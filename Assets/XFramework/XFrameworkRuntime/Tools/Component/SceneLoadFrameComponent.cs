@@ -69,6 +69,7 @@ namespace XFramework
 
         #region 加载同步场景
 
+        
         /// <summary>
         /// 同步加载场景
         /// </summary>
@@ -81,7 +82,7 @@ namespace XFramework
                 //加载热更配置表
                 HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
                 //实例化场景内容到临时位置
-                HotFixFrameComponent.Instance.InstantiateTempHotFixAssetBundle();
+                // HotFixFrameComponent.Instance.InstantiateTempHotFixAssetBundle();
                 //加载场景AssetBundle
                 HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
             }

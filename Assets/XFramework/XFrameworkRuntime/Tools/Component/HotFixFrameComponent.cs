@@ -33,7 +33,7 @@ namespace XFramework
         /// </summary>
         public void InstantiateTempHotFixAssetBundle()
         {
-            GameObject sceneLoadComponent = transform.Find("SceneLoadComponent/SceneHotFixTemp").gameObject;
+            GameObject sceneLoadComponent = transform.Find("SceneLoadFrameComponent/SceneHotFixTemp").gameObject;
             string fontAssetBundlePath = hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundlePath;
             string fontAssetBundleName = hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundleName;
             string localFontPath = Application.streamingAssetsPath + "/" + fontAssetBundlePath + fontAssetBundleName;
@@ -67,6 +67,40 @@ namespace XFramework
             Debug.Log("初始化完毕");
         }
 
+        public void InstantiateHotFixAssetBundle()
+        {
+            string localFontPath = Application.streamingAssetsPath + "/" + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundlePath +
+                                   hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundleName;
+            //加载字体
+            AssetBundle fontAssetBundle = AssetBundle.LoadFromFile(localFontPath);
+            //加载内容
+            for (int i = 0; i < hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
+            {
+                AssetBundle tempHotFixAssetBundle =
+                    AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/" + hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath +
+                                             DataFrameComponent.AllCharToLower(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName));
+                currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
+                GameObject hotFixObject = tempHotFixAssetBundle.LoadAsset<GameObject>(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
+                if (hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath == string.Empty)
+                {
+                    Instantiate(hotFixObject, null, false);
+                }
+                else
+                {
+                    Instantiate(hotFixObject, GameObject.Find(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath).transform, false);
+                }
+            }
+
+            foreach (AssetBundle assetBundle in currentSceneAllAssetBundle)
+            {
+                assetBundle.Unload(false);
+            }
+
+            currentSceneAllAssetBundle.Clear();
+            fontAssetBundle.Unload(false);
+        }
+
+
         /// <summary>
         /// 释放临时资源到指定位置
         /// </summary>
@@ -89,7 +123,7 @@ namespace XFramework
         /// <param name="sceneName"></param>
         public void LoadHotFixSceneConfig(string sceneName)
         {
-            string hotFixAssetConfig = FileOperation.GetTextToLoad(Application.streamingAssetsPath + "/HotFix/HotFixConfig", sceneName + ".json");
+            string hotFixAssetConfig = FileOperation.GetTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundleConfig", sceneName + ".json");
             hotFixAssetAssetBundleSceneConfigs = JsonUtility.FromJson<HotFixAssetAssetBundleSceneConfig>(hotFixAssetConfig);
         }
 
@@ -101,7 +135,7 @@ namespace XFramework
         {
             if (!Application.CanStreamedLevelBeLoaded(sceneName))
             {
-                AssetBundle assetBundle = AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/HotFix/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
+                AssetBundle assetBundle = AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
             }
         }
 

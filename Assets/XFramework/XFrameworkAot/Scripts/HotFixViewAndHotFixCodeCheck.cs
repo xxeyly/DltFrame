@@ -9,16 +9,13 @@ using System.Text;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class Aot : MonoBehaviour
+public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 {
     [LabelText("下载UI进度条")] public Slider progress;
     [LabelText("下载进度文本")] public Text progressPercentage;
     [LabelText("下载地址")] public string downPath = "http://127.0.0.1/";
-    [LabelText("当前进度")] public float currentProgress;
-    [LabelText("进度上限")] public float progressMax = 6;
     [LabelText("总的下载量")] public Text totalDownload;
     [LabelText("当前下载速度")] public Text currentDownSpeed;
     [LabelText("总的下载量数据")] public double totalDownloadValue;
@@ -57,7 +54,7 @@ public class Aot : MonoBehaviour
     [LabelText("当前下载HotFixAssetConfig")] public HotFixAssetConfig currentOperationHotFixAssetConfig;
     [LabelText("缓存更改路径")] public List<string> replaceCacheFile = new List<string>();
     private float time;
-    private float timer = 1;
+    private float _timer = 1;
 
     void Start()
     {
@@ -121,7 +118,7 @@ public class Aot : MonoBehaviour
     //HotFixView配置
     IEnumerator HotFixViewConfigCheck()
     {
-        UnityWebRequest hotFixViewConfigWebRequest = UnityWebRequest.Get(downPath + "HotFix/HotFixConfig/HotFixViewConfig.json");
+        UnityWebRequest hotFixViewConfigWebRequest = UnityWebRequest.Get(downPath + "HotFix/HotFixViewConfig/HotFixViewConfig.json");
         yield return hotFixViewConfigWebRequest.SendWebRequest();
         if (hotFixViewConfigWebRequest.responseCode != 200)
         {
@@ -141,9 +138,9 @@ public class Aot : MonoBehaviour
         hotFixViewLocalCheck = false;
         //检查文件
         hotFixViewIsNeedDown = false;
-        if (File.Exists(Application.streamingAssetsPath + "/HotFix/HotFixAsset/" + hotFixViewHotFixAssetConfig.name))
+        if (File.Exists(Application.streamingAssetsPath + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name))
         {
-            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/HotFixAsset/" + hotFixViewHotFixAssetConfig.name);
+            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name);
             yield return hotFixViewLoadLocalFile.SendWebRequest();
 
             if (hotFixViewLoadLocalFile.downloadHandler.data.Length > 0)
@@ -176,7 +173,7 @@ public class Aot : MonoBehaviour
     //HotFixCode配置
     IEnumerator HotFixCodeConfigCheck()
     {
-        UnityWebRequest hotFixCodeConfigWebRequest = UnityWebRequest.Get(downPath + "HotFix/HotFixConfig/HotFixCodeConfig.json");
+        UnityWebRequest hotFixCodeConfigWebRequest = UnityWebRequest.Get(downPath + "HotFix/HotFixCodeConfig/HotFixCodeConfig.json");
         yield return hotFixCodeConfigWebRequest.SendWebRequest();
         if (hotFixCodeConfigWebRequest.responseCode != 200)
         {
@@ -197,9 +194,9 @@ public class Aot : MonoBehaviour
         hotFixCodeLocalCheck = false;
         //检查文件
         hotFixCodeIsNeedDown = false;
-        if (File.Exists(Application.streamingAssetsPath + "/HotFix/HotFixAsset/" + hotFixCodeHotFixAssetConfig.name))
+        if (File.Exists(Application.streamingAssetsPath + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name))
         {
-            UnityWebRequest hotFixCodeLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/HotFixAsset/" + hotFixCodeHotFixAssetConfig.name);
+            UnityWebRequest hotFixCodeLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name);
             yield return hotFixCodeLoadLocalFile.SendWebRequest();
 
             if (hotFixCodeLoadLocalFile.downloadHandler.data.Length > 0)
@@ -264,18 +261,38 @@ public class Aot : MonoBehaviour
 
     IEnumerator HotFixDown(HotFixAssetConfig hotFixAssetConfig, Action action)
     {
-        string url = downPath + "HotFix/HotFixAsset/" + hotFixAssetConfig.name;
-        //文件夹不存在要创建
-        if (!Directory.Exists(Application.streamingAssetsPath + "/" + "HotFix/HotFixAsset"))
+        string url = string.Empty;
+        //本地路径
+        string downFilePath = string.Empty;
+        //缓存路径
+        switch (hotFixAssetConfig.name)
         {
-            Directory.CreateDirectory(Application.streamingAssetsPath + "/" + "HotFix/HotFixAsset");
+            case "hotfixview":
+                url = downPath + "HotFix/HotFixView/" + hotFixAssetConfig.name;
+                //文件夹不存在要创建
+                if (!Directory.Exists(Application.streamingAssetsPath + "/" + "HotFix/HotFixView"))
+                {
+                    Directory.CreateDirectory(Application.streamingAssetsPath + "/" + "HotFix/HotFixView");
+                }
+
+                downFilePath = Application.streamingAssetsPath + "/" + "HotFix/HotFixView" + "/" + hotFixAssetConfig.name;
+                break;
+            case "XFrameworkHotFix.dll.bytes":
+                url = downPath + "HotFix/HotFixCode/" + hotFixAssetConfig.name;
+                //文件夹不存在要创建
+                if (!Directory.Exists(Application.streamingAssetsPath + "/" + "HotFix/HotFixCode"))
+                {
+                    Directory.CreateDirectory(Application.streamingAssetsPath + "/" + "HotFix/HotFixCode");
+                }
+
+                downFilePath = Application.streamingAssetsPath + "/" + "HotFix/HotFixCode" + "/" + hotFixAssetConfig.name;
+
+                break;
         }
 
-        //本地路径
-        string downFilePath = Application.streamingAssetsPath + "/" + "HotFix/HotFixAsset" + "/" + hotFixAssetConfig.name;
-
-        //缓存路径
         string downFileCachePath = downFilePath + ".Cache";
+
+
         //检查本地缓存文件
         string localMd5 = String.Empty;
         if (File.Exists(downFileCachePath))
@@ -308,7 +325,7 @@ public class Aot : MonoBehaviour
                 Debug.Log("已有缓存文件,继续下载:" + hotFixAssetConfig.name);
                 currentDownloadValue += _hotFixFileStream.Length;
                 totalDownload.text = FileSizeString(currentDownloadValue) + "/" + FileSizeString(totalDownloadValue);
-                UpdateView((float)(_hotFixFileStream.Length / double.Parse(currentOperationHotFixAssetConfig.size)));
+                UpdateView();
                 _hotFixUnityWebRequest.SetRequestHeader("Range", "bytes=" + _hotFixFileStream.Length + "-");
             }
             else
@@ -363,7 +380,7 @@ public class Aot : MonoBehaviour
     {
         // Editor环境下，HotUpdate.dll.bytes已经被自动加载，不需要加载，重复加载反而会出问题。  
 #if !UNITY_EDITOR
-        Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{Application.streamingAssetsPath}/HotFix/HotFixAsset/XFrameworkHotFix.dll.bytes"));
+        Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{Application.streamingAssetsPath}/HotFix/HotFixCode/XFrameworkHotFix.dll.bytes"));
 #else
         // Editor下无需加载，直接查找获得HotUpdate程序集  
         Assembly hotFix = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "XFrameworkHotFix");
@@ -375,7 +392,7 @@ public class Aot : MonoBehaviour
     private void Update()
     {
         time += Time.deltaTime;
-        if (time >= timer)
+        if (time >= _timer)
         {
             time = 0;
             // UpdateHotFixViewDownProgress();
@@ -406,7 +423,7 @@ public class Aot : MonoBehaviour
                 currentDownSpeed.text = FileSizeString(newDownSize);
                 currentDownloadValue += newDownSize;
                 totalDownload.text = FileSizeString(currentDownloadValue) + "/" + FileSizeString(totalDownloadValue);
-                UpdateView((float)(newDownSize / double.Parse(currentOperationHotFixAssetConfig.size)));
+                UpdateView();
             }
             else
             {
@@ -476,11 +493,10 @@ public class Aot : MonoBehaviour
     }
 
     //更新UI
-    private void UpdateView(float addProgress = 1)
+    private void UpdateView()
     {
-        currentProgress += addProgress;
-        progress.value = currentProgress / progressMax;
-        progressPercentage.text = (int)(currentProgress / progressMax * 100) + "/" + 100;
+        progress.value = (float)(currentDownloadValue / totalDownloadValue);
+        progressPercentage.text = (int)(currentDownloadValue / totalDownloadValue * 100) + "/" + 100;
     }
 
     private void ReplaceCacheFile()

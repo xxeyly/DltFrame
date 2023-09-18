@@ -5,6 +5,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// {{ AOT assemblies
 	public static readonly IReadOnlyList<string> PatchedAOTAssemblyList = new List<string>
 	{
+		"StompyRobot.SRF.dll",
 		"System.Core.dll",
 		"System.dll",
 		"UnityEngine.AssetBundleModule.dll",
@@ -18,8 +19,15 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// }} 
 
 	// {{ AOT generic types
+	// SRF.Components.SRAutoSingleton<object>
+	// SRF.SRList.<GetEnumerator>d__15<object>
+	// SRF.SRList<object>
+	// System.Action<LitJson.PropertyMetadata>
+	// System.Action<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Action<UnityEngine.EventSystems.RaycastResult>
 	// System.Action<UnityEngine.RaycastHit>
+	// System.Action<UnityEngine.Vector2,object>
+	// System.Action<UnityEngine.Vector3,object>
 	// System.Action<XFramework.AudioComponentData.AudioInfo>
 	// System.Action<XFramework.General.GenerateAttributesTypeGroup>
 	// System.Action<XFramework.TimeTaskInfo>
@@ -50,6 +58,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<ushort>
 	// System.ArraySegment.ArraySegmentEnumerator<byte>
 	// System.ArraySegment<byte>
+	// System.Collections.Generic.ArraySortHelper<LitJson.PropertyMetadata>
+	// System.Collections.Generic.ArraySortHelper<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ArraySortHelper<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.ArraySortHelper<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.ArraySortHelper<XFramework.General.GenerateAttributesTypeGroup>
@@ -65,6 +75,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ArraySortHelper<uint>
 	// System.Collections.Generic.ArraySortHelper<ulong>
 	// System.Collections.Generic.ArraySortHelper<ushort>
+	// System.Collections.Generic.Comparer<LitJson.PropertyMetadata>
+	// System.Collections.Generic.Comparer<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.Comparer<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.Comparer<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.Comparer<XFramework.General.GenerateAttributesTypeGroup>
@@ -80,36 +92,64 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.Comparer<uint>
 	// System.Collections.Generic.Comparer<ulong>
 	// System.Collections.Generic.Comparer<ushort>
+	// System.Collections.Generic.Dictionary.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.Enumerator<object,LitJson.ArrayMetadata>
+	// System.Collections.Generic.Dictionary.Enumerator<object,LitJson.ObjectMetadata>
+	// System.Collections.Generic.Dictionary.Enumerator<object,LitJson.PropertyMetadata>
 	// System.Collections.Generic.Dictionary.Enumerator<object,int>
 	// System.Collections.Generic.Dictionary.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.Enumerator<ulong,object>
 	// System.Collections.Generic.Dictionary.Enumerator<ushort,object>
 	// System.Collections.Generic.Dictionary.Enumerator<ushort,ushort>
+	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<object,LitJson.ArrayMetadata>
+	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<object,LitJson.ObjectMetadata>
+	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<object,LitJson.PropertyMetadata>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<object,int>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<ulong,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<ushort,object>
 	// System.Collections.Generic.Dictionary.KeyCollection.Enumerator<ushort,ushort>
+	// System.Collections.Generic.Dictionary.KeyCollection<int,object>
+	// System.Collections.Generic.Dictionary.KeyCollection<object,LitJson.ArrayMetadata>
+	// System.Collections.Generic.Dictionary.KeyCollection<object,LitJson.ObjectMetadata>
+	// System.Collections.Generic.Dictionary.KeyCollection<object,LitJson.PropertyMetadata>
 	// System.Collections.Generic.Dictionary.KeyCollection<object,int>
 	// System.Collections.Generic.Dictionary.KeyCollection<object,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<ulong,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<ushort,object>
 	// System.Collections.Generic.Dictionary.KeyCollection<ushort,ushort>
+	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<int,object>
+	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<object,LitJson.ArrayMetadata>
+	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<object,LitJson.ObjectMetadata>
+	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<object,LitJson.PropertyMetadata>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<object,int>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<object,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<ulong,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<ushort,object>
 	// System.Collections.Generic.Dictionary.ValueCollection.Enumerator<ushort,ushort>
+	// System.Collections.Generic.Dictionary.ValueCollection<int,object>
+	// System.Collections.Generic.Dictionary.ValueCollection<object,LitJson.ArrayMetadata>
+	// System.Collections.Generic.Dictionary.ValueCollection<object,LitJson.ObjectMetadata>
+	// System.Collections.Generic.Dictionary.ValueCollection<object,LitJson.PropertyMetadata>
 	// System.Collections.Generic.Dictionary.ValueCollection<object,int>
 	// System.Collections.Generic.Dictionary.ValueCollection<object,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<ulong,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<ushort,object>
 	// System.Collections.Generic.Dictionary.ValueCollection<ushort,ushort>
+	// System.Collections.Generic.Dictionary<int,object>
+	// System.Collections.Generic.Dictionary<object,LitJson.ArrayMetadata>
+	// System.Collections.Generic.Dictionary<object,LitJson.ObjectMetadata>
+	// System.Collections.Generic.Dictionary<object,LitJson.PropertyMetadata>
 	// System.Collections.Generic.Dictionary<object,int>
 	// System.Collections.Generic.Dictionary<object,object>
 	// System.Collections.Generic.Dictionary<ulong,object>
 	// System.Collections.Generic.Dictionary<ushort,object>
 	// System.Collections.Generic.Dictionary<ushort,ushort>
+	// System.Collections.Generic.EqualityComparer<LitJson.ArrayMetadata>
+	// System.Collections.Generic.EqualityComparer<LitJson.ObjectMetadata>
+	// System.Collections.Generic.EqualityComparer<LitJson.PropertyMetadata>
+	// System.Collections.Generic.EqualityComparer<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.EqualityComparer<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.EqualityComparer<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.EqualityComparer<XFramework.General.GenerateAttributesTypeGroup>
@@ -125,6 +165,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.EqualityComparer<uint>
 	// System.Collections.Generic.EqualityComparer<ulong>
 	// System.Collections.Generic.EqualityComparer<ushort>
+	// System.Collections.Generic.ICollection<LitJson.PropertyMetadata>
+	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,LitJson.ArrayMetadata>>
+	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,LitJson.ObjectMetadata>>
+	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,LitJson.PropertyMetadata>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,int>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ICollection<System.Collections.Generic.KeyValuePair<ulong,object>>
@@ -145,6 +190,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ICollection<uint>
 	// System.Collections.Generic.ICollection<ulong>
 	// System.Collections.Generic.ICollection<ushort>
+	// System.Collections.Generic.IComparer<LitJson.PropertyMetadata>
+	// System.Collections.Generic.IComparer<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IComparer<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.IComparer<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.IComparer<XFramework.General.GenerateAttributesTypeGroup>
@@ -160,6 +207,16 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IComparer<uint>
 	// System.Collections.Generic.IComparer<ulong>
 	// System.Collections.Generic.IComparer<ushort>
+	// System.Collections.Generic.IDictionary<int,object>
+	// System.Collections.Generic.IDictionary<object,LitJson.ArrayMetadata>
+	// System.Collections.Generic.IDictionary<object,LitJson.ObjectMetadata>
+	// System.Collections.Generic.IDictionary<object,LitJson.PropertyMetadata>
+	// System.Collections.Generic.IDictionary<object,object>
+	// System.Collections.Generic.IEnumerable<LitJson.PropertyMetadata>
+	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,LitJson.ArrayMetadata>>
+	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,LitJson.ObjectMetadata>>
+	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,LitJson.PropertyMetadata>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,int>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<ulong,object>>
@@ -180,6 +237,11 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEnumerable<uint>
 	// System.Collections.Generic.IEnumerable<ulong>
 	// System.Collections.Generic.IEnumerable<ushort>
+	// System.Collections.Generic.IEnumerator<LitJson.PropertyMetadata>
+	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,object>>
+	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,LitJson.ArrayMetadata>>
+	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,LitJson.ObjectMetadata>>
+	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,LitJson.PropertyMetadata>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,int>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<ulong,object>>
@@ -200,9 +262,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEnumerator<uint>
 	// System.Collections.Generic.IEnumerator<ulong>
 	// System.Collections.Generic.IEnumerator<ushort>
+	// System.Collections.Generic.IEqualityComparer<int>
 	// System.Collections.Generic.IEqualityComparer<object>
 	// System.Collections.Generic.IEqualityComparer<ulong>
 	// System.Collections.Generic.IEqualityComparer<ushort>
+	// System.Collections.Generic.IList<LitJson.PropertyMetadata>
+	// System.Collections.Generic.IList<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.IList<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.IList<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.IList<XFramework.General.GenerateAttributesTypeGroup>
@@ -218,11 +283,17 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IList<uint>
 	// System.Collections.Generic.IList<ulong>
 	// System.Collections.Generic.IList<ushort>
+	// System.Collections.Generic.KeyValuePair<int,object>
+	// System.Collections.Generic.KeyValuePair<object,LitJson.ArrayMetadata>
+	// System.Collections.Generic.KeyValuePair<object,LitJson.ObjectMetadata>
+	// System.Collections.Generic.KeyValuePair<object,LitJson.PropertyMetadata>
 	// System.Collections.Generic.KeyValuePair<object,int>
 	// System.Collections.Generic.KeyValuePair<object,object>
 	// System.Collections.Generic.KeyValuePair<ulong,object>
 	// System.Collections.Generic.KeyValuePair<ushort,object>
 	// System.Collections.Generic.KeyValuePair<ushort,ushort>
+	// System.Collections.Generic.List.Enumerator<LitJson.PropertyMetadata>
+	// System.Collections.Generic.List.Enumerator<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.List.Enumerator<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.List.Enumerator<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.List.Enumerator<XFramework.General.GenerateAttributesTypeGroup>
@@ -238,6 +309,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.List.Enumerator<uint>
 	// System.Collections.Generic.List.Enumerator<ulong>
 	// System.Collections.Generic.List.Enumerator<ushort>
+	// System.Collections.Generic.List.SynchronizedList<LitJson.PropertyMetadata>
+	// System.Collections.Generic.List.SynchronizedList<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.List.SynchronizedList<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.List.SynchronizedList<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.List.SynchronizedList<XFramework.General.GenerateAttributesTypeGroup>
@@ -253,6 +326,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.List.SynchronizedList<uint>
 	// System.Collections.Generic.List.SynchronizedList<ulong>
 	// System.Collections.Generic.List.SynchronizedList<ushort>
+	// System.Collections.Generic.List<LitJson.PropertyMetadata>
+	// System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.List<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.List<XFramework.General.GenerateAttributesTypeGroup>
@@ -268,6 +343,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.List<uint>
 	// System.Collections.Generic.List<ulong>
 	// System.Collections.Generic.List<ushort>
+	// System.Collections.Generic.ObjectComparer<LitJson.PropertyMetadata>
+	// System.Collections.Generic.ObjectComparer<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ObjectComparer<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.ObjectComparer<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.ObjectComparer<XFramework.General.GenerateAttributesTypeGroup>
@@ -283,6 +360,10 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectComparer<uint>
 	// System.Collections.Generic.ObjectComparer<ulong>
 	// System.Collections.Generic.ObjectComparer<ushort>
+	// System.Collections.Generic.ObjectEqualityComparer<LitJson.ArrayMetadata>
+	// System.Collections.Generic.ObjectEqualityComparer<LitJson.ObjectMetadata>
+	// System.Collections.Generic.ObjectEqualityComparer<LitJson.PropertyMetadata>
+	// System.Collections.Generic.ObjectEqualityComparer<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ObjectEqualityComparer<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.Generic.ObjectEqualityComparer<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.Generic.ObjectEqualityComparer<XFramework.General.GenerateAttributesTypeGroup>
@@ -306,6 +387,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.Queue<FlyingWormConsole3.LiteNetLib.NatPunchModule.SuccessEventData>
 	// System.Collections.Generic.Queue<int>
 	// System.Collections.Generic.Queue<object>
+	// System.Collections.Generic.Stack.Enumerator<int>
+	// System.Collections.Generic.Stack.Enumerator<object>
+	// System.Collections.Generic.Stack<int>
+	// System.Collections.Generic.Stack<object>
+	// System.Collections.ObjectModel.ReadOnlyCollection<LitJson.PropertyMetadata>
+	// System.Collections.ObjectModel.ReadOnlyCollection<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.ObjectModel.ReadOnlyCollection<UnityEngine.EventSystems.RaycastResult>
 	// System.Collections.ObjectModel.ReadOnlyCollection<XFramework.AudioComponentData.AudioInfo>
 	// System.Collections.ObjectModel.ReadOnlyCollection<XFramework.General.GenerateAttributesTypeGroup>
@@ -321,6 +408,8 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.ObjectModel.ReadOnlyCollection<uint>
 	// System.Collections.ObjectModel.ReadOnlyCollection<ulong>
 	// System.Collections.ObjectModel.ReadOnlyCollection<ushort>
+	// System.Comparison<LitJson.PropertyMetadata>
+	// System.Comparison<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Comparison<UnityEngine.EventSystems.RaycastResult>
 	// System.Comparison<XFramework.AudioComponentData.AudioInfo>
 	// System.Comparison<XFramework.General.GenerateAttributesTypeGroup>
@@ -336,6 +425,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Comparison<uint>
 	// System.Comparison<ulong>
 	// System.Comparison<ushort>
+	// System.Func<byte>
 	// System.Func<object,System.IntPtr>
 	// System.Func<object,byte>
 	// System.Func<object,double>
@@ -349,7 +439,10 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Func<object,ulong>
 	// System.Func<object,ushort>
 	// System.Func<object>
+	// System.IEquatable<object>
 	// System.Nullable<System.DateTime>
+	// System.Predicate<LitJson.PropertyMetadata>
+	// System.Predicate<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Predicate<UnityEngine.EventSystems.RaycastResult>
 	// System.Predicate<XFramework.AudioComponentData.AudioInfo>
 	// System.Predicate<XFramework.General.GenerateAttributesTypeGroup>
@@ -375,6 +468,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 
 	public void RefMethods()
 	{
+		// object SRF.Service.SRServiceManager.GetService<object>()
 		// object System.Activator.CreateInstance<object>()
 		// object[] System.Array.Empty<object>()
 		// System.Void System.Array.Resize<byte>(byte[]&,int)
