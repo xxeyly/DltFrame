@@ -38,6 +38,7 @@ namespace XFramework
         private bool IsConnected()
         {
             int dwFlag = new int();
+            /*
             if (!HttpFrameComponentExtern.InternetGetConnectedState(ref dwFlag, 0))
             {
                 if ((dwFlag & 0x14) == 0)
@@ -64,6 +65,7 @@ namespace XFramework
                     return true;
                 }
             }
+            */
 
             return false;
         }

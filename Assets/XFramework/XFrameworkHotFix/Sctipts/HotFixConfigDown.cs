@@ -20,11 +20,11 @@ public class HotFixConfigDown : MonoBehaviour
         Instance = this;
     }
 
+    [LabelText("下载地址")] public string downPath = "http://127.0.0.1/";
     [LabelText("下载UI进度条")] public Slider progress;
     [LabelText("下载进度文本")] public Text progressPercentage;
     [LabelText("总的下载量")] public Text totalDownload;
     [LabelText("当前下载速度")] public Text currentDownSpeed;
-    [LabelText("下载地址")] public string downPath = "http://127.0.0.1/";
     [LabelText("下载流")] private FileStream _hotFixFileStream;
     [LabelText("下载请求")] private UnityWebRequest _hotFixUnityWebRequest;
     [LabelText("总的下载量数据")] public double totalDownloadValue;
@@ -64,15 +64,16 @@ public class HotFixConfigDown : MonoBehaviour
         {
             HotFixRuntimeDownConfig hotFixRuntimeDownConfig = null;
             hotFixRuntimeDownConfig = needDownHotFixRuntimeDownConfig[index];
+            Debug.Log("开始下载:" + hotFixRuntimeDownConfig.Name);
             currentHotFixRuntimeDownConfig = hotFixRuntimeDownConfig;
             string url = downPath + "/" + hotFixRuntimeDownConfig.Path + hotFixRuntimeDownConfig.Name;
-            if (!Directory.Exists(Application.streamingAssetsPath + "/" + hotFixRuntimeDownConfig.Path))
+            if (!Directory.Exists(General.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path))
             {
-                Directory.CreateDirectory(Application.streamingAssetsPath + "/" + hotFixRuntimeDownConfig.Path);
+                Directory.CreateDirectory(General.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path);
             }
 
             //本地路径
-            string downFilePath = Application.streamingAssetsPath + "/" + hotFixRuntimeDownConfig.Path + hotFixRuntimeDownConfig.Name;
+            string downFilePath = General.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path + hotFixRuntimeDownConfig.Name;
             string downFileCachePath = downFilePath + ".Cache";
 
 
@@ -137,6 +138,9 @@ public class HotFixConfigDown : MonoBehaviour
                         Debug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
                         Debug.Log("本地下载的Md5:" + localFileMd5);
                         Debug.Log("服务器的Md5:" + hotFixRuntimeDownConfig.Md5);
+                        //下载错误,移除错误数据大小
+                        currentDownloadValue -= _hotFixUnityWebRequest.downloadHandler.data.Length;
+                        totalDownload.text = FileSizeString(currentDownloadValue) + "/" + FileSizeString(totalDownloadValue);
                         _hotFixUnityWebRequest = null;
                         if (File.Exists(downFileCachePath))
                         {
@@ -294,7 +298,6 @@ public class HotFixConfigDown : MonoBehaviour
     {
         foreach (string cachePath in replaceCacheFile)
         {
-            Debug.Log(cachePath);
             string replacePath = cachePath.Replace(".Cache", "");
             if (File.Exists(replacePath))
             {

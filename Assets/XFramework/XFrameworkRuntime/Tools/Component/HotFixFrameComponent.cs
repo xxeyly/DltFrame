@@ -36,7 +36,7 @@ namespace XFramework
             GameObject sceneLoadComponent = transform.Find("SceneLoadFrameComponent/SceneHotFixTemp").gameObject;
             string fontAssetBundlePath = hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundlePath;
             string fontAssetBundleName = hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundleName;
-            string localFontPath = Application.streamingAssetsPath + "/" + fontAssetBundlePath + fontAssetBundleName;
+            string localFontPath = General.GetDeviceStoragePath() + "/" + fontAssetBundlePath + fontAssetBundleName;
             //加载字体
             AssetBundle fontAssetBundle = AssetBundle.LoadFromFile(localFontPath);
             //加载内容
@@ -45,7 +45,7 @@ namespace XFramework
                 string assetBundlePath = hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath;
                 string assetBundleName = hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName;
                 string assetBundleInstantiatePath = hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath;
-                AssetBundle tempHotFixAssetBundle = AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/" + assetBundlePath + assetBundleName);
+                AssetBundle tempHotFixAssetBundle = AssetBundle.LoadFromFile(General.GetDeviceStoragePath() + "/" + assetBundlePath + assetBundleName);
                 GameObject hotFixObject = tempHotFixAssetBundle.LoadAsset<GameObject>(assetBundleName);
                 GameObject tempHotFixObject = Instantiate(hotFixObject, sceneLoadComponent.transform, false);
                 if (!hotFixAssetAssetBundleTempPath.ContainsKey(assetBundleInstantiatePath))
@@ -69,7 +69,7 @@ namespace XFramework
 
         public void InstantiateHotFixAssetBundle()
         {
-            string localFontPath = Application.streamingAssetsPath + "/" + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundlePath +
+            string localFontPath = General.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundlePath +
                                    hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundleName;
             //加载字体
             AssetBundle fontAssetBundle = AssetBundle.LoadFromFile(localFontPath);
@@ -77,7 +77,7 @@ namespace XFramework
             for (int i = 0; i < hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
             {
                 AssetBundle tempHotFixAssetBundle =
-                    AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/" + hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath +
+                    AssetBundle.LoadFromFile(General.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath +
                                              DataFrameComponent.AllCharToLower(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName));
                 currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
                 GameObject hotFixObject = tempHotFixAssetBundle.LoadAsset<GameObject>(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
@@ -123,7 +123,7 @@ namespace XFramework
         /// <param name="sceneName"></param>
         public void LoadHotFixSceneConfig(string sceneName)
         {
-            string hotFixAssetConfig = FileOperation.GetTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundleConfig", sceneName + ".json");
+            string hotFixAssetConfig = FileOperation.GetTextToLoad(General.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", sceneName + ".json");
             hotFixAssetAssetBundleSceneConfigs = JsonUtility.FromJson<HotFixAssetAssetBundleSceneConfig>(hotFixAssetConfig);
         }
 
@@ -135,7 +135,7 @@ namespace XFramework
         {
             if (!Application.CanStreamedLevelBeLoaded(sceneName))
             {
-                AssetBundle assetBundle = AssetBundle.LoadFromFile(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
+                AssetBundle assetBundle = AssetBundle.LoadFromFile(General.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
             }
         }
 

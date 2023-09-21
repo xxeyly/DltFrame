@@ -2,8 +2,8 @@ using System.Runtime.InteropServices;
 
 public class HttpFrameComponentExtern
 {
-    [DllImport("winInet.dll")] //引用外部库
-    public static extern bool InternetGetConnectedState(ref int dwFlag, int dwReserved); //库中函数
+    // [DllImport("winInet.dll")] //引用外部库
+    // public static extern bool InternetGetConnectedState(ref int dwFlag, int dwReserved); //库中函数
 
     /// <summary>
     /// 判断连接状态
@@ -11,7 +11,7 @@ public class HttpFrameComponentExtern
     public static bool IsConnected()
     {
         int dwFlag = new int();
-        if (!InternetGetConnectedState(ref dwFlag, 0))
+        /*if (!InternetGetConnectedState(ref dwFlag, 0))
         {
             if ((dwFlag & 0x14) == 0)
             {
@@ -36,7 +36,7 @@ public class HttpFrameComponentExtern
             {
                 return true;
             }
-        }
+        }*/
 
         return false;
     }

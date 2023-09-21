@@ -122,6 +122,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         yield return hotFixViewConfigWebRequest.SendWebRequest();
         if (hotFixViewConfigWebRequest.responseCode != 200)
         {
+            Debug.Log("访问错误:" + hotFixViewConfigWebRequest.url + hotFixViewConfigWebRequest.responseCode);
             StartCoroutine(HotFixViewConfigCheck());
         }
         else
@@ -138,9 +139,9 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         hotFixViewLocalCheck = false;
         //检查文件
         hotFixViewIsNeedDown = false;
-        if (File.Exists(Application.streamingAssetsPath + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name))
+        if (File.Exists(General.GetDeviceStoragePath() + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name))
         {
-            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name);
+            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(General.GetDeviceStoragePath() + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name);
             yield return hotFixViewLoadLocalFile.SendWebRequest();
 
             if (hotFixViewLoadLocalFile.downloadHandler.data.Length > 0)
@@ -194,9 +195,9 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         hotFixCodeLocalCheck = false;
         //检查文件
         hotFixCodeIsNeedDown = false;
-        if (File.Exists(Application.streamingAssetsPath + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name))
+        if (File.Exists(General.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name))
         {
-            UnityWebRequest hotFixCodeLoadLocalFile = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name);
+            UnityWebRequest hotFixCodeLoadLocalFile = UnityWebRequest.Get(General.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name);
             yield return hotFixCodeLoadLocalFile.SendWebRequest();
 
             if (hotFixCodeLoadLocalFile.downloadHandler.data.Length > 0)
@@ -270,22 +271,22 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             case "hotfixview":
                 url = downPath + "HotFix/HotFixView/" + hotFixAssetConfig.name;
                 //文件夹不存在要创建
-                if (!Directory.Exists(Application.streamingAssetsPath + "/" + "HotFix/HotFixView"))
+                if (!Directory.Exists(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixView"))
                 {
-                    Directory.CreateDirectory(Application.streamingAssetsPath + "/" + "HotFix/HotFixView");
+                    Directory.CreateDirectory(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixView");
                 }
 
-                downFilePath = Application.streamingAssetsPath + "/" + "HotFix/HotFixView" + "/" + hotFixAssetConfig.name;
+                downFilePath = General.GetDeviceStoragePath() + "/" + "HotFix/HotFixView" + "/" + hotFixAssetConfig.name;
                 break;
             case "XFrameworkHotFix.dll.bytes":
                 url = downPath + "HotFix/HotFixCode/" + hotFixAssetConfig.name;
                 //文件夹不存在要创建
-                if (!Directory.Exists(Application.streamingAssetsPath + "/" + "HotFix/HotFixCode"))
+                if (!Directory.Exists(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode"))
                 {
-                    Directory.CreateDirectory(Application.streamingAssetsPath + "/" + "HotFix/HotFixCode");
+                    Directory.CreateDirectory(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode");
                 }
 
-                downFilePath = Application.streamingAssetsPath + "/" + "HotFix/HotFixCode" + "/" + hotFixAssetConfig.name;
+                downFilePath = General.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode" + "/" + hotFixAssetConfig.name;
 
                 break;
         }
@@ -380,7 +381,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     {
         // Editor环境下，HotUpdate.dll.bytes已经被自动加载，不需要加载，重复加载反而会出问题。  
 #if !UNITY_EDITOR
-        Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{Application.streamingAssetsPath}/HotFix/HotFixCode/XFrameworkHotFix.dll.bytes"));
+        Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{General.GetDeviceStoragePath()}/HotFix/HotFixCode/XFrameworkHotFix.dll.bytes"));
 #else
         // Editor下无需加载，直接查找获得HotUpdate程序集  
         Assembly hotFix = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "XFrameworkHotFix");

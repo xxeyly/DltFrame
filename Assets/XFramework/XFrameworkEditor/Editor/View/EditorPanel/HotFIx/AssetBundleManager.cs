@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using HybridCLR.Editor.Commands;
 using LitJson;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -15,18 +16,22 @@ public class AssetBundleManager : BaseEditor
     [LabelText("打包压缩方式")] public BuildAssetBundleOptions targetBuildAssetBundleOptions = BuildAssetBundleOptions.None;
     [LabelText("打包平台")] public BuildTarget targetBuildTarget = BuildTarget.StandaloneWindows;
 
-    [LabelText("Assembly-路径可不填")] [TableList]
+    [LabelText("Assembly打包")] public bool AssemblyParticipatePackaging;
+    [LabelText("MetaAssembly打包")] public bool MetaAssemblyParticipatePackaging;
+
+    /*[LabelText("Assembly-路径可不填")] [TableList]
     public List<BundleFileConfig> AssemblyAssetDirectoryConfig;
+    [LabelText("元数据")] [TableList] public List<BundleDirectoryConfig> MetaAssembly;*/
 
     [LabelText("框架")] [TableList] public List<BundleFileConfig> GameRootStartBundleDirectoryConfig;
-    [LabelText("元数据")] [TableList] public List<BundleDirectoryConfig> MetaAssembly;
+
 
     [HorizontalGroup("打包", width: 100)]
     [Button("清空打包勾选")]
     public void ClearAll()
     {
         ClearBundleFileConfigPackaging(GameRootStartBundleDirectoryConfig);
-        ClearBundleDirectoryConfigPackaging(MetaAssembly);
+        // ClearBundleDirectoryConfigPackaging(MetaAssembly);
         AssetBundle.UnloadAllAssetBundles(true);
     }
 
@@ -36,7 +41,7 @@ public class AssetBundleManager : BaseEditor
     public void SelectAll()
     {
         AllSelectBundleFileConfigPackaging(GameRootStartBundleDirectoryConfig);
-        AllSelectBundleDirectoryConfigPackaging(MetaAssembly);
+        // AllSelectBundleDirectoryConfigPackaging(MetaAssembly);
         AssetBundle.UnloadAllAssetBundles(true);
     }
 
@@ -74,23 +79,44 @@ public class AssetBundleManager : BaseEditor
 
 
     [HorizontalGroup("打包")]
-    [Button("打包AB包和Md5")]
-    public void NewBundle()
+    [Button("生成文件配置信息")]
+    public void GenerateFileConfig()
     {
         AssetBundle.UnloadAllAssetBundles(true);
-        Save();
+        OnSaveConfig();
         //热更文件
-        foreach (BundleFileConfig bundleFileConfig in AssemblyAssetDirectoryConfig)
+        if (AssemblyParticipatePackaging)
         {
-            if (!bundleFileConfig.participatePackaging)
+            CompileDllCommand.CompileDllActiveBuildTarget();
+            string platformName = string.Empty;
+            switch (targetBuildTarget)
             {
-                continue;
+                case BuildTarget.StandaloneWindows:
+                    platformName = "StandaloneWindows64";
+                    break;
+                case BuildTarget.WSAPlayer:
+                    platformName = "WSAPlayer";
+                    break;
             }
 
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/StandaloneWindows64/Assembly-CSharp.dll",
+            if (!Directory.Exists("Assets/StreamingAssets/HotFixRuntime/Assembly"))
+            {
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFixRuntime/Assembly");
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+#endif
+            }
+
+            if (!Directory.Exists("Assets/StreamingAssets/HotFixRuntime/AssemblyConfig"))
+            {
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFixRuntime/AssemblyConfig");
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+#endif
+            }
+
+            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
                 Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes", true);
-
-
             HotFixRuntimeDownConfig hotFixAssemblyConfig = new HotFixRuntimeDownConfig();
             hotFixAssemblyConfig.Md5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
             hotFixAssemblyConfig.Name = "Assembly-CSharp.dll.bytes";
@@ -106,6 +132,13 @@ public class AssetBundleManager : BaseEditor
             if (!bundleFileConfig.participatePackaging)
             {
                 continue;
+            }
+            if (!Directory.Exists("Assets/StreamingAssets/HotFixRuntime/GameRootStartAssetBundle"))
+            {
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFixRuntime/GameRootStartAssetBundle");
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+#endif
             }
 
             AssetImporter gameRootStartImporter = null;
@@ -125,14 +158,42 @@ public class AssetBundleManager : BaseEditor
         }
 
         //元数据
-        foreach (BundleDirectoryConfig bundleDirectoryConfig in MetaAssembly)
+        if (MetaAssemblyParticipatePackaging)
         {
-            if (!bundleDirectoryConfig.participatePackaging)
+            if (!Directory.Exists("Assets/StreamingAssets/HotFix/Metadata"))
             {
-                continue;
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFix/Metadata");
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+#endif
+            }
+            if (!Directory.Exists("Assets/StreamingAssets/HotFix/MetadataConfig"))
+            {
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFix/MetadataConfig");
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+#endif
             }
 
-            List<string> buildPath = DataFrameComponent.GetGetSpecifyPathInAllTypePath(bundleDirectoryConfig.folderPath, "bytes");
+            //移动元文件
+            foreach (string metadataName in AOTGenericReferences.PatchedAOTAssemblyList)
+            {
+                string platformName = string.Empty;
+                switch (targetBuildTarget)
+                {
+                    case BuildTarget.StandaloneWindows:
+                        platformName = "StandaloneWindows64";
+                        break;
+                    case BuildTarget.WSAPlayer:
+                        platformName = "WSAPlayer";
+                        break;
+                }
+
+                File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
+                    Application.streamingAssetsPath + "/HotFix/Metadata/" + metadataName + ".bytes", true);
+            }
+
+            List<string> buildPath = DataFrameComponent.GetGetSpecifyPathInAllTypePath("Assets/StreamingAssets/HotFix/Metadata", "bytes");
             List<HotFixRuntimeDownConfig> hotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             foreach (string path in buildPath)
             {
@@ -148,6 +209,7 @@ public class AssetBundleManager : BaseEditor
             FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFix/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
         }
 
+        OnLoadConfig();
         AssetDatabase.Refresh();
         DataFrameComponent.RemoveAllAssetBundleName();
     }
@@ -194,10 +256,6 @@ public class AssetBundleManager : BaseEditor
     }
 
 
-    public void Save()
-    {
-    }
-
 #endif
     public override void OnDisable()
     {
@@ -221,8 +279,6 @@ public class AssetBundleManager : BaseEditor
             targetBuildAssetBundleOptions = loadAssetBundleManager.targetBuildAssetBundleOptions;
             targetBuildTarget = loadAssetBundleManager.targetBuildTarget;
             GameRootStartBundleDirectoryConfig = loadAssetBundleManager.GameRootStartBundleDirectoryConfig;
-            MetaAssembly = loadAssetBundleManager.MetaAssembly;
-            AssemblyAssetDirectoryConfig = loadAssetBundleManager.AssemblyAssetDirectoryConfig;
         }
     }
 

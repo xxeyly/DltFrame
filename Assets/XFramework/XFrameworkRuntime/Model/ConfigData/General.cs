@@ -63,18 +63,24 @@ namespace XFramework
         };
 
 
-        [LabelText("平台StreamingAssets路径")]
-        public static string GetPlatformStreamingAssetsPath()
+        public static string GetDeviceStoragePath()
         {
-#if UNITY_ANDROID //安卓  
-            return Application.dataPath + "!/assets/";
-#elif UNITY_IPHONE //iPhone  
-            return Application.dataPath + "/Raw/";
-#elif UNITY_STANDALONE_WIN || UNITY_EDITOR //windows平台和web平台  
-            return Application.dataPath + "/StreamingAssets/";
-#else
-            return string.Empty;
-#endif
+            string path = String.Empty;
+
+            switch (Application.platform)
+            {
+                case RuntimePlatform.WindowsPlayer:
+                case RuntimePlatform.WindowsEditor:
+                    path = Application.streamingAssetsPath;
+                    break;
+                case RuntimePlatform.WSAPlayerX64:
+                case RuntimePlatform.WSAPlayerX86:
+                case RuntimePlatform.WSAPlayerARM:
+                    path = Application.persistentDataPath;
+                    break;
+            }
+
+            return path;
         }
 
         [LabelText("平台PersistentDataPath路径")]
@@ -122,18 +128,18 @@ namespace XFramework
         [LabelText("XFramework路径")] public static string XFrameworkPath = "Assets/XFramework/XFrameworkRuntime/";
         [LabelText("BaseWindow模板地址")] public static string BaseWindowTemplatePath = XFrameworkPath + "Model/Template/BaseWindowTemplate.cs";
 
-        [LabelText("ChildBaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = XFrameworkPath +   "Model/Template/ChildBaseWindowTemplate.cs";
+        [LabelText("ChildBaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = XFrameworkPath + "Model/Template/ChildBaseWindowTemplate.cs";
 
         [LabelText("ListenerComponentData模板地址")]
         public static string ListenerComponentDataTemplatePath = XFrameworkPath + "Model/Template/ListenerComponentDataTemplate.cs";
 
-        [LabelText("SceneLoadComponent模板地址")] public static string SceneComponentTemplatePath = XFrameworkPath +  "Model/Template/SceneComponentTemplate.cs";
+        [LabelText("SceneLoadComponent模板地址")] public static string SceneComponentTemplatePath = XFrameworkPath + "Model/Template/SceneComponentTemplate.cs";
 
         [LabelText("SceneLoadComponentInit模板地址")]
-        public static string SceneComponentInitTemplatePath = XFrameworkPath +  "Model/Template/SceneComponentInitTemplate.cs";
+        public static string SceneComponentInitTemplatePath = XFrameworkPath + "Model/Template/SceneComponentInitTemplate.cs";
 
         [LabelText("AnimatorControllerParameterData模板地址")]
-        public static string AnimatorControllerParameterDataTemplatePath = XFrameworkPath +  "Model/Template/AnimatorControllerParameterDataTemplate.cs";
+        public static string AnimatorControllerParameterDataTemplatePath = XFrameworkPath + "Model/Template/AnimatorControllerParameterDataTemplate.cs";
 
         [LabelText("存放路径根路径")] public static string assetRootPath = "Assets/Config/";
 

@@ -12,6 +12,8 @@ using UnityEngine.Serialization;
 
 public class HotFixConfigCheck : MonoBehaviour
 {
+    [LabelText("下载地址")] public string downPath = "http://127.0.0.1/";
+
     [BoxGroup("下载内容")] [LabelText("再次下载等待时间")]
     public float againDownWaitTime;
 
@@ -76,8 +78,8 @@ public class HotFixConfigCheck : MonoBehaviour
         Debug.Log("配置表开始下载");
         Debug.Log("元数据表开始下载");
         StartCoroutine(MetadataHotFixRuntimeDownConfig());
-        Debug.Log("元数据表下载完毕");
         yield return new WaitUntil(() => isMetadataHotFixRuntimeDownConfigTableDownOver);
+        Debug.Log("元数据表下载完毕");
         Debug.Log("Assembly表开始下载");
         StartCoroutine(AssemblyHotFixRuntimeDownConfig());
         yield return new WaitUntil(() => isAssemblyHotFixRuntimeDownConfigDownOver);
@@ -113,11 +115,12 @@ public class HotFixConfigCheck : MonoBehaviour
 
     IEnumerator MetadataHotFixRuntimeDownConfig()
     {
-        UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1/HotFix/MetadataConfig/" + "MetadataConfig.json");
+        UnityWebRequest request = UnityWebRequest.Get(downPath + "HotFix/MetadataConfig/" + "MetadataConfig.json");
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
         {
             yield return new WaitForSeconds(againDownWaitTime);
+            Debug.Log(request.url);
             StartCoroutine(MetadataHotFixRuntimeDownConfig());
         }
         else
@@ -131,8 +134,11 @@ public class HotFixConfigCheck : MonoBehaviour
     {
         if (index <= metadataHotFixRuntimeDownConfigTable.Count - 1)
         {
-            string localFilePath = Application.streamingAssetsPath + "/" + metadataHotFixRuntimeDownConfigTable[index].Path + metadataHotFixRuntimeDownConfigTable[index].Name;
+            string localFilePath = General.GetDeviceStoragePath() + "/" + metadataHotFixRuntimeDownConfigTable[index].Path + metadataHotFixRuntimeDownConfigTable[index].Name;
+            Debug.Log(localFilePath);
             UnityWebRequest request = UnityWebRequest.Get(localFilePath);
+            Debug.Log(request.url);
+            Debug.Log(File.Exists(localFilePath));
             yield return request.SendWebRequest();
             if (request.responseCode != 200)
             {
@@ -158,7 +164,7 @@ public class HotFixConfigCheck : MonoBehaviour
 
     IEnumerator AssemblyHotFixRuntimeDownConfig()
     {
-        UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1/HotFixRuntime/AssemblyConfig/" + "AssemblyConfig.json");
+        UnityWebRequest request = UnityWebRequest.Get(downPath + "HotFixRuntime/AssemblyConfig/" + "AssemblyConfig.json");
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
         {
@@ -174,7 +180,7 @@ public class HotFixConfigCheck : MonoBehaviour
 
     IEnumerator AssemblyHotFixRuntimeDownConfigLocalCheck()
     {
-        string localFilePath = Application.streamingAssetsPath + "/" + assemblyHotFixRuntimeDownConfig.Path + assemblyHotFixRuntimeDownConfig.Name;
+        string localFilePath = General.GetDeviceStoragePath() + "/" + assemblyHotFixRuntimeDownConfig.Path + assemblyHotFixRuntimeDownConfig.Name;
         UnityWebRequest request = UnityWebRequest.Get(localFilePath);
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
@@ -195,7 +201,7 @@ public class HotFixConfigCheck : MonoBehaviour
 
     IEnumerator GameRootStartHotFixRuntimeDownConfig()
     {
-        UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1/HotFixRuntime/GameRootStartAssetBundleConfig/" + "GameRootStartConfig.json");
+        UnityWebRequest request = UnityWebRequest.Get(downPath + "HotFixRuntime/GameRootStartAssetBundleConfig/" + "GameRootStartConfig.json");
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
         {
@@ -211,7 +217,7 @@ public class HotFixConfigCheck : MonoBehaviour
 
     IEnumerator GameRootStartHotFixRuntimeDownConfigLocalCheck()
     {
-        string localFilePath = Application.streamingAssetsPath + "/" + gameRootStartHotFixRuntimeDownConfig.Path + gameRootStartHotFixRuntimeDownConfig.Name;
+        string localFilePath = General.GetDeviceStoragePath() + "/" + gameRootStartHotFixRuntimeDownConfig.Path + gameRootStartHotFixRuntimeDownConfig.Name;
 
         UnityWebRequest request = UnityWebRequest.Get(localFilePath);
         yield return request.SendWebRequest();
@@ -233,10 +239,11 @@ public class HotFixConfigCheck : MonoBehaviour
 
     IEnumerator ServerResourcesCount()
     {
-        UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1/HotFixRuntime/" + "HotFixServerResourcesCount.json");
+        UnityWebRequest request = UnityWebRequest.Get(downPath + "HotFixRuntime/" + "HotFixServerResourcesCount.json");
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
         {
+            Debug.Log(request.url);
             yield return new WaitForSeconds(againDownWaitTime);
             StartCoroutine(ServerResourcesCount());
         }
@@ -254,7 +261,7 @@ public class HotFixConfigCheck : MonoBehaviour
     {
         if (index <= hotFixAssetAssetBundleSceneConfigTable.Count - 1)
         {
-            UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1/HotFixRuntime/HotFixAssetBundleConfig/" + hotFixAssetAssetBundleSceneConfigTable[index] + ".json");
+            UnityWebRequest request = UnityWebRequest.Get(downPath + "HotFixRuntime/HotFixAssetBundleConfig/" + hotFixAssetAssetBundleSceneConfigTable[index] + ".json");
             yield return request.SendWebRequest();
             if (request.responseCode != 200)
             {
@@ -291,9 +298,9 @@ public class HotFixConfigCheck : MonoBehaviour
             }
 
             string localPathCacheName = hotFixAssetAssetBundleSceneConfig.sceneHotFixAssetAssetBundleAssetConfig.assetBundleName + ".json.Cache";
-            SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundleConfig", localPathCacheName, JsonMapper.ToJson(hotFixAssetAssetBundleSceneConfig));
+            SaveTextToLoad(General.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", localPathCacheName, JsonMapper.ToJson(hotFixAssetAssetBundleSceneConfig));
 
-            HotFixConfigDown.Instance.replaceCacheFile.Add(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundleConfig/" + localPathCacheName);
+            HotFixConfigDown.Instance.replaceCacheFile.Add(General.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + localPathCacheName);
         }
 
         return hotFixAssetAssetBundleAssetConfigs;
@@ -303,7 +310,7 @@ public class HotFixConfigCheck : MonoBehaviour
     {
         if (index <= hotFixAssetAssetBundleAssetConfigs.Count - 1)
         {
-            string localFilePath = Application.streamingAssetsPath + "/" + hotFixAssetAssetBundleAssetConfigs[index].assetBundlePath + hotFixAssetAssetBundleAssetConfigs[index].assetBundleName;
+            string localFilePath = General.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleAssetConfigs[index].assetBundlePath + hotFixAssetAssetBundleAssetConfigs[index].assetBundleName;
 
             UnityWebRequest request = UnityWebRequest.Get(localFilePath);
             yield return request.SendWebRequest();

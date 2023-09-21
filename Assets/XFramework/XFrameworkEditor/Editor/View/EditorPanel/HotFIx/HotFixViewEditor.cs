@@ -1,14 +1,17 @@
+using System;
 using System.IO;
+using HybridCLR.Editor.Commands;
+using LitJson;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace XFramework
 {
     public class HotFixViewEditor : BaseEditor
     {
-        [LabelText("HotFixCode路径-保存读取用")] [HideInInspector]
-        public string HotFixCodeFilePath;
+        [LabelText("打包平台")] public BuildTarget targetBuildTarget = BuildTarget.StandaloneWindows;
 
         [TabGroup("HotFix", "HotFixView")] [LabelText("HotFixViewPrefab")]
         public Object HotFixView;
@@ -21,8 +24,28 @@ namespace XFramework
         [Button("HotFixCode配置输出")]
         public void HotFixCodeConfigOut()
         {
-            Debug.Log("HotFixCode配置输出");
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/StandaloneWindows64/XFrameworkHotFix.dll",
+            OnSaveConfig();
+            CompileDllCommand.CompileDllActiveBuildTarget();
+            string platformName = string.Empty;
+            switch (targetBuildTarget)
+            {
+                case BuildTarget.StandaloneWindows:
+                    platformName = "StandaloneWindows64";
+                    break;
+                case BuildTarget.WSAPlayer:
+                    platformName = "WSAPlayer";
+                    break;
+            }
+
+            if (!Directory.Exists("Assets/StreamingAssets/HotFix/HotFixCode"))
+            {
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFix/HotFixCode");
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+#endif
+            }
+
+            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/XFrameworkHotFix.dll",
                 Application.streamingAssetsPath + "/HotFix/HotFixCode/" + "XFrameworkHotFix.dll.bytes", true);
             string path = "Assets/StreamingAssets/HotFix/HotFixCode/XFrameworkHotFix.dll.bytes";
 
@@ -31,21 +54,33 @@ namespace XFramework
             hotFixAssetConfig.md5 = FileOperation.GetMD5HashFromFile(path);
             hotFixAssetConfig.size = FileOperation.GetFileSize(path).ToString();
             FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFix/HotFixCodeConfig/" + "HotFixCodeConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
+            Debug.Log("HotFixCode配置输出");
+
+            OnLoadConfig();
         }
 
         [TabGroup("HotFix", "HotFixView")]
         [Button("HotFixView配置输出")]
         public void HotFixViewConfigOut()
         {
+            OnSaveConfig();
             if (HotFixView == null)
             {
                 Debug.Log("配置信息错误");
                 return;
             }
 
+            if (!Directory.Exists("Assets/StreamingAssets/HotFix/HotFixView"))
+            {
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFix/HotFixView");
+#if UNITY_EDITOR
+                AssetDatabase.Refresh();
+#endif
+            }
+
             AssetImporter hotFixViewImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(HotFixView));
             hotFixViewImporter.assetBundleName = "HotFix/HotFixView/hotfixview";
-            BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.ChunkBasedCompression, BuildTarget.StandaloneWindows);
+            BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.ChunkBasedCompression, targetBuildTarget);
             DataFrameComponent.RemoveAllAssetBundleName();
             UnityEditor.AssetDatabase.Refresh();
             Debug.Log("HotFixView配置输出");
@@ -57,6 +92,7 @@ namespace XFramework
             hotFixAssetConfig.md5 = FileOperation.GetMD5HashFromFile(filePath);
             hotFixAssetConfig.size = FileOperation.GetFileSize(filePath).ToString();
             FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFix/HotFixViewConfig/" + "HotFixViewConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
+            OnLoadConfig();
         }
 
         public override void OnDisable()
@@ -76,8 +112,14 @@ namespace XFramework
 
         public override void OnLoadConfig()
         {
-            HotFixViewEditor hotFixViewEditor = JsonUtility.FromJson<HotFixViewEditor>(FileOperation.GetTextToLoad(General.assetRootPath, "HotFixView.json"));
+            if (!File.Exists(General.assetRootPath + "HotFixView.json"))
+            {
+                return;
+            }
+
+            HotFixViewEditor hotFixViewEditor = JsonMapper.ToObject<HotFixViewEditor>(FileOperation.GetTextToLoad(General.assetRootPath, "HotFixView.json"));
             this.HotFixView = AssetDatabase.LoadAssetAtPath<Object>(hotFixViewEditor.HotFixViewFilePath);
+            this.targetBuildTarget = hotFixViewEditor.targetBuildTarget;
         }
 
         public override void OnInit()

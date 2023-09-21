@@ -11,6 +11,8 @@ using XFramework;
 public class SceneHotfixAssetManager : BaseEditor
 {
 #if UNITY_EDITOR
+    [LabelText("打包平台")] public BuildTarget targetBuildTarget = BuildTarget.StandaloneWindows;
+
     [LabelText("场景热更资源文件-切换场景后会自动更换配置文件,无需手动切换")] [AssetList] [InlineEditor()]
     public SceneAssetBundleAsset SceneAssetBundleAsset;
 
@@ -327,6 +329,20 @@ public class SceneHotfixAssetManager : BaseEditor
     [Button("打包AssetBundle并生成配置表", ButtonSizes.Medium)]
     public void BundleSceneDataAndGenerateBuildConfig()
     {
+        if (SceneAssetBundleAsset == null)
+        {
+            Debug.Log("无配置文件");
+            return;
+        }
+
+        if (!Directory.Exists("Assets/StreamingAssets/HotFixRuntime/HotFixAssetBundle"))
+        {
+            Directory.CreateDirectory("Assets/StreamingAssets/HotFixRuntime/HotFixAssetBundle");
+#if UNITY_EDITOR
+            AssetDatabase.Refresh();
+#endif
+        }
+
         //检查场景中热更资源配置是否正确
         //HotFixAssetPathConfig 只能作为父节点存在,上面任何父物体不能再次包含HotFixAssetPathConfig,保证唯一性
         //设置场景中所有路径配置信息
@@ -426,10 +442,10 @@ public class SceneHotfixAssetManager : BaseEditor
                         }
                     }
 
-                    if (!scenePrefabConfig.resourceUpdate)
+                    /*if (!scenePrefabConfig.resourceUpdate)
                     {
                         continue;
-                    }
+                    }*/
 
                     AssetImporter assetImporter = AssetImporter.GetAtPath(scenePrefabConfig.prefabPath);
                     HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabConfig.prefabPath);
@@ -439,7 +455,7 @@ public class SceneHotfixAssetManager : BaseEditor
 
 
             UnityEditor.AssetDatabase.Refresh();
-            UnityEditor.BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", UnityEditor.BuildAssetBundleOptions.ChunkBasedCompression /*| BuildAssetBundleOptions.DisableWriteTypeTree*/, UnityEditor.BuildTarget.StandaloneWindows);
+            UnityEditor.BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", UnityEditor.BuildAssetBundleOptions.ChunkBasedCompression /*| BuildAssetBundleOptions.DisableWriteTypeTree*/, targetBuildTarget);
 
             UnityEditor.AssetDatabase.Refresh();
 
