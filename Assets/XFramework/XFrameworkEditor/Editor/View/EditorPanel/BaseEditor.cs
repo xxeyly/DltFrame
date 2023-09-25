@@ -1,8 +1,11 @@
-﻿#if UNITY_EDITOR
+﻿using UnityEditor;
+using UnityEditor.Build;
+
+#if UNITY_EDITOR
 
 namespace XFramework
 {
-    public abstract class BaseEditor
+    public abstract class BaseEditor 
     {
         public abstract void OnDisable();
         public abstract void OnCreateConfig();

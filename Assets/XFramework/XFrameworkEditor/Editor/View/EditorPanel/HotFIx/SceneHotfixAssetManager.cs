@@ -11,12 +11,11 @@ using XFramework;
 public class SceneHotfixAssetManager : BaseEditor
 {
 #if UNITY_EDITOR
-    [LabelText("打包平台")] public BuildTarget targetBuildTarget = BuildTarget.StandaloneWindows;
-
     [LabelText("场景热更资源文件-切换场景后会自动更换配置文件,无需手动切换")] [AssetList] [InlineEditor()]
     public SceneAssetBundleAsset SceneAssetBundleAsset;
 
     [LabelText("当前编辑场景")] private Scene currentrScene;
+
 
     public void Update()
     {
@@ -455,7 +454,7 @@ public class SceneHotfixAssetManager : BaseEditor
 
 
             UnityEditor.AssetDatabase.Refresh();
-            UnityEditor.BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", UnityEditor.BuildAssetBundleOptions.ChunkBasedCompression /*| BuildAssetBundleOptions.DisableWriteTypeTree*/, targetBuildTarget);
+            UnityEditor.BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", UnityEditor.BuildAssetBundleOptions.ChunkBasedCompression /*| BuildAssetBundleOptions.DisableWriteTypeTree*/, EditorUserBuildSettings.activeBuildTarget);
 
             UnityEditor.AssetDatabase.Refresh();
 
@@ -525,7 +524,12 @@ public class SceneHotfixAssetManager : BaseEditor
     {
     }
 
+    private void OnActiveBuildTargetChanged()
+    {
+    }
+
     public override void OnInit()
     {
     }
+   
 }

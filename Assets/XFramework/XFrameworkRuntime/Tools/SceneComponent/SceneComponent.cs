@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace XFramework
 {
+    [RequireComponent(typeof(HotFixAssetPathConfig))]
     public abstract partial class SceneComponent : SerializedMonoBehaviour, ISceneComponent
     {
         public abstract void StartComponent();

@@ -1,11 +1,8 @@
 ﻿#if UNITY_EDITOR
 
 using System;
-using System.Collections.Generic;
-using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
-using UnityEngine;
 
 namespace XFramework
 {
@@ -44,6 +41,7 @@ namespace XFramework
             OnCreateConfig();
             OnLoadConfig();
         }
+
     }
 }
 #endif

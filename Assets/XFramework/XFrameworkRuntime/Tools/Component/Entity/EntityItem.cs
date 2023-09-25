@@ -6,6 +6,7 @@ using UnityEngine;
 namespace XFramework
 {
     [Serializable]
+    [RequireComponent(typeof(HotFixAssetPathConfig))]
     public partial class EntityItem : MonoBehaviour
     {
         [LabelText("实体名称")] public string entityName;

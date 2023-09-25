@@ -54,6 +54,7 @@ namespace XFramework
             OnCreateConfig();
             OnLoadConfig();
         }
+  
     }
 }
 #endif

@@ -253,6 +253,7 @@ namespace XFramework
         public override void OnInit()
         {
         }
+     
     }
 }
 #endif

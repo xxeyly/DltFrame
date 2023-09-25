@@ -11,8 +11,6 @@ namespace XFramework
 {
     public class HotFixViewEditor : BaseEditor
     {
-        [LabelText("打包平台")] public BuildTarget targetBuildTarget = BuildTarget.StandaloneWindows;
-
         [TabGroup("HotFix", "HotFixView")] [LabelText("HotFixViewPrefab")]
         public Object HotFixView;
 
@@ -27,7 +25,7 @@ namespace XFramework
             OnSaveConfig();
             CompileDllCommand.CompileDllActiveBuildTarget();
             string platformName = string.Empty;
-            switch (targetBuildTarget)
+            switch (EditorUserBuildSettings.activeBuildTarget)
             {
                 case BuildTarget.StandaloneWindows:
                     platformName = "StandaloneWindows64";
@@ -80,7 +78,7 @@ namespace XFramework
 
             AssetImporter hotFixViewImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(HotFixView));
             hotFixViewImporter.assetBundleName = "HotFix/HotFixView/hotfixview";
-            BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.ChunkBasedCompression, targetBuildTarget);
+            BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.ChunkBasedCompression, EditorUserBuildSettings.activeBuildTarget);
             DataFrameComponent.RemoveAllAssetBundleName();
             UnityEditor.AssetDatabase.Refresh();
             Debug.Log("HotFixView配置输出");
@@ -119,11 +117,11 @@ namespace XFramework
 
             HotFixViewEditor hotFixViewEditor = JsonMapper.ToObject<HotFixViewEditor>(FileOperation.GetTextToLoad(General.assetRootPath, "HotFixView.json"));
             this.HotFixView = AssetDatabase.LoadAssetAtPath<Object>(hotFixViewEditor.HotFixViewFilePath);
-            this.targetBuildTarget = hotFixViewEditor.targetBuildTarget;
         }
 
         public override void OnInit()
         {
         }
+     
     }
 }

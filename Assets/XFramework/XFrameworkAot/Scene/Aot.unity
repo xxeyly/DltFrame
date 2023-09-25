@@ -729,7 +729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progress: {fileID: 1120872902}
   progressPercentage: {fileID: 1749525378}
-  downPath: http://192.168.137.1/WASPlayer/
+  downPath: http://192.168.21.13/WASPlayer/
   totalDownload: {fileID: 997395899}
   currentDownSpeed: {fileID: 729629852}
   totalDownloadValue: 0

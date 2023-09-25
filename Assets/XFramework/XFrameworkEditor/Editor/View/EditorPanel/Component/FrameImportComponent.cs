@@ -88,7 +88,6 @@ namespace XFramework
             OnLoadConfig();
         }
 
-
         public static void Import(string packagePath)
         {
             AssetDatabase.ImportPackage(packagePath, true);

@@ -14,8 +14,6 @@ public class AssetBundleManager : BaseEditor
 
     [LabelText("打包存放地址")] [FolderPath] public string buildSavePath;
     [LabelText("打包压缩方式")] public BuildAssetBundleOptions targetBuildAssetBundleOptions = BuildAssetBundleOptions.None;
-    [LabelText("打包平台")] public BuildTarget targetBuildTarget = BuildTarget.StandaloneWindows;
-
     [LabelText("Assembly打包")] public bool AssemblyParticipatePackaging;
     [LabelText("MetaAssembly打包")] public bool MetaAssemblyParticipatePackaging;
 
@@ -89,7 +87,7 @@ public class AssetBundleManager : BaseEditor
         {
             CompileDllCommand.CompileDllActiveBuildTarget();
             string platformName = string.Empty;
-            switch (targetBuildTarget)
+            switch (EditorUserBuildSettings.activeBuildTarget)
             {
                 case BuildTarget.StandaloneWindows:
                     platformName = "StandaloneWindows64";
@@ -133,6 +131,7 @@ public class AssetBundleManager : BaseEditor
             {
                 continue;
             }
+
             if (!Directory.Exists("Assets/StreamingAssets/HotFixRuntime/GameRootStartAssetBundle"))
             {
                 Directory.CreateDirectory("Assets/StreamingAssets/HotFixRuntime/GameRootStartAssetBundle");
@@ -144,7 +143,7 @@ public class AssetBundleManager : BaseEditor
             AssetImporter gameRootStartImporter = null;
             gameRootStartImporter = AssetImporter.GetAtPath(bundleFileConfig.filePath);
             gameRootStartImporter.assetBundleName = "GameRootStartAssetBundle/GameRootStart";
-            BuildPipeline.BuildAssetBundles(buildSavePath, targetBuildAssetBundleOptions, targetBuildTarget);
+            BuildPipeline.BuildAssetBundles(buildSavePath, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
             DataFrameComponent.RemoveAllAssetBundleName();
             File.Delete(buildSavePath + "/" + "GameRootStartAssetBundle/gamerootstart.manifest");
             UnityEditor.AssetDatabase.Refresh();
@@ -167,6 +166,7 @@ public class AssetBundleManager : BaseEditor
                 AssetDatabase.Refresh();
 #endif
             }
+
             if (!Directory.Exists("Assets/StreamingAssets/HotFix/MetadataConfig"))
             {
                 Directory.CreateDirectory("Assets/StreamingAssets/HotFix/MetadataConfig");
@@ -179,7 +179,7 @@ public class AssetBundleManager : BaseEditor
             foreach (string metadataName in AOTGenericReferences.PatchedAOTAssemblyList)
             {
                 string platformName = string.Empty;
-                switch (targetBuildTarget)
+                switch (EditorUserBuildSettings.activeBuildTarget)
                 {
                     case BuildTarget.StandaloneWindows:
                         platformName = "StandaloneWindows64";
@@ -277,7 +277,6 @@ public class AssetBundleManager : BaseEditor
             AssetBundleManager loadAssetBundleManager = JsonMapper.ToObject<AssetBundleManager>(FileOperation.GetTextToLoad(Application.dataPath + "/Config/BuildAssetBundleConfig.json"));
             buildSavePath = loadAssetBundleManager.buildSavePath;
             targetBuildAssetBundleOptions = loadAssetBundleManager.targetBuildAssetBundleOptions;
-            targetBuildTarget = loadAssetBundleManager.targetBuildTarget;
             GameRootStartBundleDirectoryConfig = loadAssetBundleManager.GameRootStartBundleDirectoryConfig;
         }
     }
@@ -285,6 +284,7 @@ public class AssetBundleManager : BaseEditor
     public override void OnInit()
     {
     }
+   
 }
 
 

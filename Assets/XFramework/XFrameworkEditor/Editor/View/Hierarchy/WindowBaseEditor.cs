@@ -49,8 +49,6 @@ namespace XFramework
             Undo.RegisterCreatedObjectUndo(windowView, "Empty WindowView");
             Vector2 windowSize = uiCanvas.GetComponent<CanvasScaler>().referenceResolution;
             windowView.AddComponent<RectTransform>().sizeDelta = Vector2.zero;
-            // windowView.AddComponent<GenerationBaseWindow>().Init();
-            windowView.AddComponent<BaseWindowGenerateScripts>();
             //Window目录
             GameObject window = new GameObject("Window");
             window.AddComponent<RectTransform>().sizeDelta = windowSize;

@@ -7,14 +7,14 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XFramework;
-public class HotFixAssetPathConfig : SerializedMonoBehaviour
+
+public class HotFixAssetPathConfig : MonoBehaviour
 {
     [LabelText("生成路径")] public string generateHierarchyPath;
     [LabelText("预制体路径")] public string prefabPath;
     [LabelText("Ab包路径")] public string assetBundlePath;
 #if UNITY_EDITOR
     [Button("生成路径", ButtonSizes.Medium)]
-    [LabelText("重命名")]
     [GUIColor(0, 1, 0)]
     public void SetPath()
     {
@@ -65,7 +65,20 @@ public class HotFixAssetPathConfig : SerializedMonoBehaviour
     [Button("保存预制体")]
     public void ApplyPrefab()
     {
-        PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
+        if (!File.Exists(prefabPath))
+        {
+            PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
+        }
+        else
+        {
+            PrefabUtility.ApplyPrefabInstance(gameObject, InteractionMode.AutomatedAction);
+        }
+
+        GameObject prefabObj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        prefabObj.transform.localPosition = transform.localPosition;
+        prefabObj.transform.localEulerAngles = transform.localEulerAngles;
+        prefabObj.transform.localScale = transform.localScale;
+        AssetDatabase.SaveAssets();
     }
 
     /// <summary>
