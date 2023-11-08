@@ -4,7 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+#if HybridCLR
 using HybridCLR;
+#endif
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -51,8 +54,10 @@ public class HotFixInit
             }
 
             byte[] dllBytes = File.ReadAllBytes($"{General.GetDeviceStoragePath()}/{"HotFix/Metadata/" + aotDllName}.bytes");
+#if HybridCLR
             LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
             Debug.Log($"LoadMetadataForAOTAssembly:{aotDllName}. ret:{err}");
+#endif
         }
     }
 
@@ -75,8 +80,10 @@ public class HotFixInit
         foreach (var aotDllName in aotDllList)
         {
             byte[] dllBytes = File.ReadAllBytes($"{General.GetDeviceStoragePath()}/{"HotFix/Metadata/" + aotDllName}.bytes");
+#if HybridCLR
             LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
             Debug.Log($"LoadMetadataForAOTAssembly:{aotDllName}. ret:{err}");
+#endif
         }
     }
 

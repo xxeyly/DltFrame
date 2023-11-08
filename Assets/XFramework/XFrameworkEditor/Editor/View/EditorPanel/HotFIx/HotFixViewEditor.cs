@@ -1,3 +1,4 @@
+#if HybridCLR
 using System;
 using System.IO;
 using HybridCLR.Editor.Commands;
@@ -125,3 +126,4 @@ namespace XFramework
      
     }
 }
+#endif

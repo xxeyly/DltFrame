@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+#if HybridCLR
 using HybridCLR.Editor.Commands;
 using LitJson;
 using Sirenix.OdinInspector;
@@ -313,3 +314,4 @@ public class BundleFileConfig
     [HorizontalGroup("资源优化")] [HideLabel] [TableColumnWidth(width: 100, resizable: false)]
     public bool compress = false;
 }
+#endif

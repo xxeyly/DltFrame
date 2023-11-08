@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XFramework;
-
+#if HybridCLR
 public class SceneHotfixAssetManager : BaseEditor
 {
 #if UNITY_EDITOR
@@ -533,3 +533,4 @@ public class SceneHotfixAssetManager : BaseEditor
     }
    
 }
+#endif

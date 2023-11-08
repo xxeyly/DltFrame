@@ -23,13 +23,13 @@ namespace XFramework
             GetWindow<FrameMenu>().Show();
         }
 
-
+#if HybridCLR
         [MenuItem("Xframe/热更界面")]
         private static void OpenHotFixWindow()
         {
             GetWindow<HotFixMenu>().Show();
         }
-
+#endif
         protected override void OnDestroy()
         {
             base.OnDestroy();
@@ -106,7 +106,7 @@ namespace XFramework
                 }
             }
         }
-        
+
 
         //音频组件
         private AudioComponentEditor _audioComponentEditor = new AudioComponentEditor();

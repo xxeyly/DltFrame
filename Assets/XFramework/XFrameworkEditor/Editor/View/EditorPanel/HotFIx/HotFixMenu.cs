@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Sirenix.OdinInspector.Editor;
+#if HybridCLR
 
 namespace XFramework
 {
@@ -96,3 +97,4 @@ namespace XFramework
         }
     }
 }
+#endif
