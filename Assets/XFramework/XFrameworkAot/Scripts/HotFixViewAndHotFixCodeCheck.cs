@@ -4,23 +4,37 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
+
+
+//下载速度
+public delegate void HotFixViewAndHotFixCodeDownSpeed(float downSpeed);
+
+//当前下载量
+public delegate void HotFixViewAndHotFixCodeCurrentDownValue(double downValue);
+
+//总下载量
+public delegate void HotFixViewAndHotFixCodeTotalDownValue(double downValue);
 
 public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 {
-    [LabelText("下载UI进度条")] public Slider progress;
-    [LabelText("下载进度文本")] public Text progressPercentage;
     [LabelText("下载地址")] public string downPath = "http://127.0.0.1/";
-    [LabelText("总的下载量")] public Text totalDownload;
-    [LabelText("当前下载速度")] public Text currentDownSpeed;
     [LabelText("总的下载量数据")] public double totalDownloadValue;
     [LabelText("当前下载量数据")] public double currentDownloadValue;
-    [BoxGroup("HotFixView")] public HotFixAssetConfig hotFixViewHotFixAssetConfig;
+
+    //下载速度
+    public static HotFixViewAndHotFixCodeDownSpeed HotFixViewAndHotFixCodeDownSpeed;
+
+    //当前下载量
+    public static HotFixViewAndHotFixCodeCurrentDownValue HotFixViewAndHotFixCodeCurrentDownValue;
+
+    //总的下载量
+    public static HotFixViewAndHotFixCodeTotalDownValue HotFixViewAndHotFixCodeTotalDownValue;
+
+    [BoxGroup("HotFixView")] [LabelText("HotFixView文件数据")]
+    public HotFixAssetConfig hotFixViewHotFixAssetConfig;
 
     [LabelText("HotFixViewAssetConfig下载完毕")] [BoxGroup("HotFixView")]
     public bool hotFixViewConfigDownOver;
@@ -34,7 +48,8 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     [BoxGroup("HotFixView")] [LabelText("HotFixView下载完毕")]
     public bool hotFixViewDownOver;
 
-    [BoxGroup("HotFixCode")] public HotFixAssetConfig hotFixCodeHotFixAssetConfig;
+    [BoxGroup("HotFixCode")] [LabelText("HotFixCode文件数据")]
+    public HotFixAssetConfig hotFixCodeHotFixAssetConfig;
 
     [BoxGroup("HotFixCode")] [LabelText("HotFixCodeAssetConfig下载完毕")]
     public bool hotFixCodeConfigDownOver;
@@ -48,13 +63,14 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     [BoxGroup("HotFixCode")] [LabelText("HotFixCode下载完毕")]
     public bool hotFixCodeDownOver;
 
-    [LabelText("下载大小")] private Dictionary<string, int> _hotFixAssetConfigDownSize = new Dictionary<string, int>();
+    [LabelText("当前检测时间")] [SerializeField] private float currentCheckTime;
+    [LabelText("检测时间")] [SerializeField] private float checkTime = 1;
+    [LabelText("下载大小")] [SerializeField] private Dictionary<string, int> _hotFixAssetConfigDownSize = new Dictionary<string, int>();
     [LabelText("下载流")] private FileStream _hotFixFileStream;
     [LabelText("下载请求")] private UnityWebRequest _hotFixUnityWebRequest;
     [LabelText("当前下载HotFixAssetConfig")] public HotFixAssetConfig currentOperationHotFixAssetConfig;
     [LabelText("缓存更改路径")] public List<string> replaceCacheFile = new List<string>();
-    private float time;
-    private float _timer = 1;
+
 
     void Start()
     {
@@ -89,7 +105,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         else
         {
             hotFixViewDownOver = true;
-            UpdateView();
         }
 
         yield return new WaitUntil(() => hotFixViewDownOver);
@@ -107,7 +122,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         else
         {
             hotFixCodeDownOver = true;
-            UpdateView();
         }
 
         yield return new WaitUntil(() => hotFixCodeDownOver);
@@ -128,7 +142,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         else
         {
             hotFixViewHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(hotFixViewConfigWebRequest.downloadHandler.text);
-            UpdateView();
             hotFixViewConfigDownOver = true;
         }
     }
@@ -146,7 +159,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
             if (hotFixViewLoadLocalFile.downloadHandler.data.Length > 0)
             {
-                string localFileMD5 = GetMD5HashByte(hotFixViewLoadLocalFile.downloadHandler.data);
+                string localFileMD5 = General.GetMD5HashByte(hotFixViewLoadLocalFile.downloadHandler.data);
                 if (hotFixViewHotFixAssetConfig.md5 != localFileMD5)
                 {
                     hotFixViewIsNeedDown = true;
@@ -165,7 +178,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         if (hotFixViewIsNeedDown)
         {
             totalDownloadValue += double.Parse(hotFixViewHotFixAssetConfig.size);
-            totalDownload.text = FileSizeString(currentDownloadValue) + "/" + FileSizeString(totalDownloadValue);
+            HotFixViewAndHotFixCodeTotalDownValue?.Invoke(totalDownloadValue);
         }
 
         hotFixViewLocalCheck = true;
@@ -183,8 +196,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         else
         {
             hotFixCodeHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(hotFixCodeConfigWebRequest.downloadHandler.text);
-            UpdateView();
-
             hotFixCodeConfigDownOver = true;
         }
     }
@@ -202,7 +213,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
             if (hotFixCodeLoadLocalFile.downloadHandler.data.Length > 0)
             {
-                if (hotFixCodeHotFixAssetConfig.md5 != GetMD5HashByte(hotFixCodeLoadLocalFile.downloadHandler.data))
+                if (hotFixCodeHotFixAssetConfig.md5 != General.GetMD5HashByte(hotFixCodeLoadLocalFile.downloadHandler.data))
                 {
                     hotFixCodeIsNeedDown = true;
                 }
@@ -220,31 +231,12 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         if (hotFixCodeIsNeedDown)
         {
             totalDownloadValue += double.Parse(hotFixCodeHotFixAssetConfig.size);
-            totalDownload.text = FileSizeString(currentDownloadValue) + "/" + FileSizeString(totalDownloadValue);
+            HotFixViewAndHotFixCodeTotalDownValue?.Invoke(totalDownloadValue);
         }
 
         hotFixCodeLocalCheck = true;
     }
 
-    private static string GetMD5HashFromFile(string fileName)
-    {
-        if (File.Exists(fileName))
-        {
-            FileStream file = new FileStream(fileName, FileMode.Open);
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] retVal = md5.ComputeHash(file);
-            file.Close();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < retVal.Length; i++)
-            {
-                sb.Append(retVal[i].ToString("x2"));
-            }
-
-            return sb.ToString();
-        }
-
-        return null;
-    }
 
     //获得文件大小
     private static long GetFileSize(string fileName)
@@ -299,7 +291,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         if (File.Exists(downFileCachePath))
         {
             byte[] localCache = File.ReadAllBytes(downFileCachePath);
-            localMd5 = GetMD5HashByte(localCache);
+            localMd5 = General.GetMD5HashByte(localCache);
         }
 
         //文件流
@@ -314,7 +306,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             _hotFixFileStream.Dispose();
             _hotFixFileStream = null;
             _hotFixUnityWebRequest = null;
-            UpdateView();
             action.Invoke();
         }
         else
@@ -325,8 +316,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             {
                 Debug.Log("已有缓存文件,继续下载:" + hotFixAssetConfig.name);
                 currentDownloadValue += _hotFixFileStream.Length;
-                totalDownload.text = FileSizeString(currentDownloadValue) + "/" + FileSizeString(totalDownloadValue);
-                UpdateView();
+                HotFixViewAndHotFixCodeCurrentDownValue?.Invoke(currentDownloadValue);
                 _hotFixUnityWebRequest.SetRequestHeader("Range", "bytes=" + _hotFixFileStream.Length + "-");
             }
             else
@@ -340,7 +330,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             _hotFixFileStream.Dispose();
             _hotFixFileStream = null;
             _hotFixAssetConfigDownSize[hotFixAssetConfig.name] = (int)GetFileSize(downFileCachePath);
-            string localFileMd5 = GetMD5HashFromFile(downFileCachePath);
+            string localFileMd5 = General.GetMD5HashFromFile(downFileCachePath);
             // Debug.Log(_hotFixUnityWebRequest.responseCode);
             if (_hotFixUnityWebRequest.responseCode != 200 && _hotFixUnityWebRequest.responseCode != 206)
             {
@@ -384,18 +374,18 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{General.GetDeviceStoragePath()}/HotFix/HotFixCode/XFrameworkHotFix.dll.bytes"));
 #else
         // Editor下无需加载，直接查找获得HotUpdate程序集  
-        Assembly hotFix = System.AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "XFrameworkHotFix");
+        Assembly hotFix = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "XFrameworkHotFix");
 #endif
         Type type = hotFix.GetType("HotFixInit");
-        type.GetMethod("Init").Invoke(null, null);
+        type.GetMethod("Init")?.Invoke(null, null);
     }
 
     private void Update()
     {
-        time += Time.deltaTime;
-        if (time >= _timer)
+        currentCheckTime += Time.deltaTime;
+        if (currentCheckTime >= checkTime)
         {
-            time = 0;
+            currentCheckTime = 0;
             // UpdateHotFixViewDownProgress();
             if (_hotFixFileStream != null && _hotFixUnityWebRequest != null)
             {
@@ -421,10 +411,9 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             {
                 fileStream.Write(_hotFixUnityWebRequest.downloadHandler.data, _hotFixAssetConfigDownSize[fileName], newDownSize);
                 _hotFixAssetConfigDownSize[fileName] = downSize;
-                currentDownSpeed.text = FileSizeString(newDownSize);
+                HotFixViewAndHotFixCodeDownSpeed?.Invoke(newDownSize);
                 currentDownloadValue += newDownSize;
-                totalDownload.text = FileSizeString(currentDownloadValue) + "/" + FileSizeString(totalDownloadValue);
-                UpdateView();
+                HotFixViewAndHotFixCodeCurrentDownValue?.Invoke(currentDownloadValue);
             }
             else
             {
@@ -437,69 +426,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
     }
 
-
-    /// <summary>
-    /// 转换字节大小、长度, 根据字节大小范围返回KB, MB, GB自适长度
-    /// </summary>
-    /// <param name="length">传入字节大小</param>
-    /// <returns></returns>
-    private string FileSizeString(double length)
-    {
-        int byteConversion = 1024;
-        double bytes = Convert.ToDouble(length);
-
-        // 超过EB的单位已经没有实际转换意义了, 太大了, 忽略不用
-        if (bytes >= Math.Pow(byteConversion, 6)) // EB
-        {
-            return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 6), 2), " EB");
-        }
-
-        if (bytes >= Math.Pow(byteConversion, 5)) // PB
-        {
-            return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 5), 2), " PB");
-        }
-        else if (bytes >= Math.Pow(byteConversion, 4)) // TB
-        {
-            return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 4), 2), " TB");
-        }
-        else if (bytes >= Math.Pow(byteConversion, 3)) // GB
-        {
-            return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 3), 2), " GB");
-        }
-        else if (bytes >= Math.Pow(byteConversion, 2)) // MB
-        {
-            return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 2), 2), " MB");
-        }
-        else if (bytes >= byteConversion) // KB
-        {
-            return string.Concat(Math.Round(bytes / byteConversion, 2), " KB");
-        }
-        else // Bytes
-        {
-            return string.Concat(bytes, " Bytes");
-        }
-    }
-
-    private string GetMD5HashByte(byte[] fileByte)
-    {
-        MD5 md5 = new MD5CryptoServiceProvider();
-        byte[] retVal = md5.ComputeHash(fileByte);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < retVal.Length; i++)
-        {
-            sb.Append(retVal[i].ToString("x2"));
-        }
-
-        return sb.ToString();
-    }
-
-    //更新UI
-    private void UpdateView()
-    {
-        progress.value = (float)(currentDownloadValue / totalDownloadValue);
-        progressPercentage.text = (int)(currentDownloadValue / totalDownloadValue * 100) + "/" + 100;
-    }
-
+    //删除缓存文件
     private void ReplaceCacheFile()
     {
         foreach (string cachePath in replaceCacheFile)
