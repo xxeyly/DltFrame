@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/XFramework/XFrameworkAot/Scene/Aot.unity
+    path: Assets/XFramework/Aot/Scene/Aot.unity
     guid: 5183d93278945a24db316893218684b1
   - enabled: 1
-    path: Assets/XFramework/XFrameworkHotFix/Scene/HotFix.unity
+    path: Assets/XFramework/HotFix/Scene/HotFix.unity
     guid: 1898140f9db66ae40a4e4f7d25fd5be6
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: f3aee3376240e624b877e6b4e9b83442,
