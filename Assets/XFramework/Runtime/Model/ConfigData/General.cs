@@ -59,7 +59,9 @@ namespace XFramework
             typeof(MouseFrameComponent),
             typeof(TimeFrameComponent),
             typeof(ViewFrameComponent),
+#if HybridCLR
             typeof(HotFixFrameComponent),
+#endif
         };
 
 

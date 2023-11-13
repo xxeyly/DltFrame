@@ -594,7 +594,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     0: ODIN_INSPECTOR;ODIN_INSPECTOR_3
-    14: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;!HybridCLR
+    14: ODIN_INSPECTOR;ODIN_INSPECTOR_3;ODIN_INSPECTOR_3_1;!HybridCLR;UNITY_TEST;XFrameInit
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:

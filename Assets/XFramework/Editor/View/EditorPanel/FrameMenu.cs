@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Sirenix.OdinInspector.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -16,27 +17,32 @@ namespace XFramework
         {
         }
 
+#if !XFrameInit
+        [MenuItem("Xframe/框架初始化")]
+        private static void FrameInit()
+        {
+            BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+            //获取当前平台已有的宏定义
+            var symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+            //添加想要的宏定义
+            var symbolsList = symbols.Split(';').ToList();
+            if (symbolsList.Contains("XFrameInit"))
+            {
+                return;
+            }
 
+            symbolsList.Add("XFrameInit");
+            symbolsList.Add("!HybridCLR");
+            symbols = string.Join(";", symbolsList);
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, symbols);
+        }
+#endif
+
+#if XFrameInit
         [MenuItem("Xframe/框架界面")]
         private static void OpenWindow()
         {
             GetWindow<FrameMenu>().Show();
-        }
-
-#if HybridCLR
-        [MenuItem("Xframe/热更界面")]
-        private static void OpenHotFixWindow()
-        {
-            GetWindow<HotFixMenu>().Show();
-        }
-#endif
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            _audioComponentEditor.OnDisable();
-            gameRootEditor.OnDisable();
-            _frameImportComponent.OnDisable();
-            AssetDatabase.SaveAssets();
         }
 
         [MenuItem("Xframe/监听生成 &l")]
@@ -105,6 +111,23 @@ namespace XFramework
                     baseWindow.SetSetSiblingIndex();
                 }
             }
+        }
+#endif
+
+#if HybridCLR && XFrameInit
+        [MenuItem("Xframe/热更界面")]
+        private static void OpenHotFixWindow()
+        {
+            GetWindow<HotFixMenu>().Show();
+        }
+#endif
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            _audioComponentEditor.OnDisable();
+            gameRootEditor.OnDisable();
+            _frameImportComponent.OnDisable();
+            AssetDatabase.SaveAssets();
         }
 
 
