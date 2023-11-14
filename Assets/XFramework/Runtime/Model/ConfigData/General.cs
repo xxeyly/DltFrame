@@ -57,8 +57,9 @@ namespace XFramework
             typeof(AudioFrameComponent),
             typeof(HttpFrameComponent),
             typeof(MouseFrameComponent),
-            typeof(TimeFrameComponent),
+            // typeof(TimeFrameComponent),
             typeof(ViewFrameComponent),
+            typeof(UniTaskFrameComponent),
 #if HybridCLR
             typeof(HotFixFrameComponent),
 #endif

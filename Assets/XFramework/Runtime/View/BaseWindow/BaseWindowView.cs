@@ -134,7 +134,6 @@ namespace XFramework
         {
             RemoveAllListenerEvent();
             RemoveThisView();
-            RemoveTimeTask();
         }
 
         private void RemoveThisView()

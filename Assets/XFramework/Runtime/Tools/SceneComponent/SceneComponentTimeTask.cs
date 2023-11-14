@@ -13,10 +13,9 @@ namespace XFramework
         /// <param name="delay"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        protected int AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
+        protected string AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
-            int timeTaskId = TimeFrameComponent.Instance.AddTimeTask(callback, taskName, delay, count);
-            return timeTaskId;
+            return UniTaskFrameComponent.Instance.AddTask(taskName, delay, count, null, null, callback);
         }
 
         /// <summary>
@@ -27,10 +26,9 @@ namespace XFramework
         /// <param name="delay"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        protected int AddSwitchTask(List<UnityAction> callbackList, string taskName, float delay, int count = 1)
+        protected string AddSwitchTask(List<UnityAction> callbackList, string taskName, float delay, int count = 1)
         {
-            int timeTaskId = TimeFrameComponent.Instance.AddSwitchTask(callbackList, taskName, delay, count);
-            return timeTaskId;
+            return UniTaskFrameComponent.Instance.AddTask(taskName, delay, count, null, null, callbackList.ToArray());
         }
 
 
@@ -38,18 +36,18 @@ namespace XFramework
         /// 删除计时任务
         /// </summary>
         /// <param name="timeTaskId"></param>
-        protected void DeleteTimeTask(int timeTaskId)
+        protected void DeleteTimeTask(string taskName)
         {
-            TimeFrameComponent.Instance.DeleteTimeTask(timeTaskId);
+            UniTaskFrameComponent.Instance.RemoveTask(taskName);
         }
 
         /// <summary>
         /// 删除计时任务
         /// </summary>
         /// <param name="timeTaskId"></param>
-        protected void DeleteSwitchTask(int timeTaskId)
+        protected void DeleteSwitchTask(string timeTaskId)
         {
-            TimeFrameComponent.Instance.DeleteSwitchTask(timeTaskId);
+            UniTaskFrameComponent.Instance.RemoveTask(timeTaskId);
         }
     }
 }

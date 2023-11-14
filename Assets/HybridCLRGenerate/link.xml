@@ -180,9 +180,6 @@
     <type fullname="UnityEngine.Networking.UploadHandlerRaw" preserve="all" />
     <type fullname="UnityEngine.WWWForm" preserve="all" />
   </assembly>
-  <assembly fullname="XFrameworkAot">
-    <type fullname="HttpFrameComponentExtern" preserve="all" />
-  </assembly>
   <assembly fullname="mscorlib">
     <type fullname="System.Action" preserve="all" />
     <type fullname="System.Action`1" preserve="all" />

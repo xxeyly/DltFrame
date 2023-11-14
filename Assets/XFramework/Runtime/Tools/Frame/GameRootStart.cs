@@ -150,8 +150,6 @@ namespace XFramework
         {
             //视图摧毁
             ViewFrameComponent.Instance.AllViewDestroy(destroySceneName);
-            //计时器初始化
-            TimeFrameComponent.Instance.FrameSceneInitComponent();
             //实体清除
             EntityFrameComponent.Instance.RemoveSceneEntityName();
             //场景组件移除

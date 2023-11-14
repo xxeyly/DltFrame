@@ -22,7 +22,7 @@ namespace XFramework
         /// <summary>
         /// 视图计时任务ID
         /// </summary>
-        private int _viewTimeTaskId;
+        private string _viewTimeTaskId;
 
         /// <summary>
         /// 获得当前场景中的Canvas
@@ -320,8 +320,7 @@ namespace XFramework
         /// <param name="time">多长时间后执行</param>
         private void ViewTimeTask<T>(UnityAction<T> viewAction, T viewType, float time)
         {
-            _viewTimeTaskId =
-                TimeFrameComponent.Instance.AddTimeTask(() => { viewAction.Invoke(viewType); }, "视图任务", time);
+            _viewTimeTaskId = UniTaskFrameComponent.Instance.AddTask("视图任务", time, 1, null, null, () => { viewAction.Invoke(viewType); });
         }
 
         /// <summary>
@@ -329,7 +328,7 @@ namespace XFramework
         /// </summary>
         private void StopViewTimeTask()
         {
-            TimeFrameComponent.Instance.DeleteTimeTask(_viewTimeTaskId);
+            UniTaskFrameComponent.Instance.RemoveTask(_viewTimeTaskId);
         }
 
         #endregion

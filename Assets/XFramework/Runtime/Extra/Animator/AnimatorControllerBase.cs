@@ -142,26 +142,27 @@ namespace XFramework
             }
         }
 
-        private int _playAnimTimeTask;
+        private string _playAnimTimeTask;
 
         /// <summary>
         /// 播放动画+事件
         /// </summary>
         /// <param name="animationType"></param>
         /// <param name="eventAction"></param>
-        public int PlayAnim(string animationType, UnityAction eventAction)
+        public string PlayAnim(string animationType, UnityAction eventAction)
         {
             if (ContainsParameter(animationType))
             {
                 PlayAnim(animationType);
-                return _playAnimTimeTask = TimeFrameComponent.Instance.AddTimeTask(eventAction, "播放动画:" + animationType, GetPlayAnimLength(animationType));
+                _playAnimTimeTask = animationType;
+                return UniTaskFrameComponent.Instance.AddTask(animationType, GetPlayAnimLength(animationType), 1, null, null, eventAction);
             }
             else
             {
                 Debug.Log("不包含当前动画:" + animationType);
             }
 
-            return 0;
+            return String.Empty;
         }
 
 
@@ -242,7 +243,7 @@ namespace XFramework
         public void StopAnimTaskTime()
         {
             StopAnim();
-            TimeFrameComponent.Instance.DeleteTimeTask(_playAnimTimeTask);
+            UniTaskFrameComponent.Instance.RemoveTask(_playAnimTimeTask);
         }
     }
 }

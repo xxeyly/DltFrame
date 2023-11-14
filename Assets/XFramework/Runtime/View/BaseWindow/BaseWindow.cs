@@ -19,7 +19,6 @@ namespace XFramework
     {
         [HideLabel] [HorizontalGroup("任务ID")] public int timeTaskId;
         [HideLabel] [HorizontalGroup("任务名称")] public string timeTaskName;
-        [HideLabel] [HorizontalGroup("任务类型")] public TimeTaskList.TimeLoopType timeLoopType;
     }
 
     /// <summary>

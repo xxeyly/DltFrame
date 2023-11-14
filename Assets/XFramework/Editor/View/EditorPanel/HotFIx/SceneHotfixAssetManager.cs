@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XFramework;
+
 #if HybridCLR
 public class SceneHotfixAssetManager : BaseEditor
 {
@@ -280,8 +281,10 @@ public class SceneHotfixAssetManager : BaseEditor
         }
 
         //存储根点信息
-        PrefabUtility.CreatePrefab("Assets/HotFixPrefabs/Scene/" + sceneName + "/" + emptyRoot.name + ".prefab", emptyRoot, UnityEditor.ReplacePrefabOptions.ConnectToPrefab);
-        SceneAssetBundleAsset.rootPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/HotFixPrefabs/Scene/" + sceneName + "/" + emptyRoot.name + ".prefab");
+#pragma warning disable 0618
+        PrefabUtility.CreatePrefab("Assets/HotFixPrefabs/Scene/" + sceneName + "/" + emptyRoot.name + ".prefab", emptyRoot, ReplacePrefabOptions.ConnectToPrefab);
+#pragma warning restore 0618
+        SceneAssetBundleAsset.rootPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/HotFixPrefabs/Scene/" + sceneName + "/" + emptyRoot.name + ".prefab");
         PrefabUtility.UnpackPrefabInstance(emptyRoot, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
 
         //显示场景物体
@@ -531,6 +534,5 @@ public class SceneHotfixAssetManager : BaseEditor
     public override void OnInit()
     {
     }
-   
 }
 #endif

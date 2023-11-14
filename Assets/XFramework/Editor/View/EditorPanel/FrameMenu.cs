@@ -21,22 +21,45 @@ namespace XFramework
         [MenuItem("Xframe/框架初始化")]
         private static void FrameInit()
         {
+            AddMacro("XFrameInit");
+            AddMacro("!HybridCLR");
+        }
+#endif
+        //添加宏定义
+        private static void AddMacro(string macroName)
+        {
             BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
             //获取当前平台已有的宏定义
             var symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
             //添加想要的宏定义
             var symbolsList = symbols.Split(';').ToList();
-            if (symbolsList.Contains("XFrameInit"))
+            if (symbolsList.Contains(macroName))
             {
                 return;
             }
 
-            symbolsList.Add("XFrameInit");
-            symbolsList.Add("!HybridCLR");
+            symbolsList.Add(macroName);
             symbols = string.Join(";", symbolsList);
             PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, symbols);
         }
-#endif
+
+        //删除宏定义
+        private static void RemoveMacro(string macroName)
+        {
+            BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+            //获取当前平台已有的宏定义
+            var symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
+            //添加想要的宏定义
+            var symbolsList = symbols.Split(';').ToList();
+            if (!symbolsList.Contains(macroName))
+            {
+                return;
+            }
+
+            symbolsList.Remove(macroName);
+            symbols = string.Join(";", symbolsList);
+            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, symbols);
+        }
 
 #if XFrameInit
         [MenuItem("Xframe/框架界面")]
@@ -112,6 +135,25 @@ namespace XFramework
                 }
             }
         }
+
+#if !HybridCLR
+        [MenuItem("Xframe/开启热更功能")]
+        public static void OpenHotFix()
+        {
+            RemoveMacro("!HybridCLR");
+            AddMacro("HybridCLR");
+        }
+#endif
+
+#if HybridCLR
+        [MenuItem("Xframe/关闭热更功能")]
+        public static void CloseHotFix()
+        {
+            RemoveMacro("HybridCLR");
+            AddMacro("!HybridCLR");
+        }
+#endif
+
 #endif
 
 #if HybridCLR && XFrameInit
@@ -161,4 +203,5 @@ namespace XFramework
         }
     }
 }
+
 #endif

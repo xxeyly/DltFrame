@@ -183,6 +183,9 @@ public class AssetBundleManager : BaseEditor
                 switch (EditorUserBuildSettings.activeBuildTarget)
                 {
                     case BuildTarget.StandaloneWindows:
+                        platformName = "StandaloneWindows";
+                        break;
+                    case BuildTarget.StandaloneWindows64:
                         platformName = "StandaloneWindows64";
                         break;
                     case BuildTarget.WSAPlayer:

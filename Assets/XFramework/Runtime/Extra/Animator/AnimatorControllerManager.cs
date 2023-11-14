@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,7 +23,7 @@ namespace XFramework
         /// <summary>
         /// 动画控制器任务
         /// </summary>
-        private int _animatorTimeTask;
+        private string _animatorTimeTask;
 
         public override void StartComponent()
         {
@@ -115,38 +116,35 @@ namespace XFramework
         /// </summary>
         /// <param name="animType"></param>
         /// <param name="animAction"></param>
-        public int PlayAnim(string animType, UnityAction animAction)
+        public async UniTask<string> PlayAnim(string animType, UnityAction animAction)
         {
             currentPlayAnim = animType;
             eventChange = false;
-
-            TimeFrameComponent.Instance.DeleteTimeTask(_animatorTimeTask);
-            AnimatorControllerBase fistController = GetPlayAnimFirstController(animType);
-
-            _animatorTimeTask = TimeFrameComponent.Instance.AddTimeTask(() =>
-                {
-                    if (fistController == null)
-                    {
-                        return;
-                    }
-
-                    if (fistController.GetAnimClipPlayOver())
-                    {
-                        animAction.Invoke();
-                    }
-                }
-                , "动画播放时间", GetPlayAnimFirstLength(animType));
             foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.PlayAnim(animType);
             }
 
+            await UniTask.WaitUntil(GetAnimControllerPlayerOver);
+            animAction?.Invoke();
             return _animatorTimeTask;
+        }
+
+        private bool GetAnimControllerPlayerOver()
+        {
+            foreach (AnimatorControllerBase animatorControllerBase in allAnimController)
+            {
+                if (!animatorControllerBase.GetAnimClipPlayOver())
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void StopAnimAction()
         {
-            TimeFrameComponent.Instance.DeleteTimeTask(_animatorTimeTask);
             foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 controllerBase.StopAnim();

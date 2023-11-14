@@ -632,13 +632,13 @@ namespace XFramework
                             else
                             {
                                 _leftDoubleClickRay.Add(hit.collider.gameObject);
-                                TimeFrameComponent.Instance.AddTimeTask(() =>
+                                UniTaskFrameComponent.Instance.AddTask("左键双击移除", doubleClickTime, 1, null, null, () =>
                                 {
                                     if (_leftDoubleClickRay.Contains(hit.collider.gameObject))
                                     {
                                         _leftDoubleClickRay.Remove(hit.collider.gameObject);
                                     }
-                                }, "左键双击移除", doubleClickTime);
+                                });
                             }
 
                             break;
@@ -656,13 +656,13 @@ namespace XFramework
                             else
                             {
                                 _centerDoubleClickRay.Add(hit.collider.gameObject);
-                                TimeFrameComponent.Instance.AddTimeTask(() =>
+                                UniTaskFrameComponent.Instance.AddTask("左键双击移除", doubleClickTime, 1, null, null, () =>
                                 {
-                                    if (_centerDoubleClickRay.Contains(hit.collider.gameObject))
+                                    if (_leftDoubleClickRay.Contains(hit.collider.gameObject))
                                     {
-                                        _centerDoubleClickRay.Remove(hit.collider.gameObject);
+                                        _leftDoubleClickRay.Remove(hit.collider.gameObject);
                                     }
-                                }, "左键双击移除", doubleClickTime);
+                                });
                             }
 
                             break;
@@ -680,13 +680,13 @@ namespace XFramework
                             else
                             {
                                 _rightDoubleClickRay.Add(hit.collider.gameObject);
-                                TimeFrameComponent.Instance.AddTimeTask(() =>
+                                UniTaskFrameComponent.Instance.AddTask("左键双击移除", doubleClickTime, 1, null, null, () =>
                                 {
-                                    if (_rightDoubleClickRay.Contains(hit.collider.gameObject))
+                                    if (_leftDoubleClickRay.Contains(hit.collider.gameObject))
                                     {
-                                        _rightDoubleClickRay.Remove(hit.collider.gameObject);
+                                        _leftDoubleClickRay.Remove(hit.collider.gameObject);
                                     }
-                                }, "左键双击移除", doubleClickTime);
+                                });
                             }
 
                             break;

@@ -225,18 +225,6 @@ namespace XFramework
             }
         }
 
-        /// <summary>
-        /// 开始物体跟随鼠标
-        /// </summary>
-        /// <param name="targetObj"></param>
-        /// <param name="offset">偏差</param>
-        public void StartUiFollowingMouse(GameObject targetObj, Vector2 offset = new Vector2())
-        {
-            _canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-            UiFollowingMouse(targetObj, offset);
-            _objectFollowingMouseTaskTime =
-                TimeFrameComponent.Instance.AddTimeTask(() => { UiFollowingMouse(targetObj, offset); }, "UI拖拽任务", 0.00f, 0);
-        }
 
         /// <summary>
         /// UI物体跟随鼠标移动
@@ -265,14 +253,6 @@ namespace XFramework
             uiPos += new Vector2(-offset.x, -offset.y);
             targetObj.GetComponent<RectTransform>().localPosition = uiPos;
             // Debug.Log("拖拽物体的位置:" + targetObj.transform.localPosition);
-        }
-
-        /// <summary>
-        /// 停止任务
-        /// </summary>
-        public void StopUiFollowingMouse()
-        {
-            TimeFrameComponent.Instance.DeleteTimeTask(_objectFollowingMouseTaskTime);
         }
 
 
@@ -433,85 +413,6 @@ namespace XFramework
         }
 
         private int _drag3DObjectInUIPanelTimeTask;
-
-        /// <summary>
-        /// 拖动3D物体在UI面板上
-        /// </summary>
-        public bool Drag3DObjectInUIPanel(Camera _currentCamera, Transform _target, Vector3 centerPos,
-            float leftDirection, float rightDirection, float topDirection, float downDirection,
-            float frontDirection, float backDirection)
-        {
-            Ray ray = _currentCamera.ScreenPointToRay(Input.mousePosition * (1920f / Screen.width));
-            RaycastHit hit;
-            bool isHit = Physics.Raycast(ray, out hit, LayerMask.NameToLayer("CheckItem"), 10000);
-            if (isHit)
-            {
-                // Debug.Log(hit.collider.gameObject);
-            }
-            else
-            {
-                // Debug.Log("未找到物体");
-            }
-
-            if (isHit && _target.gameObject == hit.collider.gameObject)
-            {
-                Debug.Log(hit.collider.gameObject);
-                TimeFrameComponent.Instance.DeleteTimeTask(_drag3DObjectInUIPanelTimeTask);
-                _drag3DObjectInUIPanelTimeTask = TimeFrameComponent.Instance.AddTimeTask(() =>
-                {
-                    Transform cameraTransform = _currentCamera.transform;
-                    Vector3 CO_Direction = _target.position - cameraTransform.position;
-                    float cPlane = Vector3.Dot(CO_Direction, cameraTransform.forward);
-                    Vector3 currentMousePos = _currentCamera.ScreenToWorldPoint(new Vector3(
-                        Input.mousePosition.x * (1920f / Screen.width), Input.mousePosition.y * (1920f / Screen.width),
-                        cPlane));
-
-                    if (currentMousePos.x <= centerPos.x - leftDirection)
-                    {
-                        currentMousePos.x = centerPos.x - leftDirection;
-                    }
-
-                    if (currentMousePos.x >= centerPos.x + rightDirection)
-                    {
-                        currentMousePos.x = centerPos.x + rightDirection;
-                    }
-
-                    if (currentMousePos.y <= centerPos.y - downDirection)
-                    {
-                        currentMousePos.y = centerPos.y - downDirection;
-                    }
-
-                    if (currentMousePos.y >= centerPos.y + topDirection)
-                    {
-                        currentMousePos.y = centerPos.y + downDirection;
-                    }
-
-                    if (currentMousePos.z <= centerPos.z - frontDirection)
-                    {
-                        currentMousePos.z = centerPos.z - frontDirection;
-                    }
-
-                    if (currentMousePos.z >= centerPos.z + backDirection)
-                    {
-                        currentMousePos.z = centerPos.z + backDirection;
-                    }
-
-                    _target.position = currentMousePos;
-                }, "拖动3D物体在UI面板上", 0.001f, 0);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// 停止拖动3D物体在UI面板上
-        /// </summary>
-        public void StopDrag3DObjectInUIPanel()
-        {
-            TimeFrameComponent.Instance.DeleteTimeTask(_drag3DObjectInUIPanelTimeTask);
-        }
+      
     }
 }

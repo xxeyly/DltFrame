@@ -36,7 +36,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<float>
 	// System.Action<int>
 	// System.Action<long>
-	// System.Action<object,System.IntPtr>
+	// System.Action<object,System.UIntPtr>
 	// System.Action<object,byte>
 	// System.Action<object,double>
 	// System.Action<object,float>
@@ -426,7 +426,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Comparison<ulong>
 	// System.Comparison<ushort>
 	// System.Func<byte>
-	// System.Func<object,System.IntPtr>
+	// System.Func<object,System.UIntPtr>
 	// System.Func<object,byte>
 	// System.Func<object,double>
 	// System.Func<object,float>
