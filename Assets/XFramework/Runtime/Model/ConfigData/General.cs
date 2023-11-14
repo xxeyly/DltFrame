@@ -56,7 +56,7 @@ namespace XFramework
             typeof(ListenerFrameComponent),
             typeof(AudioFrameComponent),
             typeof(HttpFrameComponent),
-            typeof(MouseFrameComponent),
+            // typeof(MouseFrameComponent),
             // typeof(TimeFrameComponent),
             typeof(ViewFrameComponent),
             typeof(UniTaskFrameComponent),

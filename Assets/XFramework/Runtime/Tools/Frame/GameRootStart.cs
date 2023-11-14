@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -43,7 +44,7 @@ namespace XFramework
         [LabelText("框架加载日志")] [BoxGroup] public bool frameLoadLog;
 
 
-        private void OnEnable()
+        private async void OnEnable()
         {
             //场景中只有一个GameRootStart
             if (DataFrameComponent.GetAllObjectsInScene<GameRootStart>().Count == 1)
@@ -79,22 +80,27 @@ namespace XFramework
 
             Debug.Log("框架初始化完毕");
             //框架组件开启
-
             dontDestroyFrameSceneComponents = DataFrameComponent.GetAllObjectsInScene<SceneComponent>("DontDestroyOnLoad");
-            for (int i = 0; i < dontDestroyFrameSceneComponents.Count; i++)
+            if (dontDestroyFrameSceneComponents.Count > 0)
             {
-                dontDestroyFrameSceneComponents[i].StartComponent();
+                Debug.Log("不摧毁的SceneComponent加载完毕");
+
+                for (int i = 0; i < dontDestroyFrameSceneComponents.Count; i++)
+                {
+                    dontDestroyFrameSceneComponents[i].StartComponent();
+                }
             }
 
-            // Debug.Log("不摧毁的SceneComponent加载完毕");
-
-            frameSceneInitStartSingletons = DataFrameComponent.GetAllObjectsInScene<SceneComponentInit>("DontDestroyOnLoad");
-            for (int i = 0; i < frameSceneInitStartSingletons.Count; i++)
+            if (frameSceneInitStartSingletons.Count > 0)
             {
-                frameSceneInitStartSingletons[i].InitComponent();
-            }
+                frameSceneInitStartSingletons = DataFrameComponent.GetAllObjectsInScene<SceneComponentInit>("DontDestroyOnLoad");
+                for (int i = 0; i < frameSceneInitStartSingletons.Count; i++)
+                {
+                    frameSceneInitStartSingletons[i].InitComponent();
+                }
 
-            // Debug.Log("不摧毁的SceneComponentInit加载完毕");
+                Debug.Log("不摧毁的SceneComponentInit加载完毕");
+            }
 
             if (initJump)
             {
@@ -103,6 +109,7 @@ namespace XFramework
                 DestroyImmediate(GetComponent<AudioListener>());
             }
 
+            // await UniTask.NextFrame();
             SceneManager.sceneLoaded += SceneLoadOverCallBack;
         }
 
