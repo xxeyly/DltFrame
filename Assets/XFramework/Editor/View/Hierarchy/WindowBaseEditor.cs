@@ -81,8 +81,8 @@ namespace XFramework
 
                 if (uiObj.GetComponent<Button>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.Button;
-                    uiObj.GetComponent<BindUiType>().eventTriggerType = General.UIEventTriggerType.PointerClick;
+                    uiObj.GetComponent<BindUiType>().type = UiType.Button;
+                    uiObj.GetComponent<BindUiType>().eventTriggerType = UIEventTriggerType.PointerClick;
                 }
                 else if (uiObj.GetComponent<Image>() &&
                          !uiObj.GetComponent<Button>() &&
@@ -94,66 +94,66 @@ namespace XFramework
                          // !uiObj.GetComponent<TMP_Dropdown>() &&
                          !uiObj.GetComponent<Dropdown>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.Image;
+                    uiObj.GetComponent<BindUiType>().type = UiType.Image;
                 }
                 else if (uiObj.GetComponent<Text>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.Text;
+                    uiObj.GetComponent<BindUiType>().type = UiType.Text;
                 }
                 else if (uiObj.GetComponent<Toggle>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.Toggle;
+                    uiObj.GetComponent<BindUiType>().type = UiType.Toggle;
                 }
                 else if (uiObj.GetComponent<RawImage>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.RawImage;
+                    uiObj.GetComponent<BindUiType>().type = UiType.RawImage;
                 }
                 else if (uiObj.GetComponent<Scrollbar>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.Scrollbar;
+                    uiObj.GetComponent<BindUiType>().type = UiType.Scrollbar;
                 }
                 else if (uiObj.GetComponent<Dropdown>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.Dropdown;
+                    uiObj.GetComponent<BindUiType>().type = UiType.Dropdown;
                 }
                 else if (uiObj.GetComponent<InputField>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.InputField;
+                    uiObj.GetComponent<BindUiType>().type = UiType.InputField;
                 }
                 else if (uiObj.GetComponent<ScrollRect>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.ScrollRect;
+                    uiObj.GetComponent<BindUiType>().type = UiType.ScrollRect;
                 }
                 else if (uiObj.GetComponent<VideoPlayer>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.VideoPlayer;
+                    uiObj.GetComponent<BindUiType>().type = UiType.VideoPlayer;
                 }
                 else if (uiObj.GetComponent<Slider>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.Slider;
+                    uiObj.GetComponent<BindUiType>().type = UiType.Slider;
                 }
                 else if (uiObj.GetComponentInChildren<ChildBaseWindow>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.ChildList;
+                    uiObj.GetComponent<BindUiType>().type = UiType.ChildList;
                     uiObj.GetComponent<BindUiType>().childType = uiObj.GetComponentInChildren<ChildBaseWindow>();
                 }
 #if UNITY_2019_1_OR_NEWER
                 else if (uiObj.GetComponentInChildren<TMP_Dropdown>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.TMP_Dropdown;
+                    uiObj.GetComponent<BindUiType>().type = UiType.TMP_Dropdown;
                 }
                 else if (uiObj.GetComponentInChildren<TMP_InputField>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.TMP_InputField;
+                    uiObj.GetComponent<BindUiType>().type = UiType.TMP_InputField;
                 }
                 else if (uiObj.GetComponentInChildren<TextMeshProUGUI>())
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.TextMeshProUGUI;
+                    uiObj.GetComponent<BindUiType>().type = UiType.TextMeshProUGUI;
                 }
 #endif
                 else
                 {
-                    uiObj.GetComponent<BindUiType>().type = General.UiType.GameObject;
+                    uiObj.GetComponent<BindUiType>().type = UiType.GameObject;
                 }
             }
         }

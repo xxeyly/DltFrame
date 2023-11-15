@@ -17,13 +17,7 @@ public class AssetBundleManager : BaseEditor
     [LabelText("打包压缩方式")] public BuildAssetBundleOptions targetBuildAssetBundleOptions = BuildAssetBundleOptions.None;
     [LabelText("Assembly打包")] public bool AssemblyParticipatePackaging;
     [LabelText("MetaAssembly打包")] public bool MetaAssemblyParticipatePackaging;
-
-    /*[LabelText("Assembly-路径可不填")] [TableList]
-    public List<BundleFileConfig> AssemblyAssetDirectoryConfig;
-    [LabelText("元数据")] [TableList] public List<BundleDirectoryConfig> MetaAssembly;*/
-
     [LabelText("框架")] [TableList] public List<BundleFileConfig> GameRootStartBundleDirectoryConfig;
-
 
     [HorizontalGroup("打包", width: 100)]
     [Button("清空打包勾选")]
