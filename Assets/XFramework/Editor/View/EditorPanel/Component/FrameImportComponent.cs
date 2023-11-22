@@ -33,18 +33,18 @@ namespace XFramework
 
         public override void OnCreateConfig()
         {
-            _frameComponentEditorData = AssetDatabase.LoadAssetAtPath<FrameComponentEditorData>(General.frameComponentEditorDataPath);
+            _frameComponentEditorData = AssetDatabase.LoadAssetAtPath<FrameComponentEditorData>(RuntimeGlobal.frameComponentEditorDataPath);
             if (_frameComponentEditorData == null)
             {
-                if (!Directory.Exists(General.assetRootPath))
+                if (!Directory.Exists(RuntimeGlobal.assetRootPath))
                 {
-                    Directory.CreateDirectory(General.assetRootPath);
+                    Directory.CreateDirectory(RuntimeGlobal.assetRootPath);
                 }
 
                 //创建数据
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<FrameComponentEditorData>(), General.frameComponentEditorDataPath);
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<FrameComponentEditorData>(), RuntimeGlobal.frameComponentEditorDataPath);
                 //读取数据
-                _frameComponentEditorData = AssetDatabase.LoadAssetAtPath<FrameComponentEditorData>(General.frameComponentEditorDataPath);
+                _frameComponentEditorData = AssetDatabase.LoadAssetAtPath<FrameComponentEditorData>(RuntimeGlobal.frameComponentEditorDataPath);
             }
         }
 

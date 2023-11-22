@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
 
-public class General
+public class AotGlobal
 {
     public static string GetDeviceStoragePath()
     {

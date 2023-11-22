@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace XFramework
 {
-    public static partial class General
+    public static partial class RuntimeGlobal
     {
 
         [LabelText("获得网页跟目录地址")]

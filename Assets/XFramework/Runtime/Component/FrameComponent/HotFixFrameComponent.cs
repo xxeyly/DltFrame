@@ -40,13 +40,13 @@ namespace XFramework
         public async UniTask<string> InstantiateHotFixAssetBundle()
         {
             //本地字体路径
-            string localFontPath = General.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundlePath + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundleName;
+            string localFontPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundlePath + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundleName;
             //加载字体
             AssetBundle fontAssetBundle = await AssetBundle.LoadFromFileAsync(localFontPath);
             //加载内容
             for (int i = 0; i < hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
             {
-                string assetBundlePath = General.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath;
+                string assetBundlePath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath;
                 string assetBundleName = DataFrameComponent.AllCharToLower(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
 
                 AssetBundle tempHotFixAssetBundle = await AssetBundle.LoadFromFileAsync(assetBundlePath + assetBundleName);
@@ -95,7 +95,7 @@ namespace XFramework
         /// <param name="sceneName"></param>
         public async UniTask<string> LoadHotFixSceneConfig(string sceneName)
         {
-            UnityWebRequest request = UnityWebRequest.Get(General.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + sceneName + ".json");
+            UnityWebRequest request = UnityWebRequest.Get(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + sceneName + ".json");
             await request.SendWebRequest();
             string hotFixAssetConfig = request.downloadHandler.text;
             hotFixAssetAssetBundleSceneConfigs = JsonUtility.FromJson<HotFixAssetAssetBundleSceneConfig>(hotFixAssetConfig);
@@ -112,7 +112,7 @@ namespace XFramework
             if (!Application.CanStreamedLevelBeLoaded(sceneName))
             {
                 //加载场景
-                await AssetBundle.LoadFromFileAsync(General.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
+                await AssetBundle.LoadFromFileAsync(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
             }
 
             return string.Empty;

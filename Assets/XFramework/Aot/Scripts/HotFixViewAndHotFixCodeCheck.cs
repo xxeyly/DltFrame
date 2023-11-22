@@ -139,9 +139,9 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     //HotFixPath本地检测
     IEnumerator HotFixPathLocalLoad()
     {
-        if (File.Exists(General.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"))
+        if (File.Exists(AotGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"))
         {
-            UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(General.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt");
+            UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(AotGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt");
             yield return hotFixPathLoadLocalFile.SendWebRequest();
             hotFixPath = hotFixPathLoadLocalFile.downloadHandler.text;
         }
@@ -172,14 +172,14 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         hotFixViewLocalCheck = false;
         //检查文件
         hotFixViewIsNeedDown = false;
-        if (File.Exists(General.GetDeviceStoragePath() + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name))
+        if (File.Exists(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name))
         {
-            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(General.GetDeviceStoragePath() + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name);
+            UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name);
             yield return hotFixViewLoadLocalFile.SendWebRequest();
 
             if (hotFixViewLoadLocalFile.downloadHandler.data.Length > 0)
             {
-                string localFileMD5 = General.GetMD5HashByte(hotFixViewLoadLocalFile.downloadHandler.data);
+                string localFileMD5 = AotGlobal.GetMD5HashByte(hotFixViewLoadLocalFile.downloadHandler.data);
                 if (hotFixViewHotFixAssetConfig.md5 != localFileMD5)
                 {
                     hotFixViewIsNeedDown = true;
@@ -226,14 +226,14 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         hotFixCodeLocalCheck = false;
         //检查文件
         hotFixCodeIsNeedDown = false;
-        if (File.Exists(General.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name))
+        if (File.Exists(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name))
         {
-            UnityWebRequest hotFixCodeLoadLocalFile = UnityWebRequest.Get(General.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name);
+            UnityWebRequest hotFixCodeLoadLocalFile = UnityWebRequest.Get(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + hotFixCodeHotFixAssetConfig.name);
             yield return hotFixCodeLoadLocalFile.SendWebRequest();
 
             if (hotFixCodeLoadLocalFile.downloadHandler.data.Length > 0)
             {
-                if (hotFixCodeHotFixAssetConfig.md5 != General.GetMD5HashByte(hotFixCodeLoadLocalFile.downloadHandler.data))
+                if (hotFixCodeHotFixAssetConfig.md5 != AotGlobal.GetMD5HashByte(hotFixCodeLoadLocalFile.downloadHandler.data))
                 {
                     hotFixCodeIsNeedDown = true;
                 }
@@ -283,22 +283,22 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             case "hotfixview":
                 url = hotFixPath + "HotFix/HotFixView/" + hotFixAssetConfig.name;
                 //文件夹不存在要创建
-                if (!Directory.Exists(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixView"))
+                if (!Directory.Exists(AotGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView"))
                 {
-                    Directory.CreateDirectory(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixView");
+                    Directory.CreateDirectory(AotGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView");
                 }
 
-                downFilePath = General.GetDeviceStoragePath() + "/" + "HotFix/HotFixView" + "/" + hotFixAssetConfig.name;
+                downFilePath = AotGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView" + "/" + hotFixAssetConfig.name;
                 break;
             case "hotfixcode":
                 url = hotFixPath + "HotFix/HotFixCode/" + hotFixAssetConfig.name;
                 //文件夹不存在要创建
-                if (!Directory.Exists(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode"))
+                if (!Directory.Exists(AotGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode"))
                 {
-                    Directory.CreateDirectory(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode");
+                    Directory.CreateDirectory(AotGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode");
                 }
 
-                downFilePath = General.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode" + "/" + hotFixAssetConfig.name;
+                downFilePath = AotGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixCode" + "/" + hotFixAssetConfig.name;
 
                 break;
         }
@@ -311,7 +311,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         if (File.Exists(downFileCachePath))
         {
             byte[] localCache = File.ReadAllBytes(downFileCachePath);
-            localMd5 = General.GetMD5HashByte(localCache);
+            localMd5 = AotGlobal.GetMD5HashByte(localCache);
         }
 
         //文件流
@@ -351,7 +351,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             _hotFixFileStream.Dispose();
             _hotFixFileStream = null;
             _hotFixAssetConfigDownSize[hotFixAssetConfig.name] = (int)GetFileSize(downFileCachePath);
-            string localFileMd5 = General.GetMD5HashFromFile(downFileCachePath);
+            string localFileMd5 = AotGlobal.GetMD5HashFromFile(downFileCachePath);
             // Debug.Log(_hotFixUnityWebRequest.responseCode);
             if (_hotFixUnityWebRequest.responseCode != 200 && _hotFixUnityWebRequest.responseCode != 206)
             {

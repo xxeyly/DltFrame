@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class General
+public class HotFixGlobal
 {
     public static string GetDeviceStoragePath()
     {

@@ -87,7 +87,7 @@ namespace XFramework
             GameRootStart tempGameRootStart = gameRootStart.AddComponent<GameRootStart>();
             //添加框架组件
             Undo.RegisterCreatedObjectUndo(gameRootStart, "UndoCreate");
-            foreach (Type type in General.frameComponentType)
+            foreach (Type type in RuntimeGlobal.frameComponentType)
             {
                 GameObject tempComponentObj = new GameObject(type.Name);
                 tempComponentObj.transform.SetParent(gameRootStart.transform);

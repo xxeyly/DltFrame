@@ -24,7 +24,7 @@ public class HotFixInit
     private static void SceneLoadOverCallBack(Scene arg0, LoadSceneMode arg1)
     {
         Debug.Log("HotFix");
-        GameObject hotFixView = AssetBundle.LoadFromFile(General.GetDeviceStoragePath() + "/" + "HotFix/HotFixView/hotfixview").LoadAsset<GameObject>("HotFixView");
+        GameObject hotFixView = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView/hotfixview").LoadAsset<GameObject>("HotFixView");
         GameObject.Instantiate(hotFixView);
         SceneManager.sceneLoaded -= SceneLoadOverCallBack;
     }
@@ -32,9 +32,9 @@ public class HotFixInit
     //首先加载这个是因为网络下载的时候需要使用这个元数据
     private static void LoadMscorlibMetadataForAOTAssemblies()
     {
-        if (!Directory.Exists(General.GetDeviceStoragePath() + "/HotFix/Metadata/"))
+        if (!Directory.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/"))
         {
-            Directory.CreateDirectory(General.GetDeviceStoragePath() + "/HotFix/Metadata/");
+            Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/");
         }
 
         List<string> aotDllList = new List<string>
@@ -44,7 +44,7 @@ public class HotFixInit
 
         foreach (var aotDllName in aotDllList)
         {
-            string aotDllPath = General.GetDeviceStoragePath() + "/HotFix/Metadata/" + aotDllName + ".bytes";
+            string aotDllPath = HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/" + aotDllName + ".bytes";
             if (!File.Exists(aotDllPath))
             {
                 Debug.Log(aotDllName + "拷贝");
@@ -53,7 +53,7 @@ public class HotFixInit
                 File.Copy(Application.streamingAssetsPath + "/HotFix/Metadata/" + aotDllName + ".bytes", aotDllPath, true);
             }
 
-            byte[] dllBytes = File.ReadAllBytes($"{General.GetDeviceStoragePath()}/{"HotFix/Metadata/" + aotDllName}.bytes");
+            byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + aotDllName}.bytes");
 #if HybridCLR
             LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
             Debug.Log($"LoadMetadataForAOTAssembly:{aotDllName}. ret:{err}");
@@ -72,14 +72,14 @@ public class HotFixInit
             "UnityEngine.CoreModule.dll",
             "UnityEngine.JSONSerializeModule.dll",
         };
-        if (!Directory.Exists(General.GetDeviceStoragePath() + "/HotFix/Metadata/"))
+        if (!Directory.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/"))
         {
-            Directory.CreateDirectory(General.GetDeviceStoragePath() + "/HotFix/Metadata/");
+            Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/");
         }
 
         foreach (var aotDllName in aotDllList)
         {
-            byte[] dllBytes = File.ReadAllBytes($"{General.GetDeviceStoragePath()}/{"HotFix/Metadata/" + aotDllName}.bytes");
+            byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + aotDllName}.bytes");
 #if HybridCLR
             LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
             Debug.Log($"LoadMetadataForAOTAssembly:{aotDllName}. ret:{err}");
@@ -93,7 +93,7 @@ public class HotFixInit
         //加载元数据
         LoadMetadataForAOTAssemblies();
         LoadHotFixCode();
-        GameObject GameRootStart = AssetBundle.LoadFromFile(General.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
+        GameObject GameRootStart = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
         GameObject.Instantiate(GameRootStart);
     }
 

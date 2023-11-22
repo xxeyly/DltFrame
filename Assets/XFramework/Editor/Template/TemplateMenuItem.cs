@@ -17,7 +17,7 @@ namespace XFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewBaseWindow.cs", null, General.BaseWindowTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewBaseWindow.cs", null, RuntimeGlobal.BaseWindowTemplatePath);
         }
 
         [MenuItem("Assets/Create/XFramework/C# ChildBaseWindow", false, 71)]
@@ -29,7 +29,7 @@ namespace XFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewChildBaseWindow.cs", null, General.ChildBaseWindowTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewChildBaseWindow.cs", null, RuntimeGlobal.ChildBaseWindowTemplatePath);
         }
 
         [MenuItem("Assets/Create/XFramework/C# ListenerFrameComponentData", false, 73)]
@@ -41,7 +41,7 @@ namespace XFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/ListenerComponentData.cs", null, General.ListenerComponentDataTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/ListenerComponentData.cs", null, RuntimeGlobal.ListenerComponentDataTemplatePath);
         }
 
         [MenuItem("Assets/Create/XFramework/C# SceneComponent", false, 74)]
@@ -53,7 +53,7 @@ namespace XFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponent.cs", null, General.SceneComponentTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponent.cs", null, RuntimeGlobal.SceneComponentTemplatePath);
         }
 
         [MenuItem("Assets/Create/XFramework/C# SceneComponentInit", false, 75)]
@@ -65,7 +65,7 @@ namespace XFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponentInit.cs", null, General.SceneComponentInitTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponentInit.cs", null, RuntimeGlobal.SceneComponentInitTemplatePath);
         }
 
 
@@ -78,7 +78,7 @@ namespace XFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/AnimatorControllerParameterData.cs", null, General.AnimatorControllerParameterDataTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/AnimatorControllerParameterData.cs", null, RuntimeGlobal.AnimatorControllerParameterDataTemplatePath);
         }
 
         /// <summary>

@@ -22,18 +22,18 @@ namespace XFramework
 
         public override void OnCreateConfig()
         {
-            _customAudioData = AssetDatabase.LoadAssetAtPath<AudioComponentData>(General.customAudioDataPath);
+            _customAudioData = AssetDatabase.LoadAssetAtPath<AudioComponentData>(RuntimeGlobal.customAudioDataPath);
             if (_customAudioData == null)
             {
-                if (!Directory.Exists(General.assetRootPath))
+                if (!Directory.Exists(RuntimeGlobal.assetRootPath))
                 {
-                    Directory.CreateDirectory(General.assetRootPath);
+                    Directory.CreateDirectory(RuntimeGlobal.assetRootPath);
                 }
 
                 //创建数据
-                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AudioComponentData>(), General.customAudioDataPath);
+                AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AudioComponentData>(), RuntimeGlobal.customAudioDataPath);
                 //读取数据
-                _customAudioData = AssetDatabase.LoadAssetAtPath<AudioComponentData>(General.customAudioDataPath);
+                _customAudioData = AssetDatabase.LoadAssetAtPath<AudioComponentData>(RuntimeGlobal.customAudioDataPath);
             }
         }
 

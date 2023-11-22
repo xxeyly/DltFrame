@@ -24,34 +24,34 @@ namespace XFramework
             text = text.Replace("#region StartVariableBindEvent", GenerateBaseWindowData.startVariableBindEvent);
             text = text.Replace("#endregion EndVariableBindEvent", GenerateBaseWindowData.endVariableBindEvent);
 
-            if (resourceFile == General.BaseWindowTemplatePath)
+            if (resourceFile == RuntimeGlobal.BaseWindowTemplatePath)
             {
                 text = text.Replace("BaseWindowTemplate", className);
                 text = text.Replace("#region StartCustomAttributesStart", GenerateBaseWindowData.startCustomAttributesStart);
                 text = text.Replace("#endregion EndCustomAttributesStart", GenerateBaseWindowData.endCustomAttributesStart);
             }
 
-            if (resourceFile == General.ChildBaseWindowTemplatePath)
+            if (resourceFile == RuntimeGlobal.ChildBaseWindowTemplatePath)
             {
                 text = text.Replace("ChildBaseWindowTemplate", className);
             }
 
-            if (resourceFile == General.ListenerComponentDataTemplatePath)
+            if (resourceFile == RuntimeGlobal.ListenerComponentDataTemplatePath)
             {
                 text = text.Replace("ListenerComponentDataTemplate", "ListenerComponent");
             }
 
-            if (resourceFile == General.SceneComponentTemplatePath)
+            if (resourceFile == RuntimeGlobal.SceneComponentTemplatePath)
             {
                 text = text.Replace("SceneComponentTemplate", className);
             }
 
-            if (resourceFile == General.SceneComponentInitTemplatePath)
+            if (resourceFile == RuntimeGlobal.SceneComponentInitTemplatePath)
             {
                 text = text.Replace("SceneComponentInitTemplate", className);
             }
 
-            if (resourceFile == General.AnimatorControllerParameterDataTemplatePath)
+            if (resourceFile == RuntimeGlobal.AnimatorControllerParameterDataTemplatePath)
             {
                 text = text.Replace("AnimatorControllerParameterDataTemplate", "AnimatorControllerData");
             }

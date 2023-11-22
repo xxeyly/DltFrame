@@ -67,13 +67,13 @@ public class HotFixConfigDown : MonoBehaviour
             Debug.Log("开始下载:" + hotFixRuntimeDownConfig.Name);
             currentHotFixRuntimeDownConfig = hotFixRuntimeDownConfig;
             string url = downPath + "/" + hotFixRuntimeDownConfig.Path + hotFixRuntimeDownConfig.Name;
-            if (!Directory.Exists(General.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path))
+            if (!Directory.Exists(HotFixGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path))
             {
-                Directory.CreateDirectory(General.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path);
+                Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path);
             }
 
             //本地路径
-            string downFilePath = General.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path + hotFixRuntimeDownConfig.Name;
+            string downFilePath = HotFixGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.Path + hotFixRuntimeDownConfig.Name;
             string downFileCachePath = downFilePath + ".Cache";
 
 
