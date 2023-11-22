@@ -32,16 +32,16 @@ namespace XFramework
 
             if (uiCanvas == null)
             {
-                GameObject CanvasObj = new GameObject("Canvas");
-                uiCanvas = CanvasObj.AddComponent<Canvas>();
+                GameObject canvasObj = new GameObject("Canvas");
+                uiCanvas = canvasObj.AddComponent<Canvas>();
                 uiCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                CanvasScaler canvasScaler = CanvasObj.AddComponent<CanvasScaler>();
+                CanvasScaler canvasScaler = canvasObj.AddComponent<CanvasScaler>();
                 canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
                 canvasScaler.referenceResolution = new Vector2(1920, 1080);
-                CanvasObj.AddComponent<GraphicRaycaster>();
-                GameObject EventSystem = new GameObject("EventSystem");
-                EventSystem.AddComponent<EventSystem>();
-                EventSystem.AddComponent<StandaloneInputModule>();
+                canvasObj.AddComponent<GraphicRaycaster>();
+                GameObject eventSystem = new GameObject("EventSystem");
+                eventSystem.AddComponent<EventSystem>();
+                eventSystem.AddComponent<StandaloneInputModule>();
             }
 
             //View 窗口根目录
@@ -74,87 +74,103 @@ namespace XFramework
             GameObject uiObj = Selection.objects.First() as GameObject;
             if (uiObj != null)
             {
-                if (!uiObj.GetComponent<BindUiType>())
+                BindUiType bindUiType = uiObj.GetComponent<BindUiType>();
+                Button button = uiObj.GetComponent<Button>();
+                Text text = uiObj.GetComponent<Text>();
+                TextMeshProUGUI textMeshProUGUI = uiObj.GetComponent<TextMeshProUGUI>();
+                Toggle toggle = uiObj.GetComponent<Toggle>();
+                RawImage rawImage = uiObj.GetComponent<RawImage>();
+                Scrollbar scrollbar = uiObj.GetComponent<Scrollbar>();
+                Dropdown dropdown = uiObj.GetComponent<Dropdown>();
+                TMP_Dropdown tmpDropdown = uiObj.GetComponent<TMP_Dropdown>();
+                InputField inputField = uiObj.GetComponent<InputField>();
+                TMP_InputField tmpInputField = uiObj.GetComponent<TMP_InputField>();
+                ScrollRect scrollRect = uiObj.GetComponent<ScrollRect>();
+                VideoPlayer videoPlayer = uiObj.GetComponent<VideoPlayer>();
+                Slider slider = uiObj.GetComponent<Slider>();
+                ChildBaseWindow childBaseWindow = uiObj.GetComponentInChildren<ChildBaseWindow>();
+                Image image = uiObj.GetComponent<Image>();
+
+
+                if (bindUiType == null)
                 {
                     Undo.AddComponent<BindUiType>(uiObj);
+                    bindUiType = uiObj.GetComponent<BindUiType>();
                 }
-
-                if (uiObj.GetComponent<Button>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.Button;
-                    uiObj.GetComponent<BindUiType>().eventTriggerType = UIEventTriggerType.PointerClick;
-                }
-                else if (
-                    uiObj.GetComponent<Image>() &&
-                    !uiObj.GetComponent<Button>() &&
-                    !uiObj.GetComponent<Scrollbar>() &&
-                    !uiObj.GetComponent<ScrollRect>() &&
-                    !uiObj.GetComponent<RawImage>() &&
-                    !uiObj.GetComponent<TMP_InputField>() &&
-                    !uiObj.GetComponent<InputField>() &&
-                    !uiObj.GetComponent<TMP_Dropdown>() &&
-                    !uiObj.GetComponent<Dropdown>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.Image;
-                }
-                else if (uiObj.GetComponent<Text>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.Text;
-                }
-                else if (uiObj.GetComponent<Toggle>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.Toggle;
-                }
-                else if (uiObj.GetComponent<RawImage>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.RawImage;
-                }
-                else if (uiObj.GetComponent<Scrollbar>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.Scrollbar;
-                }
-                else if (uiObj.GetComponent<Dropdown>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.Dropdown;
-                }
-                else if (uiObj.GetComponent<InputField>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.InputField;
-                }
-                else if (uiObj.GetComponent<ScrollRect>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.ScrollRect;
-                }
-                else if (uiObj.GetComponent<VideoPlayer>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.VideoPlayer;
-                }
-                else if (uiObj.GetComponent<Slider>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.Slider;
-                }
-                else if (uiObj.GetComponentInChildren<ChildBaseWindow>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.ChildList;
-                    uiObj.GetComponent<BindUiType>().childType = uiObj.GetComponentInChildren<ChildBaseWindow>();
-                }
-#if UNITY_2019_1_OR_NEWER
-                else if (uiObj.GetComponentInChildren<TMP_Dropdown>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.TMP_Dropdown;
-                }
-                else if (uiObj.GetComponentInChildren<TMP_InputField>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.TMP_InputField;
-                }
-                else if (uiObj.GetComponentInChildren<TextMeshProUGUI>())
-                {
-                    uiObj.GetComponent<BindUiType>().type = UiType.TextMeshProUGUI;
-                }
-#endif
                 else
                 {
-                    uiObj.GetComponent<BindUiType>().type = UiType.GameObject;
+                    if (bindUiType.type != UiType.GameObject)
+                    {
+                        bindUiType.type = UiType.GameObject;
+                        return;
+                    }
+                }
+
+                if (button != null)
+                {
+                    bindUiType.type = UiType.Button;
+                    bindUiType.eventTriggerType = UIEventTriggerType.PointerClick;
+                }
+                else if (text != null)
+                {
+                    bindUiType.type = UiType.Text;
+                }
+                else if (textMeshProUGUI != null)
+                {
+                    bindUiType.type = UiType.TextMeshProUGUI;
+                }
+                else if (toggle != null)
+                {
+                    bindUiType.type = UiType.Toggle;
+                }
+                else if (rawImage != null)
+                {
+                    bindUiType.type = UiType.RawImage;
+                }
+                else if (scrollbar != null)
+                {
+                    bindUiType.type = UiType.Scrollbar;
+                }
+                else if (dropdown != null)
+                {
+                    bindUiType.type = UiType.Dropdown;
+                }
+                else if (tmpDropdown != null)
+                {
+                    bindUiType.type = UiType.TMP_Dropdown;
+                }
+                else if (inputField != null)
+                {
+                    bindUiType.type = UiType.InputField;
+                }
+                else if (tmpInputField != null)
+                {
+                    bindUiType.type = UiType.TMP_InputField;
+                }
+                else if (scrollRect != null)
+                {
+                    bindUiType.type = UiType.ScrollRect;
+                }
+                else if (videoPlayer != null)
+                {
+                    bindUiType.type = UiType.VideoPlayer;
+                }
+                else if (slider != null)
+                {
+                    bindUiType.type = UiType.Slider;
+                }
+                else if (childBaseWindow != null)
+                {
+                    bindUiType.type = UiType.ChildList;
+                    bindUiType.childType = childBaseWindow;
+                }
+                else if (image != null)
+                {
+                    bindUiType.type = UiType.Image;
+                }
+                else
+                {
+                    bindUiType.type = UiType.GameObject;
                 }
             }
         }

@@ -12,7 +12,7 @@ namespace XFramework
             GUIStyle guiStyle = new GUIStyle();
             guiStyle.normal.textColor = Color.cyan;
             guiStyle.fontSize = 12;
-            guiStyle.fontStyle = FontStyle.Bold;
+            guiStyle.fontStyle = FontStyle.Italic;
             return guiStyle;
         }
 
