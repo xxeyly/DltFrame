@@ -21,16 +21,28 @@ namespace XFramework
             GameObject obj = EditorUtility.InstanceIDToObject(instanceid) as GameObject;
             if (obj != null)
             {
-                if (obj.GetComponent<EntityItem>() != null)
+                EntityItem entityItem = obj.GetComponent<EntityItem>();
+                if (entityItem != null)
                 {
                     #region 静态
 
-                    GUI.Label(GlobalHierarchy.SetRect(selectionrect, -7, 18), "E",GlobalHierarchy.LabelGUIStyle());
+                    GUI.Label(GlobalHierarchy.SetRect(selectionrect, -7, 18), "E", GlobalHierarchy.LabelGUIStyle());
+
+                    #endregion
+
+                    #region 警告
+
+                    if (entityItem.entityName != obj.name)
+                    {
+                        if (GUI.Button(GlobalHierarchy.SetRect(selectionrect, -22, 18), "R", GlobalHierarchy.LabelGUIStyle()))
+                        {
+                            obj.name = entityItem.entityName;
+                        }
+                    }
 
                     #endregion
                 }
             }
         }
-
     }
 }

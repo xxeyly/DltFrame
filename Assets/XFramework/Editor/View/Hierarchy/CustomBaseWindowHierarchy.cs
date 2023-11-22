@@ -10,8 +10,6 @@ namespace XFramework
     [InitializeOnLoad]
     public class CustomBaseWindowHierarchy
     {
-        [LabelText("全局")] public static string Global = "Global";
-
         static CustomBaseWindowHierarchy()
         {
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyShow;
