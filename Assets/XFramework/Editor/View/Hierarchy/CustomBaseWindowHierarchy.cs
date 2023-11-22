@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 
 using System;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ namespace XFramework
     [InitializeOnLoad]
     public class CustomBaseWindowHierarchy
     {
+        [LabelText("全局")] public static string Global = "Global";
+
         static CustomBaseWindowHierarchy()
         {
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyShow;
@@ -32,7 +35,7 @@ namespace XFramework
 
                     if (tempBaseWindow.GetViewShowType() == ViewShowType.Static)
                     {
-                        GUI.Label(SetRect(selectionrect, -7, 18), "S");
+                        GUI.Label(GlobalHierarchy.SetRect(selectionrect, -7, 18), "S", GlobalHierarchy.LabelGUIStyle());
                     }
 
                     #endregion
@@ -43,19 +46,16 @@ namespace XFramework
                     {
                         string viewName = " --- " + tempBaseWindow.viewName;
                         Rect viewNameRect;
-                        if (General.HierarchyContentFollow)
+                        if (GlobalHierarchy.HierarchyContentFollow)
                         {
                             viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataFrameComponent.CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
                         }
                         else
                         {
-                            viewNameRect = SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
+                            viewNameRect = GlobalHierarchy.SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
                         }
 
-                        GUI.Label(viewNameRect, viewName, new GUIStyle()
-                        {
-                            fontStyle = FontStyle.Italic
-                        });
+                        GUI.Label(viewNameRect, viewName, GlobalHierarchy.LabelGUIStyle());
                     }
 
                     #endregion
@@ -65,7 +65,7 @@ namespace XFramework
                     rectCheck.width = 18;
                     GameObject window = obj.transform.Find("Window").gameObject;
 
-                    window.SetActive(GUI.Toggle(SetRect(selectionrect, -22, 18), window.activeSelf, string.Empty));
+                    window.SetActive(GUI.Toggle(GlobalHierarchy.SetRect(selectionrect, -22, 18), window.activeSelf, string.Empty));
                     if (window.GetComponent<CanvasGroup>())
                     {
                         window.GetComponent<CanvasGroup>().alpha = window.activeSelf ? 1 : 0;
@@ -80,14 +80,6 @@ namespace XFramework
 #endif
                 }
             }
-        }
-
-        private static Rect SetRect(Rect selectionRect, float offset, float width)
-        {
-            Rect rect = new Rect(selectionRect);
-            rect.x += rect.width + offset;
-            rect.width = width;
-            return rect;
         }
     }
 }

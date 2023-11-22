@@ -1,10 +1,12 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace XFramework
 {
     public abstract class FrameComponent : SerializedMonoBehaviour, IComponent
     {
+
         //框架组件初始化
         public abstract void FrameInitComponent();
 

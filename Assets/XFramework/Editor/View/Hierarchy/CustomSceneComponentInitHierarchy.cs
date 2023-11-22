@@ -32,33 +32,23 @@ namespace XFramework
                     {
                         string viewName = " --- " + sceneComponent.viewName;
                         Rect viewNameRect;
-                        if (General.HierarchyContentFollow)
+                        if (GlobalHierarchy.HierarchyContentFollow)
                         {
                             viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataFrameComponent.CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
                         }
                         else
                         {
-                            viewNameRect = SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
+                            viewNameRect = GlobalHierarchy.SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
                         }
 
-                        GUI.Label(viewNameRect, viewName, new GUIStyle()
-                        {
-                            fontStyle = FontStyle.Italic
-                        });
+                        GUI.Label(viewNameRect, viewName,GlobalHierarchy.LabelGUIStyle());
                     }
 
                     #endregion
                 }
             }
         }
-
-        private static Rect SetRect(Rect selectionRect, float offset, float width)
-        {
-            Rect rect = new Rect(selectionRect);
-            rect.x += rect.width + offset;
-            rect.width = width;
-            return rect;
-        }
+        
     }
 }
 #endif

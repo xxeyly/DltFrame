@@ -25,19 +25,13 @@ namespace XFramework
                 {
                     #region 静态
 
-                    GUI.Label(SetRect(selectionrect, -7, 18), "U");
+                    GUI.Label(GlobalHierarchy.SetRect(selectionrect, -7, 18), "U", GlobalHierarchy.LabelGUIStyle());
 
                     #endregion
                 }
             }
         }
 
-        private static Rect SetRect(Rect selectionRect, float offset, float width)
-        {
-            Rect rect = new Rect(selectionRect);
-            rect.x += rect.width + offset;
-            rect.width = width;
-            return rect;
-        }
+    
     }
 }

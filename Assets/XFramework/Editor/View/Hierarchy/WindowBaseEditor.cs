@@ -84,15 +84,16 @@ namespace XFramework
                     uiObj.GetComponent<BindUiType>().type = UiType.Button;
                     uiObj.GetComponent<BindUiType>().eventTriggerType = UIEventTriggerType.PointerClick;
                 }
-                else if (uiObj.GetComponent<Image>() &&
-                         !uiObj.GetComponent<Button>() &&
-                         !uiObj.GetComponent<Scrollbar>() &&
-                         !uiObj.GetComponent<ScrollRect>() &&
-                         !uiObj.GetComponent<RawImage>() &&
-                         // !uiObj.GetComponent<TMP_InputField>() &&
-                         !uiObj.GetComponent<InputField>() &&
-                         // !uiObj.GetComponent<TMP_Dropdown>() &&
-                         !uiObj.GetComponent<Dropdown>())
+                else if (
+                    uiObj.GetComponent<Image>() &&
+                    !uiObj.GetComponent<Button>() &&
+                    !uiObj.GetComponent<Scrollbar>() &&
+                    !uiObj.GetComponent<ScrollRect>() &&
+                    !uiObj.GetComponent<RawImage>() &&
+                    !uiObj.GetComponent<TMP_InputField>() &&
+                    !uiObj.GetComponent<InputField>() &&
+                    !uiObj.GetComponent<TMP_Dropdown>() &&
+                    !uiObj.GetComponent<Dropdown>())
                 {
                     uiObj.GetComponent<BindUiType>().type = UiType.Image;
                 }

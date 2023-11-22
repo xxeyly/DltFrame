@@ -1,12 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace XFramework
 {
-    partial class BaseWindow
+    public partial class SceneComponent
     {
         #region 无返回方法
 

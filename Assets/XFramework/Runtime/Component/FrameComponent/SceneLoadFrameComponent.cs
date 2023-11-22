@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -37,7 +38,6 @@ namespace XFramework
 
         public override void FrameSceneEndComponent()
         {
-            
         }
 
         public override void FrameEndComponent()
@@ -74,22 +74,19 @@ namespace XFramework
 
         #region 加载同步场景
 
-        
         /// <summary>
         /// 同步加载场景
         /// </summary>
         /// <param name="sceneName"></param>
         /// <param name="loadSceneMode"></param>
-        public void SceneLoad(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        public async void SceneLoad(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (GameRootStart.Instance.hotFixLoad)
             {
                 //加载热更配置表
-                HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
-                //实例化场景内容到临时位置
-                // HotFixFrameComponent.Instance.InstantiateTempHotFixAssetBundle();
+                await HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
                 //加载场景AssetBundle
-                HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
+                await HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
             }
 
             LoadSynchronizationScene(sceneName, loadSceneMode);
@@ -110,7 +107,6 @@ namespace XFramework
 
         #region 加载异步场景
 
-
         /// <summary>
         /// 异步加载场景
         /// </summary>
@@ -122,19 +118,20 @@ namespace XFramework
         }
 
         [LabelText("异步加载逻辑")]
-        private void LoadAsyncScene(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        private async void LoadAsyncScene(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (GameRootStart.Instance.hotFixLoad)
             {
                 //加载热更配置表
-                HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
-                //实例化场景内容到临时位置
-                HotFixFrameComponent.Instance.InstantiateTempHotFixAssetBundle();
+                await HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
                 //加载场景AssetBundle
-                HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
+                await HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
             }
+
             tempSceneAsyncOperation = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
             tempSceneAsyncOperation.allowSceneActivation = false;
+            await tempSceneAsyncOperation;
+            
         }
 
         /// <summary>
@@ -163,9 +160,8 @@ namespace XFramework
         {
             tempSceneAsyncOperation.allowSceneActivation = true;
         }
-        #endregion
 
-    
+        #endregion
 
 
         /// <summary>

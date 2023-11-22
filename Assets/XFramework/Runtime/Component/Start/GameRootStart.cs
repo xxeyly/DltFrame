@@ -44,7 +44,7 @@ namespace XFramework
         [LabelText("框架加载日志")] [BoxGroup] public bool frameLoadLog;
 
 
-        private async void OnEnable()
+        private void OnEnable()
         {
             //场景中只有一个GameRootStart
             if (DataFrameComponent.GetAllObjectsInScene<GameRootStart>().Count == 1)
@@ -108,8 +108,6 @@ namespace XFramework
                 SceneLoadFrameComponent.Instance.SceneLoad(initJumpSceneName);
                 DestroyImmediate(GetComponent<AudioListener>());
             }
-
-            // await UniTask.NextFrame();
             SceneManager.sceneLoaded += SceneLoadOverCallBack;
         }
 
@@ -134,12 +132,12 @@ namespace XFramework
         /// 加载场景初始化单例
         /// 加载顺序 框架组件-场景工具
         /// </summary>
-        private void InitSceneStartSingletons(Scene scene)
+        private async void InitSceneStartSingletons(Scene scene)
         {
-            if (Instance.hotFixLoad)
+            //热更加载
+            if (hotFixLoad)
             {
-                HotFixFrameComponent.Instance.InstantiateHotFixAssetBundle();
-                // HotFixFrameComponent.Instance.ReleaseTempHotFixAssetBundle();
+                await HotFixFrameComponent.Instance.InstantiateHotFixAssetBundle();
                 Debug.Log("释放热更资源");
             }
 
