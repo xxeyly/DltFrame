@@ -106,17 +106,17 @@ namespace XFramework
         public override void OnSaveConfig()
         {
             HotFixViewFilePath = AssetDatabase.GetAssetPath(HotFixView);
-            FileOperation.SaveTextToLoad(General.assetRootPath, "HotFixView.json", JsonUtility.ToJson(this));
+            FileOperation.SaveTextToLoad(RuntimeGlobal.assetRootPath, "HotFixView.json", JsonUtility.ToJson(this));
         }
 
         public override void OnLoadConfig()
         {
-            if (!File.Exists(General.assetRootPath + "HotFixView.json"))
+            if (!File.Exists(RuntimeGlobal.assetRootPath + "HotFixView.json"))
             {
                 return;
             }
 
-            HotFixViewEditor hotFixViewEditor = JsonMapper.ToObject<HotFixViewEditor>(FileOperation.GetTextToLoad(General.assetRootPath, "HotFixView.json"));
+            HotFixViewEditor hotFixViewEditor = JsonMapper.ToObject<HotFixViewEditor>(FileOperation.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixView.json"));
             this.HotFixView = AssetDatabase.LoadAssetAtPath<Object>(hotFixViewEditor.HotFixViewFilePath);
         }
 
