@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 
 namespace XFramework
@@ -15,12 +12,8 @@ namespace XFramework
         [LabelText("生成脚本内容")] private Dictionary<string, Dictionary<string, List<List<string>>>> _returnCallDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
 
         [LabelText("所有脚本内容")] private Dictionary<string, string> _allScriptsContentDic;
-        [LabelText("加载脚本路径")] public string loadScriptsPath = "Scripts";
         [LabelText("所有脚本")] [SerializeField] private List<string> allScriptPath;
 
-        
-        
-        
         [Button(ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
         [LabelText("代码生成")]
@@ -37,9 +30,6 @@ namespace XFramework
 
             _callDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
             _returnCallDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
-            //脚本路径
-            string scriptsPath = Application.dataPath + "/" + loadScriptsPath;
-
             _allScriptsContentDic = new Dictionary<string, string>();
             allScriptPath = new List<string>();
             List<string> classPath = DataFrameComponent.GetGetSpecifyPathInAllTypePath("Assets", "cs");

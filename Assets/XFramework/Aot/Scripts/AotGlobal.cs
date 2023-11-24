@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class AotGlobal
 {
+    //获得设备存储路径
     public static string GetDeviceStoragePath()
     {
         string path = String.Empty;
@@ -26,6 +27,7 @@ public class AotGlobal
         return path;
     }
 
+    //获得数据的MD5值
     public static string GetMD5HashByte(byte[] fileByte)
     {
         MD5 md5 = new MD5CryptoServiceProvider();
@@ -39,11 +41,7 @@ public class AotGlobal
         return sb.ToString();
     }
 
-    /// <summary>
-    /// 转换字节大小、长度, 根据字节大小范围返回KB, MB, GB自适长度
-    /// </summary>
-    /// <param name="length">传入字节大小</param>
-    /// <returns></returns>
+    //字节长度转换单位
     public static string FileSizeString(double length)
     {
         int byteConversion = 1024;
@@ -81,6 +79,7 @@ public class AotGlobal
         }
     }
 
+    //获得文件地址的MD5值
     public static string GetMD5HashFromFile(string fileName)
     {
         if (File.Exists(fileName))
@@ -99,5 +98,46 @@ public class AotGlobal
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 拷贝文件夹
+    /// </summary>
+    /// <param name="sourceDirName"></param>
+    /// <param name="destDirName"></param>
+    public static void Copy(string sourceDirName, string destDirName)
+    {
+        if (sourceDirName.Substring(sourceDirName.Length - 1) != "\\")
+        {
+            sourceDirName = sourceDirName + "\\";
+        }
+
+        if (destDirName.Substring(destDirName.Length - 1) != "\\")
+        {
+            destDirName = destDirName + "\\";
+        }
+
+        if (Directory.Exists(sourceDirName))
+        {
+            if (!Directory.Exists(destDirName))
+            {
+                Directory.CreateDirectory(destDirName);
+            }
+
+            foreach (string item in Directory.GetFiles(sourceDirName))
+            {
+                if (item.Contains("meta"))
+                {
+                    continue;
+                }
+
+                File.Copy(item, destDirName + Path.GetFileName(item), true);
+            }
+
+            foreach (string item in Directory.GetDirectories(sourceDirName))
+            {
+                Copy(item, destDirName + item.Substring(item.LastIndexOf("\\", StringComparison.Ordinal) + 1));
+            }
+        }
     }
 }

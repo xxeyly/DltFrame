@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.Events;
 using Object = System.Object;
 
 
+// ReSharper disable once CheckNamespace
 namespace XFramework
 {
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     public partial class ListenerFrameComponent : FrameComponent
     {
         public static ListenerFrameComponent Instance;
@@ -362,7 +364,6 @@ namespace XFramework
                 {
                     if (t == null)
                     {
-                        ((CallBack<T>)customDelegate)(t);
                         return;
                     }
 
@@ -629,6 +630,11 @@ namespace XFramework
             foreach (SceneComponent sceneComponent in DataFrameComponent.GetAllObjectsInScene<SceneComponent>())
             {
                 ReflexBinEventListener(sceneComponent);
+            }
+
+            foreach (SceneComponentInit sceneComponentInit in DataFrameComponent.GetAllObjectsInScene<SceneComponentInit>())
+            {
+                ReflexBinEventListener(sceneComponentInit);
             }
 
             foreach (BaseWindow baseWindow in DataFrameComponent.GetAllObjectsInScene<BaseWindow>())

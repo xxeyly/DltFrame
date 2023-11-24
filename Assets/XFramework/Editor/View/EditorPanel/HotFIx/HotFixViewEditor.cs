@@ -31,6 +31,9 @@ namespace XFramework
                 case BuildTarget.StandaloneWindows:
                     platformName = "StandaloneWindows64";
                     break;
+                case BuildTarget.StandaloneWindows64:
+                    platformName = "StandaloneWindows64";
+                    break;
                 case BuildTarget.WSAPlayer:
                     platformName = "WSAPlayer";
                     break;
@@ -123,7 +126,6 @@ namespace XFramework
         public override void OnInit()
         {
         }
-     
     }
 }
 #endif

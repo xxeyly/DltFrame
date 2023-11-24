@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Sirenix.Serialization;
 #if HybridCLR
 using HybridCLR;
 #endif
@@ -102,7 +103,7 @@ public class HotFixInit
     {
         // Editor环境下，HotUpdate.dll.bytes已经被自动加载，不需要加载，重复加载反而会出问题。  
 #if !UNITY_EDITOR
-        Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{General.GetDeviceStoragePath()}/HotFixRuntime/Assembly/Assembly-CSharp.dll.bytes"));
+        Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/HotFixRuntime/Assembly/Assembly-CSharp.dll.bytes"));
 #else
 
 #endif
