@@ -10,21 +10,41 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Serialization;
 
-public class HotFixConfigCheck : MonoBehaviour
+//下载速度
+public delegate void HotFixRuntimeUpdateTableStart();
+
+public delegate void HotFixRuntimeUpdateTableEnd();
+
+public delegate void HotFixRuntimeLocalFileUpdateCheck(int currentCount, int maxCount);
+
+
+public class HotFixRuntimeServerFileCheck : MonoBehaviour
 {
     [LabelText("下载地址")] public string downPath = "http://127.0.0.1/";
 
     [BoxGroup("下载内容")] [LabelText("再次下载等待时间")]
     public float againDownWaitTime;
 
-    [BoxGroup("资源内容")] [LabelText("当前服务器检测资源数量")]
-    public int currentServerCheckAssetNumber;
+    [BoxGroup("资源内容")] [LabelText("当前本地检测更新资源数量")]
+    public int currentLocalFileUpdateCheckAssetNumber;
 
-    [BoxGroup("资源内容")] [LabelText("检测服务器资源数量上限")]
-    public float checkServerAssetNumberMax;
+    [BoxGroup("资源内容")] [LabelText("本地检测更新资源数量上限")]
+    public int localFileUpdateCheckAssetNumberMax;
+
+    //开始检测配置表
+    public static HotFixRuntimeUpdateTableStart HotFixRuntimeUpdateTableStart;
+
+    //结束检测配置表
+    public static HotFixRuntimeUpdateTableEnd HotFixRuntimeUpdateTableEnd;
+
+    //本地文件更新检测
+    public static HotFixRuntimeLocalFileUpdateCheck HotFixRuntimeLocalFileUpdateCheck;
+
+    [BoxGroup("元数据资源内容")] [LabelText("元数据配置列表")]
+    public List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable = new List<HotFixRuntimeDownConfig>();
 
     [BoxGroup("元数据资源内容")] [LabelText("元数据列表")]
-    public List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable = new List<HotFixRuntimeDownConfig>();
+    public List<string> metadataHotFixRuntimeDownConfigTableList = new List<string>();
 
     [BoxGroup("元数据资源内容")] [LabelText("元数据下载完毕")]
     public bool isMetadataHotFixRuntimeDownConfigTableDownOver = false;
@@ -73,9 +93,11 @@ public class HotFixConfigCheck : MonoBehaviour
         StartCoroutine(StartDownAssetConfig());
     }
 
+    //开始下载配置表
     IEnumerator StartDownAssetConfig()
     {
         Debug.Log("配置表开始下载");
+        HotFixRuntimeUpdateTableStart?.Invoke();
         Debug.Log("元数据表开始下载");
         StartCoroutine(MetadataHotFixRuntimeDownConfig());
         yield return new WaitUntil(() => isMetadataHotFixRuntimeDownConfigTableDownOver);
@@ -95,9 +117,10 @@ public class HotFixConfigCheck : MonoBehaviour
         StartCoroutine(HotFixAssetAssetBundleScene(0));
         yield return new WaitUntil(() => isHotFixAssetAssetBundleSceneConfigDownOver);
         Debug.Log("配置表下载完毕");
+        HotFixRuntimeUpdateTableEnd?.Invoke();
         StartCoroutine(StartAssetLocalCheck());
     }
-
+    //检测本地资源
     IEnumerator StartAssetLocalCheck()
     {
         StartCoroutine(MetadataHotFixRuntimeDownConfigLocalCheck(0));
@@ -113,6 +136,7 @@ public class HotFixConfigCheck : MonoBehaviour
         HotFixConfigDown.Instance.DownHotFixRuntimeDownConfig(needDownHotFixRuntimeDownConfig);
     }
 
+    //下载远程元数据配置表
     IEnumerator MetadataHotFixRuntimeDownConfig()
     {
         UnityWebRequest request = UnityWebRequest.Get(downPath + "HotFix/MetadataConfig/" + "MetadataConfig.json");
@@ -120,13 +144,20 @@ public class HotFixConfigCheck : MonoBehaviour
         if (request.responseCode != 200)
         {
             yield return new WaitForSeconds(againDownWaitTime);
-            Debug.Log(request.url);
             StartCoroutine(MetadataHotFixRuntimeDownConfig());
         }
         else
         {
             metadataHotFixRuntimeDownConfigTable = JsonMapper.ToObject<List<HotFixRuntimeDownConfig>>(request.downloadHandler.text);
+
+            foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in metadataHotFixRuntimeDownConfigTable)
+            {
+                metadataHotFixRuntimeDownConfigTableList.Add(hotFixRuntimeDownConfig.Name);
+            }
+
             isMetadataHotFixRuntimeDownConfigTableDownOver = true;
+            //更新检测数量
+            localFileUpdateCheckAssetNumberMax += metadataHotFixRuntimeDownConfigTable.Count;
         }
     }
 
@@ -147,7 +178,7 @@ public class HotFixConfigCheck : MonoBehaviour
             else
             {
                 //本地Md5校验
-                if (GetMD5HashFromFile(localFilePath) != metadataHotFixRuntimeDownConfigTable[index].Md5)
+                if (HotFixGlobal.GetMD5HashFromFile(localFilePath) != metadataHotFixRuntimeDownConfigTable[index].Md5)
                 {
                     needDownHotFixRuntimeDownConfig.Add(metadataHotFixRuntimeDownConfigTable[index]);
                 }
@@ -175,6 +206,8 @@ public class HotFixConfigCheck : MonoBehaviour
         {
             assemblyHotFixRuntimeDownConfig = JsonMapper.ToObject<HotFixRuntimeDownConfig>(request.downloadHandler.text);
             isAssemblyHotFixRuntimeDownConfigDownOver = true;
+            //更新检测数量
+            localFileUpdateCheckAssetNumberMax += 1;
         }
     }
 
@@ -190,7 +223,7 @@ public class HotFixConfigCheck : MonoBehaviour
         else
         {
             //本地Md5校验
-            if (GetMD5HashFromFile(localFilePath) != assemblyHotFixRuntimeDownConfig.Md5)
+            if (HotFixGlobal.GetMD5HashFromFile(localFilePath) != assemblyHotFixRuntimeDownConfig.Md5)
             {
                 needDownHotFixRuntimeDownConfig.Add(assemblyHotFixRuntimeDownConfig);
             }
@@ -212,6 +245,8 @@ public class HotFixConfigCheck : MonoBehaviour
         {
             gameRootStartHotFixRuntimeDownConfig = JsonMapper.ToObject<HotFixRuntimeDownConfig>(request.downloadHandler.text);
             isGameRootStartDownOver = true;
+            //更新检测数量
+            localFileUpdateCheckAssetNumberMax += 1;
         }
     }
 
@@ -228,7 +263,7 @@ public class HotFixConfigCheck : MonoBehaviour
         else
         {
             //本地Md5校验
-            if (GetMD5HashFromFile(localFilePath) != gameRootStartHotFixRuntimeDownConfig.Md5)
+            if (HotFixGlobal.GetMD5HashFromFile(localFilePath) != gameRootStartHotFixRuntimeDownConfig.Md5)
             {
                 needDownHotFixRuntimeDownConfig.Add(gameRootStartHotFixRuntimeDownConfig);
             }
@@ -249,10 +284,10 @@ public class HotFixConfigCheck : MonoBehaviour
         }
         else
         {
-            currentServerCheckAssetNumber = 0;
+            currentLocalFileUpdateCheckAssetNumber = 0;
             hotFixAssetAssetBundleSceneConfigTable = JsonMapper.ToObject<List<string>>(request.downloadHandler.text);
-            currentServerCheckAssetNumber = 0;
-            checkServerAssetNumberMax = hotFixAssetAssetBundleSceneConfigTable.Count;
+            currentLocalFileUpdateCheckAssetNumber = 0;
+            localFileUpdateCheckAssetNumberMax = hotFixAssetAssetBundleSceneConfigTable.Count;
             isHotFixAssetAssetBundleSceneConfigTableDownOver = true;
         }
     }
@@ -271,6 +306,14 @@ public class HotFixConfigCheck : MonoBehaviour
             else
             {
                 HotFixAssetAssetBundleSceneConfig hotFixAssetAssetBundleSceneConfig = JsonMapper.ToObject<HotFixAssetAssetBundleSceneConfig>(request.downloadHandler.text);
+
+                //更新检测数量
+                //场景
+                localFileUpdateCheckAssetNumberMax += 1;
+                //字体
+                localFileUpdateCheckAssetNumberMax += 1;
+                //场景内资源
+                localFileUpdateCheckAssetNumberMax += hotFixAssetAssetBundleSceneConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Count;
                 hotFixAssetAssetBundleSceneConfigs.Add(hotFixAssetAssetBundleSceneConfig);
                 if (hotFixAssetAssetBundleSceneConfigs.Count < hotFixAssetAssetBundleSceneConfigTable.Count)
                 {
@@ -298,7 +341,7 @@ public class HotFixConfigCheck : MonoBehaviour
             }
 
             string localPathCacheName = hotFixAssetAssetBundleSceneConfig.sceneHotFixAssetAssetBundleAssetConfig.assetBundleName + ".json.Cache";
-            SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", localPathCacheName, JsonMapper.ToJson(hotFixAssetAssetBundleSceneConfig));
+            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", localPathCacheName, JsonMapper.ToJson(hotFixAssetAssetBundleSceneConfig));
 
             HotFixConfigDown.Instance.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + localPathCacheName);
         }
@@ -328,7 +371,7 @@ public class HotFixConfigCheck : MonoBehaviour
             else
             {
                 //本地Md5校验
-                if (GetMD5HashFromFile(localFilePath) != hotFixAssetAssetBundleAssetConfigs[index].md5)
+                if (HotFixGlobal.GetMD5HashFromFile(localFilePath) != hotFixAssetAssetBundleAssetConfigs[index].md5)
                 {
                     HotFixRuntimeDownConfig hotFixRuntimeDownConfig = new HotFixRuntimeDownConfig()
                     {
@@ -348,48 +391,5 @@ public class HotFixConfigCheck : MonoBehaviour
         {
             hotFixAssetBundleLocalCheck = true;
         }
-    }
-
-
-    private string GetMD5HashFromFile(string fileName)
-    {
-        if (File.Exists(fileName))
-        {
-            FileStream file = new FileStream(fileName, FileMode.Open);
-            MD5 md5 = new MD5CryptoServiceProvider();
-            byte[] retVal = md5.ComputeHash(file);
-            file.Close();
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < retVal.Length; i++)
-            {
-                sb.Append(retVal[i].ToString("x2"));
-            }
-
-            return sb.ToString();
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// 保存文本信息到本地
-    /// </summary>
-    /// <param name="path">文件路径</param>
-    /// <param name="fileName">文件名称</param>
-    /// <param name="information">保存信息</param>
-    public static void SaveTextToLoad(string path, string fileName, string information)
-    {
-        if (Directory.Exists(path))
-        {
-        }
-        else
-        {
-            Directory.CreateDirectory(path);
-        }
-
-        File.WriteAllText(path + "/" + fileName, information, new System.Text.UTF8Encoding(false));
-#if UNITY_EDITOR
-        UnityEditor.AssetDatabase.Refresh();
-#endif
     }
 }

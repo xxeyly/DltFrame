@@ -11,12 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/XFramework/HotFix/Scene/HotFix.unity
     guid: 1898140f9db66ae40a4e4f7d25fd5be6
-  - enabled: 1
-    path: Assets/Scene/Login.unity
-    guid: 3381d840b7745d34dbfb8e5b9656bfa7
-  - enabled: 1
-    path: Assets/Scene/Init.unity
-    guid: 3c13e566d7cf2b642b8eb925b3e6cff6
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: f3aee3376240e624b877e6b4e9b83442,
       type: 2}

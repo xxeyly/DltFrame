@@ -38,6 +38,7 @@ public class HotFixConfigDown : MonoBehaviour
     public void DownHotFixRuntimeDownConfig(List<HotFixRuntimeDownConfig> needDownHotFixRuntimeDownConfig)
     {
         Debug.Log("加载完毕");
+        
         if (needDownHotFixRuntimeDownConfig.Count == 0)
         {
             ReplaceCacheFile();

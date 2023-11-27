@@ -1,16 +1,12 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using Sirenix.Serialization;
 #if HybridCLR
 using HybridCLR;
 #endif
 
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 public class HotFixInit
 {
@@ -24,9 +20,9 @@ public class HotFixInit
 
     private static void SceneLoadOverCallBack(Scene arg0, LoadSceneMode arg1)
     {
-        Debug.Log("HotFix");
         GameObject hotFixView = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView/hotfixview").LoadAsset<GameObject>("HotFixView");
-        GameObject.Instantiate(hotFixView);
+        Object.Instantiate(hotFixView);
+        Debug.Log("HotFixView加载完毕");
         SceneManager.sceneLoaded -= SceneLoadOverCallBack;
     }
 
@@ -48,15 +44,12 @@ public class HotFixInit
             string aotDllPath = HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/" + aotDllName + ".bytes";
             if (!File.Exists(aotDllPath))
             {
-                Debug.Log(aotDllName + "拷贝");
-                Debug.Log(aotDllPath);
-
                 File.Copy(Application.streamingAssetsPath + "/HotFix/Metadata/" + aotDllName + ".bytes", aotDllPath, true);
             }
 
             byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + aotDllName}.bytes");
 #if HybridCLR
-            LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
+            LoadImageErrorCode err = RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
             Debug.Log($"LoadMetadataForAOTAssembly:{aotDllName}. ret:{err}");
 #endif
         }
@@ -94,8 +87,8 @@ public class HotFixInit
         //加载元数据
         LoadMetadataForAOTAssemblies();
         LoadHotFixCode();
-        GameObject GameRootStart = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
-        GameObject.Instantiate(GameRootStart);
+        GameObject gameRootStart = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
+        Object.Instantiate(gameRootStart);
     }
 
     //加载XFrameworkHotFix数据

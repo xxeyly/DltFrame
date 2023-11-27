@@ -55,6 +55,7 @@ namespace XFramework
             hotFixAssetConfig.name = "HotFixCode.dll.bytes";
             hotFixAssetConfig.md5 = FileOperation.GetMD5HashFromFile(path);
             hotFixAssetConfig.size = FileOperation.GetFileSize(path).ToString();
+            hotFixAssetConfig.path = "HotFix/HotFixCode";
             FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFix/HotFixCodeConfig/" + "HotFixCodeConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
             Debug.Log("HotFixCode配置输出");
 
@@ -93,6 +94,7 @@ namespace XFramework
             hotFixAssetConfig.name = "hotfixview"; //ab包打包后自带转换成小写
             hotFixAssetConfig.md5 = FileOperation.GetMD5HashFromFile(filePath);
             hotFixAssetConfig.size = FileOperation.GetFileSize(filePath).ToString();
+            hotFixAssetConfig.path = "HotFix/HotFixView";
             FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFix/HotFixViewConfig/" + "HotFixViewConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
             OnLoadConfig();
         }

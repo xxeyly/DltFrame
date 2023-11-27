@@ -203,6 +203,7 @@ public class AssetBundleManager : BaseEditor
                     Size = FileOperation.GetFileSize(path).ToString()
                 });
             }
+            
 
             FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFix/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
         }
