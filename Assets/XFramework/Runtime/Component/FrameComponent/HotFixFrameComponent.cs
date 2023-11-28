@@ -11,7 +11,7 @@ namespace XFramework
     {
         public static HotFixFrameComponent Instance;
 
-        [LabelText("热修复包AssetBundle配置")] public HotFixAssetAssetBundleSceneConfig hotFixAssetAssetBundleSceneConfigs = new HotFixAssetAssetBundleSceneConfig();
+        [LabelText("热修复包AssetBundle配置")] public HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfigs = new HotFixRuntimeSceneAssetBundleConfig();
         [LabelText("热更AssetBundle临时路径")] public Dictionary<string, List<GameObject>> hotFixAssetAssetBundleTempPath = new Dictionary<string, List<GameObject>>();
         [LabelText("场景所有AssetBundle")] public List<AssetBundle> currentSceneAllAssetBundle = new List<AssetBundle>();
 
@@ -40,25 +40,25 @@ namespace XFramework
         public async UniTask<string> InstantiateHotFixAssetBundle()
         {
             //本地字体路径
-            string localFontPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundlePath + hotFixAssetAssetBundleSceneConfigs.sceneFontFixAssetConfig.assetBundleName;
+            string localFontPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundlePath + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundleName;
             //加载字体
             AssetBundle fontAssetBundle = await AssetBundle.LoadFromFileAsync(localFontPath);
             //加载内容
-            for (int i = 0; i < hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
+            for (int i = 0; i < hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
             {
-                string assetBundlePath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath;
-                string assetBundleName = DataFrameComponent.AllCharToLower(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
+                string assetBundlePath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath;
+                string assetBundleName = DataFrameComponent.AllCharToLower(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
 
                 AssetBundle tempHotFixAssetBundle = await AssetBundle.LoadFromFileAsync(assetBundlePath + assetBundleName);
                 currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
-                GameObject hotFixObject = (GameObject)await tempHotFixAssetBundle.LoadAssetAsync<GameObject>(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
-                if (hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath == string.Empty)
+                GameObject hotFixObject = (GameObject)await tempHotFixAssetBundle.LoadAssetAsync<GameObject>(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
+                if (hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath == string.Empty)
                 {
                     Instantiate(hotFixObject, null, false);
                 }
                 else
                 {
-                    Instantiate(hotFixObject, GameObject.Find(hotFixAssetAssetBundleSceneConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath).transform, false);
+                    Instantiate(hotFixObject, GameObject.Find(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath).transform, false);
                 }
             }
 
@@ -98,7 +98,7 @@ namespace XFramework
             UnityWebRequest request = UnityWebRequest.Get(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + sceneName + ".json");
             await request.SendWebRequest();
             string hotFixAssetConfig = request.downloadHandler.text;
-            hotFixAssetAssetBundleSceneConfigs = JsonUtility.FromJson<HotFixAssetAssetBundleSceneConfig>(hotFixAssetConfig);
+            hotFixRuntimeSceneAssetBundleConfigs = JsonUtility.FromJson<HotFixRuntimeSceneAssetBundleConfig>(hotFixAssetConfig);
             return String.Empty;
         }
 

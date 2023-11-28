@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using Sirenix.Serialization;
 #if HybridCLR
 using HybridCLR;
 #endif
@@ -59,9 +61,9 @@ public class HotFixInit
     {
         List<string> aotDllList = new List<string>
         {
-            "StompyRobot.SRF.dll",
             "System.Core.dll",
             "System.dll",
+            "UniTask.dll",
             "UnityEngine.AssetBundleModule.dll",
             "UnityEngine.CoreModule.dll",
             "UnityEngine.JSONSerializeModule.dll",
@@ -96,7 +98,7 @@ public class HotFixInit
     {
         // Editor环境下，HotUpdate.dll.bytes已经被自动加载，不需要加载，重复加载反而会出问题。  
 #if !UNITY_EDITOR
-        Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/HotFixRuntime/Assembly/Assembly-CSharp.dll.bytes"));
+        Assembly.Load(File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/HotFixRuntime/Assembly/Assembly-CSharp.dll.bytes"));
 #else
 
 #endif

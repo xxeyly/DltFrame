@@ -202,38 +202,38 @@ public class SceneHotfixAssetManager : BaseEditor
     private void GenerateBuildConfig()
     {
         string sceneName = DataFrameComponent.AllCharToLower(SceneManager.GetActiveScene().name);
-        HotFixAssetAssetBundleSceneConfig hotFixAssetAssetBundleSceneConfig = new HotFixAssetAssetBundleSceneConfig();
+        HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = new HotFixRuntimeSceneAssetBundleConfig();
         if (SceneAssetBundleAsset.sceneBuildScene)
         {
-            hotFixAssetAssetBundleSceneConfig.sceneHotFixAssetAssetBundleAssetConfig.assetBundleName = sceneName;
-            hotFixAssetAssetBundleSceneConfig.sceneHotFixAssetAssetBundleAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/";
-            hotFixAssetAssetBundleSceneConfig.sceneHotFixAssetAssetBundleAssetConfig.assetBundleSize =
+            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleName = sceneName;
+            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/";
+            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleSize =
                 FileOperation.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName).ToString();
-            hotFixAssetAssetBundleSceneConfig.sceneHotFixAssetAssetBundleAssetConfig.md5 =
+            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.md5 =
                 FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
-            hotFixAssetAssetBundleSceneConfig.sceneHotFixAssetAssetBundleAssetConfig.assetBundleInstantiatePath = "";
+            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleInstantiatePath = "";
         }
 
         if (SceneAssetBundleAsset.copySceneAssetBundleAsset == null)
         {
             //场景字体
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.assetBundleName = sceneName + "font";
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/";
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.assetBundleSize =
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = sceneName + "font";
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/";
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
                 FileOperation.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.md5 =
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
                 FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.assetBundleInstantiatePath = "";
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleInstantiatePath = "";
         }
         else
         {
             string copySceneName = DataFrameComponent.AllCharToLower(SceneAssetBundleAsset.copySceneAssetBundleAsset.name);
             //场景字体
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.assetBundleName = copySceneName + "font";
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/";
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.assetBundleSize =
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = copySceneName + "font";
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/";
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
                 FileOperation.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font").ToString();
-            hotFixAssetAssetBundleSceneConfig.sceneFontFixAssetConfig.md5 =
+            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
                 FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font");
         }
 
@@ -244,7 +244,7 @@ public class SceneHotfixAssetManager : BaseEditor
             HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabConfig.prefabPath);
             UnityEditor.AssetImporter assetImporter = UnityEditor.AssetImporter.GetAtPath(hotFixAssetPathConfig.prefabPath);
             assetImporter.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
-            HotFixAssetAssetBundleAssetConfig hot = new HotFixAssetAssetBundleAssetConfig();
+            HotFixRuntimeAssetBundleConfig hot = new HotFixRuntimeAssetBundleConfig();
 
             hot.assetBundleName = DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name);
             hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name), "");
@@ -252,10 +252,10 @@ public class SceneHotfixAssetManager : BaseEditor
             string adPath = Application.streamingAssetsPath + "/" + hot.assetBundlePath + hot.assetBundleName;
             hot.assetBundleSize = FileOperation.GetFileSize(adPath).ToString();
             hot.md5 = FileOperation.GetMD5HashFromFile(adPath);
-            hotFixAssetAssetBundleSceneConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hot);
+            hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hot);
         }
 
-        FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundleConfig", SceneManager.GetActiveScene().name + ".json", JsonUtility.ToJson(hotFixAssetAssetBundleSceneConfig));
+        FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundleConfig", SceneManager.GetActiveScene().name + ".json", JsonUtility.ToJson(hotFixRuntimeSceneAssetBundleConfig));
         Debug.Log("打包 配置信息完成");
     }
 

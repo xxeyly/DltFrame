@@ -2,7 +2,7 @@ using System;
 using Sirenix.OdinInspector;
 
 [Serializable]
-public class HotFixAssetAssetBundleAssetConfig
+public class HotFixRuntimeAssetBundleConfig
 {
     [LabelText("AssetBundle名称")] public string assetBundleName;
     [LabelText("AssetBundle路径")] public string assetBundlePath;

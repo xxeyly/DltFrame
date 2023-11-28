@@ -146,15 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0301492d004d0e846b7338a5ba42b1c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   generateHierarchyPath: Canvas
   prefabPath: Assets/HotFixPrefabs/Scene/Init/UI/EmptyWindowView.prefab
   assetBundlePath: HotFixRuntime/HotFixAssetBundle/init/ui/emptywindowview
@@ -195,7 +186,6 @@ MonoBehaviour:
   timeTaskInfoList: []
   viewName: 
   typeName: EmptyWindowView
-  callBackName: []
 --- !u!1 &7738086351468450206
 GameObject:
   m_ObjectHideFlags: 0

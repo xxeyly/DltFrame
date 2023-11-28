@@ -85,6 +85,7 @@ public class AssetBundleManager : BaseEditor
             switch (EditorUserBuildSettings.activeBuildTarget)
             {
                 case BuildTarget.StandaloneWindows:
+                case BuildTarget.StandaloneWindows64:
                     platformName = "StandaloneWindows64";
                     break;
                 case BuildTarget.WSAPlayer:
@@ -203,7 +204,7 @@ public class AssetBundleManager : BaseEditor
                     Size = FileOperation.GetFileSize(path).ToString()
                 });
             }
-            
+
 
             FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFix/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
         }
@@ -283,7 +284,6 @@ public class AssetBundleManager : BaseEditor
     public override void OnInit()
     {
     }
-   
 }
 
 
