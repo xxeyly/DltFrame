@@ -40,6 +40,20 @@ public class AotGlobal
 
         return sb.ToString();
     }
+    //获得文件大小
+    public static long GetFileSize(string fileName)
+    {
+        if (File.Exists(fileName))
+        {
+            FileStream file = new FileStream(fileName, FileMode.Open);
+            long size = file.Length;
+            file.Close();
+            file.Dispose();
+            return size;
+        }
+
+        return 0;
+    }
 
     //字节长度转换单位
     public static string FileSizeString(double length)
@@ -88,12 +102,12 @@ public class AotGlobal
             MD5 md5 = new MD5CryptoServiceProvider();
             byte[] retVal = md5.ComputeHash(file);
             file.Close();
+            file.Dispose();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < retVal.Length; i++)
             {
                 sb.Append(retVal[i].ToString("x2"));
             }
-
             return sb.ToString();
         }
 

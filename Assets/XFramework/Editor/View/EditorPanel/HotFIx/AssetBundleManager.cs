@@ -112,10 +112,10 @@ public class AssetBundleManager : BaseEditor
             File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
                 Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes", true);
             HotFixRuntimeDownConfig hotFixAssemblyConfig = new HotFixRuntimeDownConfig();
-            hotFixAssemblyConfig.Md5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
-            hotFixAssemblyConfig.Name = "Assembly-CSharp.dll.bytes";
-            hotFixAssemblyConfig.Size = FileOperation.GetFileSize(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes").ToString();
-            hotFixAssemblyConfig.Path = "HotFixRuntime/Assembly/";
+            hotFixAssemblyConfig.md5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
+            hotFixAssemblyConfig.name = "Assembly-CSharp.dll.bytes";
+            hotFixAssemblyConfig.size = FileOperation.GetFileSize(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes").ToString();
+            hotFixAssemblyConfig.path = "HotFixRuntime/Assembly/";
             FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/AssemblyConfig", "AssemblyConfig.json", JsonMapper.ToJson(hotFixAssemblyConfig));
             Debug.Log("移动完毕");
         }
@@ -145,10 +145,10 @@ public class AssetBundleManager : BaseEditor
             UnityEditor.AssetDatabase.Refresh();
 
             HotFixRuntimeDownConfig hotFixGameRootStartConfig = new HotFixRuntimeDownConfig();
-            hotFixGameRootStartConfig.Md5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart");
-            hotFixGameRootStartConfig.Name = "gamerootstart";
-            hotFixGameRootStartConfig.Size = FileOperation.GetFileSize(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart").ToString();
-            hotFixGameRootStartConfig.Path = "HotFixRuntime/GameRootStartAssetBundle/";
+            hotFixGameRootStartConfig.md5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart");
+            hotFixGameRootStartConfig.name = "gamerootstart";
+            hotFixGameRootStartConfig.size = FileOperation.GetFileSize(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart").ToString();
+            hotFixGameRootStartConfig.path = "HotFixRuntime/GameRootStartAssetBundle/";
             FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json", JsonMapper.ToJson(hotFixGameRootStartConfig));
         }
 
@@ -198,10 +198,10 @@ public class AssetBundleManager : BaseEditor
             {
                 hotFixMetaAssemblyConfigs.Add(new HotFixRuntimeDownConfig()
                 {
-                    Name = DataFrameComponent.GetPathFileNameDontContainFileType(path) + ".bytes",
-                    Md5 = FileOperation.GetMD5HashFromFile(path),
-                    Path = "HotFix/Metadata/",
-                    Size = FileOperation.GetFileSize(path).ToString()
+                    name = DataFrameComponent.GetPathFileNameDontContainFileType(path) + ".bytes",
+                    md5 = FileOperation.GetMD5HashFromFile(path),
+                    path = "HotFix/Metadata/",
+                    size = FileOperation.GetFileSize(path).ToString()
                 });
             }
 

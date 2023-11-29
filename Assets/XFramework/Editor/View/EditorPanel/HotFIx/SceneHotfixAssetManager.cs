@@ -216,14 +216,22 @@ public class SceneHotfixAssetManager : BaseEditor
 
         if (SceneAssetBundleAsset.copySceneAssetBundleAsset == null)
         {
-            //场景字体
-            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = sceneName + "font";
-            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/";
-            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
-                FileOperation.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
-            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
-                FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
-            hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleInstantiatePath = "";
+            //场景中可能不包含字体,不包含,设为空
+            if (!File.Exists(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font"))
+            {
+                hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig = null;
+            }
+            else
+            {
+                //场景字体
+                hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = sceneName + "font";
+                hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/";
+                hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
+                    FileOperation.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
+                hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
+                    FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
+                hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleInstantiatePath = "";
+            }
         }
         else
         {
@@ -443,11 +451,6 @@ public class SceneHotfixAssetManager : BaseEditor
                             fontAssetImporter.assetBundleName = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Font/" + sceneName + "Font";
                         }
                     }
-
-                    /*if (!scenePrefabConfig.resourceUpdate)
-                    {
-                        continue;
-                    }*/
 
                     AssetImporter assetImporter = AssetImporter.GetAtPath(scenePrefabConfig.prefabPath);
                     HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabConfig.prefabPath);

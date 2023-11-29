@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -40,9 +41,15 @@ namespace XFramework
         public async UniTask<string> InstantiateHotFixAssetBundle()
         {
             //本地字体路径
-            string localFontPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundlePath + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundleName;
-            //加载字体
-            AssetBundle fontAssetBundle = await AssetBundle.LoadFromFileAsync(localFontPath);
+            string localFontPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundlePath +
+                                   hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundleName;
+            AssetBundle fontAssetBundle = null;
+            if (File.Exists(localFontPath))
+            {
+                //加载字体
+                fontAssetBundle = await AssetBundle.LoadFromFileAsync(localFontPath);
+            }
+
             //加载内容
             for (int i = 0; i < hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
             {
@@ -68,7 +75,11 @@ namespace XFramework
             }
 
             currentSceneAllAssetBundle.Clear();
-            fontAssetBundle.Unload(false);
+            if (File.Exists(localFontPath))
+            {
+                fontAssetBundle?.Unload(false);
+            }
+
             return string.Empty;
         }
 

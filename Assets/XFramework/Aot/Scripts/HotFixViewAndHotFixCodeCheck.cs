@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -67,12 +68,10 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     public bool hotFixCodeDownOver;
 
     [LabelText("当前检测时间")] [SerializeField] private float currentCheckTime;
-
     [LabelText("检测时间")] [SerializeField] private float checkTime = 1;
-
-    // [LabelText("下载大小")] [SerializeField] private Dictionary<string, int> _hotFixAssetConfigDownSize = new Dictionary<string, int>();
-    [LabelText("下载流")] private FileStream _hotFixFileStream;
-    [LabelText("下载请求")] private UnityWebRequest _hotFixUnityWebRequest;
+    [LabelText("下载流")] public FileStream _hotFixFileStream;
+    [LabelText("下载请求")] public UnityWebRequest _hotFixUnityWebRequest;
+    [LabelText("上一次下载字节长度")] public int oldDownByteLength;
     [LabelText("当前下载HotFixAssetConfig")] public HotFixAssetConfig currentOperationHotFixAssetConfig;
     [LabelText("缓存更改路径")] public List<string> replaceCacheFile = new List<string>();
 
@@ -107,11 +106,13 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         //HotFixCode本地检查
         StartCoroutine(HotFixCodeLocalCheck());
         yield return new WaitUntil(() => hotFixCodeLocalCheck);
+        //更新总的下载量
+        HotFixViewAndHotFixCodeTotalDownValue?.Invoke(totalDownloadValue);
         //HotFixView需要下载
         if (hotFixViewIsNeedDown)
         {
             currentOperationHotFixAssetConfig = hotFixViewHotFixAssetConfig;
-            StartCoroutine(HotFixDown(hotFixViewHotFixAssetConfig, () => { hotFixViewDownOver = true; }));
+            StartCoroutine(HotFixAssetConfigLocalCacheCheck(hotFixViewHotFixAssetConfig, () => { hotFixViewDownOver = true; }));
         }
         else
         {
@@ -122,7 +123,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         if (hotFixCodeIsNeedDown)
         {
             currentOperationHotFixAssetConfig = hotFixCodeHotFixAssetConfig;
-            StartCoroutine(HotFixDown(hotFixCodeHotFixAssetConfig, () => { hotFixCodeDownOver = true; }));
+            StartCoroutine(HotFixAssetConfigLocalCacheCheck(hotFixCodeHotFixAssetConfig, () => { hotFixCodeDownOver = true; }));
         }
         else
         {
@@ -219,7 +220,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         {
             //更新最大下载量
             totalDownloadValue += double.Parse(hotFixViewHotFixAssetConfig.size);
-            HotFixViewAndHotFixCodeTotalDownValue?.Invoke(totalDownloadValue);
         }
 
         hotFixViewLocalCheck = true;
@@ -285,33 +285,18 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         {
             //更新最大下载量
             totalDownloadValue += double.Parse(hotFixCodeHotFixAssetConfig.size);
-            HotFixViewAndHotFixCodeTotalDownValue?.Invoke(totalDownloadValue);
         }
 
         hotFixCodeLocalCheck = true;
     }
 
-
-    //获得文件大小
-    private static long GetFileSize(string fileName)
-    {
-        if (File.Exists(fileName))
-        {
-            FileStream file = new FileStream(fileName, FileMode.Open);
-            long size = file.Length;
-            file.Dispose();
-            return size;
-        }
-
-        return 0;
-    }
-
-    IEnumerator HotFixDown(HotFixAssetConfig hotFixAssetConfig, Action action)
+    //HotFixAssetConfig本地文件检测
+    IEnumerator HotFixAssetConfigLocalCacheCheck(HotFixAssetConfig hotFixAssetConfig, Action action)
     {
         //下载路径
-        string downFileUrl = hotFixPath + hotFixAssetConfig.path + "/" + hotFixAssetConfig.name;
+        string downFileUrl = hotFixPath + hotFixAssetConfig.path + hotFixAssetConfig.name;
         //本地路径文件夹
-        string localPathDirectory = AotGlobal.GetDeviceStoragePath() + "/" + hotFixAssetConfig.path + "/";
+        string localPathDirectory = AotGlobal.GetDeviceStoragePath() + "/" + hotFixAssetConfig.path;
         //文件夹不存在,创建文件夹
         if (!Directory.Exists(localPathDirectory))
         {
@@ -320,94 +305,92 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
         //下载文件缓存路径
         string downFileCachePath = localPathDirectory + hotFixAssetConfig.name + ".Cache";
-
-        Debug.Log(downFileCachePath);
-        //本地缓存文件的Md5
-        string localCacheMd5 = String.Empty;
-        if (File.Exists(downFileCachePath))
+        bool isCache = File.Exists(downFileCachePath);
+        if (isCache)
         {
-            byte[] localCache = File.ReadAllBytes(downFileCachePath);
-            localCacheMd5 = AotGlobal.GetMD5HashByte(localCache);
-        }
-        else
-        {
-            Debug.Log(hotFixAssetConfig.name + ":未查找到");
-        }
-
-        //文件流
-        _hotFixFileStream = new FileStream(downFileCachePath, FileMode.OpenOrCreate, FileAccess.Write);
-        //下载请求
-        _hotFixUnityWebRequest = UnityWebRequest.Get(downFileUrl);
-        //缓存文件的Md5和服务器的Md5相同,表示已经下载完毕
-        if (localCacheMd5 == hotFixAssetConfig.md5)
-        {
-            _hotFixFileStream.Close();
-            _hotFixFileStream.Dispose();
-            _hotFixFileStream = null;
-            _hotFixUnityWebRequest = null;
-            action.Invoke();
-        }
-        else
-        {
-            //已有有缓存文件,继续下载
-            if (_hotFixFileStream.Length > 0)
+            //本地缓存文件的Md5
+            string localCacheMd5 = AotGlobal.GetMD5HashFromFile(downFileCachePath);
+            Debug.Log("存在缓存文件:" + downFileCachePath + ":" + "本地文件Md5:" + localCacheMd5);
+            replaceCacheFile.Add(downFileCachePath);
+            //当前下载量加上已经下载的缓存量
+            currentDownloadValue += AotGlobal.GetFileSize(downFileCachePath);
+            //缓存文件的Md5和服务器的Md5相同,表示已经下载完毕
+            if (localCacheMd5 == hotFixAssetConfig.md5)
             {
-                //当前下载量加上已经下载的缓存量
-                currentDownloadValue += _hotFixFileStream.Length;
-                //更新下载数据
-                HotFixViewAndHotFixCodeCurrentDownValue?.Invoke(currentDownloadValue);
-                //读取缓存文件
-                _hotFixUnityWebRequest.downloadHandler = new DownloadHandlerFile(downFileCachePath);
-                //使用断点续传下载
-                _hotFixUnityWebRequest.SetRequestHeader("Range", "bytes=" + _hotFixFileStream.Length + "-");
-            }
-
-            //开启下载
-            yield return _hotFixUnityWebRequest.SendWebRequest();
-            //重置检测时间
-            currentCheckTime = 0;
-            //下载流程完毕,直接写入文件
-            WriteContent(_hotFixFileStream);
-            //关闭下载流
-            _hotFixFileStream.Close();
-            _hotFixFileStream.Dispose();
-            _hotFixFileStream = null;
-            //检测下载完后的文件的Md5
-            localCacheMd5 = AotGlobal.GetMD5HashFromFile(downFileCachePath);
-            if (_hotFixUnityWebRequest.responseCode != 200 && _hotFixUnityWebRequest.responseCode != 206)
-            {
-                //下载出错,发起下次下载请求
-                yield return new WaitForSeconds(0.2f);
-                StartCoroutine(HotFixDown(hotFixAssetConfig, action));
+                action.Invoke();
             }
             else
             {
-                if (localCacheMd5 != hotFixAssetConfig.md5)
-                {
-                    Debug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
-                    Debug.Log("本地下载的Md5:" + localCacheMd5);
-                    Debug.Log("服务器的Md5:" + hotFixAssetConfig.md5);
-                    //清除已经下载的大小
-                    currentDownloadValue -= GetFileSize(downFileCachePath);
-                    //关闭下载流
-                    _hotFixUnityWebRequest = null;
-                    //删除文件
-                    if (File.Exists(downFileCachePath))
-                    {
-                        File.Delete(downFileCachePath);
-                    }
+                HotFixViewAndHotFixCodeCurrentDownValue?.Invoke(currentDownloadValue);
+                //下载请求
+                _hotFixUnityWebRequest = UnityWebRequest.Get(downFileUrl);
+                //使用断点续传下载
+                _hotFixUnityWebRequest.SetRequestHeader("Range", "bytes=" + AotGlobal.GetFileSize(downFileCachePath) + "-");
+                yield return StartCoroutine(DownHotFixAssetConfig(downFileCachePath, hotFixAssetConfig, action));
+            }
+        }
+        else
+        {
+            //下载请求
+            _hotFixUnityWebRequest = UnityWebRequest.Get(downFileUrl);
+            yield return StartCoroutine(DownHotFixAssetConfig(downFileCachePath, hotFixAssetConfig, action));
+        }
+    }
 
-                    //再次发起下载请求
-                    yield return new WaitForSeconds(0.2f);
-                    StartCoroutine(HotFixDown(hotFixAssetConfig, action));
-                }
-                else
+    //下载HotFixAssetConfig
+    IEnumerator DownHotFixAssetConfig(string downFileCachePath, HotFixAssetConfig hotFixAssetConfig, Action action)
+    {
+        //文件流
+        _hotFixFileStream = new FileStream(downFileCachePath, FileMode.OpenOrCreate, FileAccess.Write);
+        //开启下载
+        yield return _hotFixUnityWebRequest.SendWebRequest();
+        currentCheckTime = 0;
+        //重置检测时间
+        //下载流程完毕,直接写入文件
+        WriteContent(_hotFixFileStream);
+        //重置上一次下载字节长度
+        oldDownByteLength = 0;
+        //关闭下载流
+        _hotFixFileStream.Close();
+        _hotFixFileStream.Dispose();
+        _hotFixFileStream = null;
+        //检测下载完后的文件的Md5
+        string localCacheMd5 = AotGlobal.GetMD5HashFromFile(downFileCachePath);
+        if (_hotFixUnityWebRequest.responseCode != 200 && _hotFixUnityWebRequest.responseCode != 206)
+        {
+            //下载出错,发起下次下载请求
+            yield return new WaitForSeconds(0.2f);
+            StartCoroutine(HotFixAssetConfigLocalCacheCheck(hotFixAssetConfig, action));
+        }
+        else
+        {
+            if (localCacheMd5 != hotFixAssetConfig.md5)
+            {
+                Debug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
+                Debug.Log("本地下载的Md5:" + localCacheMd5);
+                Debug.Log("服务器的Md5:" + hotFixAssetConfig.md5);
+                //旧大小清空
+                oldDownByteLength = 0;
+                //清除已经下载的大小
+                currentDownloadValue -= AotGlobal.GetFileSize(downFileCachePath);
+                //关闭下载流
+                _hotFixUnityWebRequest = null;
+                //删除文件
+                if (File.Exists(downFileCachePath))
                 {
-                    Debug.Log("下载完毕:" + hotFixAssetConfig.name);
-                    _hotFixUnityWebRequest = null;
-                    replaceCacheFile.Add(downFileCachePath);
-                    action.Invoke();
+                    File.Delete(downFileCachePath);
                 }
+
+                //再次发起下载请求
+                yield return new WaitForSeconds(0.2f);
+                StartCoroutine(HotFixAssetConfigLocalCacheCheck(hotFixAssetConfig, action));
+            }
+            else
+            {
+                Debug.Log("下载完毕:" + hotFixAssetConfig.name);
+                _hotFixUnityWebRequest = null;
+                replaceCacheFile.Add(downFileCachePath);
+                action.Invoke();
             }
         }
     }
@@ -433,7 +416,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         if (currentCheckTime >= checkTime)
         {
             currentCheckTime = 0;
-            // UpdateHotFixViewDownProgress();
             if (_hotFixFileStream != null && _hotFixUnityWebRequest != null)
             {
                 WriteContent(_hotFixFileStream);
@@ -447,20 +429,25 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     {
         if (fileStream != null && _hotFixUnityWebRequest != null && _hotFixUnityWebRequest.downloadHandler != null && _hotFixUnityWebRequest.downloadHandler.data != null)
         {
-            //写入前字节长度
-            int offset = (int)fileStream.Length;
+            // Debug.Log("本地大小:" + fileStream.Length);
             //下载文件大小
             int downSize = _hotFixUnityWebRequest.downloadHandler.data.Length;
+            // Debug.Log("当前下载大小:" + downSize);
             //写入文件长度
-            int newDownSize = downSize - offset;
-            fileStream.Seek(offset, SeekOrigin.Begin);
+            int newDownSize = downSize - oldDownByteLength;
+            // Debug.Log("写入大小:" + newDownSize);
             // Debug.Log("有下载更新:" + newDownSize);
+            fileStream.Seek(fileStream.Length, SeekOrigin.Begin);
+
             if (newDownSize > 0)
             {
-                fileStream.Write(_hotFixUnityWebRequest.downloadHandler.data, offset, newDownSize);
+                // Debug.Log(oldDownByteLength + ";" + newDownSize);
+                fileStream.Write(_hotFixUnityWebRequest.downloadHandler.data, oldDownByteLength, newDownSize);
                 HotFixViewAndHotFixCodeDownSpeed?.Invoke(newDownSize);
                 currentDownloadValue += newDownSize;
                 HotFixViewAndHotFixCodeCurrentDownValue?.Invoke(currentDownloadValue);
+                oldDownByteLength = downSize;
+                // Debug.Log("写入后大小:" + fileStream.Length);
             }
             else
             {

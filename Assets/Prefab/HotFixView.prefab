@@ -111,6 +111,56 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1836730739966976228
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6123287470005976524}
+  - component: {fileID: 4735369305257918062}
+  m_Layer: 0
+  m_Name: HotFixRuntimeFileDown
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6123287470005976524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836730739966976228}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 3107797382903888936}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4735369305257918062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1836730739966976228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b91e03a354418480bcc174a1b556e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hotFixPath: http://127.0.0.1/
+  replaceCacheFile: []
+  currentCheckTime: 0
+  checkTime: 1
+  currentDownloadValue: 0
+  totalDownloadValue: 0
+  HotFixRuntimeDownConfigOver: 0
 --- !u!1 &3139452287653251051
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +179,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4601338028552064192
 RectTransform:
   m_ObjectHideFlags: 0
@@ -247,8 +297,8 @@ RectTransform:
   m_Father: {fileID: 662696528073243580}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -290,63 +340,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!1 &3690289166952534918
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3690289166952534919}
-  - component: {fileID: 3690289166952534912}
-  m_Layer: 0
-  m_Name: HotFixConfigDown
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3690289166952534919
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3690289166952534918}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 3107797382903888936}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3690289166952534912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3690289166952534918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ffeb0e934ca0d24786d7c6296d558d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  progress: {fileID: 6554757217291231587}
-  progressPercentage: {fileID: 2253818771214707458}
-  totalDownload: {fileID: 8511632409429724203}
-  currentDownSpeed: {fileID: 6862109820802658910}
-  downPath: http://127.0.0.1/
-  totalDownloadValue: 0
-  currentDownloadValue: 0
-  currentHotFixRuntimeDownConfig:
-    Name: 
-    Path: 
-    Size: 
-    Md5: 
-  hotFixAssetConfigDownSize: 0
-  replaceCacheFile: []
 --- !u!1 &3690289167388688750
 GameObject:
   m_ObjectHideFlags: 0
@@ -358,7 +351,7 @@ GameObject:
   - component: {fileID: 3690289167388688744}
   - component: {fileID: 3690289167388688751}
   m_Layer: 0
-  m_Name: HotFixConfigCheck
+  m_Name: HotFixRuntimeFileCheck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -390,32 +383,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bbfc8102fd07024cb951a3e09bfafe0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hotFixPath: http://127.0.0.1/
+  hotFixPathLocalLoad: 0
   againDownWaitTime: 0
-  currentServerCheckAssetNumber: 0
-  checkServerAssetNumberMax: 0
+  currentLocalFileUpdateCheckAssetNumber: 0
+  localFileUpdateCheckAssetNumberMax: 0
   metadataHotFixRuntimeDownConfigTable: []
-  isMetadataHotFixRuntimeDownConfigTableDownOver: 0
+  isMetadataDownOver: 0
   assemblyHotFixRuntimeDownConfig:
-    Name: 
-    Path: 
-    Size: 
-    Md5: 
-  isAssemblyHotFixRuntimeDownConfigDownOver: 0
+    name: 
+    path: 
+    size: 
+    md5: 
+  isAssemblyDownOver: 0
   gameRootStartHotFixRuntimeDownConfig:
-    Name: 
-    Path: 
-    Size: 
-    Md5: 
+    name: 
+    path: 
+    size: 
+    md5: 
   isGameRootStartDownOver: 0
-  hotFixAssetAssetBundleSceneConfigTable: []
-  isHotFixAssetAssetBundleSceneConfigTableDownOver: 0
-  hotFixAssetAssetBundleSceneConfigs: []
-  isHotFixAssetAssetBundleSceneConfigDownOver: 0
+  hotFixRuntimeAssetBundleSceneConfigTable: []
+  isSceneConfigOver: 0
+  hotFixRuntimeSceneAssetBundleConfigs: []
+  isSceneAssetBundleOver: 0
   needDownHotFixRuntimeDownConfig: []
-  metadataHotFixRuntimeDownConfigLocalCheck: 0
-  assemblyHotFixRuntimeDownConfigLocalCheckLocalCheck: 0
-  gameRootStartHotFixRuntimeDownConfigLocalCheck: 0
-  hotFixAssetBundleLocalCheck: 0
+  isMetadataLocalCheck: 0
+  isAssemblyLocalCheck: 0
+  isGameRootStartLocalCheck: 0
+  isAssetBundleLocalCheck: 0
+  hotFixRuntimeFileDown: {fileID: 4735369305257918062}
 --- !u!1 &5651991069078353866
 GameObject:
   m_ObjectHideFlags: 0
@@ -560,7 +556,7 @@ Transform:
   m_Children:
   - {fileID: 4601338028552064192}
   - {fileID: 3690289167388688744}
-  - {fileID: 3690289166952534919}
+  - {fileID: 6123287470005976524}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -597,7 +593,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

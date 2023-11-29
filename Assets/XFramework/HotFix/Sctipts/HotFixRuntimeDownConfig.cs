@@ -3,8 +3,8 @@ using System;
 [Serializable]
 public class HotFixRuntimeDownConfig
 {
-    public string Name;
-    public string Path;
-    public string Size;
-    public string Md5;
+    public string name;
+    public string path;
+    public string size;
+    public string md5;
 }

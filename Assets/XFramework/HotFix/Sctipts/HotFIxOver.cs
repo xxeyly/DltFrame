@@ -1,0 +1,53 @@
+using System.IO;
+using System.Reflection;
+using HybridCLR;
+using UnityEngine;
+
+public class HotFIxOver
+{
+    public static void Over()
+    {
+        Debug.Log("开始加载原数据");
+        LoadMetadataForAOTAssemblies();
+        Debug.Log("开始加载Assembly-CSharp");
+        LoadAssemblyCSharp();
+        Debug.Log("开始加载游戏");
+        LoadGameRootStart();
+    }
+
+    //加载原数据
+    private static void LoadMetadataForAOTAssemblies()
+    {
+        if (!Directory.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/"))
+        {
+            Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/");
+        }
+
+        foreach (string metadata in HotFixRuntimeFileCheck.metadataHotFixRuntimeDownConfigTableList)
+        {
+            byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + metadata}");
+#if HybridCLR
+            LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
+            Debug.Log($"LoadMetadataForAOTAssembly:{metadata}. ret:{err}");
+#endif
+        }
+    }
+
+    //加载Assembly-CSharp数据
+    private static void LoadAssemblyCSharp()
+    {
+#if !UNITY_EDITOR
+        Assembly.Load(File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/HotFixRuntime/Assembly/Assembly-CSharp.dll.bytes"));
+#else
+
+#endif
+    }
+
+    //LoadGameRootStart
+    private static void LoadGameRootStart()
+    {
+        //加载元数据
+        GameObject gameRootStart = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
+        Object.Instantiate(gameRootStart);
+    }
+}
