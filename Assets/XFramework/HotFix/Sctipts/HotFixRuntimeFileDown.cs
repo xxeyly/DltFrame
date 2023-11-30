@@ -54,8 +54,6 @@ public class HotFixRuntimeFileDown : MonoBehaviour
             {
                 File.Move(cachePath, replacePath);
             }
-
-            Debug.Log(replacePath);
         }
 #if UNITY_EDITOR
         AssetDatabase.Refresh();

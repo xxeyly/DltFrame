@@ -16,7 +16,6 @@ public class HotFixInit
     public static void Init()
     {
         Debug.Log("初始化");
-        LoadMscorlibMetadataForAOTAssemblies();
         SceneManager.sceneLoaded += SceneLoadOverCallBack;
         SceneManager.LoadScene("HotFix");
     }
@@ -34,33 +33,5 @@ public class HotFixInit
         Debug.Log("HotFixView加载完毕");
         SceneManager.sceneLoaded -= SceneLoadOverCallBack;
     }
-
-    //首先加载这个是因为网络下载的时候需要使用这个元数据
-    private static void LoadMscorlibMetadataForAOTAssemblies()
-    {
-        if (!Directory.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/"))
-        {
-            Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/");
-        }
-
-        List<string> aotDllList = new List<string>
-        {
-            "mscorlib.dll"
-        };
-
-        foreach (var aotDllName in aotDllList)
-        {
-            string aotDllPath = HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/" + aotDllName + ".bytes";
-            if (!File.Exists(aotDllPath))
-            {
-                File.Copy(Application.streamingAssetsPath + "/HotFix/Metadata/" + aotDllName + ".bytes", aotDllPath, true);
-            }
-
-            byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + aotDllName}.bytes");
-#if HybridCLR
-            LoadImageErrorCode err = RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
-            Debug.Log($"LoadMetadataForAOTAssembly:{aotDllName}. ret:{err}");
-#endif
-        }
-    }
+    
 }

@@ -19,6 +19,8 @@ public class HotFixGlobal
             case RuntimePlatform.WSAPlayerX64:
             case RuntimePlatform.WSAPlayerX86:
             case RuntimePlatform.WSAPlayerARM:
+            case RuntimePlatform.Android:
+            case RuntimePlatform.IPhonePlayer:
                 path = Application.persistentDataPath;
                 break;
         }
@@ -47,6 +49,7 @@ public class HotFixGlobal
         UnityEditor.AssetDatabase.Refresh();
 #endif
     }
+
     //字节长度转换单位
     public static string FileSizeString(double length)
     {
@@ -84,6 +87,12 @@ public class HotFixGlobal
             return string.Concat(bytes, " Bytes");
         }
     }
+
+    /// <summary>
+    /// 获得文件地址的MD5值
+    /// </summary>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
     public static string GetMD5HashFromFile(string fileName)
     {
         if (File.Exists(fileName))
@@ -103,6 +112,7 @@ public class HotFixGlobal
 
         return null;
     }
+
     //获得文件大小
     public static long GetFileSize(string fileName)
     {

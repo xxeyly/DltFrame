@@ -20,6 +20,8 @@ public class AotGlobal
             case RuntimePlatform.WSAPlayerX64:
             case RuntimePlatform.WSAPlayerX86:
             case RuntimePlatform.WSAPlayerARM:
+            case RuntimePlatform.Android:
+            case RuntimePlatform.IPhonePlayer:
                 path = Application.persistentDataPath;
                 break;
         }
@@ -40,6 +42,7 @@ public class AotGlobal
 
         return sb.ToString();
     }
+
     //获得文件大小
     public static long GetFileSize(string fileName)
     {
@@ -108,6 +111,7 @@ public class AotGlobal
             {
                 sb.Append(retVal[i].ToString("x2"));
             }
+
             return sb.ToString();
         }
 

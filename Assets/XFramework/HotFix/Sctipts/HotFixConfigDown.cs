@@ -32,22 +32,9 @@ public class HotFixConfigDown : MonoBehaviour
     public HotFixRuntimeDownConfig currentHotFixRuntimeDownConfig;
     [LabelText("下载大小")] public int hotFixAssetConfigDownSize;
     [LabelText("缓存更改路径")] public List<string> replaceCacheFile = new List<string>();
+    
     private float time;
     private float timer = 1;
-
-   
-    private string GetMD5HashByte(byte[] fileByte)
-    {
-        MD5 md5 = new MD5CryptoServiceProvider();
-        byte[] retVal = md5.ComputeHash(fileByte);
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < retVal.Length; i++)
-        {
-            sb.Append(retVal[i].ToString("x2"));
-        }
-
-        return sb.ToString();
-    }
 
     /// <summary>
     /// 转换字节大小、长度, 根据字节大小范围返回KB, MB, GB自适长度

@@ -1,14 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
-using LitJson;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Serialization;
 
 //下载开始下载
 public delegate void HotFixRuntimeTableDownStart();
@@ -52,7 +47,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     public List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable = new List<HotFixRuntimeDownConfig>();
 
     [BoxGroup("元数据资源内容")] [LabelText("元数据检测")]
-    public bool HotFixRuntimeDownConfigLocalCheckOver;
+    public bool hotFixRuntimeDownConfigLocalCheckOver;
 
     [BoxGroup("元数据资源内容")] [LabelText("元数据列表")]
     public static List<string> metadataHotFixRuntimeDownConfigTableList = new List<string>();
@@ -183,7 +178,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         else
         {
             //获得元数据配置表
-            metadataHotFixRuntimeDownConfigTable = JsonMapper.ToObject<List<HotFixRuntimeDownConfig>>(request.downloadHandler.text);
+            metadataHotFixRuntimeDownConfigTable = JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(request.downloadHandler.text);
             //统计元数据列表
             foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in metadataHotFixRuntimeDownConfigTable)
             {
@@ -216,7 +211,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         else
         {
             //获得Assembly配置表
-            assemblyHotFixRuntimeDownConfig = JsonMapper.ToObject<HotFixRuntimeDownConfig>(request.downloadHandler.text);
+            assemblyHotFixRuntimeDownConfig = JsonUtil.FromJson<HotFixRuntimeDownConfig>(request.downloadHandler.text);
             //Assembly下载完毕
             isAssemblyDownOver = true;
             //更新检测数量
@@ -238,7 +233,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         else
         {
             //获得GameRootStart配置表
-            gameRootStartHotFixRuntimeDownConfig = JsonMapper.ToObject<HotFixRuntimeDownConfig>(request.downloadHandler.text);
+            gameRootStartHotFixRuntimeDownConfig = JsonUtil.FromJson<HotFixRuntimeDownConfig>(request.downloadHandler.text);
             //GameRootStart下载完毕
             isGameRootStartDownOver = true;
             //更新检测数量
@@ -260,7 +255,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         else
         {
             //获得运行场景数量
-            hotFixRuntimeAssetBundleSceneConfigTable = JsonMapper.ToObject<List<string>>(request.downloadHandler.text);
+            hotFixRuntimeAssetBundleSceneConfigTable = JsonUtil.FromJson<System.Collections.Generic.List<string>>(request.downloadHandler.text);
             //运行场景数量下载完毕
             isSceneConfigOver = true;
         }
@@ -282,7 +277,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
             else
             {
                 //场景AssetBundle配置表
-                HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = JsonMapper.ToObject<HotFixRuntimeSceneAssetBundleConfig>(request.downloadHandler.text);
+                HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = JsonUtil.FromJson<HotFixRuntimeSceneAssetBundleConfig>(request.downloadHandler.text);
                 //更新检测数量
                 //场景
                 localFileUpdateCheckAssetNumberMax += 1;
@@ -343,9 +338,9 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     {
         for (int i = 0; i < metadataHotFixRuntimeDownConfigTable.Count; i++)
         {
-            HotFixRuntimeDownConfigLocalCheckOver = false;
+            hotFixRuntimeDownConfigLocalCheckOver = false;
             StartCoroutine(HotFixRuntimeDownConfigLocalCheck(metadataHotFixRuntimeDownConfigTable[i]));
-            yield return new WaitUntil(() => HotFixRuntimeDownConfigLocalCheckOver);
+            yield return new WaitUntil(() => hotFixRuntimeDownConfigLocalCheckOver);
         }
 
 
@@ -372,7 +367,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
             }
         }
 
-        HotFixRuntimeDownConfigLocalCheckOver = true;
+        hotFixRuntimeDownConfigLocalCheckOver = true;
         //更新检测数量
         currentLocalFileUpdateCheckAssetNumber += 1;
         HotFixRuntimeLocalFileCheck?.Invoke(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
@@ -461,7 +456,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         foreach (HotFixRuntimeSceneAssetBundleConfig hotFixAssetAssetBundleSceneConfig in hotFixRuntimeSceneAssetBundleConfigs)
         {
             string localPathCacheName = hotFixAssetAssetBundleSceneConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleName + ".json.Cache";
-            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", localPathCacheName, JsonMapper.ToJson(hotFixAssetAssetBundleSceneConfig));
+            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", localPathCacheName, JsonUtil.ToJson(hotFixAssetAssetBundleSceneConfig));
             //添加到缓存列表中
             hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + localPathCacheName);
         }
