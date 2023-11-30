@@ -1,19 +1,13 @@
 ManifestFileVersion: 0
-CRC: 4172268342
+CRC: 3119626380
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: hotfixruntime/hotfixassetbundle/init/scene/init
+      Name: hotfixruntime/hotfixassetbundle/login/scene/login
       Dependencies: {}
     Info_1:
-      Name: hotfixruntime/hotfixassetbundle/init/entity/cube
+      Name: hotfixruntime/hotfixassetbundle/login/entity/capsule
       Dependencies: {}
     Info_2:
-      Name: hotfixruntime/hotfixassetbundle/init/scenecomponent/gameobject
-      Dependencies: {}
-    Info_3:
-      Name: hotfixruntime/hotfixassetbundle/init/scenecomponentinit/gameobjec
-      Dependencies: {}
-    Info_4:
-      Name: hotfixruntime/hotfixassetbundle/init/ui/emptywindowview
+      Name: hotfixruntime/hotfixassetbundle/login/scenecomponent/loginscenecomponent
       Dependencies: {}

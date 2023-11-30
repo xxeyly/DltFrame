@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8976059316474925691
+--- !u!1 &3842899325304849980
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8976059316474925694}
-  - component: {fileID: 8976059316474925695}
-  - component: {fileID: 8976059316474925692}
-  - component: {fileID: 8976059316474925693}
-  - component: {fileID: 8976059316474925690}
-  - component: {fileID: 5842212911797497627}
+  - component: {fileID: 3842899325304849976}
+  - component: {fileID: 3842899325304849977}
+  - component: {fileID: 3842899325304849978}
+  - component: {fileID: 3842899325304849979}
+  - component: {fileID: 8447685786004020821}
+  - component: {fileID: 6606280599469141475}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8976059316474925694
+--- !u!4 &3842899325304849976
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8976059316474925691}
-  m_LocalRotation: {x: 0.46193978, y: 0.19134173, z: 0.19134173, w: 0.84462327}
-  m_LocalPosition: {x: 0.2, y: 0.1, z: 0.4}
+  m_GameObject: {fileID: 3842899325304849980}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.5287362, y: 1.0374758, z: 0.04389608}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45, y: 45, z: 45}
---- !u!33 &8976059316474925695
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &3842899325304849977
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8976059316474925691}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8976059316474925692
+  m_GameObject: {fileID: 3842899325304849980}
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &3842899325304849978
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8976059316474925691}
+  m_GameObject: {fileID: 3842899325304849980}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -84,47 +84,48 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8976059316474925693
-BoxCollider:
+--- !u!136 &3842899325304849979
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8976059316474925691}
+  m_GameObject: {fileID: 3842899325304849980}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &8976059316474925690
+--- !u!114 &8447685786004020821
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8976059316474925691}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c09d928fccfe4baea43a8f325620cc01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityName: Cube
-  isLog: 0
-  entityTags: []
-  editorEntityTags: []
---- !u!114 &5842212911797497627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8976059316474925691}
+  m_GameObject: {fileID: 3842899325304849980}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0301492d004d0e846b7338a5ba42b1c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   generateHierarchyPath: 
-  prefabPath: Assets/HotFixPrefabs/Scene/Init/Entity/Cube.prefab
-  assetBundlePath: HotFixRuntime/HotFixAssetBundle/init/entity/cube
+  prefabPath: Assets/HotFixPrefabs/Scene/Login/Entity/Capsule.prefab
+  assetBundlePath: HotFixRuntime/HotFixAssetBundle/login/entity/capsule
+--- !u!114 &6606280599469141475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3842899325304849980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c09d928fccfe4baea43a8f325620cc01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityName: Capsule
+  isLog: 0
+  entityTags: []
+  editorEntityTags: []

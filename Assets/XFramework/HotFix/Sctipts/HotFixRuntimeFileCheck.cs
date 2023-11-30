@@ -76,6 +76,9 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     [BoxGroup("场景资源内容")] [LabelText("场景内所有AssetBundle资源信息")]
     public List<HotFixRuntimeSceneAssetBundleConfig> hotFixRuntimeSceneAssetBundleConfigs = new List<HotFixRuntimeSceneAssetBundleConfig>();
 
+    [BoxGroup("场景资源内容")] [LabelText("场景资源下载完毕")]
+    public bool isHotFixAssetBundleConfigOver;
+
     [BoxGroup("场景资源内容")] [LabelText("服务器场景资源下载完毕")]
     public bool isSceneAssetBundleOver;
 
@@ -154,7 +157,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         yield return new WaitUntil(() => isSceneConfigOver);
         Debug.Log("SceneCount下载完毕");
 
-        StartCoroutine(DownSceneAssetBundleConfig(0));
+        StartCoroutine(StartDownSceneAssetBundleConfig());
         yield return new WaitUntil(() => isSceneAssetBundleOver);
         Debug.Log("配置表下载完毕----------");
         yield return new WaitForSeconds(0.5f);
@@ -261,42 +264,44 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
     }
 
-    //下载场景AssetBundle配置表
-    IEnumerator DownSceneAssetBundleConfig(int index)
+
+    IEnumerator StartDownSceneAssetBundleConfig()
     {
-        if (index <= hotFixRuntimeAssetBundleSceneConfigTable.Count - 1)
+        for (int i = 0; i < hotFixRuntimeAssetBundleSceneConfigTable.Count; i++)
         {
-            UnityWebRequest request = UnityWebRequest.Get(hotFixPath + "HotFixRuntime/HotFixAssetBundleConfig/" + hotFixRuntimeAssetBundleSceneConfigTable[index] + ".json");
-            yield return request.SendWebRequest();
-            if (request.responseCode != 200)
-            {
-                //请求错误,等待一定时间后再次请求
-                yield return new WaitForSeconds(againDownWaitTime);
-                StartCoroutine(DownSceneAssetBundleConfig(index));
-            }
-            else
-            {
-                //场景AssetBundle配置表
-                HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = JsonUtil.FromJson<HotFixRuntimeSceneAssetBundleConfig>(request.downloadHandler.text);
-                //更新检测数量
-                //场景
-                localFileUpdateCheckAssetNumberMax += 1;
-                //字体
-                localFileUpdateCheckAssetNumberMax += 1;
-                //场景内资源
-                localFileUpdateCheckAssetNumberMax += hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Count;
-                //添加到场景AssetBundle配置表
-                hotFixRuntimeSceneAssetBundleConfigs.Add(hotFixRuntimeSceneAssetBundleConfig);
-                if (hotFixRuntimeSceneAssetBundleConfigs.Count < hotFixRuntimeAssetBundleSceneConfigTable.Count)
-                {
-                    index += 1;
-                    StartCoroutine(DownSceneAssetBundleConfig(index));
-                }
-                else
-                {
-                    isSceneAssetBundleOver = true;
-                }
-            }
+            isHotFixAssetBundleConfigOver = false;
+            yield return StartCoroutine(DownSceneAssetBundleConfig(hotFixRuntimeAssetBundleSceneConfigTable[i]));
+            yield return new WaitUntil(() => isHotFixAssetBundleConfigOver);
+        }
+
+        isSceneAssetBundleOver = true;
+    }
+
+    //下载场景AssetBundle配置表
+    IEnumerator DownSceneAssetBundleConfig(string sceneName)
+    {
+        UnityWebRequest request = UnityWebRequest.Get(hotFixPath + "HotFixRuntime/HotFixAssetBundleConfig/" + sceneName + ".json");
+        yield return request.SendWebRequest();
+        if (request.responseCode != 200)
+        {
+            //请求错误,等待一定时间后再次请求
+            yield return new WaitForSeconds(againDownWaitTime);
+            StartCoroutine(DownSceneAssetBundleConfig(sceneName));
+        }
+        else
+        {
+            //场景AssetBundle配置表
+            HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = JsonUtil.FromJson<HotFixRuntimeSceneAssetBundleConfig>(request.downloadHandler.text);
+            //更新检测数量
+            //场景
+            localFileUpdateCheckAssetNumberMax += 1;
+            //字体
+            localFileUpdateCheckAssetNumberMax += 1;
+            //场景内资源
+            localFileUpdateCheckAssetNumberMax += hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Count;
+            //添加到场景AssetBundle配置表
+            hotFixRuntimeSceneAssetBundleConfigs.Add(hotFixRuntimeSceneAssetBundleConfig);
+            isHotFixAssetBundleConfigOver = true;
         }
     }
 
@@ -451,7 +456,6 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
     private void SaveSceneHotFixRuntimeAssetBundleConfigCacheFile()
     {
-        List<HotFixRuntimeAssetBundleConfig> hotFixAssetAssetBundleAssetConfigs = new List<HotFixRuntimeAssetBundleConfig>();
         //遍历所有场景配置表
         foreach (HotFixRuntimeSceneAssetBundleConfig hotFixAssetAssetBundleSceneConfig in hotFixRuntimeSceneAssetBundleConfigs)
         {
