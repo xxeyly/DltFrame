@@ -170,7 +170,7 @@ namespace LitJson
             hex_seq = new char[4];
             indentation = 0;
             indent_value = 4;
-            pretty_print = true;
+            pretty_print = false;
             validate = true;
             lower_case_properties = false;
 
@@ -383,7 +383,6 @@ namespace LitJson
             context.ExpectingValue = false;
         }
 
-        [CLSCompliant(false)]
         public void Write (ulong number)
         {
             DoValidation (Condition.Value);

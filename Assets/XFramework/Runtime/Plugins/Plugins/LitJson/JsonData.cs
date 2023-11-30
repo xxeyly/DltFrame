@@ -19,7 +19,6 @@ using System.IO;
 
 namespace LitJson
 {
-#pragma warning disable CS0436
     public class JsonData : IJsonWrapper, IEquatable<JsonData>
     {
         #region Fields
@@ -1057,6 +1056,4 @@ namespace LitJson
             list_enumerator.Reset ();
         }
     }
-    
-#pragma warning able CS0436
 }

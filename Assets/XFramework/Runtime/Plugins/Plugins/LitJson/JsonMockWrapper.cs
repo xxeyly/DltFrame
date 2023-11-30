@@ -17,8 +17,6 @@ using System.Collections.Specialized;
 
 namespace LitJson
 {
-#pragma warning disable CS0436
-
     public class JsonMockWrapper : IJsonWrapper
     {
         public bool IsArray   { get { return false; } }
@@ -104,6 +102,4 @@ namespace LitJson
         void IOrderedDictionary.Insert   (int i, object k, object v) {}
         void IOrderedDictionary.RemoveAt (int i) {}
     }
-#pragma warning able CS0436
-
 }
