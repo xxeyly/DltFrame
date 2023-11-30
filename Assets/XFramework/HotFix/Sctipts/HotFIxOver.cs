@@ -1,6 +1,7 @@
 using System.IO;
 using System.Reflection;
 using HybridCLR;
+using UnityEditor;
 using UnityEngine;
 
 public class HotFIxOver
@@ -46,8 +47,12 @@ public class HotFIxOver
     //LoadGameRootStart
     private static void LoadGameRootStart()
     {
-        //加载元数据
-        GameObject gameRootStart = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
+        GameObject gameRootStart = null;
+#if UNITY_EDITOR
+        gameRootStart = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefab/GameRootStart.prefab");
+#else
+        gameRootStart = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
+#endif
         Object.Instantiate(gameRootStart);
     }
 }

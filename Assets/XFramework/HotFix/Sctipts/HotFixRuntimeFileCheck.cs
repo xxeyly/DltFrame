@@ -19,6 +19,9 @@ public delegate void HotFixRuntimeTableDownOver();
 //开始本地检测
 public delegate void HotFixRuntimeLocalFileCheck(int currentCount, int maxCount);
 
+//本地检测完毕
+public delegate void HotFixRuntimeLocalFileCheckOver();
+
 public class HotFixRuntimeFileCheck : MonoBehaviour
 {
     [LabelText("下载地址")] public string hotFixPath = "http://127.0.0.1/";
@@ -41,6 +44,9 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
     //本地文件更新检测
     public static HotFixRuntimeLocalFileCheck HotFixRuntimeLocalFileCheck;
+
+    //本地文件更新检测完毕
+    public static HotFixRuntimeLocalFileCheckOver HotFixRuntimeLocalFileCheckOver;
 
     [BoxGroup("元数据资源内容")] [LabelText("元数据配置列表")]
     public List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable = new List<HotFixRuntimeDownConfig>();
@@ -156,6 +162,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         StartCoroutine(DownSceneAssetBundleConfig(0));
         yield return new WaitUntil(() => isSceneAssetBundleOver);
         Debug.Log("配置表下载完毕----------");
+        yield return new WaitForSeconds(0.5f);
         HotFixRuntimeTableDownOver?.Invoke();
         StartCoroutine(StartLocalAssetCheck());
     }
@@ -315,6 +322,9 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         StartCoroutine(AssetBundleLocalCheck(hotFixAssetAssetBundleAssetConfigs));
         yield return new WaitUntil(() => isAssetBundleLocalCheck);
         Debug.Log("本地检测完毕");
+        yield return new WaitForSeconds(1f);
+        HotFixRuntimeLocalFileCheckOver?.Invoke();
+
         //没有要更新的文件,直接进入游戏
         if (needDownHotFixRuntimeDownConfig.Count == 0)
         {
