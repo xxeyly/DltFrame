@@ -106,7 +106,7 @@ namespace XFramework
         /// <param name="sceneName"></param>
         public async UniTask<string> LoadHotFixSceneConfig(string sceneName)
         {
-            UnityWebRequest request = UnityWebRequest.Get(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + sceneName + ".json");
+            UnityWebRequest request = UnityWebRequest.Get(RuntimeGlobal.GetDeviceStoragePath(true) + "/HotFixRuntime/HotFixAssetBundleConfig/" + sceneName + ".json");
             await request.SendWebRequest();
             string hotFixAssetConfig = request.downloadHandler.text;
             hotFixRuntimeSceneAssetBundleConfigs = JsonUtility.FromJson<HotFixRuntimeSceneAssetBundleConfig>(hotFixAssetConfig);

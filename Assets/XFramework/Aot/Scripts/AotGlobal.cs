@@ -1,13 +1,16 @@
 using System;
+using System.Collections;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class AotGlobal
 {
     //获得设备存储路径
-    public static string GetDeviceStoragePath()
+    public static string GetDeviceStoragePath(bool read = false)
     {
         string path = String.Empty;
 
@@ -21,12 +24,47 @@ public class AotGlobal
             case RuntimePlatform.WSAPlayerX86:
             case RuntimePlatform.WSAPlayerARM:
             case RuntimePlatform.Android:
+                if (read)
+                {
+                    path = "file://" + Application.persistentDataPath;
+                }
+                else
+                {
+                    path = Application.persistentDataPath;
+                }
+
+                break;
             case RuntimePlatform.IPhonePlayer:
                 path = Application.persistentDataPath;
                 break;
         }
 
         return path;
+    }
+
+    public static void SaveTextToLoad(string path, string information)
+    {
+        FileStream aFile = new FileStream(path, FileMode.Create);
+        //得到字符串的UTF8 数据流
+        information = Regex.Unescape(information);
+        byte[] bts = System.Text.Encoding.UTF8.GetBytes(information);
+        // StreamWriter sw = new StreamWriter(aFile, Encoding.UTF8);
+        // sw.WriteLine(information);
+        // sw.Close();
+        aFile.Write(bts, 0, bts.Length);
+        if (aFile != null)
+        {
+            //清空缓存
+            aFile.Flush();
+            // 关闭流
+            aFile.Close();
+            //销毁资源
+            aFile.Dispose();
+        }
+
+#if UNITY_EDITOR
+        UnityEditor.AssetDatabase.Refresh();
+#endif
     }
 
     //获得数据的MD5值
@@ -125,16 +163,6 @@ public class AotGlobal
     /// <param name="destDirName"></param>
     public static void Copy(string sourceDirName, string destDirName)
     {
-        if (sourceDirName.Substring(sourceDirName.Length - 1) != "\\")
-        {
-            sourceDirName = sourceDirName + "\\";
-        }
-
-        if (destDirName.Substring(destDirName.Length - 1) != "\\")
-        {
-            destDirName = destDirName + "\\";
-        }
-
         if (Directory.Exists(sourceDirName))
         {
             if (!Directory.Exists(destDirName))
@@ -149,6 +177,7 @@ public class AotGlobal
                     continue;
                 }
 
+                Debug.Log("拷贝文件" + item);
                 File.Copy(item, destDirName + Path.GetFileName(item), true);
             }
 
@@ -157,5 +186,28 @@ public class AotGlobal
                 Copy(item, destDirName + item.Substring(item.LastIndexOf("\\", StringComparison.Ordinal) + 1));
             }
         }
+        else
+        {
+            Debug.Log(sourceDirName + "不存在");
+        }
+    }
+
+    public static void CopyFile(string sourcePath, string destinationPath)
+    {
+        byte[] fileData = null;
+        // 从 StreamingAssets 文件夹读取文件数据
+        UnityWebRequest www = UnityWebRequest.Get(sourcePath);
+        www.SendWebRequest();
+        fileData = www.downloadHandler.data;
+
+        // 创建目标文件夹（如果不存在）
+        string destinationFolder = Path.GetDirectoryName(destinationPath);
+        if (!Directory.Exists(destinationFolder))
+        {
+            Directory.CreateDirectory(destinationFolder);
+        }
+
+        // 将文件数据写入目标文件
+        File.WriteAllBytes(destinationPath, fileData);
     }
 }

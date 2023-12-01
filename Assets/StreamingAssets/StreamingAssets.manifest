@@ -1,13 +1,7 @@
 ManifestFileVersion: 0
-CRC: 3119626380
+CRC: 1996473628
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: hotfixruntime/hotfixassetbundle/login/scene/login
-      Dependencies: {}
-    Info_1:
-      Name: hotfixruntime/hotfixassetbundle/login/entity/capsule
-      Dependencies: {}
-    Info_2:
-      Name: hotfixruntime/hotfixassetbundle/login/scenecomponent/loginscenecomponent
+      Name: hotfix/hotfixview/hotfixview
       Dependencies: {}

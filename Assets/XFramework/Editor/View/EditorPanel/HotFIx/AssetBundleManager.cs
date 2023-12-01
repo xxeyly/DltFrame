@@ -85,11 +85,16 @@ public class AssetBundleManager : BaseEditor
             switch (EditorUserBuildSettings.activeBuildTarget)
             {
                 case BuildTarget.StandaloneWindows:
+                    platformName = "StandaloneWindows64";
+                    break;
                 case BuildTarget.StandaloneWindows64:
                     platformName = "StandaloneWindows64";
                     break;
                 case BuildTarget.WSAPlayer:
                     platformName = "WSAPlayer";
+                    break;
+                case BuildTarget.Android:
+                    platformName = "Android";
                     break;
             }
 
@@ -178,13 +183,16 @@ public class AssetBundleManager : BaseEditor
                 switch (EditorUserBuildSettings.activeBuildTarget)
                 {
                     case BuildTarget.StandaloneWindows:
-                        platformName = "StandaloneWindows";
+                        platformName = "StandaloneWindows64";
                         break;
                     case BuildTarget.StandaloneWindows64:
                         platformName = "StandaloneWindows64";
                         break;
                     case BuildTarget.WSAPlayer:
                         platformName = "WSAPlayer";
+                        break;
+                    case BuildTarget.Android:
+                        platformName = "Android";
                         break;
                 }
 
@@ -212,6 +220,7 @@ public class AssetBundleManager : BaseEditor
         OnLoadConfig();
         AssetDatabase.Refresh();
         DataFrameComponent.RemoveAllAssetBundleName();
+        Debug.Log("生成完毕");
     }
 
     private void OnTextureCompressByPath(List<string> texturePath)

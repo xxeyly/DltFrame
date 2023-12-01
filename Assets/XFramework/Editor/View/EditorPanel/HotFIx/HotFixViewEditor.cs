@@ -37,6 +37,9 @@ namespace XFramework
                 case BuildTarget.WSAPlayer:
                     platformName = "WSAPlayer";
                     break;
+                case BuildTarget.Android:
+                    platformName = "Android";
+                    break;
             }
 
             if (!Directory.Exists("Assets/StreamingAssets/HotFix/HotFixCode"))

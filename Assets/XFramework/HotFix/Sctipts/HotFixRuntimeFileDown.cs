@@ -95,7 +95,7 @@ public class HotFixRuntimeFileDown : MonoBehaviour
         //下载路径
         string downFileUrl = hotFixPath + hotFixAssetConfig.path + hotFixAssetConfig.name;
         //本地路径文件夹
-        string localPathDirectory = HotFixGlobal.GetDeviceStoragePath() + "/" + hotFixAssetConfig.path;
+        string localPathDirectory = HotFixGlobal.GetDeviceStoragePath(true) + "/" + hotFixAssetConfig.path;
         //文件夹不存在,创建文件夹
         if (!Directory.Exists(localPathDirectory))
         {
@@ -104,15 +104,16 @@ public class HotFixRuntimeFileDown : MonoBehaviour
 
         //下载文件缓存路径
         string downFileCachePath = localPathDirectory + hotFixAssetConfig.name + ".Cache";
-        bool isCache = File.Exists(downFileCachePath);
-
-        if (isCache)
+        //检测本地是否存在缓存文件
+        UnityWebRequest cacheRequest = UnityWebRequest.Get(downFileCachePath);
+        yield return cacheRequest.SendWebRequest();
+        if (cacheRequest.responseCode == 200)
         {
             //本地缓存文件的Md5
-            string localCacheMd5 = HotFixGlobal.GetMD5HashFromFile(downFileCachePath);
+            string localCacheMd5 = HotFixGlobal.GetMD5HashByte(cacheRequest.downloadHandler.data);
             Debug.Log("存在缓存文件:" + downFileCachePath + ":" + localCacheMd5);
             //当前下载量加上已经下载的缓存量
-            currentDownloadValue += HotFixGlobal.GetFileSize(downFileCachePath);
+            currentDownloadValue += cacheRequest.downloadHandler.data.Length;
             //缓存文件的Md5和服务器的Md5相同,表示已经下载完毕
             if (localCacheMd5 == hotFixAssetConfig.md5)
             {
@@ -157,8 +158,11 @@ public class HotFixRuntimeFileDown : MonoBehaviour
         _hotFixFileStream.Close();
         _hotFixFileStream.Dispose();
         _hotFixFileStream = null;
+
+        UnityWebRequest md5Request = UnityWebRequest.Get(downFileCachePath);
+        yield return md5Request.SendWebRequest();
         //检测下载完后的文件的Md5
-        string localCacheMd5 = HotFixGlobal.GetMD5HashFromFile(downFileCachePath);
+        string localCacheMd5 = HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data);
         if (_hotFixUnityWebRequest.responseCode != 200 && _hotFixUnityWebRequest.responseCode != 206)
         {
             //下载出错,发起下次下载请求

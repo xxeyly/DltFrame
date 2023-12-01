@@ -33,7 +33,8 @@ namespace XFramework
 #endif
         };
 
-        public static string GetDeviceStoragePath()
+        //获得设备存储路径
+        public static string GetDeviceStoragePath(bool read = false)
         {
             string path = String.Empty;
 
@@ -47,6 +48,17 @@ namespace XFramework
                 case RuntimePlatform.WSAPlayerX86:
                 case RuntimePlatform.WSAPlayerARM:
                 case RuntimePlatform.Android:
+                    if (read)
+                    {
+                        path = "file://" + Application.persistentDataPath;
+                    }
+                    else
+                    {
+                        path = Application.persistentDataPath;
+                    }
+
+                    break;
+                case RuntimePlatform.IPhonePlayer:
                     path = Application.persistentDataPath;
                     break;
             }

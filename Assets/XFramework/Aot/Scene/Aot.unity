@@ -918,6 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hotFixPath: 
+  isFileCopy: 0
   hotFixPathLocalLoad: 0
   totalDownloadValue: 0
   currentDownloadValue: 0

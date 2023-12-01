@@ -115,10 +115,11 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     {
         //本地下载路径
         string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt";
-        if (File.Exists(hotFixDownPath))
+        Debug.Log(1111111111111111111);
+        UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
+        yield return hotFixPathLoadLocalFile.SendWebRequest();
+        if (hotFixPathLoadLocalFile.responseCode == 200)
         {
-            UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
-            yield return hotFixPathLoadLocalFile.SendWebRequest();
             hotFixPath = hotFixPathLoadLocalFile.downloadHandler.text;
             //如果结尾不是/,添加/
             if (hotFixPath[hotFixPath.Length - 1] != '/')
@@ -128,8 +129,9 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning(hotFixDownPath + "不存在,使用默认下载地址");
+            Debug.Log("本地下载路径不存在:" + hotFixDownPath);
         }
+
 
         hotFixPathLocalLoad = true;
     }
@@ -360,14 +362,21 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
         {
+            Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "不存在");
             //本地文件不存在,添加到下载列表
             needDownHotFixRuntimeDownConfig.Add(hotFixRuntimeDownConfig);
         }
         else
         {
+            UnityWebRequest md5Request = UnityWebRequest.Get(localFilePath);
+            yield return md5Request.SendWebRequest();
+
             //本地Md5校验不通过,添加到下载列表
-            if (HotFixGlobal.GetMD5HashFromFile(localFilePath) != hotFixRuntimeDownConfig.md5)
+            if (HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data) != hotFixRuntimeDownConfig.md5)
             {
+                Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "Md5不匹配");
+                Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "本地Md5" + HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data));
+                Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "服务器Md5" + hotFixRuntimeDownConfig.md5);
                 needDownHotFixRuntimeDownConfig.Add(hotFixRuntimeDownConfig);
             }
         }
@@ -382,7 +391,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     //Assembly本地检测
     IEnumerator AssemblyLocalCheck()
     {
-        string localFilePath = HotFixGlobal.GetDeviceStoragePath() + "/" + assemblyHotFixRuntimeDownConfig.path + assemblyHotFixRuntimeDownConfig.name;
+        string localFilePath = HotFixGlobal.GetDeviceStoragePath(true) + "/" + assemblyHotFixRuntimeDownConfig.path + assemblyHotFixRuntimeDownConfig.name;
         UnityWebRequest request = UnityWebRequest.Get(localFilePath);
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
@@ -392,8 +401,10 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
         else
         {
+            UnityWebRequest md5Request = UnityWebRequest.Get(localFilePath);
+            yield return md5Request.SendWebRequest();
             //本地Md5校验不通过,添加到下载列表
-            if (HotFixGlobal.GetMD5HashFromFile(localFilePath) != assemblyHotFixRuntimeDownConfig.md5)
+            if (HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data) != assemblyHotFixRuntimeDownConfig.md5)
             {
                 needDownHotFixRuntimeDownConfig.Add(assemblyHotFixRuntimeDownConfig);
             }
@@ -409,7 +420,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     //GameRootStart本地检测
     IEnumerator GameRootStartLocalCheck()
     {
-        string localFilePath = HotFixGlobal.GetDeviceStoragePath() + "/" + gameRootStartHotFixRuntimeDownConfig.path + gameRootStartHotFixRuntimeDownConfig.name;
+        string localFilePath = HotFixGlobal.GetDeviceStoragePath(true) + "/" + gameRootStartHotFixRuntimeDownConfig.path + gameRootStartHotFixRuntimeDownConfig.name;
         UnityWebRequest request = UnityWebRequest.Get(localFilePath);
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
@@ -419,8 +430,11 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
         else
         {
+            UnityWebRequest md5Request = UnityWebRequest.Get(localFilePath);
+            yield return md5Request.SendWebRequest();
+
             //本地Md5校验不通过,添加到下载列表
-            if (HotFixGlobal.GetMD5HashFromFile(localFilePath) != gameRootStartHotFixRuntimeDownConfig.md5)
+            if (HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data) != gameRootStartHotFixRuntimeDownConfig.md5)
             {
                 needDownHotFixRuntimeDownConfig.Add(gameRootStartHotFixRuntimeDownConfig);
             }
@@ -482,7 +496,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     //HotFixRuntimeAssetBundleConfig 本地检测
     IEnumerator HotFixRuntimeAssetBundleConfigLocalCheck(HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig)
     {
-        string localFilePath = HotFixGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath + hotFixRuntimeAssetBundleConfig.assetBundleName;
+        string localFilePath = HotFixGlobal.GetDeviceStoragePath(true) + "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath + hotFixRuntimeAssetBundleConfig.assetBundleName;
         UnityWebRequest request = UnityWebRequest.Get(localFilePath);
         yield return request.SendWebRequest();
 
@@ -505,8 +519,10 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
             }
             else
             {
+                UnityWebRequest md5Request = UnityWebRequest.Get(localFilePath);
+                yield return md5Request.SendWebRequest();
                 //本地Md5校验
-                if (HotFixGlobal.GetMD5HashFromFile(localFilePath) != hotFixRuntimeAssetBundleConfig.md5)
+                if (HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data) != hotFixRuntimeAssetBundleConfig.md5)
                 {
                     needDownHotFixRuntimeDownConfig.Add(hotFixRuntimeDownConfig);
                 }
