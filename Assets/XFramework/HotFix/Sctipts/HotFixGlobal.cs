@@ -60,6 +60,29 @@ public class HotFixGlobal
         UnityEditor.AssetDatabase.Refresh();
 #endif
     }
+    /// <summary>
+    /// 读取本地文件信息
+    /// </summary>
+    /// <param name="path">路径</param>
+    /// <param name="fileName">文件名</param>
+    /// <returns></returns>
+    public static string GetTextToLoad(string path, string fileName)
+    {
+//            UnityEngine.Debug.Log(Path + "/" + FileName);
+        if (Directory.Exists(path))
+        {
+        }
+        else
+        {
+            Debug.LogError("文件不存在:" + path + "/" + fileName);
+        }
+
+        FileStream aFile = new FileStream(path + "/" + fileName, FileMode.Open);
+        StreamReader sr = new StreamReader(aFile);
+        var textData = sr.ReadToEnd();
+        sr.Close();
+        return textData;
+    }
 
     //字节长度转换单位
     public static string FileSizeString(double length)
