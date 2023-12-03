@@ -115,7 +115,14 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     {
         //本地下载路径
         string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt";
-        Debug.Log(1111111111111111111);
+        Debug.Log("File:" + File.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
+        Debug.Log("File Jar:" + File.Exists(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
+        Debug.Log("HotFixDownPath内容:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/", "HotFixDownPath.txt"));
+       //找不到文件 // Debug.Log("HotFixDownPath内容 Jar:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/", "HotFixDownPath.txt"));
+        Debug.Log("HotFixDownPathMd5:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
+       //不适用 Debug.Log("HotFixDownPathMd5 Jar:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
+       
+       
         UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
         yield return hotFixPathLoadLocalFile.SendWebRequest();
         if (hotFixPathLoadLocalFile.responseCode == 200)
@@ -508,10 +515,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         {
             HotFixRuntimeDownConfig hotFixRuntimeDownConfig = new HotFixRuntimeDownConfig()
             {
-                name = hotFixRuntimeAssetBundleConfig.assetBundleName,
-                path = hotFixRuntimeAssetBundleConfig.assetBundlePath,
-                md5 = hotFixRuntimeAssetBundleConfig.md5,
-                size = hotFixRuntimeAssetBundleConfig.assetBundleSize,
+                name = hotFixRuntimeAssetBundleConfig.assetBundleName, path = hotFixRuntimeAssetBundleConfig.assetBundlePath, md5 = hotFixRuntimeAssetBundleConfig.md5, size = hotFixRuntimeAssetBundleConfig.assetBundleSize,
             };
             if (request.responseCode != 200)
             {

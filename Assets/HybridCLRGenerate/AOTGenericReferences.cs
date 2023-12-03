@@ -6,7 +6,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	public static readonly IReadOnlyList<string> PatchedAOTAssemblyList = new List<string>
 	{
 		"System.Core.dll",
-		"System.dll",
 		"UniTask.dll",
 		"UnityEngine.AssetBundleModule.dll",
 		"UnityEngine.CoreModule.dll",
@@ -93,13 +92,16 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Action<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Action<UnityEngine.EventSystems.RaycastResult>
 	// System.Action<UnityEngine.RaycastHit>
-	// System.Action<UnityEngine.Vector2,object>
-	// System.Action<UnityEngine.Vector3,object>
 	// System.Action<XFramework.AudioComponentData.AudioInfo>
 	// System.Action<XFramework.GenerateAttributesTypeGroup>
 	// System.Action<XFramework.TimeTaskInfo>
 	// System.Action<int>
 	// System.Action<object>
+	// System.Buffers.ArrayPool<int>
+	// System.Buffers.TlsOverPerCoreLockedStacksArrayPool.LockedStack<int>
+	// System.Buffers.TlsOverPerCoreLockedStacksArrayPool.PerCoreLockedStacks<int>
+	// System.Buffers.TlsOverPerCoreLockedStacksArrayPool<int>
+	// System.ByReference<int>
 	// System.Collections.Generic.ArraySortHelper<LitJson.PropertyMetadata>
 	// System.Collections.Generic.ArraySortHelper<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ArraySortHelper<UnityEngine.EventSystems.RaycastResult>
@@ -164,7 +166,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.EqualityComparer<LitJson.ArrayMetadata>
 	// System.Collections.Generic.EqualityComparer<LitJson.ObjectMetadata>
 	// System.Collections.Generic.EqualityComparer<LitJson.PropertyMetadata>
-	// System.Collections.Generic.EqualityComparer<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.EqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>>
 	// System.Collections.Generic.EqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>
 	// System.Collections.Generic.EqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>
@@ -173,10 +174,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.EqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>
 	// System.Collections.Generic.EqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,object>>>
 	// System.Collections.Generic.EqualityComparer<System.ValueTuple<byte,object>>
-	// System.Collections.Generic.EqualityComparer<UnityEngine.EventSystems.RaycastResult>
-	// System.Collections.Generic.EqualityComparer<XFramework.AudioComponentData.AudioInfo>
-	// System.Collections.Generic.EqualityComparer<XFramework.GenerateAttributesTypeGroup>
-	// System.Collections.Generic.EqualityComparer<XFramework.TimeTaskInfo>
 	// System.Collections.Generic.EqualityComparer<byte>
 	// System.Collections.Generic.EqualityComparer<int>
 	// System.Collections.Generic.EqualityComparer<object>
@@ -208,6 +205,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IDictionary<object,LitJson.PropertyMetadata>
 	// System.Collections.Generic.IDictionary<object,object>
 	// System.Collections.Generic.IEnumerable<LitJson.PropertyMetadata>
+	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<System.UIntPtr,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,LitJson.ArrayMetadata>>
 	// System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<object,LitJson.ObjectMetadata>>
@@ -222,6 +220,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IEnumerable<object>
 	// System.Collections.Generic.IEnumerable<ushort>
 	// System.Collections.Generic.IEnumerator<LitJson.PropertyMetadata>
+	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<System.UIntPtr,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<int,object>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,LitJson.ArrayMetadata>>
 	// System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<object,LitJson.ObjectMetadata>>
@@ -246,6 +245,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.IList<int>
 	// System.Collections.Generic.IList<object>
 	// System.Collections.Generic.IList<ushort>
+	// System.Collections.Generic.KeyValuePair<System.UIntPtr,object>
 	// System.Collections.Generic.KeyValuePair<int,object>
 	// System.Collections.Generic.KeyValuePair<object,LitJson.ArrayMetadata>
 	// System.Collections.Generic.KeyValuePair<object,LitJson.ObjectMetadata>
@@ -260,14 +260,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.List.Enumerator<XFramework.TimeTaskInfo>
 	// System.Collections.Generic.List.Enumerator<int>
 	// System.Collections.Generic.List.Enumerator<object>
-	// System.Collections.Generic.List.SynchronizedList<LitJson.PropertyMetadata>
-	// System.Collections.Generic.List.SynchronizedList<System.Collections.Generic.KeyValuePair<object,object>>
-	// System.Collections.Generic.List.SynchronizedList<UnityEngine.EventSystems.RaycastResult>
-	// System.Collections.Generic.List.SynchronizedList<XFramework.AudioComponentData.AudioInfo>
-	// System.Collections.Generic.List.SynchronizedList<XFramework.GenerateAttributesTypeGroup>
-	// System.Collections.Generic.List.SynchronizedList<XFramework.TimeTaskInfo>
-	// System.Collections.Generic.List.SynchronizedList<int>
-	// System.Collections.Generic.List.SynchronizedList<object>
 	// System.Collections.Generic.List<LitJson.PropertyMetadata>
 	// System.Collections.Generic.List<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.List<UnityEngine.EventSystems.RaycastResult>
@@ -295,7 +287,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectEqualityComparer<LitJson.ArrayMetadata>
 	// System.Collections.Generic.ObjectEqualityComparer<LitJson.ObjectMetadata>
 	// System.Collections.Generic.ObjectEqualityComparer<LitJson.PropertyMetadata>
-	// System.Collections.Generic.ObjectEqualityComparer<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.Generic.ObjectEqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>
 	// System.Collections.Generic.ObjectEqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>
 	// System.Collections.Generic.ObjectEqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>
@@ -303,10 +294,6 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.ObjectEqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>
 	// System.Collections.Generic.ObjectEqualityComparer<System.ValueTuple<byte,System.ValueTuple<byte,object>>>
 	// System.Collections.Generic.ObjectEqualityComparer<System.ValueTuple<byte,object>>
-	// System.Collections.Generic.ObjectEqualityComparer<UnityEngine.EventSystems.RaycastResult>
-	// System.Collections.Generic.ObjectEqualityComparer<XFramework.AudioComponentData.AudioInfo>
-	// System.Collections.Generic.ObjectEqualityComparer<XFramework.GenerateAttributesTypeGroup>
-	// System.Collections.Generic.ObjectEqualityComparer<XFramework.TimeTaskInfo>
 	// System.Collections.Generic.ObjectEqualityComparer<byte>
 	// System.Collections.Generic.ObjectEqualityComparer<int>
 	// System.Collections.Generic.ObjectEqualityComparer<object>
@@ -314,6 +301,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Collections.Generic.Stack.Enumerator<object>
 	// System.Collections.Generic.Stack<int>
 	// System.Collections.Generic.Stack<object>
+	// System.Collections.Generic.ValueListBuilder<int>
 	// System.Collections.ObjectModel.ReadOnlyCollection<LitJson.PropertyMetadata>
 	// System.Collections.ObjectModel.ReadOnlyCollection<System.Collections.Generic.KeyValuePair<object,object>>
 	// System.Collections.ObjectModel.ReadOnlyCollection<UnityEngine.EventSystems.RaycastResult>
@@ -332,6 +320,7 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Comparison<object>
 	// System.Func<byte>
 	// System.Func<int>
+	// System.Func<object,byte>
 	// System.IEquatable<object>
 	// System.Predicate<LitJson.PropertyMetadata>
 	// System.Predicate<System.Collections.Generic.KeyValuePair<object,object>>
@@ -341,8 +330,14 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.Predicate<XFramework.TimeTaskInfo>
 	// System.Predicate<int>
 	// System.Predicate<object>
+	// System.ReadOnlySpan<int>
+	// System.Runtime.CompilerServices.ConditionalWeakTable.CreateValueCallback<System.UIntPtr,object>
 	// System.Runtime.CompilerServices.ConditionalWeakTable.CreateValueCallback<object,object>
+	// System.Runtime.CompilerServices.ConditionalWeakTable.Enumerator<System.UIntPtr,object>
+	// System.Runtime.CompilerServices.ConditionalWeakTable.Enumerator<object,object>
+	// System.Runtime.CompilerServices.ConditionalWeakTable<System.UIntPtr,object>
 	// System.Runtime.CompilerServices.ConditionalWeakTable<object,object>
+	// System.Span<int>
 	// System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>>>
 	// System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>>
 	// System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>>>>>>
@@ -353,9 +348,12 @@ public class AOTGenericReferences : UnityEngine.MonoBehaviour
 	// System.ValueTuple<byte,System.ValueTuple<byte,System.ValueTuple<byte,object>>>
 	// System.ValueTuple<byte,System.ValueTuple<byte,object>>
 	// System.ValueTuple<byte,object>
+	// UnityEngine.Events.InvokableCall<byte>
 	// UnityEngine.Events.InvokableCall<object>
 	// UnityEngine.Events.UnityAction<UnityEngine.SceneManagement.Scene,int>
+	// UnityEngine.Events.UnityAction<byte>
 	// UnityEngine.Events.UnityAction<object>
+	// UnityEngine.Events.UnityEvent<byte>
 	// UnityEngine.Events.UnityEvent<object>
 	// }}
 

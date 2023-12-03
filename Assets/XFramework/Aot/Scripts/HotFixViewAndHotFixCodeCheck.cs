@@ -343,7 +343,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         //下载路径
         string downFileUrl = hotFixPath + hotFixAssetConfig.path + hotFixAssetConfig.name;
         //本地路径文件夹
-        string localPathDirectory = AotGlobal.GetDeviceStoragePath(true) + "/" + hotFixAssetConfig.path;
+        string localPathDirectory = AotGlobal.GetDeviceStoragePath() + "/" + hotFixAssetConfig.path;
         //文件夹不存在,创建文件夹
         if (!Directory.Exists(localPathDirectory))
         {
