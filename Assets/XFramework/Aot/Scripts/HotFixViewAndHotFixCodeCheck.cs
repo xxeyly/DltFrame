@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Sirenix.OdinInspector;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -87,7 +86,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         yield return webRequest.SendWebRequest();
         if (webRequest.responseCode != 200)
         {
-            Debug.Log("访问错误:" + webRequest.url + webRequest.responseCode);
+            Debug.Log("访问错误:" + webRequest.url + ":" + webRequest.responseCode);
             yield return new WaitForSeconds(0.2f);
             StartCoroutine(CopyStreamingAssetsPathToPersistentDataPath(sourcePath, destinationPath, fileName));
         }
@@ -120,7 +119,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         yield return new WaitUntil(() => hotFixViewConfigDownOver);
         //HotFixView本地检查
         Debug.Log("HotFixView本地检查");
-
         StartCoroutine(HotFixViewLocalCheck());
         yield return new WaitUntil(() => hotFixViewLocalCheck);
         //HotFixCode服务器配置表检测
@@ -209,7 +207,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         yield return hotFixViewConfigWebRequest.SendWebRequest();
         if (hotFixViewConfigWebRequest.responseCode != 200)
         {
-            Debug.Log("访问错误:" + hotFixViewConfigWebRequest.url + hotFixViewConfigWebRequest.responseCode);
+            Debug.Log("访问错误:" + hotFixViewConfigWebRequest.url + ":" + hotFixViewConfigWebRequest.responseCode);
             yield return new WaitForSeconds(0.2f);
             StartCoroutine(HotFixViewConfigCheck());
         }
@@ -231,7 +229,6 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         hotFixViewIsNeedDown = false;
         //本地HotFixView路径
         string localHotFixViewPath = AotGlobal.GetDeviceStoragePath(true) + "/HotFix/HotFixView/" + hotFixViewHotFixAssetConfig.name;
-
         UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(localHotFixViewPath);
         yield return hotFixViewLoadLocalFile.SendWebRequest();
         if (hotFixViewLoadLocalFile.responseCode == 200)
@@ -349,6 +346,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         {
             Directory.CreateDirectory(localPathDirectory);
         }
+
         //下载文件缓存路径
         string downFileCachePath = localPathDirectory + hotFixAssetConfig.name + ".Cache";
         bool isCache = File.Exists(downFileCachePath);

@@ -114,15 +114,37 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     IEnumerator HotFixPathLocalLoad()
     {
         //本地下载路径
-        string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt";
+        string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt";
+        /*
         Debug.Log("File:" + File.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
-        Debug.Log("File Jar:" + File.Exists(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
+        //获取不到
+        //Debug.Log("File Jar:" + File.Exists(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
         Debug.Log("HotFixDownPath内容:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/", "HotFixDownPath.txt"));
-       //找不到文件 // Debug.Log("HotFixDownPath内容 Jar:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/", "HotFixDownPath.txt"));
+        //获取不到
+        // Debug.Log("HotFixDownPath内容 Jar:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/", "HotFixDownPath.txt"));
         Debug.Log("HotFixDownPathMd5:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
-       //不适用 Debug.Log("HotFixDownPathMd5 Jar:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
-       
-       
+        //获取不到
+        // Debug.Log("HotFixDownPathMd5 Jar:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
+        //获取不到
+        /*UnityWebRequest hotFixPathLoadLocalFile1 = UnityWebRequest.Get(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt");
+        yield return hotFixPathLoadLocalFile1.SendWebRequest();
+        Debug.Log("UnityWebRequest:" + hotFixPathLoadLocalFile1.responseCode);#1#
+
+        UnityWebRequest hotFixPathLoadLocalFile2 = UnityWebRequest.Get(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt");
+        yield return hotFixPathLoadLocalFile2.SendWebRequest();
+        Debug.Log("UnityWebRequest Jar:" + hotFixPathLoadLocalFile2.responseCode);
+
+
+        UnityWebRequest hotFixPathLoadLocalFile3 = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt");
+        yield return hotFixPathLoadLocalFile3.SendWebRequest();
+        Debug.Log("UnityWebRequest streamingAssetsPath:" + hotFixPathLoadLocalFile3.responseCode);
+        //获取不到
+        // Debug.Log("File streamingAssetsPath:" + File.Exists(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt"));
+        //获取不到
+        // Debug.Log("File Md5 streamingAssetsPath:" + HotFixGlobal.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt"));
+        */
+
+
         UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
         yield return hotFixPathLoadLocalFile.SendWebRequest();
         if (hotFixPathLoadLocalFile.responseCode == 200)
@@ -364,7 +386,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
     IEnumerator HotFixRuntimeDownConfigLocalCheck(HotFixRuntimeDownConfig hotFixRuntimeDownConfig)
     {
-        string localFilePath = HotFixGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeDownConfig.path + hotFixRuntimeDownConfig.name;
+        string localFilePath = HotFixGlobal.GetDeviceStoragePath(true) + "/" + hotFixRuntimeDownConfig.path + hotFixRuntimeDownConfig.name;
         UnityWebRequest request = UnityWebRequest.Get(localFilePath);
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
@@ -375,14 +397,11 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
         else
         {
-            UnityWebRequest md5Request = UnityWebRequest.Get(localFilePath);
-            yield return md5Request.SendWebRequest();
-
             //本地Md5校验不通过,添加到下载列表
-            if (HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data) != hotFixRuntimeDownConfig.md5)
+            if (HotFixGlobal.GetMD5HashByte(request.downloadHandler.data) != hotFixRuntimeDownConfig.md5)
             {
                 Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "Md5不匹配");
-                Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "本地Md5" + HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data));
+                Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "本地Md5" + HotFixGlobal.GetMD5HashByte(request.downloadHandler.data));
                 Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "服务器Md5" + hotFixRuntimeDownConfig.md5);
                 needDownHotFixRuntimeDownConfig.Add(hotFixRuntimeDownConfig);
             }
@@ -408,10 +427,8 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
         else
         {
-            UnityWebRequest md5Request = UnityWebRequest.Get(localFilePath);
-            yield return md5Request.SendWebRequest();
             //本地Md5校验不通过,添加到下载列表
-            if (HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data) != assemblyHotFixRuntimeDownConfig.md5)
+            if (HotFixGlobal.GetMD5HashByte(request.downloadHandler.data) != assemblyHotFixRuntimeDownConfig.md5)
             {
                 needDownHotFixRuntimeDownConfig.Add(assemblyHotFixRuntimeDownConfig);
             }
@@ -437,11 +454,8 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
         else
         {
-            UnityWebRequest md5Request = UnityWebRequest.Get(localFilePath);
-            yield return md5Request.SendWebRequest();
-
             //本地Md5校验不通过,添加到下载列表
-            if (HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data) != gameRootStartHotFixRuntimeDownConfig.md5)
+            if (HotFixGlobal.GetMD5HashByte(request.downloadHandler.data) != gameRootStartHotFixRuntimeDownConfig.md5)
             {
                 needDownHotFixRuntimeDownConfig.Add(gameRootStartHotFixRuntimeDownConfig);
             }
@@ -523,10 +537,8 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
             }
             else
             {
-                UnityWebRequest md5Request = UnityWebRequest.Get(localFilePath);
-                yield return md5Request.SendWebRequest();
                 //本地Md5校验
-                if (HotFixGlobal.GetMD5HashByte(md5Request.downloadHandler.data) != hotFixRuntimeAssetBundleConfig.md5)
+                if (HotFixGlobal.GetMD5HashByte(request.downloadHandler.data) != hotFixRuntimeAssetBundleConfig.md5)
                 {
                     needDownHotFixRuntimeDownConfig.Add(hotFixRuntimeDownConfig);
                 }

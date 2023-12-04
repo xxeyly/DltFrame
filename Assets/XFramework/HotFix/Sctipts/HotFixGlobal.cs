@@ -7,7 +7,7 @@ using UnityEngine;
 public class HotFixGlobal
 {
     //获得设备存储路径
-    public static string GetDeviceStoragePath(bool read = false)
+    public static string GetDeviceStoragePath(bool unityWebRequestPath = false)
     {
         string path = String.Empty;
 
@@ -21,7 +21,7 @@ public class HotFixGlobal
             case RuntimePlatform.WSAPlayerX86:
             case RuntimePlatform.WSAPlayerARM:
             case RuntimePlatform.Android:
-                if (read)
+                if (unityWebRequestPath)
                 {
                     path = "file://" + Application.persistentDataPath;
                 }

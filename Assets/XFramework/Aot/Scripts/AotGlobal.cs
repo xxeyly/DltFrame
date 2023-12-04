@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 public class AotGlobal
 {
     //获得设备存储路径
-    public static string GetDeviceStoragePath(bool read = false)
+    public static string GetDeviceStoragePath(bool unityWebRequestPath = false)
     {
         string path = String.Empty;
 
@@ -24,7 +24,7 @@ public class AotGlobal
             case RuntimePlatform.WSAPlayerX86:
             case RuntimePlatform.WSAPlayerARM:
             case RuntimePlatform.Android:
-                if (read)
+                if (unityWebRequestPath)
                 {
                     path = "file://" + Application.persistentDataPath;
                 }
@@ -40,6 +40,23 @@ public class AotGlobal
         }
 
         return path;
+    }
+
+    public static string GetTextToLoad(string path, string fileName)
+    {
+        if (Directory.Exists(path))
+        {
+        }
+        else
+        {
+            Debug.LogError("文件不存在:" + path + "/" + fileName);
+        }
+
+        FileStream aFile = new FileStream(path + "/" + fileName, FileMode.Open);
+        StreamReader sr = new StreamReader(aFile);
+        var textData = sr.ReadToEnd();
+        sr.Close();
+        return textData;
     }
 
     public static void SaveTextToLoad(string path, string information)
