@@ -89,20 +89,25 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
     IEnumerator LocalIsUpdate()
     {
+        Debug.Log("检测本地更新是否开始");
         StartCoroutine(
             CopyStreamingAssetsPathToPersistentDataPath(Application.streamingAssetsPath + "/HotFix/" + "localIsUpdate.txt", Application.persistentDataPath + "/HotFix/", "localIsUpdate.txt"));
         yield return new WaitUntil(() => isFileCopy);
         isFileCopy = false;
         StartCoroutine(LocalIsUpdateLoad());
         yield return new WaitUntil(() => localIsUpdateLoad);
+        Debug.Log("检测本地更新是否完毕");
+
         if (localIsUpdate)
         {
+            Debug.Log("开启更新");
             HotFixViewAndHotFixCodeLocalIsUpdate?.Invoke(true);
             //开始本地文件检测
             StartCoroutine(StartCheckAssetBundleUpdate());
         }
         else
         {
+            Debug.Log("关闭更新");
             HotFixViewAndHotFixCodeLocalIsUpdate?.Invoke(false);
             //直接加载
             LoadHotFixCode();

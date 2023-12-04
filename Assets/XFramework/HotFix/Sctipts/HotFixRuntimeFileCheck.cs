@@ -416,10 +416,10 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
     private void SaveMetadataConfigCacheFile()
     {
-        HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", "MetadataConfig.json", JsonUtil.ToJson(metadataHotFixRuntimeDownConfigTable));
-        
+        HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig", "MetadataConfig.json" + ".Cache", JsonUtil.ToJson(metadataHotFixRuntimeDownConfigTable));
+
         //添加到缓存列表中
-        hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + "MetadataConfig.json");
+        hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig/" + "MetadataConfig.json" + ".Cache");
     }
 
     IEnumerator HotFixRuntimeDownConfigLocalCheck(HotFixRuntimeDownConfig hotFixRuntimeDownConfig)
