@@ -19,6 +19,8 @@ public delegate void HotFixRuntimeLocalFileCheckOver();
 
 public class HotFixRuntimeFileCheck : MonoBehaviour
 {
+    [LabelText("本地开启更新")] public bool localIsUpdate;
+    [LabelText("本地开启更新读取")] public bool localIsUpdateLoad;
     [LabelText("下载地址")] public string hotFixPath = "http://127.0.0.1/";
     [LabelText("下载地址加载完毕")] public bool hotFixPathLocalLoad = false;
 
@@ -48,9 +50,6 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
     [BoxGroup("元数据资源内容")] [LabelText("元数据检测")]
     public bool hotFixRuntimeDownConfigLocalCheckOver;
-
-    [BoxGroup("元数据资源内容")] [LabelText("元数据列表")]
-    public static List<string> metadataHotFixRuntimeDownConfigTableList = new List<string>();
 
     [BoxGroup("元数据资源内容")] [LabelText("元数据下载完毕")]
     public bool isMetadataDownOver = false;
@@ -107,7 +106,46 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(StartDownAssetConfig());
+        StartCoroutine(LocalIsUpdate());
+    }
+
+    IEnumerator LocalIsUpdate()
+    {
+        StartCoroutine(LocalIsUpdateLoad());
+        yield return new WaitUntil(() => localIsUpdateLoad);
+        if (localIsUpdate)
+        {
+            //开始本地文件检测
+            StartCoroutine(StartDownAssetConfig());
+        }
+        else
+        {
+            //直接加载
+            HotFixOver.Over();
+        }
+    }
+
+    /// <summary>
+    /// 本地更新文件读取
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator LocalIsUpdateLoad()
+    {
+        //本地下载路径
+        string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "LocalIsUpdate.txt";
+        UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
+        yield return hotFixPathLoadLocalFile.SendWebRequest();
+        if (hotFixPathLoadLocalFile.responseCode == 200)
+        {
+            localIsUpdate = bool.Parse(hotFixPathLoadLocalFile.downloadHandler.text);
+        }
+        else
+        {
+            Debug.Log("本地下载路径不存在:" + hotFixDownPath);
+            localIsUpdate = true;
+        }
+
+        localIsUpdateLoad = true;
     }
 
     //HotFixPath本地检测
@@ -213,22 +251,12 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         {
             //获得元数据配置表
             metadataHotFixRuntimeDownConfigTable = JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(request.downloadHandler.text);
-            //统计元数据列表
-            foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in metadataHotFixRuntimeDownConfigTable)
-            {
-                metadataHotFixRuntimeDownConfigTableList.Add(hotFixRuntimeDownConfig.name);
-            }
 
             //元数据下载完毕
             isMetadataDownOver = true;
             //更新检测数量
             localFileUpdateCheckAssetNumberMax += metadataHotFixRuntimeDownConfigTable.Count;
         }
-    }
-
-    public static List<string> GetMetadataHotFixRuntimeDownConfigTableList()
-    {
-        return metadataHotFixRuntimeDownConfigTableList;
     }
 
     //下载远程Assembly配置表
@@ -344,6 +372,8 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     {
         StartCoroutine(MetadataLocalCheck());
         yield return new WaitUntil(() => isMetadataLocalCheck);
+        //保存元数据配置表缓存文件
+        SaveMetadataConfigCacheFile();
         StartCoroutine(AssemblyLocalCheck());
         yield return new WaitUntil(() => isAssemblyLocalCheck);
         StartCoroutine(GameRootStartLocalCheck());
@@ -359,7 +389,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         //没有要更新的文件,直接进入游戏
         if (needDownHotFixRuntimeDownConfig.Count == 0)
         {
-            HotFIxOver.Over();
+            HotFixOver.Over();
         }
         else
         {
@@ -382,6 +412,14 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
         isMetadataLocalCheck = true;
         yield return null;
+    }
+
+    private void SaveMetadataConfigCacheFile()
+    {
+        HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", "MetadataConfig.json", JsonUtil.ToJson(metadataHotFixRuntimeDownConfigTable));
+        
+        //添加到缓存列表中
+        hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + "MetadataConfig.json");
     }
 
     IEnumerator HotFixRuntimeDownConfigLocalCheck(HotFixRuntimeDownConfig hotFixRuntimeDownConfig)

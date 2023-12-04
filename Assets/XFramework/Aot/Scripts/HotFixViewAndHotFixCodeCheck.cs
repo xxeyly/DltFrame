@@ -8,6 +8,9 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Networking;
 
+//需要更新
+public delegate void HotFixViewAndHotFixCodeLocalIsUpdate(bool localIsUpdate);
+
 //需要下载
 public delegate void HotFixViewAndHotFixCodeIsDown(bool down);
 
@@ -19,12 +22,17 @@ public delegate void HotFixViewAndHotFixCodeDownloadValue(double currentDownValu
 
 public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 {
+    [LabelText("本地开启更新")] public bool localIsUpdate;
+    [LabelText("本地开启更新读取")] public bool localIsUpdateLoad;
     [LabelText("下载地址")] public string hotFixPath = "http://127.0.0.1/";
     [LabelText("文件拷贝")] public bool isFileCopy;
     [LabelText("下载地址本地读取")] public bool hotFixPathLocalLoad;
     [LabelText("总的下载量数据")] public double totalDownloadValue;
 
     [LabelText("当前下载量数据")] public double currentDownloadValue;
+
+    //本地需要更新
+    public static HotFixViewAndHotFixCodeLocalIsUpdate HotFixViewAndHotFixCodeLocalIsUpdate;
 
     //需要下载
     public static HotFixViewAndHotFixCodeIsDown HotFixViewAndHotFixCodeIsDown;
@@ -76,8 +84,29 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
     void Start()
     {
-        //开始本地文件检测
-        StartCoroutine(StartCheckAssetBundleUpdate());
+        StartCoroutine(LocalIsUpdate());
+    }
+
+    IEnumerator LocalIsUpdate()
+    {
+        StartCoroutine(
+            CopyStreamingAssetsPathToPersistentDataPath(Application.streamingAssetsPath + "/HotFix/" + "localIsUpdate.txt", Application.persistentDataPath + "/HotFix/", "localIsUpdate.txt"));
+        yield return new WaitUntil(() => isFileCopy);
+        isFileCopy = false;
+        StartCoroutine(LocalIsUpdateLoad());
+        yield return new WaitUntil(() => localIsUpdateLoad);
+        if (localIsUpdate)
+        {
+            HotFixViewAndHotFixCodeLocalIsUpdate?.Invoke(true);
+            //开始本地文件检测
+            StartCoroutine(StartCheckAssetBundleUpdate());
+        }
+        else
+        {
+            HotFixViewAndHotFixCodeLocalIsUpdate?.Invoke(false);
+            //直接加载
+            LoadHotFixCode();
+        }
     }
 
     IEnumerator CopyStreamingAssetsPathToPersistentDataPath(string sourcePath, string destinationPath, string fileName)
@@ -105,6 +134,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
     IEnumerator StartCheckAssetBundleUpdate()
     {
+        //拷贝HotFixDownPath.txt
         StartCoroutine(CopyStreamingAssetsPathToPersistentDataPath(
             Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt", Application.persistentDataPath + "/HotFix/", "HotFixDownPath.txt"));
         yield return new WaitUntil(() => isFileCopy);
@@ -173,6 +203,29 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         //等待1秒后
         ReplaceCacheFile();
         LoadHotFixCode();
+    }
+
+    /// <summary>
+    /// 本地更新文件读取
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator LocalIsUpdateLoad()
+    {
+        //本地下载路径
+        string hotFixDownPath = AotGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "LocalIsUpdate.txt";
+        UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
+        yield return hotFixPathLoadLocalFile.SendWebRequest();
+        if (hotFixPathLoadLocalFile.responseCode == 200)
+        {
+            localIsUpdate = bool.Parse(hotFixPathLoadLocalFile.downloadHandler.text);
+        }
+        else
+        {
+            Debug.Log("本地下载路径不存在:" + hotFixDownPath);
+            localIsUpdate = true;
+        }
+
+        localIsUpdateLoad = true;
     }
 
     IEnumerator HotFixPathLocalLoad()

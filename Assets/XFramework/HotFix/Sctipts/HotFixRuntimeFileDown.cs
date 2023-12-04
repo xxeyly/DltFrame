@@ -89,7 +89,7 @@ public class HotFixRuntimeFileDown : MonoBehaviour
         ReplaceCacheFile();
         yield return new WaitForSeconds(1f);
         HotFixRuntimeDownOver?.Invoke();
-        HotFIxOver.Over();
+        HotFixOver.Over();
     }
 
     //HotFixRuntimeDownConfig下载逻辑

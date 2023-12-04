@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class HotFixUpdatePanel : MonoBehaviour
 {
+    [LabelText("背景")] public GameObject back;
     [LabelText("初始化面板")] public GameObject initPanel;
     [LabelText("下载面板")] public GameObject downPanel;
     [LabelText("下载进度条")] public Slider downSliderProgress;
@@ -17,11 +18,20 @@ public class HotFixUpdatePanel : MonoBehaviour
 
     private void Awake()
     {
-        initPanel.SetActive(true);
+        HotFixViewAndHotFixCodeCheck.HotFixViewAndHotFixCodeLocalIsUpdate += HotFixViewAndHotFixCodeCheck_HotFixViewAndHotFixCodeLocalIsUpdate;
         HotFixViewAndHotFixCodeCheck.HotFixViewAndHotFixCodeDownSpeed += HotFixViewAndHotFixCodeCheck_HotFixViewAndHotFixCodeDownSpeed;
         HotFixViewAndHotFixCodeCheck.HotFixViewAndHotFixCodeIsDown += HotFixViewAndHotFixCodeCheck_HotFixViewAndHotFixCodeIsDown;
         HotFixViewAndHotFixCodeCheck.HotFixViewAndHotFixCodeDownloadValue += HotFixViewAndHotFixCodeCheck_HotFixViewAndHotFixCodeCurrentDownValue;
         AotNetworking.NetworkingState += AotNetworking_NetworkingState;
+    }
+
+    private void HotFixViewAndHotFixCodeCheck_HotFixViewAndHotFixCodeLocalIsUpdate(bool localIsUpdate)
+    {
+        if (localIsUpdate)
+        {
+            back.SetActive(true);
+            initPanel.SetActive(true);
+        }
     }
 
     private void HotFixViewAndHotFixCodeCheck_HotFixViewAndHotFixCodeCurrentDownValue(double currentDownValue, double totalDownValue)
@@ -29,7 +39,6 @@ public class HotFixUpdatePanel : MonoBehaviour
         totalDownload.text = AotGlobal.FileSizeString(currentDownValue) + "/" + AotGlobal.FileSizeString(totalDownValue);
         downSliderProgress.value = (float)(currentDownValue / totalDownValue);
         downTextProgress.text = (currentDownValue / totalDownValue * 100).ToString("0") + "/100";
-
     }
 
     private void HotFixViewAndHotFixCodeCheck_HotFixViewAndHotFixCodeIsDown(bool down)

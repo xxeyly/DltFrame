@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using HybridCLR;
 using UnityEditor;
 using UnityEngine;
 
-public class HotFIxOver
+public class HotFixOver
 {
     public static void Over()
     {
@@ -24,7 +25,16 @@ public class HotFIxOver
             Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/");
         }
 
-        foreach (string metadata in HotFixRuntimeFileCheck.metadataHotFixRuntimeDownConfigTableList)
+        List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable =
+            JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig", "MetadataConfig.json"));
+
+        List<string> metadataHotFixRuntimeDownConfigTableList = new List<string>();
+        foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in metadataHotFixRuntimeDownConfigTable)
+        {
+            metadataHotFixRuntimeDownConfigTableList.Add(hotFixRuntimeDownConfig.name);
+        }
+
+        foreach (string metadata in metadataHotFixRuntimeDownConfigTableList)
         {
             byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + metadata}");
 #if HybridCLR
