@@ -36,8 +36,28 @@ namespace XFramework
                     {
                         if (GUI.Button(GlobalHierarchy.SetRect(selectionrect, -22, 18), "R", GlobalHierarchy.LabelGUIStyle()))
                         {
-                            obj.name = entityItem.entityName;
+                            entityItem.entityName = obj.name;
                         }
+                    }
+
+                    #endregion
+
+                    #region 描述
+
+                    if (!string.IsNullOrEmpty(entityItem.descriptionName))
+                    {
+                        string descriptionName = " --- " + entityItem.descriptionName;
+                        Rect viewNameRect;
+                        if (GlobalHierarchy.HierarchyContentFollow)
+                        {
+                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 * 1 + DataFrameComponent.CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
+                        }
+                        else
+                        {
+                            viewNameRect = GlobalHierarchy.SetRect(selectionrect, -40 - ((descriptionName.Length - 1) * 12f), descriptionName.Length * 15);
+                        }
+
+                        GUI.Label(viewNameRect, descriptionName, GlobalHierarchy.LabelGUIStyle(Color.blue));
                     }
 
                     #endregion

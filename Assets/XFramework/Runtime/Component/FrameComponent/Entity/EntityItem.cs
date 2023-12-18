@@ -6,10 +6,10 @@ using UnityEngine;
 namespace XFramework
 {
     [Serializable]
-    [RequireComponent(typeof(HotFixAssetPathConfig))]
     public partial class EntityItem : MonoBehaviour
     {
         [LabelText("实体名称")] public string entityName;
+        [LabelText("描述名称")] public string descriptionName;
         [LabelText("日志输出")] public bool isLog;
         [LabelText("实体标签")] public List<string> entityTags;
 #if UNITY_EDITOR
