@@ -9,6 +9,7 @@ namespace XFramework
     {
         public static EntityFrameComponent Instance;
         [Searchable] [LabelText("场景所有实体")] public List<EntityItem> sceneEntity;
+        [LabelText("场景重复实体名称")] public Dictionary<string, List<GameObject>> sceneRepeatEntity;
 
         public GameObject Instantiate(GameObject instantiate)
         {
@@ -40,36 +41,100 @@ namespace XFramework
 
         public override void FrameInitComponent()
         {
-            Instance = this;
+            Instance = GetComponent<EntityFrameComponent>();
         }
 
         public override void FrameSceneInitComponent()
         {
             EntityInit();
         }
-
         public override void FrameSceneEndComponent()
         {
-            sceneEntity.Clear();
+            
         }
 
         public override void FrameEndComponent()
         {
         }
 
+        public void RemoveSceneEntityName()
+        {
+            List<EntityItem> tempEntityItems = DataFrameComponent.GetAllObjectsInScene<EntityItem>(GameRootStart.Instance.loadScene.name);
+            for (int i = 0; i < tempEntityItems.Count; i++)
+            {
+                if (sceneEntity.Contains(tempEntityItems[i]))
+                {
+                    sceneEntity.Remove(tempEntityItems[i]);
+                }
+            }
+        }
+
         [Button("场景道具初始化", ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
         public void EntityInit()
         {
+            List<EntityItem> tempEntity = new List<EntityItem>();
             //首场景,加载全部
             if (GameRootStart.Instance.loadScene.name == String.Empty)
             {
-                sceneEntity = DataFrameComponent.GetAllObjectsInScene<EntityItem>();
+                tempEntity = DataFrameComponent.GetAllObjectsInScene<EntityItem>();
             }
             else
             {
-                sceneEntity = DataFrameComponent.GetAllObjectsInScene<EntityItem>(GameRootStart.Instance.loadScene.name);
+                tempEntity = DataFrameComponent.GetAllObjectsInScene<EntityItem>(GameRootStart.Instance.loadScene.name);
             }
+
+            foreach (EntityItem entityItem in tempEntity)
+            {
+                if (!sceneEntity.Contains(entityItem))
+                {
+                    sceneEntity.Add(entityItem);
+                }
+            }
+        }
+
+
+        [Button("查找场景中重复实体", ButtonSizes.Large)]
+        [GUIColor(0, 1, 0)]
+        public void EntityRepeat()
+        {
+            Dictionary<string, List<GameObject>> temp = new Dictionary<string, List<GameObject>>();
+            sceneRepeatEntity = new Dictionary<string, List<GameObject>>();
+            List<EntityItem> tempEntity = new List<EntityItem>();
+            tempEntity = DataFrameComponent.GetAllObjectsInScene<EntityItem>();
+            foreach (EntityItem entityItem in tempEntity)
+            {
+                if (!temp.ContainsKey(entityItem.entityName))
+                {
+                    temp.Add(entityItem.entityName, new List<GameObject>() { entityItem.gameObject });
+                }
+                else
+                {
+                    temp[entityItem.entityName].Add(entityItem.gameObject);
+                }
+            }
+
+            foreach (KeyValuePair<string, List<GameObject>> pair in temp)
+            {
+                if (pair.Value.Count > 1)
+                {
+                    sceneRepeatEntity.Add(pair.Key, pair.Value);
+                }
+            }
+        }
+
+        public List<EntityItem> GetEntityItemByEntityName(string entityName)
+        {
+            List<EntityItem> entityItems = new List<EntityItem>();
+            foreach (EntityItem tempSceEntityItem in sceneEntity)
+            {
+                if (tempSceEntityItem.entityName == entityName)
+                {
+                    entityItems.Add(tempSceEntityItem);
+                }
+            }
+
+            return entityItems;
         }
 
         /// <summary>
@@ -129,6 +194,29 @@ namespace XFramework
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// 根据实体名称显示或隐藏
+        /// </summary>
+        /// <param name="entityName"></param>
+        /// <param name="display"></param>
+        public void DisplayEntityByEntityName(bool display, string entityName)
+        {
+            foreach (EntityItem entityItem in sceneEntity)
+            {
+                if (entityItem.entityName == entityName)
+                {
+                    if (display)
+                    {
+                        entityItem.Show();
+                    }
+                    else
+                    {
+                        entityItem.Hide();
+                    }
+                }
+            }
         }
 
         /// <summary>
