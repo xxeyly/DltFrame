@@ -20,6 +20,8 @@ public class HotFixGlobal
             case RuntimePlatform.WSAPlayerX64:
             case RuntimePlatform.WSAPlayerX86:
             case RuntimePlatform.WSAPlayerARM:
+                path = Application.persistentDataPath;
+                break;
             case RuntimePlatform.Android:
                 if (unityWebRequestPath)
                 {
@@ -60,6 +62,7 @@ public class HotFixGlobal
         UnityEditor.AssetDatabase.Refresh();
 #endif
     }
+
     /// <summary>
     /// 读取本地文件信息
     /// </summary>

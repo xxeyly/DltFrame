@@ -23,6 +23,8 @@ public class AotGlobal
             case RuntimePlatform.WSAPlayerX64:
             case RuntimePlatform.WSAPlayerX86:
             case RuntimePlatform.WSAPlayerARM:
+                path = Application.persistentDataPath;
+                break;
             case RuntimePlatform.Android:
                 if (unityWebRequestPath)
                 {
