@@ -23,6 +23,8 @@ namespace XFramework
             entityName = gameObject.name;
         }
 
+      
+
         public void AddToEntityList()
         {
             if (EntityFrameComponent.Instance == null)
@@ -127,6 +129,5 @@ namespace XFramework
         {
             return EntityFrameComponent.Instance.GetFirstEntityStateByEntityName(entityName);
         }
-
     }
 }

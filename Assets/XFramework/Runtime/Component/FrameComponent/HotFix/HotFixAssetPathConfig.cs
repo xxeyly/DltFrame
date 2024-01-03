@@ -67,6 +67,7 @@ public class HotFixAssetPathConfig : MonoBehaviour
     {
         if (!File.Exists(prefabPath))
         {
+            PrefabUtility.UnpackPrefabInstance(gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
             PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
         }
         else

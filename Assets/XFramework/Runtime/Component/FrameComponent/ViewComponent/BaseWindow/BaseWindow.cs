@@ -24,7 +24,6 @@ namespace XFramework
     /// <summary>
     /// 视图基类
     /// </summary>
-    [RequireComponent(typeof(HotFixAssetPathConfig))]
     [RequireComponent(typeof(BaseWindowGenerateScripts))]
     public abstract partial class BaseWindow : SerializedMonoBehaviour
     {

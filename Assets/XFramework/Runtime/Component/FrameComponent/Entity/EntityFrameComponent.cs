@@ -48,9 +48,9 @@ namespace XFramework
         {
             EntityInit();
         }
+
         public override void FrameSceneEndComponent()
         {
-            
         }
 
         public override void FrameEndComponent()
@@ -263,6 +263,21 @@ namespace XFramework
             }
 
             return false;
+        }
+        /// <summary>
+        /// 移除实体
+        /// </summary>
+        /// <param name="entityName"></param>
+        public void RemoveEntityItem(string entityName)
+        {
+            for (int i = 0; i < sceneEntity.Count; i++)
+            {
+                if (sceneEntity[i].entityName == entityName)
+                {
+                    sceneEntity.RemoveAt(i);
+                    break;
+                }
+            }
         }
     }
 }
