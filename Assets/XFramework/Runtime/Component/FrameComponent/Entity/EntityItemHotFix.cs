@@ -4,6 +4,7 @@ namespace XFramework
 {
     public partial class EntityItem
     {
+#if UNITY_EDITOR
         [GUIColor(0, 1, 0)]
         [HorizontalGroup("热更")]
         [Button("添加热更组件", ButtonSizes.Large)]
@@ -27,5 +28,6 @@ namespace XFramework
                 DestroyImmediate(GetComponent<HotFixAssetPathConfig>());
             }
         }
+#endif
     }
 }
