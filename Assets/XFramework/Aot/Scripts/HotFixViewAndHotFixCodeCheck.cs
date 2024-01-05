@@ -90,9 +90,18 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     IEnumerator LocalIsUpdate()
     {
         Debug.Log("检测本地更新是否开始");
-        StartCoroutine(
-            CopyStreamingAssetsPathToPersistentDataPath(Application.streamingAssetsPath + "/HotFix/" + "localIsUpdate.txt", Application.persistentDataPath + "/HotFix/", "localIsUpdate.txt"));
+        if (File.Exists(AotGlobal.GetDeviceStoragePath() + "/HotFix/" + "localIsUpdate.txt"))
+        {
+            isFileCopy = true;
+        }
+        else
+        {
+            StartCoroutine(
+                CopyStreamingAssetsPathToPersistentDataPath(Application.streamingAssetsPath + "/HotFix/" + "localIsUpdate.txt", Application.persistentDataPath + "/HotFix/", "localIsUpdate.txt"));
+        }
+
         yield return new WaitUntil(() => isFileCopy);
+
         isFileCopy = false;
         StartCoroutine(LocalIsUpdateLoad());
         yield return new WaitUntil(() => localIsUpdateLoad);

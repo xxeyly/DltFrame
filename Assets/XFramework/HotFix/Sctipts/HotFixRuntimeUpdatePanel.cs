@@ -83,6 +83,6 @@ public class HotFixRuntimeUpdatePanel : MonoBehaviour
     private void HotFixRuntimeFileCheck_HotFixRuntimeLocalFileCheck(int currentCount, int maxCount)
     {
         localFileCheckSlider.value = (float)currentCount / maxCount;
-        localFileCheckText.text = (currentCount / maxCount * 100).ToString("0") + "/100";
+        localFileCheckText.text = (int)(localFileCheckSlider.value * 100) + "/100";
     }
 }

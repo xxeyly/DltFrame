@@ -18,12 +18,10 @@ namespace XFramework
 
         [GUIColor(0, 1, 0)]
         [Button("设置为当前物体名称", ButtonSizes.Large)]
-        public void GetCurrentGameObjectName()
+        public void SetCurrentGameObjectName()
         {
             entityName = gameObject.name;
         }
-
-      
 
         public void AddToEntityList()
         {

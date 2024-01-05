@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+#if HybridCLR
 using HybridCLR;
+#endif
 using UnityEditor;
 using UnityEngine;
 

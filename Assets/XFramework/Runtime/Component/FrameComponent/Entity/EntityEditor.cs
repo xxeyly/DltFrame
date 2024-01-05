@@ -17,11 +17,11 @@ namespace XFramework
 
             if (!uiObj.GetComponent<EntityItem>())
             {
-                UnityEditor.Undo.AddComponent<EntityItem>(uiObj).GetCurrentGameObjectName();
+                UnityEditor.Undo.AddComponent<EntityItem>(uiObj).SetCurrentGameObjectName();
             }
             else
             {
-                uiObj.GetComponent<EntityItem>().GetCurrentGameObjectName();
+                uiObj.GetComponent<EntityItem>().SetCurrentGameObjectName();
             }
         }
     }
