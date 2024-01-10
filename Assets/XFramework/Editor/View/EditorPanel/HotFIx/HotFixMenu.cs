@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using Sirenix.OdinInspector.Editor;
+using UnityEngine;
+
 #if HybridCLR
 
 namespace XFramework
@@ -10,6 +12,8 @@ namespace XFramework
         public HotFixViewEditor HotFixViewEditor;
         private SceneHotfixAssetManager SceneHotfixAssetManager = new SceneHotfixAssetManager();
         private AssetBundleManager _assetBundleManager = new AssetBundleManager();
+        private HotFixCollect _hotFixCollect = new HotFixCollect();
+        private SceneHotFixConfig _sceneHotFixConfig = new SceneHotFixConfig();
 
         protected override OdinMenuTree BuildMenuTree()
         {
@@ -19,15 +23,24 @@ namespace XFramework
             HotFixViewEditor.OnLoadConfig();
             SceneHotfixAssetManager.OnLoadConfig();
             _assetBundleManager.OnLoadConfig();
-            tree.Add("HotFix", HotFixViewEditor);
-            tree.Add("场景热更资源", SceneHotfixAssetManager);
-            tree.Add("资源打包", _assetBundleManager);
+            _sceneHotFixConfig.OnInit();
+            _sceneHotFixConfig.OnLoadConfig();
+            _hotFixCollect.OnLoadConfig();
+            
+            tree.Add("集合", _hotFixCollect);
+            // tree.Add("HotFix", HotFixViewEditor);
+            // tree.Add("场景热更资源", SceneHotfixAssetManager);
+            // tree.Add("资源打包", _assetBundleManager);
+            tree.Add("场景资源", _sceneHotFixConfig);
+
             return tree;
         }
+
 
         private void Update()
         {
             SceneHotfixAssetManager.Update();
+            _sceneHotFixConfig.Update();
         }
 
         protected override void OnDestroy()
@@ -36,6 +49,7 @@ namespace XFramework
             HotFixViewEditor.OnSaveConfig();
             SceneHotfixAssetManager.OnSaveConfig();
             _assetBundleManager.OnSaveConfig();
+            _hotFixCollect.OnSaveConfig();
         }
 
         private void CreateInitDirectory()

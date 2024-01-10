@@ -16,7 +16,7 @@ public class HotFixAssetPathConfig : MonoBehaviour
 #if UNITY_EDITOR
     [Button("生成路径", ButtonSizes.Medium)]
     [GUIColor(0, 1, 0)]
-    public void SetPath()
+    public void SetPathAndApplyPrefab()
     {
         generateHierarchyPath = DataFrameComponent.GetComponentPath(transform, false);
         prefabPath = UnityEditor.PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
@@ -63,11 +63,15 @@ public class HotFixAssetPathConfig : MonoBehaviour
     }
 
     [Button("保存预制体")]
-    public void ApplyPrefab()
+    private void ApplyPrefab()
     {
         if (!File.Exists(prefabPath))
         {
-            PrefabUtility.UnpackPrefabInstance(gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+            if (PrefabUtility.IsPartOfPrefabAsset(gameObject) || PrefabUtility.IsPrefabAssetMissing(gameObject))
+            {
+                PrefabUtility.UnpackPrefabInstance(gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+            }
+
             PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
         }
         else

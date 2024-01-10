@@ -14,7 +14,7 @@ public class AssetBundleManager : BaseEditor
 #if UNITY_EDITOR
 
     [LabelText("打包存放地址")] [FolderPath] public string buildSavePath;
-    [LabelText("打包压缩方式")] public BuildAssetBundleOptions targetBuildAssetBundleOptions = BuildAssetBundleOptions.None;
+    // [LabelText("打包压缩方式")] public BuildAssetBundleOptions targetBuildAssetBundleOptions = BuildAssetBundleOptions.None;
     [LabelText("Assembly打包")] public bool AssemblyParticipatePackaging;
     [LabelText("MetaAssembly打包")] public bool MetaAssemblyParticipatePackaging;
     [LabelText("框架")] [TableList] public List<BundleFileConfig> GameRootStartBundleDirectoryConfig;
@@ -144,7 +144,7 @@ public class AssetBundleManager : BaseEditor
             AssetImporter gameRootStartImporter = null;
             gameRootStartImporter = AssetImporter.GetAtPath(bundleFileConfig.filePath);
             gameRootStartImporter.assetBundleName = "GameRootStartAssetBundle/GameRootStart";
-            BuildPipeline.BuildAssetBundles(buildSavePath, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
+            // BuildPipeline.BuildAssetBundles(buildSavePath, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
             DataFrameComponent.RemoveAllAssetBundleName();
             File.Delete(buildSavePath + "/" + "GameRootStartAssetBundle/gamerootstart.manifest");
             UnityEditor.AssetDatabase.Refresh();
@@ -285,7 +285,7 @@ public class AssetBundleManager : BaseEditor
         {
             AssetBundleManager loadAssetBundleManager = JsonMapper.ToObject<AssetBundleManager>(FileOperation.GetTextToLoad(Application.dataPath + "/Config/BuildAssetBundleConfig.json"));
             buildSavePath = loadAssetBundleManager.buildSavePath;
-            targetBuildAssetBundleOptions = loadAssetBundleManager.targetBuildAssetBundleOptions;
+            // targetBuildAssetBundleOptions = loadAssetBundleManager.targetBuildAssetBundleOptions;
             GameRootStartBundleDirectoryConfig = loadAssetBundleManager.GameRootStartBundleDirectoryConfig;
         }
     }

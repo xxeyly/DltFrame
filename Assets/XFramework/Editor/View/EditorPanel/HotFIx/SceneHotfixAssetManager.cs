@@ -40,7 +40,7 @@ public class SceneHotfixAssetManager : BaseEditor
         for (int i = 0; i < SceneAssetBundleAsset.ScenePrefabConfigs.Count; i++)
         {
             //路径信息
-            HotFixAssetPathConfig hotFixAssetSceneHierarchyPath = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(SceneAssetBundleAsset.ScenePrefabConfigs[i].prefabPath);
+            HotFixAssetPathConfig hotFixAssetSceneHierarchyPath = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(SceneAssetBundleAsset.ScenePrefabConfigs[i]);
             Transform parent = null;
             if (hotFixAssetSceneHierarchyPath.GetHierarchyGeneratePath() != string.Empty)
             {
@@ -60,66 +60,6 @@ public class SceneHotfixAssetManager : BaseEditor
         UnityEditor.SceneManagement.EditorSceneManager.SaveScene(currentrScene);
     }
 
-    [LabelText("更新场景数据")]
-    private void UpdateSceneObjectData()
-    {
-        List<HotFixAssetPathConfig> hotFixAssetSceneHierarchyPaths = DataFrameComponent.GetAllObjectsInScene<HotFixAssetPathConfig>();
-
-        //对比新旧Md5和添加新的
-        foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetSceneHierarchyPaths)
-        {
-            hotFixAssetPathConfig.SetPath();
-            //包含当前
-            if (ScenePrefabConfigCon(hotFixAssetPathConfig.prefabPath))
-            {
-                //比较Md5是否更新
-                ScenePrefabConfig scenePrefabConfig = GetScenePrefabConfigByPrefabPath(hotFixAssetPathConfig.prefabPath);
-                string newPrefabMd5 = FileOperation.GetMD5HashFromFile(hotFixAssetPathConfig.prefabPath);
-                scenePrefabConfig.prefabMd5 = newPrefabMd5;
-                //是否更新资源
-                scenePrefabConfig.resourceUpdate = false;
-            }
-        }
-    }
-
-    private ScenePrefabConfig GetScenePrefabConfigByPrefabPath(string prefabPath)
-    {
-        foreach (ScenePrefabConfig prefabConfig in SceneAssetBundleAsset.ScenePrefabConfigs)
-        {
-            if (prefabConfig.prefabPath == prefabPath)
-            {
-                return prefabConfig;
-            }
-        }
-
-        return null;
-    }
-
-    private bool HotFixAssetPathConfigCon(ScenePrefabConfig config, List<HotFixAssetPathConfig> hotFixAssetPathConfigs)
-    {
-        foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetPathConfigs)
-        {
-            if (hotFixAssetPathConfig.prefabPath == config.prefabPath)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private bool ScenePrefabConfigCon(string prefabPath)
-    {
-        foreach (ScenePrefabConfig prefabConfig in SceneAssetBundleAsset.ScenePrefabConfigs)
-        {
-            if (prefabConfig.prefabPath == prefabPath)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     private bool ParentConHotFixAssetPathConfig(Transform current)
     {
@@ -247,9 +187,9 @@ public class SceneHotfixAssetManager : BaseEditor
 
 
         //场景AssetBundle
-        foreach (ScenePrefabConfig scenePrefabConfig in SceneAssetBundleAsset.ScenePrefabConfigs)
+        foreach (string scenePrefabPath in SceneAssetBundleAsset.ScenePrefabConfigs)
         {
-            HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabConfig.prefabPath);
+            HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabPath);
             UnityEditor.AssetImporter assetImporter = UnityEditor.AssetImporter.GetAtPath(hotFixAssetPathConfig.prefabPath);
             assetImporter.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
             HotFixRuntimeAssetBundleConfig hot = new HotFixRuntimeAssetBundleConfig();
@@ -297,8 +237,6 @@ public class SceneHotfixAssetManager : BaseEditor
 
         //显示场景物体
         ShowSceneObject();
-        //更新场景数据
-        UpdateSceneObjectData();
     }
 
     [BoxGroup("节点操作")]
@@ -313,8 +251,6 @@ public class SceneHotfixAssetManager : BaseEditor
         UnityEditor.PrefabUtility.UnpackPrefabInstance(root, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
         //显示场景物体
         ShowSceneObject();
-        //更新场景数据
-        UpdateSceneObjectData();
     }
 
     private void RemoveEmptyRoot()
@@ -374,49 +310,7 @@ public class SceneHotfixAssetManager : BaseEditor
             //应用预制体
             foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetSceneHierarchyPaths)
             {
-                hotFixAssetPathConfig.ApplyPrefab();
-            }
-
-            //移除不存在的
-            for (int i = 0; i < SceneAssetBundleAsset.ScenePrefabConfigs.Count; i++)
-            {
-                if (!HotFixAssetPathConfigCon(SceneAssetBundleAsset.ScenePrefabConfigs[i], hotFixAssetSceneHierarchyPaths))
-                {
-                    SceneAssetBundleAsset.ScenePrefabConfigs.RemoveAt(i);
-                }
-            }
-
-            //对比新旧Md5和添加新的
-            foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetSceneHierarchyPaths)
-            {
-                hotFixAssetPathConfig.SetPath();
-                //包含当前
-                if (ScenePrefabConfigCon(hotFixAssetPathConfig.prefabPath))
-                {
-                    ScenePrefabConfig scenePrefabConfig = GetScenePrefabConfigByPrefabPath(hotFixAssetPathConfig.prefabPath);
-                    //本地没有Ab包,直接打包
-                    if (File.Exists(Application.streamingAssetsPath + "/" + hotFixAssetPathConfig.assetBundlePath))
-                    {
-                        //比较Md5是否更新
-                        string oldPrefabMd5 = scenePrefabConfig.prefabMd5;
-                        string newPrefabMd5 = FileOperation.GetMD5HashFromFile(hotFixAssetPathConfig.prefabPath);
-                        //是否更新资源
-                        scenePrefabConfig.resourceUpdate = oldPrefabMd5 != newPrefabMd5;
-                    }
-                    else
-                    {
-                        scenePrefabConfig.resourceUpdate = true;
-                    }
-                }
-                else
-                {
-                    SceneAssetBundleAsset.ScenePrefabConfigs.Add(new ScenePrefabConfig()
-                    {
-                        prefabPath = hotFixAssetPathConfig.prefabPath,
-                        prefabMd5 = FileOperation.GetMD5HashFromFile(hotFixAssetPathConfig.prefabPath),
-                        resourceUpdate = true
-                    });
-                }
+                hotFixAssetPathConfig.SetPathAndApplyPrefab();
             }
 
             //移除当前场景中的HotFixAssetPathConfig
@@ -440,10 +334,10 @@ public class SceneHotfixAssetManager : BaseEditor
             //如果是拷贝场景数据,信息不参与打包
             if (SceneAssetBundleAsset.copySceneAssetBundleAsset == null)
             {
-                foreach (ScenePrefabConfig scenePrefabConfig in SceneAssetBundleAsset.ScenePrefabConfigs)
+                foreach (string scenePrefabPath in SceneAssetBundleAsset.ScenePrefabConfigs)
                 {
                     //不管该Prefab是否参与打包,字体肯定要重更新打包
-                    foreach (string assetDependency in GetAssetDependencies(scenePrefabConfig.prefabPath))
+                    foreach (string assetDependency in GetAssetDependencies(scenePrefabPath))
                     {
                         if (assetDependency.Contains("TMP_SDF.shader") || assetDependency.Contains(".otf") || assetDependency.Contains(".ttf") || assetDependency.Contains(".asset"))
                         {
@@ -452,8 +346,8 @@ public class SceneHotfixAssetManager : BaseEditor
                         }
                     }
 
-                    AssetImporter assetImporter = AssetImporter.GetAtPath(scenePrefabConfig.prefabPath);
-                    HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabConfig.prefabPath);
+                    AssetImporter assetImporter = AssetImporter.GetAtPath(scenePrefabPath);
+                    HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabPath);
                     assetImporter.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
                 }
             }
@@ -466,8 +360,6 @@ public class SceneHotfixAssetManager : BaseEditor
 
             //显示场景物体
             ShowSceneObject();
-            //更新场景数据
-            UpdateSceneObjectData();
             //生成场景配置表
             GenerateBuildConfig();
             DataFrameComponent.RemoveAllAssetBundleName();

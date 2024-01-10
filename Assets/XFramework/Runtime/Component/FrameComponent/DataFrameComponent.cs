@@ -1190,7 +1190,6 @@ namespace XFramework
                     {
                         length += CharacterLengthDic["汉"];
                     }
-                    
                 }
             }
 
@@ -1719,6 +1718,51 @@ namespace XFramework
             }
 
             return byteContent;
+        }
+
+        /// <summary>
+        /// 拷贝文件夹
+        /// </summary>
+        /// <param name="sourceDirName"></param>
+        /// <param name="destDirName"></param>
+        public static void Copy(string sourceDirName, string destDirName)
+        {
+            if (Directory.Exists(sourceDirName))
+            {
+                if (!Directory.Exists(destDirName))
+                {
+                    Directory.CreateDirectory(destDirName);
+                }
+
+                foreach (string item in Directory.GetFiles(sourceDirName))
+                {
+                    if (item.Contains("meta"))
+                    {
+                        continue;
+                    }
+
+                    if (destDirName[destDirName.Length - 1] != '/')
+                    {
+                        destDirName += "/";
+                    }
+
+                    File.Copy(item, destDirName + "/" + Path.GetFileName(item), true);
+                }
+
+                foreach (string item in Directory.GetDirectories(sourceDirName))
+                {
+                    Copy(item + "/", destDirName + "/" + DataFrameComponent.GetPathFileName(item));
+                }
+            }
+            else
+            {
+                Debug.Log(sourceDirName + "不存在");
+            }
+        }
+
+        public static void CopyFile(string sourcePath, string destinationPath)
+        {
+            File.Copy(sourcePath, destinationPath, true);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace XFramework
                 gameObject.AddComponent<HotFixAssetPathConfig>();
             }
 
-            GetComponent<HotFixAssetPathConfig>().SetPath();
+            GetComponent<HotFixAssetPathConfig>().SetPathAndApplyPrefab();
         }
 
         [GUIColor(0, 1, 0)]

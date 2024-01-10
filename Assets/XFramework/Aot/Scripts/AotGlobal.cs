@@ -196,13 +196,17 @@ public class AotGlobal
                     continue;
                 }
 
-                Debug.Log("拷贝文件" + item);
-                File.Copy(item, destDirName + Path.GetFileName(item), true);
+                if (destDirName[destDirName.Length - 1] != '/')
+                {
+                    destDirName += "/";
+                }
+
+                File.Copy(item, destDirName + "/" + Path.GetFileName(item), true);
             }
 
             foreach (string item in Directory.GetDirectories(sourceDirName))
             {
-                Copy(item, destDirName + item.Substring(item.LastIndexOf("\\", StringComparison.Ordinal) + 1));
+                Copy(item + "/", destDirName + "/" + GetPathFileName(item));
             }
         }
         else
@@ -210,6 +214,13 @@ public class AotGlobal
             Debug.Log(sourceDirName + "不存在");
         }
     }
+
+    public static string GetPathFileName(string path)
+    {
+        FileInfo fileInfo = new FileInfo(path);
+        return fileInfo.Name;
+    }
+
 
     public static void CopyFile(string sourcePath, string destinationPath)
     {
