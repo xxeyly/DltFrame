@@ -73,6 +73,7 @@ namespace DltFramework
         [GUIColor(0, 1, 0)]
         public void EntityInit()
         {
+            sceneEntity.Clear();
             List<EntityItem> tempEntity = new List<EntityItem>();
             //首场景,加载全部
             if (GameRootStart.Instance.loadScene.name == String.Empty)
