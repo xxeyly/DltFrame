@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -101,8 +102,6 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
     [BoxGroup("本地检测")] [LabelText("HotFixRuntimeFileDown本地检测")]
     public HotFixRuntimeFileDown hotFixRuntimeFileDown;
-
-    [LabelText("缓存更改路径")] public List<string> replaceCacheFile = new List<string>();
 
     void Start()
     {
@@ -374,11 +373,14 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         yield return new WaitUntil(() => isMetadataLocalCheck);
         //保存元数据配置表缓存文件
         SaveMetadataConfigCacheFile();
+        //Assembly本地检测
         StartCoroutine(AssemblyLocalCheck());
         yield return new WaitUntil(() => isAssemblyLocalCheck);
+        //GameRootStart本地检测
         StartCoroutine(GameRootStartLocalCheck());
         yield return new WaitUntil(() => isGameRootStartLocalCheck);
         List<HotFixRuntimeAssetBundleConfig> hotFixAssetAssetBundleAssetConfigs = HotFixAssetAssetBundleSceneConfigGroup();
+        //保存场景AssetBundle配置表缓存文件
         SaveSceneHotFixRuntimeAssetBundleConfigCacheFile();
         StartCoroutine(AssetBundleLocalCheck(hotFixAssetAssetBundleAssetConfigs));
         yield return new WaitUntil(() => isAssetBundleLocalCheck);
@@ -389,6 +391,8 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         //没有要更新的文件,直接进入游戏
         if (needDownHotFixRuntimeDownConfig.Count == 0)
         {
+            Debug.Log("无新配置,直接进入游戏");
+            hotFixRuntimeFileDown.ReplaceCacheFile();
             HotFixOver.Over();
         }
         else
@@ -396,6 +400,8 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
             hotFixRuntimeFileDown.DownHotFixRuntimeDownConfig(needDownHotFixRuntimeDownConfig, hotFixPath);
         }
     }
+
+   
 
     #region 本地数据检测
 
@@ -414,6 +420,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         yield return null;
     }
 
+    //保存元数据配置表缓存文件
     private void SaveMetadataConfigCacheFile()
     {
         HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig", "MetadataConfig.json" + ".Cache", JsonUtil.ToJson(metadataHotFixRuntimeDownConfigTable));
@@ -527,6 +534,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         return hotFixAssetAssetBundleAssetConfigs;
     }
 
+    //保存场景AssetBundle配置表缓存文件
     private void SaveSceneHotFixRuntimeAssetBundleConfigCacheFile()
     {
         //遍历所有场景配置表

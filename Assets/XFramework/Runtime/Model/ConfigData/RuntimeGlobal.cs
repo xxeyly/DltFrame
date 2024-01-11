@@ -7,7 +7,6 @@ namespace XFramework
 {
     public static partial class RuntimeGlobal
     {
-
         [LabelText("获得网页跟目录地址")]
         public static string GetUrlRootPath()
         {
@@ -39,8 +38,10 @@ namespace XFramework
 
             switch (Application.platform)
             {
-                case RuntimePlatform.WindowsPlayer:
                 case RuntimePlatform.WindowsEditor:
+                    path = Application.dataPath + "/UnStreamingAssets";
+                    break;
+                case RuntimePlatform.WindowsPlayer:
                     path = Application.streamingAssetsPath;
                     break;
                 case RuntimePlatform.WSAPlayerX64:

@@ -41,7 +41,6 @@ public class HotFixInit
 
 #else
         GameObject hotFixView = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView/hotfixview").LoadAsset<GameObject>("HotFixView");
-
 #endif
             Object.Instantiate(hotFixView);
             Debug.Log("HotFixView加载完毕");

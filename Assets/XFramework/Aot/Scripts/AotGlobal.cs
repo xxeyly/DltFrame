@@ -16,8 +16,10 @@ public class AotGlobal
 
         switch (Application.platform)
         {
-            case RuntimePlatform.WindowsPlayer:
             case RuntimePlatform.WindowsEditor:
+                path = Application.dataPath + "/UnStreamingAssets";
+                break;
+            case RuntimePlatform.WindowsPlayer:
                 path = Application.streamingAssetsPath;
                 break;
             case RuntimePlatform.WSAPlayerX64:

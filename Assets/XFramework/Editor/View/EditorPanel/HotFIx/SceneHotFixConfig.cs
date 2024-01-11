@@ -12,7 +12,7 @@ namespace XFramework
     {
         [LabelText("场景资源文件是否存在")] private bool isExistsNormalSceneAssetBundleAsset;
 
-        [ShowIf("isExistsNormalSceneAssetBundleAsset")] [HorizontalGroup("NormalSceneAssetBundleAsset")] [LabelText("正常场景配置")] [InlineEditor()] [OnValueChanged("OnNormalSceneAssetBundleAssetChanged")]
+        [ShowIf("isExistsNormalSceneAssetBundleAsset")] [HorizontalGroup("NormalSceneAssetBundleAsset")] [LabelText("正常场景配置")] [InlineEditor()] [OnValueChanged("OnNormalSceneAssetBundleAssetChanged")] [AssetList]
         public NormalSceneAssetBundleAsset NormalSceneAssetBundleAsset;
 
         [ShowIf("@this.isExistsNormalSceneAssetBundleAsset")]
@@ -67,7 +67,7 @@ namespace XFramework
 
         [LabelText("场景资源文件是否存在")] private bool isExistsCopySceneAssetBundleAsset;
 
-        [ShowIf("@this.isExistsCopySceneAssetBundleAsset")] [LabelText("拷贝场景资源文件")] [InlineEditor()] [OnValueChanged("OnCreateCopySceneAssetBundleAssetChanged")]
+        [ShowIf("@this.isExistsCopySceneAssetBundleAsset")] [LabelText("拷贝场景资源文件")] [InlineEditor()] [OnValueChanged("OnCreateCopySceneAssetBundleAssetChanged")] [AssetList]
         public CopySceneAssetBundleAsset CopySceneAssetBundleAsset;
 
         [ShowIf("@this.isExistsCopySceneAssetBundleAsset")]
@@ -164,7 +164,7 @@ namespace XFramework
             }
         }
 
-       
+
         #region 节点操作
 
         [BoxGroup("节点操作")]

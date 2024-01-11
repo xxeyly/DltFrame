@@ -40,7 +40,7 @@ public class HotFixRuntimeFileDown : MonoBehaviour
     public bool hotFixRuntimeDownConfigOver;
 
     //替换缓存文件
-    private void ReplaceCacheFile()
+    public void ReplaceCacheFile()
     {
         foreach (string cachePath in replaceCacheFile)
         {
