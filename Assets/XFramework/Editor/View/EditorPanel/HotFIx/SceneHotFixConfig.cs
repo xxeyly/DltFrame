@@ -10,8 +10,6 @@ namespace XFramework
     [Title("一个场景只能选择一种资源类型,拷贝资源类型不会产于主动打包,只会在正常场景打包时包含进去")]
     public class SceneHotFixConfig : BaseEditor
     {
-        [LabelText("打包压缩方式")] [LabelWidth(120)]
-        public BuildAssetBundleOptions BuildAssetBundleOptions;
         [LabelText("场景资源文件是否存在")] private bool isExistsNormalSceneAssetBundleAsset;
 
         [ShowIf("isExistsNormalSceneAssetBundleAsset")] [HorizontalGroup("NormalSceneAssetBundleAsset")] [LabelText("正常场景配置")] [InlineEditor()] [OnValueChanged("OnNormalSceneAssetBundleAssetChanged")]

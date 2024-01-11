@@ -2,14 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using HybridCLR.Editor.Commands;
-using LitJson;
 using Sirenix.OdinInspector;
-using Unity.Plastic.Antlr3.Runtime.Misc;
-using Unity.VisualScripting.IonicZip;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Object = System.Object;
 
 
 namespace XFramework
@@ -33,40 +29,43 @@ namespace XFramework
         [InfoBox("版本号分3个等级,\n等级1是特大改动(需要手动更改),\n等级2每次需要重新出包时变动(需要手动更改),\n等级3是每次小更新时变动(勾选版本自增每次打包会自增1)")] [LabelText("当前资源版本号")] [LabelWidth(120)]
         public Vector3 targetResourceVersion;
 
-        [ToggleGroup("HotFixView")] public bool HotFixView = false;
+        [ToggleGroup("buildHotFixView", "HotFixView")]
+        public bool buildHotFixView = false;
 
-        [ToggleGroup("HotFixView")] [LabelText("HotFixView预制体")]
+        [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体")]
         public GameObject HotFixViewPrefab;
 
-        [ToggleGroup("HotFixView")] [LabelText("HotFixView预制体路径")] [HideInInspector]
+        [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体路径")] [HideInInspector]
         public string HotFixViewPrePath;
 
-        [ToggleGroup("HotFixCode")] public bool HotFixCode = false;
+        [ToggleGroup("buildHotFixCode", "HotFixCode")]
+        public bool buildHotFixCode = false;
 
-        [ToggleGroup("MetaAssemblyParticipatePackaging", "MetaAssembly")]
-        public bool MetaAssemblyParticipatePackaging;
+        [ToggleGroup("buildMetaAssemblyParticipatePackaging", "MetaAssembly")]
+        public bool buildMetaAssemblyParticipatePackaging;
 
-        [ToggleGroup("AssemblyParticipatePackaging", "Assembly")]
-        public bool AssemblyParticipatePackaging;
+        [ToggleGroup("buildAssemblyParticipatePackaging", "Assembly")]
+        public bool buildAssemblyParticipatePackaging;
 
 
-        [ToggleGroup("GameRootStart")] public bool GameRootStart;
+        [ToggleGroup("buildGameRootStart", "GameRootStart")]
+        public bool buildGameRootStart;
 
-        [ToggleGroup("GameRootStart")] [LabelText("GameRootStart预制体")]
+        [ToggleGroup("buildGameRootStart")] [LabelText("GameRootStart预制体")]
         public GameObject GameRootStartPrefab;
 
-        [ToggleGroup("GameRootStart")] [LabelText("GameRootStart预制体路径")] [Sirenix.OdinInspector.FilePath] [HideInInspector]
+        [ToggleGroup("buildGameRootStart")] [LabelText("GameRootStart预制体路径")] [Sirenix.OdinInspector.FilePath] [HideInInspector]
         public string GameRootStartPath;
 
-        [ToggleGroup("Scene", "场景打包")] public bool Scene;
+        [ToggleGroup("BuildScene", "场景打包")] public bool BuildScene;
 
-        [ToggleGroup("Scene")] [LabelText("拷贝场景配置")]
+        [ToggleGroup("BuildScene")] [LabelText("拷贝场景配置")]
         public List<CopySceneAssetBundleAsset> CopySceneAssetBundleAsset = new List<CopySceneAssetBundleAsset>();
 
         [HideInInspector] [LabelText("CopySceneAssetBundleAsset路径")]
         public List<string> CopySceneAssetBundleAssetPath = new List<string>();
 
-        [ToggleGroup("Scene")] [LabelText("正常场景配置")]
+        [ToggleGroup("BuildScene")] [LabelText("正常场景配置")]
         public List<NormalSceneAssetBundleAsset> NormalSceneAssetBundleAssets = new List<NormalSceneAssetBundleAsset>();
 
         [HideInInspector] [LabelText("NormalSceneAssetBundleAsset")]
@@ -91,32 +90,32 @@ namespace XFramework
             }
             else
             {
-                if (HotFixView)
+                if (buildHotFixView)
                 {
                     HotFixViewBuild();
                 }
 
-                if (HotFixCode)
+                if (buildHotFixCode)
                 {
                     HotFixCodeBuild();
                 }
 
-                if (AssemblyParticipatePackaging)
+                if (buildAssemblyParticipatePackaging)
                 {
                     AssemblyBuild();
                 }
 
-                if (MetaAssemblyParticipatePackaging)
+                if (buildMetaAssemblyParticipatePackaging)
                 {
                     MetaAssemblyBuild();
                 }
 
-                if (GameRootStart)
+                if (buildGameRootStart)
                 {
                     GameRootStartBuild();
                 }
 
-                if (Scene)
+                if (BuildScene)
                 {
                     CopySceneBuild();
                     NormalSceneBuild();
@@ -217,7 +216,9 @@ namespace XFramework
                 return;
             }
 
-            HotFixCollect hotFixCollect = JsonMapper.ToObject<HotFixCollect>(FileOperation.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
+            // JsonMapper.ToObject<SceneHotFixConfig>("");
+            // JsonMapper.ToObject<HotFixCollect>("{\"targetBuildAssetBundleOptions\":0,\"HotFixDownPath\":\"\",\"localIsUpdate\":false,\"targetOutPath\":\"\",\"isUpdateVersion\":false,\"targetResourceVersion\":{\"x\":0.0,\"y\":0.0,\"z\":0.0},\"HotFixView\":false,\"HotFixViewPrefab\":{\"instanceID\":0},\"HotFixViewPrePath\":\"\",\"HotFixCode\":false,\"MetaAssemblyParticipatePackaging\":false,\"AssemblyParticipatePackaging\":false,\"GameRootStart\":false,\"GameRootStartPrefab\":{\"instanceID\":0},\"GameRootStartPath\":\"\",\"Scene\":false,\"CopySceneAssetBundleAsset\":[],\"CopySceneAssetBundleAssetPath\":[],\"NormalSceneAssetBundleAssets\":[],\"NormalSceneAssetBundleAssetsPath\":[]}");
+            HotFixCollect hotFixCollect = JsonUtil.FromJson<HotFixCollect>(FileOperation.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
 
             this.localIsUpdate = hotFixCollect.localIsUpdate;
             this.HotFixDownPath = hotFixCollect.HotFixDownPath;
@@ -226,16 +227,16 @@ namespace XFramework
             this.targetOutPath = hotFixCollect.targetOutPath;
             this.targetResourceVersion = hotFixCollect.targetResourceVersion;
             this.isUpdateVersion = hotFixCollect.isUpdateVersion;
-            this.HotFixView = hotFixCollect.HotFixView;
+            this.buildHotFixView = hotFixCollect.buildHotFixView;
             this.HotFixViewPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(hotFixCollect.HotFixViewPrePath);
             this.HotFixViewPrePath = hotFixCollect.HotFixViewPrePath;
-            this.HotFixCode = hotFixCollect.HotFixCode;
-            this.AssemblyParticipatePackaging = hotFixCollect.AssemblyParticipatePackaging;
-            this.MetaAssemblyParticipatePackaging = hotFixCollect.MetaAssemblyParticipatePackaging;
-            this.GameRootStart = hotFixCollect.GameRootStart;
+            this.buildHotFixCode = hotFixCollect.buildHotFixCode;
+            this.buildAssemblyParticipatePackaging = hotFixCollect.buildAssemblyParticipatePackaging;
+            this.buildMetaAssemblyParticipatePackaging = hotFixCollect.buildMetaAssemblyParticipatePackaging;
+            this.buildGameRootStart = hotFixCollect.buildGameRootStart;
             this.GameRootStartPath = hotFixCollect.GameRootStartPath;
             this.GameRootStartPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(hotFixCollect.GameRootStartPath);
-            this.Scene = hotFixCollect.Scene;
+            this.BuildScene = hotFixCollect.BuildScene;
 
             CopySceneAssetBundleAsset.Clear();
             NormalSceneAssetBundleAssets.Clear();
@@ -449,6 +450,12 @@ namespace XFramework
 #endif
             }
 
+            if (GameRootStartPrefab == null)
+            {
+                Debug.LogError("GameRootStartPrefab为空");
+                return;
+            }
+
             AssetImporter gameRootStartImporter = null;
             gameRootStartImporter = AssetImporter.GetAtPath(GameRootStartPath);
             gameRootStartImporter.assetBundleName = "GameRootStartAssetBundle/GameRootStart";
@@ -525,7 +532,7 @@ namespace XFramework
             }
 
             //删除manifest列表
-            List<string> deleteManifestPath = new ListStack<string>();
+            List<string> deleteManifestPath = new List<string>();
             //打包场景其他数据
             foreach (string scenePrefabPath in copySceneAssetBundleAsset.scenePrefabPaths)
             {
@@ -593,7 +600,7 @@ namespace XFramework
             }
 
             //删除manifest列表
-            List<string> deleteManifestPath = new ListStack<string>();
+            List<string> deleteManifestPath = new List<string>();
 
             //打包当前场景
             //打包场景
