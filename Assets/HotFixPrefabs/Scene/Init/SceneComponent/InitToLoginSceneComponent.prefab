@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2749037697578004611
+--- !u!1 &8085652949256854728
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6616321166868388126}
-  - component: {fileID: 8501583952029489371}
-  - component: {fileID: 8380152659612656015}
+  - component: {fileID: 8049562222189707400}
+  - component: {fileID: 1434267075032508902}
+  - component: {fileID: 143068034221901545}
   m_Layer: 0
-  m_Name: GameObjec
+  m_Name: InitToLoginSceneComponent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6616321166868388126
+--- !u!4 &8049562222189707400
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2749037697578004611}
+  m_GameObject: {fileID: 8085652949256854728}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -960, y: -540, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8501583952029489371
+--- !u!114 &1434267075032508902
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2749037697578004611}
+  m_GameObject: {fileID: 8085652949256854728}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93d575301da2cd24a8af3486681515f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 368220295c736564ca099ee6c9fff314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   serializationData:
@@ -54,18 +54,18 @@ MonoBehaviour:
     PrefabModifications: []
     SerializationNodes: []
   viewName: 
---- !u!114 &8380152659612656015
+--- !u!114 &143068034221901545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2749037697578004611}
+  m_GameObject: {fileID: 8085652949256854728}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0301492d004d0e846b7338a5ba42b1c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  generateHierarchyPath: SceneComponentInit
-  prefabPath: Assets/HotFixPrefabs/Scene/Init/SceneComponentInit/GameObjec.prefab
-  assetBundlePath: HotFixRuntime/HotFixAssetBundle/init/scenecomponentinit/gameobjec
+  generateHierarchyPath: SceneComponent
+  prefabPath: Assets/HotFixPrefabs/Scene/Init/SceneComponent/InitToLoginSceneComponent.prefab
+  assetBundlePath: HotFixRuntime/HotFixAssetBundle/init/scenecomponent/inittologinscenecomponent

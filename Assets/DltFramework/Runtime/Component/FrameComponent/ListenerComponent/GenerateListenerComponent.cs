@@ -19,6 +19,7 @@ public class GenerateListenerComponent
             Debug.LogWarning("ListenerComponentData脚本未创建 Create > DltFramework > C# ListenerFrameComponentData");
             return;
         }
+
         _generateClassData.Clear();
         Assembly assembly = Assembly.Load("Assembly-CSharp");
         foreach (Type type in assembly.GetTypes())
@@ -123,7 +124,8 @@ public class GenerateListenerComponent
                         }
                     }
 
-                    generateClassContent += GenerateGeneral.Indents(16) + executeEventContent + "(\"" + generateClassData.className + "\"" + "," + "\"" + generateMethodData.methodName + "\"" + "," + inputParameterTypeContent + ");" + GenerateGeneral.LineFeed;
+                    generateClassContent += GenerateGeneral.Indents(16) + executeEventContent + "(\"" + generateClassData.className + "\"" + "," + "\"" + generateMethodData.methodName + "\"" + "," + inputParameterTypeContent + ");" +
+                                            GenerateGeneral.LineFeed;
                 }
 
                 generateClassContent += GenerateGeneral.Indents(12) + "}" + GenerateGeneral.LineFeed;
@@ -133,8 +135,10 @@ public class GenerateListenerComponent
         }
 
         string newCon = ReplaceScriptContent(oldContent, generateClassContent, "//监听生成开始", "//监听生成结束");
-        FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), newCon);
-        Debug.Log("监听生成结束!");
+        if (newCon != oldContent)
+        {
+            FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), newCon);
+        }
     }
 
     /// <summary>
