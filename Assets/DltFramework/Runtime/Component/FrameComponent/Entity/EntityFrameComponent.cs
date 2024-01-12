@@ -57,18 +57,6 @@ namespace DltFramework
         {
         }
 
-        public void RemoveSceneEntityName()
-        {
-            List<EntityItem> tempEntityItems = DataFrameComponent.GetAllObjectsInScene<EntityItem>(GameRootStart.Instance.loadScene.name);
-            for (int i = 0; i < tempEntityItems.Count; i++)
-            {
-                if (sceneEntity.Contains(tempEntityItems[i]))
-                {
-                    sceneEntity.Remove(tempEntityItems[i]);
-                }
-            }
-        }
-
         [Button("场景道具初始化", ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
         public void EntityInit()
@@ -124,20 +112,6 @@ namespace DltFramework
             }
         }
 
-        public List<EntityItem> GetEntityItemByEntityName(string entityName)
-        {
-            List<EntityItem> entityItems = new List<EntityItem>();
-            foreach (EntityItem tempSceEntityItem in sceneEntity)
-            {
-                if (tempSceEntityItem.entityName == entityName)
-                {
-                    entityItems.Add(tempSceEntityItem);
-                }
-            }
-
-            return entityItems;
-        }
-
         /// <summary>
         /// 实体全部隐藏
         /// </summary>
@@ -166,7 +140,7 @@ namespace DltFramework
         /// <param name="entityName"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T GetFirstEntityItemByName<T>(string entityName)
+        public T GetEntity<T>(string entityName)
         {
             foreach (EntityItem entityItem in sceneEntity)
             {
@@ -184,7 +158,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="entityName"></param>
         /// <returns></returns>
-        public EntityItem GetFirstEntityItemByName(string entityName)
+        public EntityItem GetEntity(string entityName)
         {
             foreach (EntityItem entityItem in sceneEntity)
             {
@@ -202,7 +176,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="entityName"></param>
         /// <param name="display"></param>
-        public void DisplayEntityByEntityName(bool display, string entityName)
+        public void DisplayEntity(bool display, string entityName)
         {
             foreach (EntityItem entityItem in sceneEntity)
             {
@@ -225,7 +199,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="entityNames"></param>
         /// <param name="display"></param>
-        public void DisplayEntityByEntityName(bool display, params string[] entityNames)
+        public void DisplayEntity(bool display, params string[] entityNames)
         {
             foreach (string entityName in entityNames)
             {
@@ -253,7 +227,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="entityName"></param>
         /// <returns></returns>
-        public bool GetFirstEntityStateByEntityName(string entityName)
+        public bool GetEntityState(string entityName)
         {
             foreach (EntityItem entityItem in sceneEntity)
             {
@@ -269,7 +243,7 @@ namespace DltFramework
         /// 移除实体
         /// </summary>
         /// <param name="entityName"></param>
-        public void RemoveEntityItem(string entityName)
+        public void RemoveEntity(string entityName)
         {
             for (int i = 0; i < sceneEntity.Count; i++)
             {

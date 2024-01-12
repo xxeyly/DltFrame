@@ -68,12 +68,12 @@ namespace DltFramework
             GetWindow<FrameMenu>().Show();
         }
 
-        /*[MenuItem("Xframe/监听生成 &l")]
+        [MenuItem("Xframe/监听生成 &l")]
         private static void OnListenerGenerate()
         {
             GenerateListenerComponent.GenerateListener();
             Debug.Log("监听生成结束!");
-        }*/
+        }
 
         [MenuItem("Xframe/生成框架 &F")]
         public static void Generate()

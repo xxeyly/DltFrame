@@ -88,14 +88,14 @@ namespace DltFramework
         /// <param name="entityName"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected T GetFirstEntityItemByName<T>(string entityName)
+        protected T GetEntity<T>(string entityName)
         {
-            return EntityFrameComponent.Instance.GetFirstEntityItemByName<T>(entityName);
+            return EntityFrameComponent.Instance.GetEntity<T>(entityName);
         }
 
-        public EntityItem GetFirstEntityItemByName(string entityName)
+        public EntityItem GetEntity(string entityName)
         {
-            return EntityFrameComponent.Instance.GetFirstEntityItemByName(entityName);
+            return EntityFrameComponent.Instance.GetEntity(entityName);
         }
 
         /// <summary>
@@ -103,9 +103,9 @@ namespace DltFramework
         /// </summary>
         /// <param name="entityName"></param>
         /// <param name="display"></param>
-        protected void DisplayEntityByEntityName(bool display, string entityName)
+        protected void DisplayEntity(bool display, string entityName)
         {
-            EntityFrameComponent.Instance.DisplayEntityByEntityName(display, entityName);
+            EntityFrameComponent.Instance.DisplayEntity(display, entityName);
         }
 
         /// <summary>
@@ -113,9 +113,9 @@ namespace DltFramework
         /// </summary>
         /// <param name="entityNames"></param>
         /// <param name="display"></param>
-        protected void DisplayEntityByEntityName(bool display, params string[] entityNames)
+        protected void DisplayEntity(bool display, params string[] entityNames)
         {
-            EntityFrameComponent.Instance.DisplayEntityByEntityName(display, entityNames);
+            EntityFrameComponent.Instance.DisplayEntity(display, entityNames);
         }
 
         /// <summary>
@@ -123,9 +123,9 @@ namespace DltFramework
         /// </summary>
         /// <param name="entityName"></param>
         /// <returns></returns>
-        protected bool GetFirstEntityStateByEntityName(string entityName)
+        protected bool GetEntityState(string entityName)
         {
-            return EntityFrameComponent.Instance.GetFirstEntityStateByEntityName(entityName);
+            return EntityFrameComponent.Instance.GetEntityState(entityName);
         }
     }
 }

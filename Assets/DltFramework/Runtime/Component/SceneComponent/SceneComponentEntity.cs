@@ -30,12 +30,12 @@ namespace DltFramework
         /// <returns></returns>
         protected T GetFirstEntityItemByName<T>(string entityName) 
         {
-            return EntityFrameComponent.Instance.GetFirstEntityItemByName<T>(entityName);
+            return EntityFrameComponent.Instance.GetEntity<T>(entityName);
         }
 
         public EntityItem GetFirstEntityItemByName(string entityName)
         {
-            return EntityFrameComponent.Instance.GetFirstEntityItemByName(entityName);
+            return EntityFrameComponent.Instance.GetEntity(entityName);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace DltFramework
         /// <param name="display"></param>
         protected void DisplayEntityByEntityName(bool display, string entityName)
         {
-            EntityFrameComponent.Instance.DisplayEntityByEntityName(display, entityName);
+            EntityFrameComponent.Instance.DisplayEntity(display, entityName);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace DltFramework
         /// <param name="display"></param>
         protected void DisplayEntityByEntityName(bool display, params string[] entityNames)
         {
-            EntityFrameComponent.Instance.DisplayEntityByEntityName(display, entityNames);
+            EntityFrameComponent.Instance.DisplayEntity(display, entityNames);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace DltFramework
         /// <returns></returns>
         protected bool GetFirstEntityStateByEntityName(string entityName)
         {
-            return EntityFrameComponent.Instance.GetFirstEntityStateByEntityName(entityName);
+            return EntityFrameComponent.Instance.GetEntityState(entityName);
         }
  
     }

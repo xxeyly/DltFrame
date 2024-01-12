@@ -1114,7 +1114,7 @@ namespace DltFramework
             string str = "";
             foreach (char c in input)
             {
-                str += c.ToString().ToLower();
+                str = StringBuilderString(str, c.ToString().ToLower());
             }
 
             return str;
@@ -1393,7 +1393,7 @@ namespace DltFramework
 
             for (int i = 0; i < divisionPath.Count - 1 - Hierarchy; i++)
             {
-                newPath += divisionPath[i] + "/";
+                newPath = StringBuilderString(newPath, divisionPath[i], "/");
             }
 
             return newPath;
@@ -1420,7 +1420,7 @@ namespace DltFramework
                 target = GetParentByHierarchy(defaultUiTr, i);
                 if (containThis)
                 {
-                    path = target.name + "/" + path;
+                    path = StringBuilderString(target.name, "/", path);
                 }
                 else
                 {
@@ -1430,14 +1430,14 @@ namespace DltFramework
                     }
                     else
                     {
-                        path = target.name + "/" + path;
+                        path = StringBuilderString(target.name, "/", path);
                     }
                 }
             }
 
             if (containThis)
             {
-                return path + defaultUiTr.name;
+                return StringBuilderString(path, defaultUiTr.name);
             }
             else
             {
@@ -1500,6 +1500,18 @@ namespace DltFramework
             return cList;
         }
 
+        //StringBuilder字符串拼接
+        public static string StringBuilderString(params string[] strList)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (string str in strList)
+            {
+                sb.Append(str);
+            }
+
+            return sb.ToString();
+        }
+
 
 #if UNITY_EDITOR
 
@@ -1527,7 +1539,7 @@ namespace DltFramework
                 Directory.CreateDirectory(path);
             }
 
-            File.WriteAllText(path + "/" + fileName, information, new System.Text.UTF8Encoding(false));
+            File.WriteAllText(DataFrameComponent.StringBuilderString(path, "/", fileName), information, new System.Text.UTF8Encoding(false));
 #if UNITY_EDITOR
             UnityEditor.AssetDatabase.Refresh();
 #endif
@@ -1573,7 +1585,7 @@ namespace DltFramework
         /// <param name="information"></param>
         public static void SaveFileToLocal(string path, string fileName, byte[] information, FileMode fileMode, int buffSize = 1024 * 1024)
         {
-            FileStream aFile = new FileStream(path + "/" + fileName, fileMode, FileAccess.Write);
+            FileStream aFile = new FileStream(DataFrameComponent.StringBuilderString(path , "/" , fileName), fileMode, FileAccess.Write);
             if (File.Exists(path))
             {
             }
@@ -1635,7 +1647,7 @@ namespace DltFramework
                 Debug.LogError("文件不存在:" + path + "/" + fileName);
             }
 
-            FileStream aFile = new FileStream(path + "/" + fileName, FileMode.Open);
+            FileStream aFile = new FileStream(DataFrameComponent.StringBuilderString(path, "/", fileName), FileMode.Open);
             StreamReader sr = new StreamReader(aFile);
             var textData = sr.ReadToEnd();
             sr.Close();
@@ -1685,7 +1697,10 @@ namespace DltFramework
                 file.Close();
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < retVal.Length; i++)
+                {
                     sb.Append(retVal[i].ToString("x2"));
+                }
+
                 return sb.ToString();
             }
 
@@ -1713,7 +1728,7 @@ namespace DltFramework
             {
                 if (i >= startIndex && i < endIndex)
                 {
-                    byteContent += content[i];
+                    byteContent = DataFrameComponent.StringBuilderString(byteContent, content[i].ToString());
                 }
             }
 
@@ -1743,15 +1758,15 @@ namespace DltFramework
 
                     if (destDirName[destDirName.Length - 1] != '/')
                     {
-                        destDirName += "/";
+                        destDirName = DataFrameComponent.StringBuilderString(destDirName, "/");
                     }
 
-                    File.Copy(item, destDirName + "/" + Path.GetFileName(item), true);
+                    File.Copy(item, DataFrameComponent.StringBuilderString(destDirName, "/", Path.GetFileName(item)), true);
                 }
 
                 foreach (string item in Directory.GetDirectories(sourceDirName))
                 {
-                    Copy(item + "/", destDirName + "/" + DataFrameComponent.GetPathFileName(item));
+                    Copy(DataFrameComponent.StringBuilderString(item, "/"), DataFrameComponent.StringBuilderString(destDirName, "/", DataFrameComponent.GetPathFileName(item)));
                 }
             }
             else
