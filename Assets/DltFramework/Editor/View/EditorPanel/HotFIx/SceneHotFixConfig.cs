@@ -10,7 +10,9 @@ namespace DltFramework
     [Title("一个场景只能选择一种资源类型,拷贝资源类型不会产于主动打包,只会在正常场景打包时包含进去")]
     public class SceneHotFixConfig : BaseEditor
     {
+#pragma warning disable CS0414 // 字段已被赋值，但它的值从未被使用
         [LabelText("场景资源文件是否存在")] private bool isExistsNormalSceneAssetBundleAsset;
+#pragma warning restore CS0414 // 字段已被赋值，但它的值从未被使用
 
         [ShowIf("isExistsNormalSceneAssetBundleAsset")] [HorizontalGroup("NormalSceneAssetBundleAsset")] [LabelText("正常场景配置")] [InlineEditor()] [OnValueChanged("OnNormalSceneAssetBundleAssetChanged")] [AssetList]
         public NormalSceneAssetBundleAsset NormalSceneAssetBundleAsset;
@@ -28,9 +30,9 @@ namespace DltFramework
                 UnityEditor.AssetDatabase.Refresh();
             }
         }
-
+#pragma warning disable CS0414 // 字段已被赋值，但它的值从未被使用
         [LabelText("创建场景资源文件")] private bool isCreateNormalSceneAssetBundleAsset;
-
+#pragma warning restore CS0414 // 字段已被赋值，但它的值从未被使用
         [Button("创建场景热更配置")]
         [InfoBox("正常场景类型为常见的常见类型,可设置是否包含拷贝资源类型,如果包含拷贝资源类型,那么就会使用拷贝资源类型的资源,如果不包含,那么就会使用正常资源类型的资源")]
         [ShowIf("@isCreateNormalSceneAssetBundleAsset && isExistsCopySceneAssetBundleAsset==false")]
@@ -65,7 +67,9 @@ namespace DltFramework
             }
         }
 
+#pragma warning disable CS0414 // 字段已被赋值，但它的值从未被使用
         [LabelText("场景资源文件是否存在")] private bool isExistsCopySceneAssetBundleAsset;
+#pragma warning restore CS0414 // 字段已被赋值，但它的值从未被使用
 
         [ShowIf("@this.isExistsCopySceneAssetBundleAsset")] [LabelText("拷贝场景资源文件")] [InlineEditor()] [OnValueChanged("OnCreateCopySceneAssetBundleAssetChanged")] [AssetList]
         public CopySceneAssetBundleAsset CopySceneAssetBundleAsset;
@@ -86,7 +90,9 @@ namespace DltFramework
             GetSceneAssetBundleAsset();
         }
 
+#pragma warning disable CS0414 // 字段已被赋值，但它的值从未被使用
         [LabelText("创建场景资源文件")] private bool isCreateCopySceneAssetBundleAsset;
+#pragma warning restore CS0414 // 字段已被赋值，但它的值从未被使用
 
         [HorizontalGroup]
         [Button("创建拷贝场景热更配置")]

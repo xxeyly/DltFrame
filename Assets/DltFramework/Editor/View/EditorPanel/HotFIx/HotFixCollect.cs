@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+#if HybridCLR
 using HybridCLR.Editor.Commands;
+#endif
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -294,7 +296,9 @@ namespace DltFramework
         private void HotFixCodeBuild()
         {
             //热更新打包
+#if HybridCLR
             CompileDllCommand.CompileDllActiveBuildTarget();
+#endif
             string platformName = string.Empty;
             switch (EditorUserBuildSettings.activeBuildTarget)
             {
@@ -336,7 +340,9 @@ namespace DltFramework
 
         private void AssemblyBuild()
         {
+#if HybridCLR
             CompileDllCommand.CompileDllActiveBuildTarget();
+#endif
             string platformName = string.Empty;
             switch (EditorUserBuildSettings.activeBuildTarget)
             {
@@ -398,7 +404,7 @@ namespace DltFramework
                 AssetDatabase.Refresh();
 #endif
             }
-
+#if HybridCLR
             //移动元文件
             foreach (string metadataName in AOTGenericReferences.PatchedAOTAssemblyList)
             {
@@ -422,7 +428,7 @@ namespace DltFramework
                 File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
                     RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/" + metadataName + ".bytes", true);
             }
-
+#endif
             List<string> buildPath = DataFrameComponent.GetGetSpecifyPathInAllTypePath("Assets/UnStreamingAssets/HotFix/Metadata", "bytes");
             List<HotFixRuntimeDownConfig> hotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             foreach (string path in buildPath)

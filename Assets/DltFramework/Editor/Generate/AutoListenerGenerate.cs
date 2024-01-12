@@ -20,7 +20,9 @@ public class AutoListenerGenerate
         if (Convert.ToInt64(st1.TotalSeconds) - oldTime >= 1)
         {
             oldTime = Convert.ToInt64(st1.TotalSeconds);
+#if XFrameInit
             GenerateListenerComponent.GenerateListener();
+#endif
         }
     }
 }

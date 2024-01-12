@@ -17,11 +17,11 @@ namespace DltFramework
         {
         }
 
-#if !XFrameInit
+#if !DltFrameInit
         [MenuItem("Xframe/框架初始化")]
         private static void FrameInit()
         {
-            AddMacro("XFrameInit");
+            AddMacro("DltFrameInit");
             AddMacro("!HybridCLR");
         }
 #endif
@@ -61,7 +61,7 @@ namespace DltFramework
             PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, symbols);
         }
 
-#if XFrameInit
+#if DltFrameInit
         [MenuItem("Xframe/框架界面")]
         private static void OpenWindow()
         {
@@ -157,7 +157,7 @@ namespace DltFramework
 
 #endif
 
-#if HybridCLR && XFrameInit
+#if HybridCLR && DltFrameInit
         [MenuItem("Xframe/热更界面")]
         private static void OpenHotFixWindow()
         {
