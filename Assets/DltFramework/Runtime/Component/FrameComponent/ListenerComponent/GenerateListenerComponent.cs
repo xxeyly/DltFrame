@@ -11,7 +11,7 @@ public class GenerateListenerComponent
 {
     [SerializeField] private static List<GenerateClassData> _generateClassData = new List<GenerateClassData>();
     private static Assembly assembly;
-    public static string listenerComponentDataPath;
+    public static string listenerComponentDataPath = "";
 
     public static void GenerateListener()
     {
@@ -144,6 +144,7 @@ public class GenerateListenerComponent
         if (newCon != oldContent)
         {
             FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), newCon);
+            Debug.Log("监听生成成功");
         }
     }
 
