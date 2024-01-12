@@ -10,10 +10,16 @@ using DltFramework;
 public class GenerateListenerComponent
 {
     [SerializeField] private static List<GenerateClassData> _generateClassData = new List<GenerateClassData>();
+    private static Assembly assembly;
+    public static string listenerComponentDataPath;
 
     public static void GenerateListener()
     {
-        string listenerComponentDataPath = GenerateGeneral.GetPath("ListenerComponentData");
+        if (listenerComponentDataPath == string.Empty)
+        {
+            listenerComponentDataPath = GenerateGeneral.GetPath("ListenerComponentData");
+        }
+
         if (listenerComponentDataPath == null)
         {
             Debug.LogWarning("ListenerComponentData脚本未创建 Create > DltFramework > C# ListenerFrameComponentData");
@@ -21,7 +27,7 @@ public class GenerateListenerComponent
         }
 
         _generateClassData.Clear();
-        Assembly assembly = Assembly.Load("Assembly-CSharp");
+        assembly = Assembly.Load("Assembly-CSharp");
         foreach (Type type in assembly.GetTypes())
         {
             GenerateClassData tempGenerateClassData = new GenerateClassData();
