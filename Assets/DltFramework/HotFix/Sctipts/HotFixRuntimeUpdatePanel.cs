@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HotFixRuntimeUpdatePanel : MonoBehaviour
+public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileCheck, IHotFixRuntimeFileDown, IHotFixNetworking
 {
     public GameObject initPanel;
     public GameObject localFileCheckPanel;
@@ -17,24 +17,6 @@ public class HotFixRuntimeUpdatePanel : MonoBehaviour
     [LabelText("下载速度")] public Text downTextSpeed;
     [LabelText("总下载大小")] public Text totalDownload;
     public GameObject networkPanel;
-
-    private void Awake()
-    {
-        //表和本地检测
-        HotFixRuntimeFileCheck.HotFixRuntimeTableDownStart += HotFixRuntimeFileCheck_HotFixRuntimeTableDownStart;
-        HotFixRuntimeFileCheck.HotFixRuntimeTableDownOver += HotFixRuntimeFileCheck_HotFixRuntimeTableDownOver;
-        HotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheck += HotFixRuntimeFileCheck_HotFixRuntimeLocalFileCheck;
-        HotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheckOver += HotFixRuntimeFileCheck_HotFixRuntimeLocalFileCheckOver;
-
-        //下载
-        HotFixRuntimeFileDown.HotFixRuntimeDownStart += HotFixRuntimeFileDown_HotFixRuntimeDownStart;
-        HotFixRuntimeFileDown.HotFixRuntimeDownOver += HotFixRuntimeFileDown_HotFixRuntimeDownOver;
-        HotFixRuntimeFileDown.HotFixRuntimeDownSpeed += HotFixRuntimeFileDown_HotFixRuntimeDownSpeed;
-        HotFixRuntimeFileDown.HotFixRuntimeDownloadValue += HotFixRuntimeFileDown_HotFixRuntimeCurrentDownValue;
-
-        //网络
-        HotFixNetworking.NetworkingState += HotFixNetworking_NetworkingState;
-    }
 
     private void HotFixNetworking_NetworkingState(bool state)
     {
@@ -52,21 +34,6 @@ public class HotFixRuntimeUpdatePanel : MonoBehaviour
         downPanel.SetActive(true);
     }
 
-    private void HotFixRuntimeFileCheck_HotFixRuntimeLocalFileCheckOver()
-    {
-        localFileCheckPanel.SetActive(false);
-    }
-
-    private void HotFixRuntimeFileCheck_HotFixRuntimeTableDownOver()
-    {
-        initPanel.SetActive(false);
-        localFileCheckPanel.SetActive(true);
-    }
-
-    private void HotFixRuntimeFileCheck_HotFixRuntimeTableDownStart()
-    {
-        initPanel.SetActive(true);
-    }
 
     private void HotFixRuntimeFileDown_HotFixRuntimeCurrentDownValue(double current, double total)
     {
@@ -80,9 +47,53 @@ public class HotFixRuntimeUpdatePanel : MonoBehaviour
         downTextSpeed.text = HotFixGlobal.FileSizeString(downSpeed) + "/s";
     }
 
-    private void HotFixRuntimeFileCheck_HotFixRuntimeLocalFileCheck(int currentCount, int maxCount)
+
+    public void HotFixRuntimeTableDownStart()
+    {
+        initPanel.SetActive(true);
+    }
+
+    public void HotFixRuntimeTableDownOver()
+    {
+        initPanel.SetActive(false);
+        localFileCheckPanel.SetActive(true);
+    }
+
+    public void HotFixRuntimeLocalFileCheck(int currentCount, int maxCount)
     {
         localFileCheckSlider.value = (float)currentCount / maxCount;
         localFileCheckText.text = (int)(localFileCheckSlider.value * 100) + "/100";
+    }
+
+    public void HotFixRuntimeLocalFileCheckOver()
+    {
+        localFileCheckPanel.SetActive(false);
+    }
+
+    public void HotFixRuntimeDownStart()
+    {
+        downPanel.SetActive(true);
+    }
+
+    public void HotFixRuntimeDownSpeed(float downSpeed)
+    {
+        downTextSpeed.text = HotFixGlobal.FileSizeString(downSpeed) + "/s";
+    }
+
+    public void HotFixRuntimeDownloadValue(double current, double total)
+    {
+        totalDownload.text = HotFixGlobal.FileSizeString(current) + "/" + HotFixGlobal.FileSizeString(total);
+        downSliderProgress.value = (float)(current / total);
+        downTextProgress.text = (current / total * 100).ToString("0") + "/100";
+    }
+
+    public void HotFixRuntimeDownOver()
+    {
+        downPanel.SetActive(false);
+    }
+
+    public void NetworkingState(bool state)
+    {
+        networkPanel.SetActive(!state);
     }
 }

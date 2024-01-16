@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -242,4 +244,69 @@ public class AotGlobal
         // 将文件数据写入目标文件
         File.WriteAllBytes(destinationPath, fileData);
     }
+
+    //StringBuilder字符串拼接
+    public static string StringBuilderString(params string[] strList)
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (string str in strList)
+        {
+            sb.Append(str);
+        }
+
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// 查找场景中所有类型
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static List<T> GetAllObjectsInScene<T>()
+    {
+        // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
+        List<GameObject> objectsInScene = GetAllObjectsOnlyInScene();
+        List<T> specifiedType = new List<T>();
+        foreach (GameObject go in objectsInScene)
+        {
+            List<T> ts = new List<T>(go.GetComponents<T>());
+            for (int i = 0; i < ts.Count; i++)
+            {
+                if (ts[i] != null)
+                {
+                    specifiedType.Add(ts[i]);
+                }
+            }
+        }
+
+        return specifiedType;
+    }
+
+    /// <summary>
+    /// 获得场景中所有物体
+    /// </summary>
+    /// <returns></returns>
+    public static List<GameObject> GetAllObjectsOnlyInScene()
+    {
+        List<GameObject> objectsInScene = new List<GameObject>();
+        foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
+        {
+            if (go.scene.name == null)
+            {
+                continue;
+            }
+#if UNITY_EDITOR
+            if (!EditorUtility.IsPersistent(go.transform.root.gameObject) &&
+                !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+            {
+                objectsInScene.Add(go);
+            }
+#else
+                objectsInScene.Add(go);
+#endif
+        }
+
+        return objectsInScene;
+    }
+    
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using Cysharp.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,7 +6,11 @@ using UnityEngine.SceneManagement;
 namespace DltFramework
 {
     [InfoBox("框架开始")]
+#if UNITY_EDITOR
     public class GameRootStart : SerializedMonoBehaviour
+#else
+        public class GameRootStart : MonoBehaviour
+#endif
     {
         public static GameRootStart Instance;
 #pragma warning disable 649
@@ -108,6 +109,7 @@ namespace DltFramework
                 SceneLoadFrameComponent.Instance.SceneLoad(initJumpSceneName);
                 DestroyImmediate(GetComponent<AudioListener>());
             }
+
             SceneManager.sceneLoaded += SceneLoadOverCallBack;
         }
 

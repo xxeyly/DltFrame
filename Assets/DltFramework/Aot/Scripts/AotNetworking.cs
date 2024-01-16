@@ -11,6 +11,12 @@ public class AotNetworking : MonoBehaviour
     public static NetworkingState NetworkingState;
     public float time = 0;
     public float timer = 1;
+    List<IAotNetworking> _aotNetworkings = new List<IAotNetworking>();
+
+    private void Start()
+    {
+        _aotNetworkings = AotGlobal.GetAllObjectsInScene<IAotNetworking>();
+    }
 
     void Update()
     {
@@ -21,15 +27,27 @@ public class AotNetworking : MonoBehaviour
             switch (Application.internetReachability)
             {
                 case NetworkReachability.NotReachable:
-                    NetworkingState?.Invoke(false);
+                    foreach (IAotNetworking aotNetworking in _aotNetworkings)
+                    {
+                        aotNetworking.NetworkingState(false);
+                    }
+
                     // Debug.Log("断网了");
                     break;
                 case NetworkReachability.ReachableViaCarrierDataNetwork:
-                    NetworkingState?.Invoke(true);
+                    foreach (IAotNetworking aotNetworking in _aotNetworkings)
+                    {
+                        aotNetworking.NetworkingState(true);
+                    }
+
                     // Debug.Log("移动联网");
                     break;
                 case NetworkReachability.ReachableViaLocalAreaNetwork:
-                    NetworkingState?.Invoke(true);
+                    foreach (IAotNetworking aotNetworking in _aotNetworkings)
+                    {
+                        aotNetworking.NetworkingState(true);
+                    }
+
                     // Debug.Log("Wifi或者有线");
                     break;
                 default:

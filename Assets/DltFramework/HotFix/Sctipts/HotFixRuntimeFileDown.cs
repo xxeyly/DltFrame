@@ -7,19 +7,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-
-//开始下载
-public delegate void HotFixRuntimeDownStart();
-
-//下载速度
-public delegate void HotFixRuntimeDownSpeed(float downSpeed);
-
-//下载量
-public delegate void HotFixRuntimeDownloadValue(double current, double total);
-
-//开始结束
-public delegate void HotFixRuntimeDownOver();
-
 public class HotFixRuntimeFileDown : MonoBehaviour
 {
     [LabelText("下载地址")] public string hotFixPath = "http://127.0.0.1/";
@@ -31,13 +18,16 @@ public class HotFixRuntimeFileDown : MonoBehaviour
     [LabelText("上一次下载字节长度")] public int oldDownByteLength;
     [LabelText("当前下载量数据")] public double currentDownloadValue;
     [LabelText("总的下载量数据")] public double totalDownloadValue;
-    [LabelText("下载开始")] public static HotFixRuntimeDownStart HotFixRuntimeDownStart;
-    [LabelText("下载完毕")] public static HotFixRuntimeDownOver HotFixRuntimeDownOver;
-    [LabelText("下载速度")] public static HotFixRuntimeDownSpeed HotFixRuntimeDownSpeed;
-    [LabelText("当前下载量")] public static HotFixRuntimeDownloadValue HotFixRuntimeDownloadValue;
 
     [LabelText("HotFixRuntimeDownConfig下载完毕")]
     public bool hotFixRuntimeDownConfigOver;
+
+    private List<IHotFixRuntimeFileDown> _hotFixRuntimeFileDowns = new List<IHotFixRuntimeFileDown>();
+
+    private void Start()
+    {
+        _hotFixRuntimeFileDowns = HotFixGlobal.GetAllObjectsInScene<IHotFixRuntimeFileDown>();
+    }
 
     //替换缓存文件
     public void ReplaceCacheFile()
@@ -63,14 +53,22 @@ public class HotFixRuntimeFileDown : MonoBehaviour
     //获得下载路径,统计下载总大小,准备开始下载
     public void DownHotFixRuntimeDownConfig(List<HotFixRuntimeDownConfig> needDownHotFixRuntimeDownConfig, string hotFixPath)
     {
-        HotFixRuntimeDownStart?.Invoke();
+        foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
+        {
+            hotFixRuntimeFileDown.HotFixRuntimeDownStart();
+        }
+
         this.hotFixPath = hotFixPath;
         foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in needDownHotFixRuntimeDownConfig)
         {
             totalDownloadValue += double.Parse(hotFixRuntimeDownConfig.size);
         }
 
-        HotFixRuntimeDownloadValue?.Invoke(currentDownloadValue, totalDownloadValue);
+        foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
+        {
+            hotFixRuntimeFileDown.HotFixRuntimeDownloadValue(currentDownloadValue, totalDownloadValue);
+        }
+
         StartCoroutine(StartDownHotFixRuntimeDownConfig(needDownHotFixRuntimeDownConfig));
     }
 
@@ -88,7 +86,11 @@ public class HotFixRuntimeFileDown : MonoBehaviour
         Debug.Log("所有文件下载完毕");
         ReplaceCacheFile();
         yield return new WaitForSeconds(1f);
-        HotFixRuntimeDownOver?.Invoke();
+        foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
+        {
+            hotFixRuntimeFileDown.HotFixRuntimeDownOver();
+        }
+
         HotFixOver.Over();
     }
 
@@ -126,7 +128,11 @@ public class HotFixRuntimeFileDown : MonoBehaviour
                 //下载请求
                 _hotFixUnityWebRequest = UnityWebRequest.Get(downFileUrl);
                 //更新下载数据
-                HotFixRuntimeDownloadValue?.Invoke(currentDownloadValue, totalDownloadValue);
+                foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
+                {
+                    hotFixRuntimeFileDown.HotFixRuntimeDownloadValue(currentDownloadValue, totalDownloadValue);
+                }
+
                 //使用断点续传下载
                 _hotFixUnityWebRequest.SetRequestHeader("Range", "bytes=" + HotFixGlobal.GetFileSize(downFileCachePath) + "-");
                 StartCoroutine(DownHotFixRuntimeDownConfig(downFileCachePath, hotFixAssetConfig));
@@ -159,7 +165,7 @@ public class HotFixRuntimeFileDown : MonoBehaviour
         _hotFixFileStream.Close();
         _hotFixFileStream.Dispose();
         _hotFixFileStream = null;
-       
+
         //检测下载完后的文件的Md5
         string localCacheMd5 = HotFixGlobal.GetMD5HashFromFile(downFileCachePath);
         if (_hotFixUnityWebRequest.responseCode != 200 && _hotFixUnityWebRequest.responseCode != 206)
@@ -235,9 +241,18 @@ public class HotFixRuntimeFileDown : MonoBehaviour
             {
                 // Debug.Log(oldDownByteLength + ";" + newDownSize);
                 fileStream.Write(_hotFixUnityWebRequest.downloadHandler.data, oldDownByteLength, newDownSize);
-                HotFixRuntimeDownSpeed?.Invoke(newDownSize);
+
+                foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
+                {
+                    hotFixRuntimeFileDown.HotFixRuntimeDownSpeed(newDownSize);
+                }
+
                 currentDownloadValue += newDownSize;
-                HotFixRuntimeDownloadValue?.Invoke(currentDownloadValue, totalDownloadValue);
+                foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
+                {
+                    hotFixRuntimeFileDown.HotFixRuntimeDownloadValue(currentDownloadValue, totalDownloadValue);
+                }
+
                 oldDownByteLength = downSize;
                 // Debug.Log("写入后大小:" + fileStream.Length);
             }

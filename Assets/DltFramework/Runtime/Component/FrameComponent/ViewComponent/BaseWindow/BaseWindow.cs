@@ -25,7 +25,11 @@ namespace DltFramework
     /// 视图基类
     /// </summary>
     [RequireComponent(typeof(BaseWindowGenerateScripts))]
+#if UNITY_EDITOR
     public abstract partial class BaseWindow : SerializedMonoBehaviour
+#else
+        public abstract partial class BaseWindow : MonoBehaviour
+#endif
     {
         protected GameObject window;
         protected CanvasGroup canvasGroup;

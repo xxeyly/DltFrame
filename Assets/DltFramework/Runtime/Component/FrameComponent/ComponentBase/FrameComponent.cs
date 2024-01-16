@@ -4,9 +4,12 @@ using UnityEngine.Serialization;
 
 namespace DltFramework
 {
+#if UNITY_EDITOR
     public abstract class FrameComponent : SerializedMonoBehaviour, IComponent
+#else
+        public abstract class FrameComponent : MonoBehaviour, IComponent
+#endif
     {
-
         //框架组件初始化
         public abstract void FrameInitComponent();
 

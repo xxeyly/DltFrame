@@ -3,14 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public delegate void NetworkingState(bool downSpeed);
-
 
 public class HotFixNetworking : MonoBehaviour
 {
-    public static NetworkingState NetworkingState;
     public float time = 0;
     public float timer = 1;
+    List<IHotFixNetworking> _hotFixNetworkings = new List<IHotFixNetworking>();
+
+    private void Start()
+    {
+        _hotFixNetworkings = HotFixGlobal.GetAllObjectsInScene<IHotFixNetworking>();
+    }
 
     void Update()
     {
@@ -21,15 +24,27 @@ public class HotFixNetworking : MonoBehaviour
             switch (Application.internetReachability)
             {
                 case NetworkReachability.NotReachable:
-                    NetworkingState?.Invoke(false);
+                    foreach (IHotFixNetworking hotFixNetworking in _hotFixNetworkings)
+                    {
+                        hotFixNetworking.NetworkingState(false);
+                    }
+
                     // Debug.Log("断网了");
                     break;
                 case NetworkReachability.ReachableViaCarrierDataNetwork:
-                    NetworkingState?.Invoke(true);
+                    foreach (IHotFixNetworking hotFixNetworking in _hotFixNetworkings)
+                    {
+                        hotFixNetworking.NetworkingState(true);
+                    }
+
                     // Debug.Log("移动联网");
                     break;
                 case NetworkReachability.ReachableViaLocalAreaNetwork:
-                    NetworkingState?.Invoke(true);
+                    foreach (IHotFixNetworking hotFixNetworking in _hotFixNetworkings)
+                    {
+                        hotFixNetworking.NetworkingState(true);
+                    }
+
                     // Debug.Log("Wifi或者有线");
                     break;
                 default:

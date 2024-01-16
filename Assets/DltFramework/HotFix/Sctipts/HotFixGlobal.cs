@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using UnityEditor;
 using UnityEngine;
 
 public class HotFixGlobal
@@ -178,5 +180,57 @@ public class HotFixGlobal
         }
 
         return sb.ToString();
+    }
+
+    /// <summary>
+    /// 查找场景中所有类型
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public static List<T> GetAllObjectsInScene<T>()
+    {
+        // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
+        List<GameObject> objectsInScene = GetAllObjectsOnlyInScene();
+        List<T> specifiedType = new List<T>();
+        foreach (GameObject go in objectsInScene)
+        {
+            List<T> ts = new List<T>(go.GetComponents<T>());
+            for (int i = 0; i < ts.Count; i++)
+            {
+                if (ts[i] != null)
+                {
+                    specifiedType.Add(ts[i]);
+                }
+            }
+        }
+
+        return specifiedType;
+    }
+
+    /// <summary>
+    /// 获得场景中所有物体
+    /// </summary>
+    /// <returns></returns>
+    public static List<GameObject> GetAllObjectsOnlyInScene()
+    {
+        List<GameObject> objectsInScene = new List<GameObject>();
+        foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
+        {
+            if (go.scene.name == null)
+            {
+                continue;
+            }
+#if UNITY_EDITOR
+            if (!EditorUtility.IsPersistent(go.transform.root.gameObject) &&
+                !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
+            {
+                objectsInScene.Add(go);
+            }
+#else
+                objectsInScene.Add(go);
+#endif
+        }
+
+        return objectsInScene;
     }
 }

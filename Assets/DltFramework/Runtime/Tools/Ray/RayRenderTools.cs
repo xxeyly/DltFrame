@@ -72,14 +72,16 @@ namespace DltFramework
             int id = GetSwitchTaskTid();
             if (!isCon)
             {
-                RayRenderItemInfo tempRenderItemInfo = new RayRenderItemInfo();
-                tempRenderItemInfo.actionId = id;
-                tempRenderItemInfo.rayHit = rayHit;
-                tempRenderItemInfo.unRayHit = unRayHit;
-                tempRenderItemInfo.currentOperationMask = currentOperationMask;
-                tempRenderItemInfo.mouseType = mouseType;
-                tempRenderItemInfo.triggerType = triggerType;
-                tempRenderItemInfo.continuousTrigger = continuousTrigger;
+                RayRenderItemInfo tempRenderItemInfo = new RayRenderItemInfo
+                {
+                    actionId = id,
+                    rayHit = rayHit,
+                    unRayHit = unRayHit,
+                    currentOperationMask = currentOperationMask,
+                    mouseType = mouseType,
+                    triggerType = triggerType,
+                    continuousTrigger = continuousTrigger
+                };
                 rayRenderItemInfos.Add(tempRenderItemInfo);
             }
 
@@ -215,8 +217,7 @@ namespace DltFramework
 
                 #region 持续触发
 
-                List<RayRenderItemInfo> leftDownContinuousTriggerRayAction =
-                    DownContinuousTriggerRayAction(MouseType.Left);
+                List<RayRenderItemInfo> leftDownContinuousTriggerRayAction = DownContinuousTriggerRayAction(MouseType.Left);
                 _leftDownContinuousTrigger = true;
 
                 #endregion

@@ -39,7 +39,7 @@ namespace DltFramework
             switch (Application.platform)
             {
                 case RuntimePlatform.WindowsEditor:
-                    path = Application.dataPath + "/UnStreamingAssets";
+                    path = DataFrameComponent.StringBuilderString(Application.dataPath, "/UnStreamingAssets");
                     break;
                 case RuntimePlatform.WindowsPlayer:
                     path = Application.streamingAssetsPath;
@@ -50,7 +50,7 @@ namespace DltFramework
                 case RuntimePlatform.Android:
                     if (read)
                     {
-                        path = "file://" + Application.persistentDataPath;
+                        path = DataFrameComponent.StringBuilderString("file://", Application.persistentDataPath);
                     }
                     else
                     {
@@ -67,22 +67,22 @@ namespace DltFramework
         }
 
         [LabelText("DltFramework路径")] public static string DltFrameworkPath = "Assets/DltFramework/Runtime/";
-        [LabelText("BaseWindow模板地址")] public static string BaseWindowTemplatePath = DltFrameworkPath + "Model/Template/BaseWindowTemplate.cs";
-        [LabelText("ChildBaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = DltFrameworkPath + "Model/Template/ChildBaseWindowTemplate.cs";
+        [LabelText("BaseWindow模板地址")] public static string BaseWindowTemplatePath = DataFrameComponent.StringBuilderString(DltFrameworkPath, "Model/Template/BaseWindowTemplate.cs");
+        [LabelText("ChildBaseWindow模板地址")] public static string ChildBaseWindowTemplatePath = DataFrameComponent.StringBuilderString(DltFrameworkPath, "Model/Template/ChildBaseWindowTemplate.cs");
 
         [LabelText("ListenerComponentData模板地址")]
-        public static string ListenerComponentDataTemplatePath = DltFrameworkPath + "Model/Template/ListenerComponentDataTemplate.cs";
+        public static string ListenerComponentDataTemplatePath = DataFrameComponent.StringBuilderString(DltFrameworkPath, "Model/Template/ListenerComponentDataTemplate.cs");
 
-        [LabelText("SceneLoadComponent模板地址")] public static string SceneComponentTemplatePath = DltFrameworkPath + "Model/Template/SceneComponentTemplate.cs";
+        [LabelText("SceneLoadComponent模板地址")] public static string SceneComponentTemplatePath = DataFrameComponent.StringBuilderString(DltFrameworkPath, "Model/Template/SceneComponentTemplate.cs");
 
         [LabelText("SceneLoadComponentInit模板地址")]
-        public static string SceneComponentInitTemplatePath = DltFrameworkPath + "Model/Template/SceneComponentInitTemplate.cs";
+        public static string SceneComponentInitTemplatePath = DataFrameComponent.StringBuilderString(DltFrameworkPath, "Model/Template/SceneComponentInitTemplate.cs");
 
         [LabelText("AnimatorControllerParameterData模板地址")]
-        public static string AnimatorControllerParameterDataTemplatePath = DltFrameworkPath + "Model/Template/AnimatorControllerParameterDataTemplate.cs";
+        public static string AnimatorControllerParameterDataTemplatePath = DataFrameComponent.StringBuilderString(DltFrameworkPath, "Model/Template/AnimatorControllerParameterDataTemplate.cs");
 
         [LabelText("存放路径根路径")] public static string assetRootPath = "Assets/Config/";
-        [LabelText("音频配置存放路径")] public static string customAudioDataPath = assetRootPath + "CustomAudioData.asset";
-        [LabelText("框架配置存放路径")] public static string frameComponentEditorDataPath = assetRootPath + "FrameComponentEditorData.asset";
+        [LabelText("音频配置存放路径")] public static string customAudioDataPath = DataFrameComponent.StringBuilderString(assetRootPath, "CustomAudioData.asset");
+        [LabelText("框架配置存放路径")] public static string frameComponentEditorDataPath = DataFrameComponent.StringBuilderString(assetRootPath, "FrameComponentEditorData.asset");
     }
 }

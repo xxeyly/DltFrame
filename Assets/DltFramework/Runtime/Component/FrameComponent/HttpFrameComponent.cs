@@ -118,13 +118,9 @@ namespace DltFramework
             switch (requestMethod)
             {
                 case HttpRequestMethod.GET:
-                    webRequest = UnityWebRequest.Get(url + DictionaryToString(requestData));
-                    break;
                 case HttpRequestMethod.PUT:
-                    webRequest = UnityWebRequest.Get(url + DictionaryToString(requestData));
-                    break;
                 case HttpRequestMethod.DELETE:
-                    webRequest = UnityWebRequest.Get(url + DictionaryToString(requestData));
+                    webRequest = UnityWebRequest.Get(DataFrameComponent.StringBuilderString(url, DictionaryToString(requestData)));
                     break;
                 case HttpRequestMethod.POST:
                     WWWForm wwwForm = new WWWForm();
@@ -142,7 +138,7 @@ namespace DltFramework
                 await webRequest.SendWebRequest();
                 if (webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    errorAction.Invoke(_request.url + ":" + _request.error);
+                    errorAction.Invoke(DataFrameComponent.StringBuilderString(_request.url, ":", _request.error));
                 }
                 else
                 {
@@ -163,14 +159,14 @@ namespace DltFramework
             {
                 if (content == string.Empty)
                 {
-                    content += ("?");
+                    content = DataFrameComponent.StringBuilderString(content, "?");
                 }
                 else
                 {
-                    content += ("&");
+                    content = DataFrameComponent.StringBuilderString(content, "&");
                 }
 
-                content += pair.Key + "=" + pair.Value;
+                content = DataFrameComponent.StringBuilderString(content, pair.Key, "=", pair.Value);
             }
 
 
@@ -193,7 +189,7 @@ namespace DltFramework
 
             if (_request.result == UnityWebRequest.Result.ProtocolError)
             {
-                errorAction.Invoke(_request.url + ":" + _request.error);
+                errorAction.Invoke(DataFrameComponent.StringBuilderString(_request.url, ":", _request.error));
             }
             else
             {

@@ -6,17 +6,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
 
-//下载开始下载
-public delegate void HotFixRuntimeTableDownStart();
-
-//配置表下载完毕
-public delegate void HotFixRuntimeTableDownOver();
-
-//开始本地检测
-public delegate void HotFixRuntimeLocalFileCheck(int currentCount, int maxCount);
-
-//本地检测完毕
-public delegate void HotFixRuntimeLocalFileCheckOver();
 
 public class HotFixRuntimeFileCheck : MonoBehaviour
 {
@@ -34,17 +23,6 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     [BoxGroup("资源内容")] [LabelText("本地检测更新资源数量上限")]
     public int localFileUpdateCheckAssetNumberMax;
 
-    //开始检测配置表
-    public static HotFixRuntimeTableDownStart HotFixRuntimeTableDownStart;
-
-    //结束检测配置表
-    public static HotFixRuntimeTableDownOver HotFixRuntimeTableDownOver;
-
-    //本地文件更新检测
-    public static HotFixRuntimeLocalFileCheck HotFixRuntimeLocalFileCheck;
-
-    //本地文件更新检测完毕
-    public static HotFixRuntimeLocalFileCheckOver HotFixRuntimeLocalFileCheckOver;
 
     [BoxGroup("元数据资源内容")] [LabelText("元数据配置列表")]
     public List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable = new List<HotFixRuntimeDownConfig>();
@@ -103,8 +81,11 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     [BoxGroup("本地检测")] [LabelText("HotFixRuntimeFileDown本地检测")]
     public HotFixRuntimeFileDown hotFixRuntimeFileDown;
 
+    private List<IHotFixRuntimeFileCheck> _hotFixRuntimeFileCheckList = new List<IHotFixRuntimeFileCheck>();
+
     void Start()
     {
+        _hotFixRuntimeFileCheckList = HotFixGlobal.GetAllObjectsInScene<IHotFixRuntimeFileCheck>();
         StartCoroutine(LocalIsUpdate());
     }
 
@@ -208,7 +189,11 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         StartCoroutine(HotFixPathLocalLoad());
         yield return new WaitUntil(() => hotFixPathLocalLoad);
         Debug.Log("配置表开始下载----------");
-        HotFixRuntimeTableDownStart?.Invoke();
+        foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
+        {
+            hotFixRuntimeFileCheck.HotFixRuntimeTableDownStart();
+        }
+
         Debug.Log("元数据表开始下载");
         StartCoroutine(DownMetadataConfig());
         yield return new WaitUntil(() => isMetadataDownOver);
@@ -229,7 +214,11 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         yield return new WaitUntil(() => isSceneAssetBundleOver);
         Debug.Log("配置表下载完毕----------");
         yield return new WaitForSeconds(0.5f);
-        HotFixRuntimeTableDownOver?.Invoke();
+        foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
+        {
+            hotFixRuntimeFileCheck.HotFixRuntimeTableDownOver();
+        }
+
         StartCoroutine(StartLocalAssetCheck());
     }
 
@@ -386,7 +375,10 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         yield return new WaitUntil(() => isAssetBundleLocalCheck);
         Debug.Log("本地检测完毕");
         yield return new WaitForSeconds(1f);
-        HotFixRuntimeLocalFileCheckOver?.Invoke();
+        foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
+        {
+            hotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheckOver();
+        }
 
         //没有要更新的文件,直接进入游戏
         if (needDownHotFixRuntimeDownConfig.Count == 0)
@@ -401,7 +393,6 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
     }
 
-   
 
     #region 本地数据检测
 
@@ -455,7 +446,10 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         hotFixRuntimeDownConfigLocalCheckOver = true;
         //更新检测数量
         currentLocalFileUpdateCheckAssetNumber += 1;
-        HotFixRuntimeLocalFileCheck?.Invoke(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
+        foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
+        {
+            hotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheck(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
+        }
     }
 
 
@@ -481,7 +475,10 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
         //更新检测数量
         currentLocalFileUpdateCheckAssetNumber += 1;
-        HotFixRuntimeLocalFileCheck?.Invoke(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
+        foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
+        {
+            hotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheck(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
+        }
 
         isAssemblyLocalCheck = true;
     }
@@ -508,7 +505,10 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
 
         //更新检测数量
         currentLocalFileUpdateCheckAssetNumber += 1;
-        HotFixRuntimeLocalFileCheck?.Invoke(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
+        foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
+        {
+            hotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheck(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
+        }
 
         isGameRootStartLocalCheck = true;
     }
@@ -592,7 +592,11 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
 
         currentLocalFileUpdateCheckAssetNumber += 1;
-        HotFixRuntimeLocalFileCheck?.Invoke(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
+        foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
+        {
+            hotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheck(currentLocalFileUpdateCheckAssetNumber, localFileUpdateCheckAssetNumberMax);
+        }
+
         HotFixRuntimeAssetBundleConfigLocalCheckOver = true;
     }
 

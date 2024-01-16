@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using Sirenix.Serialization;
 using UnityEditor;
 #if HybridCLR
 using HybridCLR;
