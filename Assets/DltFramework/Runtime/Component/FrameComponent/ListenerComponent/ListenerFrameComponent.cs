@@ -91,7 +91,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning(eventType + "该事件已经被绑定了");
+                DebugFrameComponent.LogWarning(eventType + "该事件已经被绑定了");
             }
         }
 
@@ -299,7 +299,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.Log(eventType + "没有被绑定过");
+                DebugFrameComponent.Log(eventType + "没有被绑定过");
             }
         }
 
@@ -312,7 +312,7 @@ namespace DltFramework
         {
             if (!allListener.ContainsKey(eventType))
             {
-                Debug.Log(eventType + "没有被绑定过");
+                DebugFrameComponent.Log(eventType + "没有被绑定过");
             }
             else
             {
@@ -323,7 +323,7 @@ namespace DltFramework
                 }
                 else
                 {
-                    Debug.Log(eventType + "没有被绑定过");
+                    DebugFrameComponent.Log(eventType + "没有被绑定过");
                 }
 
                 if (delegates.Count == 0)
@@ -352,7 +352,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -378,7 +378,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -400,7 +400,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -424,7 +424,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -449,7 +449,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -474,7 +474,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
         }
 
@@ -497,7 +497,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -519,7 +519,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -542,7 +542,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -566,7 +566,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -591,7 +591,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);
@@ -617,7 +617,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogWarning("该事件没有被绑定过:" + eventType);
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
             }
 
             return default(R);

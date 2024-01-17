@@ -96,7 +96,7 @@ namespace DltFramework
         private void LoadSynchronizationScene(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             //处理场景加载时需要卸载的逻辑
-            Debug.Log("卸载的场景" + SceneManager.GetActiveScene().name);
+            DebugFrameComponent.Log("卸载的场景" + SceneManager.GetActiveScene().name);
             GameRootStart.Instance.OldSceneDestroy(SceneManager.GetActiveScene().name);
 
             // Debug.Log("加载的场景" + sceneName);
@@ -131,7 +131,6 @@ namespace DltFramework
             tempSceneAsyncOperation = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
             tempSceneAsyncOperation.allowSceneActivation = false;
             await tempSceneAsyncOperation;
-            
         }
 
         /// <summary>

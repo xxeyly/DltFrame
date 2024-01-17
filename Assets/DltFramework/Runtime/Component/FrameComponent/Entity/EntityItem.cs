@@ -44,7 +44,7 @@ namespace DltFramework
         {
             if (isLog)
             {
-                Debug.Log(entityName + ":" + "显示");
+                Log(entityName + ":" + "显示");
             }
 
             if (!gameObject.activeSelf)
@@ -57,7 +57,7 @@ namespace DltFramework
         {
             if (isLog)
             {
-                Debug.Log(entityName + ":" + "隐藏");
+                Log(entityName + ":" + "隐藏");
             }
 
             if (gameObject.activeSelf)

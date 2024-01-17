@@ -43,7 +43,7 @@ namespace DltFramework
             string listenerComponentDataPath = GenerateGeneral.GetPath(loadScriptsName);
             if (listenerComponentDataPath == null)
             {
-                Debug.LogWarning("AnimatorControllerData脚本未创建");
+                DebugFrameComponent.LogWarning("AnimatorControllerData脚本未创建");
                 return;
             }
 

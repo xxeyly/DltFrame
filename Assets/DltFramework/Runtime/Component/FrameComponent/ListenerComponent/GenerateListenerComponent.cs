@@ -22,7 +22,7 @@ public class GenerateListenerComponent
 
         if (listenerComponentDataPath == null)
         {
-            Debug.LogWarning("ListenerComponentData脚本未创建 Create > DltFramework > C# ListenerFrameComponentData");
+            DebugFrameComponent.LogWarning("ListenerComponentData脚本未创建 Create > DltFramework > C# ListenerFrameComponentData");
             return;
         }
 
@@ -149,7 +149,7 @@ public class GenerateListenerComponent
         if (newCon != oldContent)
         {
             FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), newCon);
-            Debug.Log("监听生成成功");
+            DebugFrameComponent.Log("监听生成成功");
         }
     }
 

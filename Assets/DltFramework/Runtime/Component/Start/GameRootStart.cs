@@ -72,19 +72,19 @@ namespace DltFramework
             DontDestroyOnLoad(this.gameObject);
             dontDestroyOnLoad = true;
             Instance = GetComponent<GameRootStart>();
-            Debug.Log("框架初始化");
+            DebugFrameComponent.Log("框架初始化");
             frameComponent = DataFrameComponent.GetAllObjectsInScene<FrameComponent>("DontDestroyOnLoad");
             for (int i = 0; i < frameComponent.Count; i++)
             {
                 frameComponent[i].FrameInitComponent();
             }
 
-            Debug.Log("框架初始化完毕");
+            DebugFrameComponent.Log("框架初始化完毕");
             //框架组件开启
             dontDestroyFrameSceneComponents = DataFrameComponent.GetAllObjectsInScene<SceneComponent>("DontDestroyOnLoad");
             if (dontDestroyFrameSceneComponents.Count > 0)
             {
-                Debug.Log("不摧毁的SceneComponent加载完毕");
+                DebugFrameComponent.Log("不摧毁的SceneComponent加载完毕");
 
                 for (int i = 0; i < dontDestroyFrameSceneComponents.Count; i++)
                 {
@@ -100,12 +100,12 @@ namespace DltFramework
                     frameSceneInitStartSingletons[i].InitComponent();
                 }
 
-                Debug.Log("不摧毁的SceneComponentInit加载完毕");
+                DebugFrameComponent.Log("不摧毁的SceneComponentInit加载完毕");
             }
 
             if (initJump)
             {
-                Debug.Log("初始场景跳转");
+                DebugFrameComponent.Log("初始场景跳转");
                 SceneLoadFrameComponent.Instance.SceneLoad(initJumpSceneName);
                 DestroyImmediate(GetComponent<AudioListener>());
             }
@@ -140,10 +140,10 @@ namespace DltFramework
             if (hotFixLoad)
             {
                 await HotFixFrameComponent.Instance.InstantiateHotFixAssetBundle();
-                Debug.Log("释放热更资源");
+                DebugFrameComponent.Log("释放热更资源");
             }
 
-            Debug.Log(scene.name + "场景加载完毕");
+            DebugFrameComponent.Log(scene.name + "场景加载完毕");
             FrameComponentSceneInit();
             // Debug.Log(scene.name + "框架场景初始化");
             SceneComponentStart(scene);

@@ -159,7 +159,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.Log("不包含当前动画:" + animationType);
+                DebugFrameComponent.Log("不包含当前动画:" + animationType);
             }
 
             return String.Empty;

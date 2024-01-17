@@ -29,7 +29,7 @@ public class HotFixNetworking : MonoBehaviour
                         hotFixNetworking.NetworkingState(false);
                     }
 
-                    // Debug.Log("断网了");
+                    // HotFixDebug.Log("断网了");
                     break;
                 case NetworkReachability.ReachableViaCarrierDataNetwork:
                     foreach (IHotFixNetworking hotFixNetworking in _hotFixNetworkings)
@@ -37,7 +37,7 @@ public class HotFixNetworking : MonoBehaviour
                         hotFixNetworking.NetworkingState(true);
                     }
 
-                    // Debug.Log("移动联网");
+                    // HotFixDebug.Log("移动联网");
                     break;
                 case NetworkReachability.ReachableViaLocalAreaNetwork:
                     foreach (IHotFixNetworking hotFixNetworking in _hotFixNetworkings)
@@ -45,7 +45,7 @@ public class HotFixNetworking : MonoBehaviour
                         hotFixNetworking.NetworkingState(true);
                     }
 
-                    // Debug.Log("Wifi或者有线");
+                    // HotFixDebug.Log("Wifi或者有线");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

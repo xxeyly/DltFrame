@@ -91,13 +91,13 @@ public class HotFixConfigDown : MonoBehaviour
         if (fileStream != null && _hotFixUnityWebRequest != null && _hotFixUnityWebRequest.downloadHandler != null && _hotFixUnityWebRequest.downloadHandler.data != null)
         {
             int index = (int)fileStream.Length;
-            // Debug.Log("本地文件大小:" + index);
+            // HotFixDebug.Log("本地文件大小:" + index);
             int downSize = _hotFixUnityWebRequest.downloadHandler.data.Length;
-            // Debug.Log("下载大小:" + downSize);
+            // HotFixDebug.Log("下载大小:" + downSize);
             int newDownSize = (downSize - hotFixAssetConfigDownSize);
-            // Debug.Log("新内容大小:" + newDownSize);
+            // HotFixDebug.Log("新内容大小:" + newDownSize);
             fileStream.Seek(index, SeekOrigin.Begin);
-            // Debug.Log("有下载更新:" + newDownSize);
+            // HotFixDebug.Log("有下载更新:" + newDownSize);
             if (newDownSize > 0)
             {
                 fileStream.Write(_hotFixUnityWebRequest.downloadHandler.data, hotFixAssetConfigDownSize, newDownSize);
@@ -109,7 +109,7 @@ public class HotFixConfigDown : MonoBehaviour
             }
             else
             {
-                // Debug.Log("无更新内容");
+                // HotFixDebug.Log("无更新内容");
             }
         }
         else

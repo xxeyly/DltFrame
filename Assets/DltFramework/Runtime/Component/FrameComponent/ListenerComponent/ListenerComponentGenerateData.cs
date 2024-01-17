@@ -22,7 +22,7 @@ namespace DltFramework
             string listenerComponentDataPath = GenerateGeneral.GetPath("ListenerComponentData");
             if (listenerComponentDataPath == null)
             {
-                Debug.LogWarning("ListenerComponentData脚本未创建");
+                DebugFrameComponent.LogWarning("ListenerComponentData脚本未创建");
                 return;
             }
 
@@ -223,7 +223,7 @@ namespace DltFramework
 
             #endregion
 
-            Debug.Log("代码生成完毕");
+            DebugFrameComponent.Log("代码生成完毕");
         }
 
         /// <summary>

@@ -32,7 +32,7 @@ public class AotNetworking : MonoBehaviour
                         aotNetworking.NetworkingState(false);
                     }
 
-                    // Debug.Log("断网了");
+                    // AotDebug.Log("断网了");
                     break;
                 case NetworkReachability.ReachableViaCarrierDataNetwork:
                     foreach (IAotNetworking aotNetworking in _aotNetworkings)
@@ -40,7 +40,7 @@ public class AotNetworking : MonoBehaviour
                         aotNetworking.NetworkingState(true);
                     }
 
-                    // Debug.Log("移动联网");
+                    // AotDebug.Log("移动联网");
                     break;
                 case NetworkReachability.ReachableViaLocalAreaNetwork:
                     foreach (IAotNetworking aotNetworking in _aotNetworkings)
@@ -48,7 +48,7 @@ public class AotNetworking : MonoBehaviour
                         aotNetworking.NetworkingState(true);
                     }
 
-                    // Debug.Log("Wifi或者有线");
+                    // AotDebug.Log("Wifi或者有线");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -121,7 +123,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
         else
         {
-            Debug.Log("本地下载路径不存在:" + hotFixDownPath);
+            HotFixDebug.Log("本地下载路径不存在:" + hotFixDownPath);
             localIsUpdate = true;
         }
 
@@ -134,32 +136,32 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         //本地下载路径
         string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt";
         /*
-        Debug.Log("File:" + File.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
+        HotFixDebug.Log("File:" + File.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
         //获取不到
-        //Debug.Log("File Jar:" + File.Exists(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
-        Debug.Log("HotFixDownPath内容:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/", "HotFixDownPath.txt"));
+        //HotFixDebug.Log("File Jar:" + File.Exists(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
+        HotFixDebug.Log("HotFixDownPath内容:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/", "HotFixDownPath.txt"));
         //获取不到
-        // Debug.Log("HotFixDownPath内容 Jar:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/", "HotFixDownPath.txt"));
-        Debug.Log("HotFixDownPathMd5:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
+        // HotFixDebug.Log("HotFixDownPath内容 Jar:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/", "HotFixDownPath.txt"));
+        HotFixDebug.Log("HotFixDownPathMd5:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
         //获取不到
-        // Debug.Log("HotFixDownPathMd5 Jar:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
+        // HotFixDebug.Log("HotFixDownPathMd5 Jar:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
         //获取不到
         /*UnityWebRequest hotFixPathLoadLocalFile1 = UnityWebRequest.Get(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt");
         yield return hotFixPathLoadLocalFile1.SendWebRequest();
-        Debug.Log("UnityWebRequest:" + hotFixPathLoadLocalFile1.responseCode);#1#
+        HotFixDebug.Log("UnityWebRequest:" + hotFixPathLoadLocalFile1.responseCode);#1#
 
         UnityWebRequest hotFixPathLoadLocalFile2 = UnityWebRequest.Get(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt");
         yield return hotFixPathLoadLocalFile2.SendWebRequest();
-        Debug.Log("UnityWebRequest Jar:" + hotFixPathLoadLocalFile2.responseCode);
+        HotFixDebug.Log("UnityWebRequest Jar:" + hotFixPathLoadLocalFile2.responseCode);
 
 
         UnityWebRequest hotFixPathLoadLocalFile3 = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt");
         yield return hotFixPathLoadLocalFile3.SendWebRequest();
-        Debug.Log("UnityWebRequest streamingAssetsPath:" + hotFixPathLoadLocalFile3.responseCode);
+        HotFixDebug.Log("UnityWebRequest streamingAssetsPath:" + hotFixPathLoadLocalFile3.responseCode);
         //获取不到
-        // Debug.Log("File streamingAssetsPath:" + File.Exists(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt"));
+        // HotFixDebug.Log("File streamingAssetsPath:" + File.Exists(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt"));
         //获取不到
-        // Debug.Log("File Md5 streamingAssetsPath:" + HotFixGlobal.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt"));
+        // HotFixDebug.Log("File Md5 streamingAssetsPath:" + HotFixGlobal.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt"));
         */
 
 
@@ -176,7 +178,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         }
         else
         {
-            Debug.Log("本地下载路径不存在:" + hotFixDownPath);
+            HotFixDebug.Log("本地下载路径不存在:" + hotFixDownPath);
         }
 
 
@@ -188,31 +190,31 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     {
         StartCoroutine(HotFixPathLocalLoad());
         yield return new WaitUntil(() => hotFixPathLocalLoad);
-        Debug.Log("配置表开始下载----------");
+        HotFixDebug.Log("配置表开始下载----------");
         foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
         {
             hotFixRuntimeFileCheck.HotFixRuntimeTableDownStart();
         }
 
-        Debug.Log("元数据表开始下载");
+        HotFixDebug.Log("元数据表开始下载");
         StartCoroutine(DownMetadataConfig());
         yield return new WaitUntil(() => isMetadataDownOver);
-        Debug.Log("元数据表下载完毕");
-        Debug.Log("Assembly表开始下载");
+        HotFixDebug.Log("元数据表下载完毕");
+        HotFixDebug.Log("Assembly表开始下载");
         StartCoroutine(DownAssemblyConfig());
         yield return new WaitUntil(() => isAssemblyDownOver);
-        Debug.Log("Assembly表下载完毕");
-        Debug.Log("GameRoot表开始下载");
+        HotFixDebug.Log("Assembly表下载完毕");
+        HotFixDebug.Log("GameRoot表开始下载");
         StartCoroutine(DownGameRootStartConfig());
         yield return new WaitUntil(() => isGameRootStartDownOver);
-        Debug.Log("GameRoot表下载完毕");
+        HotFixDebug.Log("GameRoot表下载完毕");
         StartCoroutine(DownSceneCountConfig());
         yield return new WaitUntil(() => isSceneConfigOver);
-        Debug.Log("SceneCount下载完毕");
+        HotFixDebug.Log("SceneCount下载完毕");
 
         StartCoroutine(StartDownSceneAssetBundleConfig());
         yield return new WaitUntil(() => isSceneAssetBundleOver);
-        Debug.Log("配置表下载完毕----------");
+        HotFixDebug.Log("配置表下载完毕----------");
         yield return new WaitForSeconds(0.5f);
         foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
         {
@@ -373,7 +375,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         SaveSceneHotFixRuntimeAssetBundleConfigCacheFile();
         StartCoroutine(AssetBundleLocalCheck(hotFixAssetAssetBundleAssetConfigs));
         yield return new WaitUntil(() => isAssetBundleLocalCheck);
-        Debug.Log("本地检测完毕");
+        HotFixDebug.Log("本地检测完毕");
         yield return new WaitForSeconds(1f);
         foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
         {
@@ -383,7 +385,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         //没有要更新的文件,直接进入游戏
         if (needDownHotFixRuntimeDownConfig.Count == 0)
         {
-            Debug.Log("无新配置,直接进入游戏");
+            HotFixDebug.Log("无新配置,直接进入游戏");
             hotFixRuntimeFileDown.ReplaceCacheFile();
             HotFixOver.Over();
         }
@@ -427,7 +429,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         yield return request.SendWebRequest();
         if (request.responseCode != 200)
         {
-            Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "不存在");
+            HotFixDebug.Log("元数据:" + hotFixRuntimeDownConfig.name + "不存在");
             //本地文件不存在,添加到下载列表
             needDownHotFixRuntimeDownConfig.Add(hotFixRuntimeDownConfig);
         }
@@ -436,9 +438,9 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
             //本地Md5校验不通过,添加到下载列表
             if (HotFixGlobal.GetMD5HashByte(request.downloadHandler.data) != hotFixRuntimeDownConfig.md5)
             {
-                Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "Md5不匹配");
-                Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "本地Md5" + HotFixGlobal.GetMD5HashByte(request.downloadHandler.data));
-                Debug.Log("元数据:" + hotFixRuntimeDownConfig.name + "服务器Md5" + hotFixRuntimeDownConfig.md5);
+                HotFixDebug.Log("元数据:" + hotFixRuntimeDownConfig.name + "Md5不匹配");
+                HotFixDebug.Log("元数据:" + hotFixRuntimeDownConfig.name + "本地Md5" + HotFixGlobal.GetMD5HashByte(request.downloadHandler.data));
+                HotFixDebug.Log("元数据:" + hotFixRuntimeDownConfig.name + "服务器Md5" + hotFixRuntimeDownConfig.md5);
                 needDownHotFixRuntimeDownConfig.Add(hotFixRuntimeDownConfig);
             }
         }

@@ -78,12 +78,12 @@ public class HotFixRuntimeFileDown : MonoBehaviour
         for (int i = 0; i < needDownHotFixRuntimeDownConfig.Count; i++)
         {
             hotFixRuntimeDownConfigOver = false;
-            Debug.Log("下载:" + needDownHotFixRuntimeDownConfig[i].name);
+            HotFixDebug.Log("下载:" + needDownHotFixRuntimeDownConfig[i].name);
             StartCoroutine(HotFixRuntimeDownConfigLocalCacheCheck(needDownHotFixRuntimeDownConfig[i]));
             yield return new WaitUntil(() => hotFixRuntimeDownConfigOver);
         }
 
-        Debug.Log("所有文件下载完毕");
+        HotFixDebug.Log("所有文件下载完毕");
         ReplaceCacheFile();
         yield return new WaitForSeconds(1f);
         foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
@@ -114,7 +114,7 @@ public class HotFixRuntimeFileDown : MonoBehaviour
         {
             //本地缓存文件的Md5
             string localCacheMd5 = HotFixGlobal.GetMD5HashFromFile(downFileCachePath);
-            Debug.Log("存在缓存文件:" + downFileCachePath + ":" + localCacheMd5);
+            HotFixDebug.Log("存在缓存文件:" + downFileCachePath + ":" + localCacheMd5);
             //当前下载量加上已经下载的缓存量
             currentDownloadValue += HotFixGlobal.GetFileSize(downFileCachePath);
             //缓存文件的Md5和服务器的Md5相同,表示已经下载完毕
@@ -178,9 +178,9 @@ public class HotFixRuntimeFileDown : MonoBehaviour
         {
             if (localCacheMd5 != hotFixAssetConfig.md5)
             {
-                Debug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
-                Debug.Log("本地下载的Md5:" + localCacheMd5);
-                Debug.Log("服务器的Md5:" + hotFixAssetConfig.md5);
+                HotFixDebug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
+                HotFixDebug.Log("本地下载的Md5:" + localCacheMd5);
+                HotFixDebug.Log("服务器的Md5:" + hotFixAssetConfig.md5);
                 //重置上一次下载字节长度
                 oldDownByteLength = 0;
                 //清除已经下载的大小
@@ -199,7 +199,7 @@ public class HotFixRuntimeFileDown : MonoBehaviour
             }
             else
             {
-                Debug.Log("下载完毕:" + hotFixAssetConfig.name);
+                HotFixDebug.Log("下载完毕:" + hotFixAssetConfig.name);
                 _hotFixUnityWebRequest = null;
                 hotFixRuntimeDownConfigOver = true;
                 replaceCacheFile.Add(downFileCachePath);
@@ -227,19 +227,19 @@ public class HotFixRuntimeFileDown : MonoBehaviour
     {
         if (fileStream != null && _hotFixUnityWebRequest != null && _hotFixUnityWebRequest.downloadHandler != null && _hotFixUnityWebRequest.downloadHandler.data != null)
         {
-            // Debug.Log("本地大小:" + fileStream.Length);
+            // HotFixDebug.Log("本地大小:" + fileStream.Length);
             //下载文件大小
             int downSize = _hotFixUnityWebRequest.downloadHandler.data.Length;
-            // Debug.Log("当前下载大小:" + downSize);
+            // HotFixDebug.Log("当前下载大小:" + downSize);
             //写入文件长度
             int newDownSize = downSize - oldDownByteLength;
-            // Debug.Log("写入大小:" + newDownSize);
-            // Debug.Log("有下载更新:" + newDownSize);
+            // HotFixDebug.Log("写入大小:" + newDownSize);
+            // HotFixDebug.Log("有下载更新:" + newDownSize);
             fileStream.Seek(fileStream.Length, SeekOrigin.Begin);
 
             if (newDownSize > 0)
             {
-                // Debug.Log(oldDownByteLength + ";" + newDownSize);
+                // HotFixDebug.Log(oldDownByteLength + ";" + newDownSize);
                 fileStream.Write(_hotFixUnityWebRequest.downloadHandler.data, oldDownByteLength, newDownSize);
 
                 foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
@@ -254,11 +254,11 @@ public class HotFixRuntimeFileDown : MonoBehaviour
                 }
 
                 oldDownByteLength = downSize;
-                // Debug.Log("写入后大小:" + fileStream.Length);
+                // HotFixDebug.Log("写入后大小:" + fileStream.Length);
             }
             else
             {
-                // Debug.Log("无更新内容");
+                // HotFixDebug.Log("无更新内容");
             }
         }
     }

@@ -1070,7 +1070,7 @@ namespace DltFramework
                 }
             }
 
-            // Debug.Log(fileName + "写入次数" + numberCycles);
+            // DebugFrameComponent.Log(fileName + "写入次数" + numberCycles);
             // 关闭流
             aFile.Close();
         }
@@ -1083,13 +1083,13 @@ namespace DltFramework
         /// <returns></returns>
         public static string GetTextToLoad(string path, string fileName)
         {
-//            UnityEngine.Debug.Log(Path + "/" + FileName);
+//            UnityEngine.DebugFrameComponent.Log(Path + "/" + FileName);
             if (Directory.Exists(path))
             {
             }
             else
             {
-                Debug.LogError("文件不存在:" + path + "/" + fileName);
+                DebugFrameComponent.LogError("文件不存在:" + path + "/" + fileName);
             }
 
             FileStream aFile = new FileStream(DataFrameComponent.StringBuilderString(path, "/", fileName), FileMode.Open);
@@ -1111,7 +1111,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.LogError("文件不存在:" + path);
+                DebugFrameComponent.LogError("文件不存在:" + path);
             }
 
             FileStream aFile = new FileStream(path, FileMode.Open);
@@ -1216,7 +1216,7 @@ namespace DltFramework
             }
             else
             {
-                Debug.Log(sourceDirName + "不存在");
+                DebugFrameComponent.Log(sourceDirName + "不存在");
             }
         }
 

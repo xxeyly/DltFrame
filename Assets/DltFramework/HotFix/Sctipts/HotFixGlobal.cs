@@ -75,13 +75,13 @@ public class HotFixGlobal
     /// <returns></returns>
     public static string GetTextToLoad(string path, string fileName)
     {
-//            UnityEngine.Debug.Log(Path + "/" + FileName);
+//            UnityEngine.HotFixDebug.Log(Path + "/" + FileName);
         if (Directory.Exists(path))
         {
         }
         else
         {
-            Debug.LogError("文件不存在:" + path + "/" + fileName);
+            HotFixDebug.LogError("文件不存在:" + path + "/" + fileName);
         }
 
         FileStream aFile = new FileStream(path + "/" + fileName, FileMode.Open);

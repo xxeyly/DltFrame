@@ -46,7 +46,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
     async UniTask LocalIsUpdate()
     {
-        // Debug.Log("检测本地更新是否开始");
+        // AotDebug.Log("检测本地更新是否开始");
         if (!File.Exists(AotGlobal.StringBuilderString(AotGlobal.GetDeviceStoragePath(), "/HotFix/localIsUpdate.txt")))
         {
             await CopyStreamingAssetsPathToPersistentDataPath(AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/localIsUpdate.txt"), Application.persistentDataPath + "/HotFix/", "localIsUpdate.txt");
@@ -54,10 +54,10 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
         //本地更新文件读取
         await LocalIsUpdateLoad();
-        // Debug.Log("检测本地更新是否完毕");
+        // AotDebug.Log("检测本地更新是否完毕");
         if (localIsUpdate)
         {
-            // Debug.Log("开启更新");
+            // AotDebug.Log("开启更新");
             foreach (IHotFixViewAndHotFixCode hotFixViewAndHotFixCode in _hotFixViewAndHotFixCodes)
             {
                 hotFixViewAndHotFixCode.HotFixViewAndHotFixCodeLocalIsUpdate(true);
@@ -68,7 +68,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         else
         {
-            Debug.Log("关闭更新");
+            AotDebug.Log("关闭更新");
             foreach (IHotFixViewAndHotFixCode hotFixViewAndHotFixCode in _hotFixViewAndHotFixCodes)
             {
                 hotFixViewAndHotFixCode.HotFixViewAndHotFixCodeLocalIsUpdate(false);
@@ -94,7 +94,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), webRequest.url, ":" + webRequest.responseCode));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), webRequest.url, ":" + webRequest.responseCode));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await CopyStreamingAssetsPathToPersistentDataPath(sourcePath, destinationPath, fileName);
         }
@@ -107,20 +107,20 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         await CopyStreamingAssetsPathToPersistentDataPath(
             AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/HotFixDownPath.txt"), AotGlobal.StringBuilderString(Application.persistentDataPath, "/HotFix/"), "HotFixDownPath.txt");
         //HotFix路径
-        // Debug.Log("HotFix路径");
+        // AotDebug.Log("HotFix路径");
         await HotFixPathLocalLoad();
         //HotFixView服务器配置表检测
-        // Debug.Log("HotFixView服务器配置表检测");
+        // AotDebug.Log("HotFixView服务器配置表检测");
         await HotFixViewConfigCheck();
         //HotFixView本地检查
-        // Debug.Log("HotFixView本地检查");
+        // AotDebug.Log("HotFixView本地检查");
         await HotFixViewLocalCheck();
         //HotFixCode服务器配置表检测
-        // Debug.Log("HotFixCode服务器配置表检测");
+        // AotDebug.Log("HotFixCode服务器配置表检测");
 
         await HotFixCodeConfigCheck();
         //HotFixCode本地检查
-        // Debug.Log("HotFixCode本地检查");
+        // AotDebug.Log("HotFixCode本地检查");
 
         await HotFixCodeLocalCheck();
         //更新总的下载量
@@ -142,13 +142,13 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             //HotFixView需要下载
             if (hotFixViewIsNeedDown)
             {
-                // Debug.Log("HotFixView需要下载");
+                // AotDebug.Log("HotFixView需要下载");
                 await HotFixAssetConfigLocalCacheCheck(hotFixViewHotFixAssetConfig);
             }
 
             if (hotFixCodeIsNeedDown)
             {
-                // Debug.Log("HotFixCode需要下载");
+                // AotDebug.Log("HotFixCode需要下载");
                 await HotFixAssetConfigLocalCacheCheck(hotFixCodeHotFixAssetConfig);
             }
 
@@ -187,7 +187,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixPathLoadLocalFile.url, ":", hotFixPathLoadLocalFile.responseCode.ToString()));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixPathLoadLocalFile.url, ":", hotFixPathLoadLocalFile.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             localIsUpdate = true;
         }
@@ -213,7 +213,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixPathLoadLocalFile.url, ":", hotFixPathLoadLocalFile.responseCode.ToString()));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixPathLoadLocalFile.url, ":", hotFixPathLoadLocalFile.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await HotFixPathLocalLoad();
         }
@@ -232,7 +232,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixViewConfigWebRequest.url, ":", hotFixViewConfigWebRequest.responseCode.ToString()));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixViewConfigWebRequest.url, ":", hotFixViewConfigWebRequest.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await HotFixViewConfigCheck();
         }
@@ -269,7 +269,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.ToString());
+            AotDebug.Log(e.ToString());
             hotFixViewIsNeedDown = true;
         }
 
@@ -293,7 +293,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixCodeConfigWebRequest.url, hotFixCodeConfigWebRequest.responseCode.ToString()));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixCodeConfigWebRequest.url, hotFixCodeConfigWebRequest.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await HotFixCodeConfigCheck();
         }
@@ -330,7 +330,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.Log(e.ToString());
+            AotDebug.Log(e.ToString());
             hotFixCodeIsNeedDown = true;
         }
 
@@ -361,7 +361,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         {
             //本地缓存文件的Md5
             string localCacheMd5 = AotGlobal.GetMD5HashFromFile(downFileCachePath);
-            Debug.Log(AotGlobal.StringBuilderString("存在缓存文件:", downFileCachePath, ":", "本地文件Md5:", localCacheMd5));
+            AotDebug.Log(AotGlobal.StringBuilderString("存在缓存文件:", downFileCachePath, ":", "本地文件Md5:", localCacheMd5));
             //当前下载量加上已经下载的缓存量
             currentDownloadValue += AotGlobal.GetFileSize(downFileCachePath);
             //缓存文件的Md5和服务器的Md5相同,表示已经下载完毕
@@ -420,9 +420,9 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         {
             if (localCacheMd5 != hotFixAssetConfig.md5)
             {
-                Debug.LogError(AotGlobal.StringBuilderString("Md5不匹配,删除文件重新下载:", _hotFixUnityWebRequest.url));
-                Debug.Log(AotGlobal.StringBuilderString("本地下载的Md5:", localCacheMd5));
-                Debug.Log(AotGlobal.StringBuilderString("服务器的Md5:" + hotFixAssetConfig.md5));
+                AotDebug.LogError(AotGlobal.StringBuilderString("Md5不匹配,删除文件重新下载:", _hotFixUnityWebRequest.url));
+                AotDebug.Log(AotGlobal.StringBuilderString("本地下载的Md5:", localCacheMd5));
+                AotDebug.Log(AotGlobal.StringBuilderString("服务器的Md5:" + hotFixAssetConfig.md5));
                 //旧大小清空
                 oldDownByteLength = 0;
                 //清除已经下载的大小
@@ -460,7 +460,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 #endif
         Type type = hotFix.GetType("HotFixInit");
         type.GetMethod("Init")?.Invoke(null, null);
-        Debug.Log("Aot加载完毕");
+        AotDebug.Log("Aot加载完毕");
     }
 
     private void Update()
@@ -482,19 +482,19 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     {
         if (fileStream != null && _hotFixUnityWebRequest != null && _hotFixUnityWebRequest.downloadHandler != null && _hotFixUnityWebRequest.downloadHandler.data != null)
         {
-            // Debug.Log("本地大小:" + fileStream.Length);
+            // AotDebug.Log("本地大小:" + fileStream.Length);
             //下载文件大小
             int downSize = _hotFixUnityWebRequest.downloadHandler.data.Length;
-            // Debug.Log("当前下载大小:" + downSize);
+            // AotDebug.Log("当前下载大小:" + downSize);
             //写入文件长度
             int newDownSize = downSize - oldDownByteLength;
-            // Debug.Log("写入大小:" + newDownSize);
-            // Debug.Log("有下载更新:" + newDownSize);
+            // AotDebug.Log("写入大小:" + newDownSize);
+            // AotDebug.Log("有下载更新:" + newDownSize);
             fileStream.Seek(fileStream.Length, SeekOrigin.Begin);
 
             if (newDownSize > 0)
             {
-                // Debug.Log(oldDownByteLength + ";" + newDownSize);
+                // AotDebug.Log(oldDownByteLength + ";" + newDownSize);
                 fileStream.Write(_hotFixUnityWebRequest.downloadHandler.data, oldDownByteLength, newDownSize);
 
                 foreach (IHotFixViewAndHotFixCode hotFixViewAndHotFixCode in _hotFixViewAndHotFixCodes)
@@ -509,11 +509,11 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
                 }
 
                 oldDownByteLength = downSize;
-                // Debug.Log("写入后大小:" + fileStream.Length);
+                // AotDebug.Log("写入后大小:" + fileStream.Length);
             }
             else
             {
-                // Debug.Log("无更新内容");
+                // AotDebug.Log("无更新内容");
             }
         }
     }

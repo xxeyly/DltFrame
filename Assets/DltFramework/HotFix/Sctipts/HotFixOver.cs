@@ -11,11 +11,11 @@ public class HotFixOver
 {
     public static void Over()
     {
-        Debug.Log("开始加载原数据");
+        HotFixDebug.Log("开始加载原数据");
         LoadMetadataForAOTAssemblies();
-        Debug.Log("开始加载Assembly-CSharp");
+        HotFixDebug.Log("开始加载Assembly-CSharp");
         LoadAssemblyCSharp();
-        Debug.Log("开始加载游戏");
+        HotFixDebug.Log("开始加载游戏");
         LoadGameRootStart();
     }
 
@@ -41,7 +41,7 @@ public class HotFixOver
             byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + metadata}");
 #if HybridCLR
             LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
-            Debug.Log($"LoadMetadataForAOTAssembly:{metadata}. ret:{err}");
+            HotFixDebug.Log($"LoadMetadataForAOTAssembly:{metadata}. ret:{err}");
 #endif
         }
     }

@@ -154,7 +154,7 @@ namespace DltFramework
                     // 把鼠标的屏幕空间坐标转换到世界空间坐标（Z值使用目标物体的屏幕空间坐标），加上偏移量，以此作为目标物体的世界空间坐标  
 
                     _vec3TargetWorldSpace = _sceneCamera.ScreenToWorldPoint(_vec3MouseScreenSpace) /* + mVec3Offset*/;
-                    Debug.Log(_vec3TargetWorldSpace);
+                    DebugFrameComponent.Log(_vec3TargetWorldSpace);
                     _targetObj.position = _vec3TargetWorldSpace;
                     //}
                 }
@@ -184,7 +184,7 @@ namespace DltFramework
                 // 把鼠标的屏幕空间坐标转换到世界空间坐标（Z值使用目标物体的屏幕空间坐标），加上偏移量，以此作为目标物体的世界空间坐标  
 
                 _vec3TargetWorldSpace = _sceneCamera.ScreenToWorldPoint(_vec3MouseScreenSpace) /* + mVec3Offset*/;
-                Debug.Log(_vec3TargetWorldSpace);
+                DebugFrameComponent.Log(_vec3TargetWorldSpace);
                 _targetObj.position = _vec3TargetWorldSpace;
                 //}
             }
@@ -217,7 +217,7 @@ namespace DltFramework
                     // 把鼠标的屏幕空间坐标转换到世界空间坐标（Z值使用目标物体的屏幕空间坐标），加上偏移量，以此作为目标物体的世界空间坐标  
 
                     _vec3TargetWorldSpace = _sceneCamera.ScreenToWorldPoint(_vec3MouseScreenSpace) + _vec3Offset;
-                    Debug.Log(_vec3TargetWorldSpace);
+                    DebugFrameComponent.Log(_vec3TargetWorldSpace);
 
                     _targetObj.position = _vec3TargetWorldSpace;
                     //}

@@ -14,7 +14,7 @@ public class HotFixInit
 {
     public static void Init()
     {
-        Debug.Log("初始化");
+        HotFixDebug.Log("初始化");
         SceneManager.sceneLoaded += SceneLoadOverCallBack;
         SceneManager.LoadScene("HotFix");
     }
@@ -42,7 +42,7 @@ public class HotFixInit
         GameObject hotFixView = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView/hotfixview").LoadAsset<GameObject>("HotFixView");
 #endif
             Object.Instantiate(hotFixView);
-            Debug.Log("HotFixView加载完毕");
+            HotFixDebug.Log("HotFixView加载完毕");
         }
         else
         {
