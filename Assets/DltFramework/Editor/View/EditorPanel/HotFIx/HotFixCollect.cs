@@ -324,7 +324,7 @@ namespace DltFramework
 #endif
             }
 
-            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
                 RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + "HotFixCode.dll.bytes", true);
             string path = "Assets/UnStreamingAssets/HotFix/HotFixCode/HotFixCode.dll.bytes";
 
@@ -376,7 +376,7 @@ namespace DltFramework
 #endif
             }
 
-            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
                 RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes", true);
             HotFixRuntimeDownConfig hotFixAssemblyConfig = new HotFixRuntimeDownConfig();
             hotFixAssemblyConfig.md5 = FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
@@ -425,11 +425,12 @@ namespace DltFramework
                         break;
                 }
 
-                File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
+                File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
                     RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/" + metadataName + ".bytes", true);
             }
 #endif
             List<string> buildPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets/UnStreamingAssets/HotFix/Metadata", "bytes");
+            Debug.Log(buildPath.Count);
             List<HotFixRuntimeDownConfig> hotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             foreach (string path in buildPath)
             {

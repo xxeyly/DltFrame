@@ -491,6 +491,12 @@ namespace DltFramework
             return path.Replace("/", "\\");
         }
 
+        [LabelText("右斜杠转左斜杠")]
+        public static string String_RightSlashChangeLeftSlash(string path)
+        {
+            return path.Replace("/", "\\");
+        }
+
         [LabelText("检查String是否是汉字")]
         public static bool String_CheckStringIsChinese(string str)
         {
@@ -740,7 +746,7 @@ namespace DltFramework
                 {
                     foreach (string filePath in pair.Value)
                     {
-                        if (Path_GetPathDontContainFileName(filePath).Contains(path))
+                        if (Path_GetPathDontContainFileName(filePath).Contains(String_RightSlashChangeLeftSlash(path)))
                         {
                             allPath.Add(filePath);
                         }
@@ -811,5 +817,4 @@ namespace DltFramework
 
 #endif
     }
-   
 }

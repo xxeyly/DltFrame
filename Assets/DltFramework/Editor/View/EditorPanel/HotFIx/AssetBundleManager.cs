@@ -113,7 +113,7 @@ public class AssetBundleManager : BaseEditor
 #endif
             }
 
-            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
                 Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes", true);
             HotFixRuntimeDownConfig hotFixAssemblyConfig = new HotFixRuntimeDownConfig();
             hotFixAssemblyConfig.md5 = FileOperationComponent.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
@@ -195,7 +195,7 @@ public class AssetBundleManager : BaseEditor
                         break;
                 }
 
-                File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
+                File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
                     Application.streamingAssetsPath + "/HotFix/Metadata/" + metadataName + ".bytes", true);
             }
 

@@ -918,10 +918,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   localIsUpdate: 0
-  localIsUpdateLoad: 0
   hotFixPath: 
-  isFileCopy: 0
-  hotFixPathLocalLoad: 0
   totalDownloadValue: 0
   currentDownloadValue: 0
   hotFixViewHotFixAssetConfig:
@@ -929,27 +926,16 @@ MonoBehaviour:
     md5: 
     size: 
     path: 
-  hotFixViewConfigDownOver: 0
-  hotFixViewLocalCheck: 0
   hotFixViewIsNeedDown: 0
-  hotFixViewDownOver: 0
   hotFixCodeHotFixAssetConfig:
     name: 
     md5: 
     size: 
     path: 
-  hotFixCodeConfigDownOver: 0
-  hotFixCodeLocalCheck: 0
   hotFixCodeIsNeedDown: 0
-  hotFixCodeDownOver: 0
   currentCheckTime: 0
   checkTime: 1
   oldDownByteLength: 0
-  currentOperationHotFixAssetConfig:
-    name: 
-    md5: 
-    size: 
-    path: 
   replaceCacheFile: []
 --- !u!4 &1385788723
 Transform:

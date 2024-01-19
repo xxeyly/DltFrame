@@ -49,7 +49,7 @@ namespace DltFramework
 #endif
             }
 
-            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
                 Application.streamingAssetsPath + "/HotFix/HotFixCode/" + "HotFixCode.dll.bytes", true);
             string path = "Assets/StreamingAssets/HotFix/HotFixCode/HotFixCode.dll.bytes";
 
