@@ -66,11 +66,11 @@ namespace DltFramework
             //首场景,加载全部
             if (GameRootStart.Instance.loadScene.name == String.Empty)
             {
-                tempEntity = DataFrameComponent.GetAllObjectsInScene<EntityItem>();
+                tempEntity = DataFrameComponent.Hierarchy_GetAllObjectsInScene<EntityItem>();
             }
             else
             {
-                tempEntity = DataFrameComponent.GetAllObjectsInScene<EntityItem>(GameRootStart.Instance.loadScene.name);
+                tempEntity = DataFrameComponent.Hierarchy_GetAllObjectsInScene<EntityItem>(GameRootStart.Instance.loadScene.name);
             }
 
             foreach (EntityItem entityItem in tempEntity)
@@ -90,7 +90,7 @@ namespace DltFramework
             Dictionary<string, List<GameObject>> temp = new Dictionary<string, List<GameObject>>();
             sceneRepeatEntity = new Dictionary<string, List<GameObject>>();
             List<EntityItem> tempEntity = new List<EntityItem>();
-            tempEntity = DataFrameComponent.GetAllObjectsInScene<EntityItem>();
+            tempEntity = DataFrameComponent.Hierarchy_GetAllObjectsInScene<EntityItem>();
             foreach (EntityItem entityItem in tempEntity)
             {
                 if (!temp.ContainsKey(entityItem.entityName))

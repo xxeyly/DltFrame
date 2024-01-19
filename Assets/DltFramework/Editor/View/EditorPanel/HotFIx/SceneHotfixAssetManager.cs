@@ -113,7 +113,7 @@ public class SceneHotfixAssetManager : BaseEditor
     //视图重新排序
     private void ViewSort()
     {
-        List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>();
+        List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
         List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
 
         for (int i = 0; i < sceneAllBaseWindow.Count; i++)
@@ -140,16 +140,16 @@ public class SceneHotfixAssetManager : BaseEditor
     [LabelText("生成配置信息")]
     private void GenerateBuildConfig()
     {
-        string sceneName = DataFrameComponent.AllCharToLower(SceneManager.GetActiveScene().name);
+        string sceneName = DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name);
         HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = new HotFixRuntimeSceneAssetBundleConfig();
         if (SceneAssetBundleAsset.sceneBuildScene)
         {
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleName = sceneName;
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/";
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleSize =
-                FileOperation.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName).ToString();
+                FileOperationComponent.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName).ToString();
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.md5 =
-                FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
+                FileOperationComponent.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleInstantiatePath = "";
         }
 
@@ -166,22 +166,22 @@ public class SceneHotfixAssetManager : BaseEditor
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = sceneName + "font";
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/";
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
-                    FileOperation.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
+                    FileOperationComponent.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
-                    FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
+                    FileOperationComponent.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleInstantiatePath = "";
             }
         }
         else
         {
-            string copySceneName = DataFrameComponent.AllCharToLower(SceneAssetBundleAsset.copySceneAssetBundleAsset.name);
+            string copySceneName = DataFrameComponent.String_AllCharToLower(SceneAssetBundleAsset.copySceneAssetBundleAsset.name);
             //场景字体
             hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = copySceneName + "font";
             hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/";
             hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
-                FileOperation.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font").ToString();
+                FileOperationComponent.GetFileSize(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font").ToString();
             hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
-                FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font");
+                FileOperationComponent.GetMD5HashFromFile(Application.streamingAssetsPath + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font");
         }
 
 
@@ -193,16 +193,16 @@ public class SceneHotfixAssetManager : BaseEditor
             assetImporter.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
             HotFixRuntimeAssetBundleConfig hot = new HotFixRuntimeAssetBundleConfig();
 
-            hot.assetBundleName = DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name);
-            hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name), "");
+            hot.assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name);
+            hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), "");
             hot.assetBundleInstantiatePath = hotFixAssetPathConfig.GetHierarchyGeneratePath();
             string adPath = Application.streamingAssetsPath + "/" + hot.assetBundlePath + hot.assetBundleName;
-            hot.assetBundleSize = FileOperation.GetFileSize(adPath).ToString();
-            hot.md5 = FileOperation.GetMD5HashFromFile(adPath);
+            hot.assetBundleSize = FileOperationComponent.GetFileSize(adPath).ToString();
+            hot.md5 = FileOperationComponent.GetMD5HashFromFile(adPath);
             hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hot);
         }
 
-        FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundleConfig", SceneManager.GetActiveScene().name + ".json", JsonUtility.ToJson(hotFixRuntimeSceneAssetBundleConfig));
+        FileOperationComponent.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/HotFixAssetBundleConfig", SceneManager.GetActiveScene().name + ".json", JsonUtility.ToJson(hotFixRuntimeSceneAssetBundleConfig));
         Debug.Log("打包 配置信息完成");
     }
 
@@ -212,7 +212,7 @@ public class SceneHotfixAssetManager : BaseEditor
     [Button("生成节点Root", ButtonSizes.Medium)]
     public void GenerateEmptyRoot()
     {
-        List<HotFixAssetPathConfig> hotFixAssetSceneHierarchyPaths = DataFrameComponent.GetAllObjectsInScene<HotFixAssetPathConfig>();
+        List<HotFixAssetPathConfig> hotFixAssetSceneHierarchyPaths = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
         //移除当前场景中的HotFixAssetPathConfig
         foreach (HotFixAssetPathConfig hotFixAssetSceneHierarchyPath in hotFixAssetSceneHierarchyPaths)
         {
@@ -291,7 +291,7 @@ public class SceneHotfixAssetManager : BaseEditor
         //检查场景中热更资源配置是否正确
         //HotFixAssetPathConfig 只能作为父节点存在,上面任何父物体不能再次包含HotFixAssetPathConfig,保证唯一性
         //设置场景中所有路径配置信息
-        List<HotFixAssetPathConfig> hotFixAssetSceneHierarchyPaths = DataFrameComponent.GetAllObjectsInScene<HotFixAssetPathConfig>();
+        List<HotFixAssetPathConfig> hotFixAssetSceneHierarchyPaths = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
         //是否有配置信息错误
         bool HotFixAssetPathConfigNodeCheck = false;
         foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetSceneHierarchyPaths)
@@ -371,14 +371,14 @@ public class SceneHotfixAssetManager : BaseEditor
     public void GenerateAllSceneConfig()
     {
         List<string> HotFixAssetAssetBundleSceneConfig = new List<string>();
-        List<string> HotFixAssetAssetBundleSceneConfigPath = DataFrameComponent.GetGetSpecifyPathInAllTypePath("Assets/StreamingAssets/HotFixRuntime/HotFixAssetBundleConfig", "json");
+        List<string> HotFixAssetAssetBundleSceneConfigPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets/StreamingAssets/HotFixRuntime/HotFixAssetBundleConfig", "json");
 
         for (int i = 0; i < HotFixAssetAssetBundleSceneConfigPath.Count; i++)
         {
-            HotFixAssetAssetBundleSceneConfig.Add(DataFrameComponent.GetPathFileNameDontContainFileType(HotFixAssetAssetBundleSceneConfigPath[i]));
+            HotFixAssetAssetBundleSceneConfig.Add(DataFrameComponent.Path_GetPathFileNameDontContainFileType(HotFixAssetAssetBundleSceneConfigPath[i]));
         }
 
-        FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFixRuntime", "HotFixServerResourcesCount.json", JsonMapper.ToJson(HotFixAssetAssetBundleSceneConfig));
+        FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFixRuntime", "HotFixServerResourcesCount.json", JsonMapper.ToJson(HotFixAssetAssetBundleSceneConfig));
     }
 
     public void Save()

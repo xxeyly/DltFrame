@@ -8,9 +8,7 @@ namespace DltFramework
     [InitializeOnLoad]
     public class CustomFrameHierarchyLogo
     {
-        private static Texture DltFrameworkLOGO;
         private static GUIStyle HierarchyIconStyle;
-        private static Texture DltFrameworkLOGOTitle;
         private static GUIStyle ProjectIconStyle;
 
         static CustomFrameHierarchyLogo()
@@ -18,15 +16,11 @@ namespace DltFramework
             HierarchyIconStyle = new GUIStyle();
             HierarchyIconStyle.alignment = TextAnchor.MiddleRight;
             HierarchyIconStyle.normal.textColor = Color.cyan;
-            DltFrameworkLOGO = AssetDatabase.LoadAssetAtPath<Texture>("Assets/DltFramework/Editor/View/Texture/Root.png");
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyShow;
 
             ProjectIconStyle = new GUIStyle();
             ProjectIconStyle.alignment = TextAnchor.MiddleRight;
             ProjectIconStyle.normal.textColor = Color.cyan;
-            DltFrameworkLOGOTitle = AssetDatabase.LoadAssetAtPath<Texture>("Assets/DltFramework/Editor/View/Texture/DltFramework.png");
-
-            
             EditorApplication.projectWindowItemOnGUI += OnProjectWindowItemOnGUI;
         }
 
@@ -37,7 +31,7 @@ namespace DltFramework
             {
                 if (gameRootStart != null && gameRootStart.GetComponent<GameRootStart>())
                 {
-                    GUI.Box(selectionrect, DltFrameworkLOGO, HierarchyIconStyle);
+                    GUI.Box(selectionrect, "框架根目录", HierarchyIconStyle);
                 }
             }
         }
@@ -50,7 +44,42 @@ namespace DltFramework
             string mainFolder = AssetDatabase.GUIDToAssetPath(guid);
             if (string.Equals(mainFolder, "Assets/DltFramework"))
             {
-                GUI.Box(selectionRect, DltFrameworkLOGOTitle, ProjectIconStyle);
+                GUI.Box(selectionRect, "框架根目录", ProjectIconStyle);
+            }
+
+            if (string.Equals(mainFolder, "Assets/DltFramework/Aot"))
+            {
+                GUI.Box(selectionRect, "不可热更", ProjectIconStyle);
+            }
+
+            if (string.Equals(mainFolder, "Assets/DltFramework/Editor"))
+            {
+                GUI.Box(selectionRect, "框架提示UI", ProjectIconStyle);
+            }
+
+            if (string.Equals(mainFolder, "Assets/DltFramework/HotFix"))
+            {
+                GUI.Box(selectionRect, "可热更", ProjectIconStyle);
+            }
+
+            if (string.Equals(mainFolder, "Assets/DltFramework/Runtime"))
+            {
+                GUI.Box(selectionRect, "可热更", ProjectIconStyle);
+            }
+
+            if (string.Equals(mainFolder, "Assets/DltFramework/Runtime/Component/Start"))
+            {
+                GUI.Box(selectionRect, "启动类", ProjectIconStyle);
+            }
+
+            if (string.Equals(mainFolder, "Assets/Config"))
+            {
+                GUI.Box(selectionRect, "配置文件", ProjectIconStyle);
+            }
+
+            if (string.Equals(mainFolder, "Assets/Config/SceneHotfixAsset"))
+            {
+                GUI.Box(selectionRect, "场景打包配置文件", ProjectIconStyle);
             }
         }
     }

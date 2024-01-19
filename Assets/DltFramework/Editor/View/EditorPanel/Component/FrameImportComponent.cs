@@ -70,7 +70,7 @@ namespace DltFramework
                     FrameComponentData.Add(new FrameImportComponentData()
                     {
                         importState = FrameImportComponentData.ImportState.导入,
-                        packageName = DataFrameComponent.GetPathFileNameDontContainFileType(file.Name),
+                        packageName = DataFrameComponent.Path_GetPathFileNameDontContainFileType(file.Name),
                         importPath = file.FullName
                     });
                 }

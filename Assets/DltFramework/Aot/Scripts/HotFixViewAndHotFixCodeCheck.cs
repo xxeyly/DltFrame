@@ -40,6 +40,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
     async void Start()
     {
+        await UniTask.DelayFrame(5);
         _hotFixViewAndHotFixCodes = AotGlobal.GetAllObjectsInScene<IHotFixViewAndHotFixCode>();
         await LocalIsUpdate();
     }
@@ -81,20 +82,20 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
 
     async UniTask CopyStreamingAssetsPathToPersistentDataPath(string sourcePath, string destinationPath, string fileName)
     {
-        UnityWebRequest webRequest = UnityWebRequest.Get(sourcePath);
+        _hotFixUnityWebRequest = UnityWebRequest.Get(sourcePath);
         try
         {
-            await webRequest.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest();
             if (!Directory.Exists(destinationPath))
             {
                 Directory.CreateDirectory(destinationPath);
             }
 
-            AotGlobal.SaveTextToLoad(AotGlobal.StringBuilderString(destinationPath + "/", fileName), webRequest.downloadHandler.text);
+            AotGlobal.SaveTextToLoad(AotGlobal.StringBuilderString(destinationPath + "/", fileName), _hotFixUnityWebRequest.downloadHandler.text);
         }
         catch (Exception e)
         {
-            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), webRequest.url, ":" + webRequest.responseCode));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":" + _hotFixUnityWebRequest.responseCode));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await CopyStreamingAssetsPathToPersistentDataPath(sourcePath, destinationPath, fileName);
         }
@@ -175,19 +176,19 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     {
         //本地下载路径
         string hotFixDownPath = AotGlobal.StringBuilderString(AotGlobal.GetDeviceStoragePath(true), "/HotFix/LocalIsUpdate.txt");
-        UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
+        _hotFixUnityWebRequest = UnityWebRequest.Get(hotFixDownPath);
 
         try
         {
-            await hotFixPathLoadLocalFile.SendWebRequest();
-            if (hotFixPathLoadLocalFile.responseCode == 200)
+            await _hotFixUnityWebRequest.SendWebRequest();
+            if (_hotFixUnityWebRequest.responseCode == 200)
             {
-                localIsUpdate = bool.Parse(hotFixPathLoadLocalFile.downloadHandler.text);
+                localIsUpdate = bool.Parse(_hotFixUnityWebRequest.downloadHandler.text);
             }
         }
         catch (Exception e)
         {
-            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixPathLoadLocalFile.url, ":", hotFixPathLoadLocalFile.responseCode.ToString()));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             localIsUpdate = true;
         }
@@ -197,13 +198,13 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     {
         //本地下载路径
         string hotFixDownPath = AotGlobal.StringBuilderString(AotGlobal.GetDeviceStoragePath(true), "/HotFix/HotFixDownPath.txt");
-        UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
+        _hotFixUnityWebRequest = UnityWebRequest.Get(hotFixDownPath);
         try
         {
-            await hotFixPathLoadLocalFile.SendWebRequest();
-            if (hotFixPathLoadLocalFile.responseCode == 200)
+            await _hotFixUnityWebRequest.SendWebRequest();
+            if (_hotFixUnityWebRequest.responseCode == 200)
             {
-                hotFixPath = hotFixPathLoadLocalFile.downloadHandler.text;
+                hotFixPath = _hotFixUnityWebRequest.downloadHandler.text;
                 //如果结尾不是/,添加/
                 if (hotFixPath[hotFixPath.Length - 1] != '/')
                 {
@@ -213,7 +214,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixPathLoadLocalFile.url, ":", hotFixPathLoadLocalFile.responseCode.ToString()));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await HotFixPathLocalLoad();
         }
@@ -223,16 +224,16 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     //HotFixView配置
     async UniTask HotFixViewConfigCheck()
     {
-        UnityWebRequest hotFixViewConfigWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixViewConfig/HotFixViewConfig.json"));
+        _hotFixUnityWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixViewConfig/HotFixViewConfig.json"));
         try
         {
-            await hotFixViewConfigWebRequest.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest();
             //读取远程配置表数据
-            hotFixViewHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(hotFixViewConfigWebRequest.downloadHandler.text);
+            hotFixViewHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(_hotFixUnityWebRequest.downloadHandler.text);
         }
         catch (Exception e)
         {
-            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixViewConfigWebRequest.url, ":", hotFixViewConfigWebRequest.responseCode.ToString()));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await HotFixViewConfigCheck();
         }
@@ -245,15 +246,15 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         hotFixViewIsNeedDown = false;
         //本地HotFixView路径
         string localHotFixViewPath = AotGlobal.StringBuilderString(AotGlobal.GetDeviceStoragePath(true), "/HotFix/HotFixView/", hotFixViewHotFixAssetConfig.name);
-        UnityWebRequest hotFixViewLoadLocalFile = UnityWebRequest.Get(localHotFixViewPath);
+        _hotFixUnityWebRequest = UnityWebRequest.Get(localHotFixViewPath);
         try
         {
-            await hotFixViewLoadLocalFile.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest();
             //本地文件数据大于0
-            if (hotFixViewLoadLocalFile.downloadHandler.data.Length > 0)
+            if (_hotFixUnityWebRequest.downloadHandler.data.Length > 0)
             {
                 //获得当前文件的Md5
-                string localFileMD5 = AotGlobal.GetMD5HashByte(hotFixViewLoadLocalFile.downloadHandler.data);
+                string localFileMD5 = AotGlobal.GetMD5HashByte(_hotFixUnityWebRequest.downloadHandler.data);
                 //Md5值不同,表示服务器端有更新
                 if (hotFixViewHotFixAssetConfig.md5 != localFileMD5)
                 {
@@ -284,16 +285,16 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     //HotFixCode配置
     async UniTask HotFixCodeConfigCheck()
     {
-        UnityWebRequest hotFixCodeConfigWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixCodeConfig/HotFixCodeConfig.json"));
+        _hotFixUnityWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixCodeConfig/HotFixCodeConfig.json"));
         try
         {
-            await hotFixCodeConfigWebRequest.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest();
             //读取配置表
-            hotFixCodeHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(hotFixCodeConfigWebRequest.downloadHandler.text);
+            hotFixCodeHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(_hotFixUnityWebRequest.downloadHandler.text);
         }
         catch (Exception e)
         {
-            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), hotFixCodeConfigWebRequest.url, hotFixCodeConfigWebRequest.responseCode.ToString()));
+            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, _hotFixUnityWebRequest.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await HotFixCodeConfigCheck();
         }
@@ -306,15 +307,15 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         hotFixCodeIsNeedDown = false;
         //本地HotFixCode路径
         string localHotFixCodePath = AotGlobal.StringBuilderString(AotGlobal.GetDeviceStoragePath(true), "/HotFix/HotFixCode/", hotFixCodeHotFixAssetConfig.name);
-        UnityWebRequest hotFixCodeLoadLocalFile = UnityWebRequest.Get(localHotFixCodePath);
+        _hotFixUnityWebRequest = UnityWebRequest.Get(localHotFixCodePath);
         try
         {
-            await hotFixCodeLoadLocalFile.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest();
             //本地文件数据大于0
-            if (hotFixCodeLoadLocalFile.downloadHandler.data.Length > 0)
+            if (_hotFixUnityWebRequest.downloadHandler.data.Length > 0)
             {
                 //获得当前文件的Md5
-                string localFileMD5 = AotGlobal.GetMD5HashByte(hotFixCodeLoadLocalFile.downloadHandler.data);
+                string localFileMD5 = AotGlobal.GetMD5HashByte(_hotFixUnityWebRequest.downloadHandler.data);
                 //Md5值不同,表示服务器端有更新
                 if (hotFixCodeHotFixAssetConfig.md5 != localFileMD5)
                 {

@@ -12,7 +12,7 @@ namespace DltFramework
     public class HttpFrameComponent : FrameComponent
     {
         public static HttpFrameComponent instance;
-        private UnityWebRequest _request;
+        private UnityWebRequest webRequest;
         [LabelText("是否联网")] public bool notReachable;
 
         /// <summary>
@@ -114,13 +114,12 @@ namespace DltFramework
 
         private async UniTask<string> HttpUnityWebRequest(string url, HttpRequestMethod requestMethod, Dictionary<string, string> requestData, Action<string> action, Action<string> errorAction)
         {
-            UnityWebRequest webRequest = null;
             switch (requestMethod)
             {
                 case HttpRequestMethod.GET:
                 case HttpRequestMethod.PUT:
                 case HttpRequestMethod.DELETE:
-                    webRequest = UnityWebRequest.Get(DataFrameComponent.StringBuilderString(url, DictionaryToString(requestData)));
+                    webRequest = UnityWebRequest.Get(DataFrameComponent.String_BuilderString(url, DictionaryToString(requestData)));
                     break;
                 case HttpRequestMethod.POST:
                     WWWForm wwwForm = new WWWForm();
@@ -138,7 +137,7 @@ namespace DltFramework
                 await webRequest.SendWebRequest();
                 if (webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
-                    errorAction.Invoke(DataFrameComponent.StringBuilderString(_request.url, ":", _request.error));
+                    errorAction.Invoke(DataFrameComponent.String_BuilderString(this.webRequest.url, ":", this.webRequest.error));
                 }
                 else
                 {
@@ -159,14 +158,14 @@ namespace DltFramework
             {
                 if (content == string.Empty)
                 {
-                    content = DataFrameComponent.StringBuilderString(content, "?");
+                    content = DataFrameComponent.String_BuilderString(content, "?");
                 }
                 else
                 {
-                    content = DataFrameComponent.StringBuilderString(content, "&");
+                    content = DataFrameComponent.String_BuilderString(content, "&");
                 }
 
-                content = DataFrameComponent.StringBuilderString(content, pair.Key, "=", pair.Value);
+                content = DataFrameComponent.String_BuilderString(content, pair.Key, "=", pair.Value);
             }
 
 
@@ -181,19 +180,19 @@ namespace DltFramework
             }
 
             byte[] databyte = Encoding.UTF8.GetBytes(requestData);
-            _request = new UnityWebRequest(url, requestMethod.ToString());
-            _request.uploadHandler = new UploadHandlerRaw(databyte);
-            _request.downloadHandler = new DownloadHandlerBuffer();
-            _request.SetRequestHeader("Content-Type", "application/json;charset=utf-8");
-            await _request.SendWebRequest();
+            webRequest = new UnityWebRequest(url, requestMethod.ToString());
+            webRequest.uploadHandler = new UploadHandlerRaw(databyte);
+            webRequest.downloadHandler = new DownloadHandlerBuffer();
+            webRequest.SetRequestHeader("Content-Type", "application/json;charset=utf-8");
+            await webRequest.SendWebRequest();
 
-            if (_request.result == UnityWebRequest.Result.ProtocolError)
+            if (webRequest.result == UnityWebRequest.Result.ProtocolError)
             {
-                errorAction.Invoke(DataFrameComponent.StringBuilderString(_request.url, ":", _request.error));
+                errorAction.Invoke(DataFrameComponent.String_BuilderString(webRequest.url, ":", webRequest.error));
             }
             else
             {
-                action.Invoke(Regex.Unescape(_request.downloadHandler.text));
+                action.Invoke(Regex.Unescape(webRequest.downloadHandler.text));
             }
 
             return String.Empty;

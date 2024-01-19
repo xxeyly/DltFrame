@@ -15,7 +15,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void AddListenerEvent(string eventType, ListenerFrameComponent.CallBack callBack)
         {
-            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void AddListenerEvent<T>(string eventType, ListenerFrameComponent.CallBack<T> callBack)
         {
-            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void AddListenerEvent<T, X>(string eventType, ListenerFrameComponent.CallBack<T, X> callBack)
         {
-            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void AddListenerEvent<T, X, Y>(string eventType, ListenerFrameComponent.CallBack<T, X, Y> callBack)
         {
-            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void AddListenerEvent<T, X, Y, Z>(string eventType, ListenerFrameComponent.CallBack<T, X, Y, Z> callBack)
         {
-            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void AddListenerEvent<T, X, Y, Z, W>(string eventType, ListenerFrameComponent.CallBack<T, X, Y, Z, W> callBack)
         {
-            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.AddListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
         }
 
         #endregion
@@ -79,7 +79,7 @@ namespace DltFramework
         /// <param name="returnCallBack"></param>
         protected void AddReturnListenerEvent<R>(string eventType, ListenerFrameComponent.ReturnCallBack<R> returnCallBack)
         {
-            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), returnCallBack);
+            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), returnCallBack);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace DltFramework
         /// <param name="returnCallBack"></param>
         protected void AddReturnListenerEvent<T, R>(string eventType, ListenerFrameComponent.ReturnCallBack<T, R> returnCallBack)
         {
-            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), returnCallBack);
+            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), returnCallBack);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace DltFramework
         /// <param name="returnCallBack"></param>
         protected void AddReturnListenerEvent<T, X, R>(string eventType, ListenerFrameComponent.ReturnCallBack<T, X, R> returnCallBack)
         {
-            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), returnCallBack);
+            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), returnCallBack);
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace DltFramework
         /// <param name="returnCallBack"></param>
         protected void AddReturnListenerEvent<T, X, Y, R>(string eventType, ListenerFrameComponent.ReturnCallBack<T, X, Y, R> returnCallBack)
         {
-            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), returnCallBack);
+            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), returnCallBack);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace DltFramework
         /// <param name="returnCallBack"></param>
         protected void AddReturnListenerEvent<T, X, Y, Z, R>(string eventType, ListenerFrameComponent.ReturnCallBack<T, X, Y, Z, R> returnCallBack)
         {
-            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), returnCallBack);
+            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), returnCallBack);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace DltFramework
         /// <param name="returnCallBack"></param>
         protected void AddReturnListenerEvent<T, X, Y, Z, W, R>(string eventType, ListenerFrameComponent.ReturnCallBack<T, X, Y, Z, W, R> returnCallBack)
         {
-            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), returnCallBack);
+            ListenerFrameComponent.Instance.AddReturnListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), returnCallBack);
         }
 
         #endregion
@@ -143,7 +143,7 @@ namespace DltFramework
         /// <param name="unityAction"></param>
         protected void RemoveListenerEvent(string eventType, ListenerFrameComponent.CallBack callBack)
         {
-            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
         }
 
         /// <summary>
@@ -153,7 +153,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void RemoveListenerEvent<T>(string eventType, ListenerFrameComponent.CallBack<T> callBack)
         {
-            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
 
         }
 
@@ -164,7 +164,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void RemoveListenerEvent<T, X>(string eventType, ListenerFrameComponent.CallBack<T, X> callBack)
         {
-            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
 
         }
 
@@ -175,7 +175,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void RemoveListenerEvent<T, X, Y>(string eventType, ListenerFrameComponent.CallBack<T, X, Y> callBack)
         {
-            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
 
         }
 
@@ -186,7 +186,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void RemoveListenerEvent<T, X, Y, Z>(string eventType, ListenerFrameComponent.CallBack<T, X, Y, Z> callBack)
         {
-            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
 
         }
 
@@ -197,7 +197,7 @@ namespace DltFramework
         /// <param name="callBack"></param>
         protected void RemoveListenerEvent<T, X, Y, Z, W>(string eventType, ListenerFrameComponent.CallBack<T, X, Y, Z, W> callBack)
         {
-            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.StringBuilderString(GetType().ToString(), "-", eventType), callBack);
+            ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
 
         }
 

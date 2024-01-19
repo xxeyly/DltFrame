@@ -101,7 +101,7 @@ namespace DltFramework
         {
             string scriptPath = GetPath(scriptsName);
 
-            string oldScriptContent = FileOperation.GetTextToLoad(scriptPath);
+            string oldScriptContent = FileOperationComponent.GetTextToLoad(scriptPath);
             return oldScriptContent;
         }
 

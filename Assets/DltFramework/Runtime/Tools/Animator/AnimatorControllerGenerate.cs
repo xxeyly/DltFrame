@@ -19,8 +19,8 @@ namespace DltFramework
         public List<string> GetReplaceContent()
         {
             List<string> replaceContent = new List<string>();
-            List<string> animatorPath = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("controller");
-            List<RuntimeAnimatorController> animators = DataFrameComponent.GetSpecifyTypeOnlyInAssetsByFilePath<RuntimeAnimatorController>(animatorPath);
+            List<string> animatorPath = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("controller");
+            List<RuntimeAnimatorController> animators = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets<RuntimeAnimatorController>(animatorPath);
             foreach (RuntimeAnimatorController animator in animators)
             {
                 foreach (AnimationClip animatorAnimationClip in animator.animationClips)
@@ -62,9 +62,9 @@ namespace DltFramework
                     //忽略关联文件与特殊类
                     if (!files[i].Name.EndsWith(".meta") && files[i].Name == loadScriptsName + ".cs")
                     {
-                        string oldScriptsContent = FileOperation.GetTextToLoad(FileOperation.ConvertToLocalPath(files[i].FullName));
+                        string oldScriptsContent = FileOperationComponent.GetTextToLoad(FileOperationComponent.ConvertToLocalPath(files[i].FullName));
                         string newScriptsContent = ReplaceScriptContent(oldScriptsContent, GetReplaceContent(), "//属性生成开始", "//属性生成结束");
-                        FileOperation.SaveTextToLoad(GenerateGeneral.GetPath(loadScriptsName), newScriptsContent);
+                        FileOperationComponent.SaveTextToLoad(GenerateGeneral.GetPath(loadScriptsName), newScriptsContent);
 
                         return;
                     }

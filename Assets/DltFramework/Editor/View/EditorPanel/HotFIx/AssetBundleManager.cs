@@ -113,14 +113,14 @@ public class AssetBundleManager : BaseEditor
 #endif
             }
 
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
                 Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes", true);
             HotFixRuntimeDownConfig hotFixAssemblyConfig = new HotFixRuntimeDownConfig();
-            hotFixAssemblyConfig.md5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
+            hotFixAssemblyConfig.md5 = FileOperationComponent.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
             hotFixAssemblyConfig.name = "Assembly-CSharp.dll.bytes";
-            hotFixAssemblyConfig.size = FileOperation.GetFileSize(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes").ToString();
+            hotFixAssemblyConfig.size = FileOperationComponent.GetFileSize(Application.streamingAssetsPath + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes").ToString();
             hotFixAssemblyConfig.path = "HotFixRuntime/Assembly/";
-            FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/AssemblyConfig", "AssemblyConfig.json", JsonMapper.ToJson(hotFixAssemblyConfig));
+            FileOperationComponent.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/AssemblyConfig", "AssemblyConfig.json", JsonMapper.ToJson(hotFixAssemblyConfig));
             Debug.Log("移动完毕");
         }
 
@@ -149,11 +149,11 @@ public class AssetBundleManager : BaseEditor
             UnityEditor.AssetDatabase.Refresh();
 
             HotFixRuntimeDownConfig hotFixGameRootStartConfig = new HotFixRuntimeDownConfig();
-            hotFixGameRootStartConfig.md5 = FileOperation.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart");
+            hotFixGameRootStartConfig.md5 = FileOperationComponent.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart");
             hotFixGameRootStartConfig.name = "gamerootstart";
-            hotFixGameRootStartConfig.size = FileOperation.GetFileSize(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart").ToString();
+            hotFixGameRootStartConfig.size = FileOperationComponent.GetFileSize(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart").ToString();
             hotFixGameRootStartConfig.path = "HotFixRuntime/GameRootStartAssetBundle/";
-            FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json", JsonMapper.ToJson(hotFixGameRootStartConfig));
+            FileOperationComponent.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json", JsonMapper.ToJson(hotFixGameRootStartConfig));
         }
 
         //元数据
@@ -195,25 +195,25 @@ public class AssetBundleManager : BaseEditor
                         break;
                 }
 
-                File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
+                File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
                     Application.streamingAssetsPath + "/HotFix/Metadata/" + metadataName + ".bytes", true);
             }
 
-            List<string> buildPath = DataFrameComponent.GetGetSpecifyPathInAllTypePath("Assets/StreamingAssets/HotFix/Metadata", "bytes");
+            List<string> buildPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets/StreamingAssets/HotFix/Metadata", "bytes");
             List<HotFixRuntimeDownConfig> hotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             foreach (string path in buildPath)
             {
                 hotFixMetaAssemblyConfigs.Add(new HotFixRuntimeDownConfig()
                 {
-                    name = DataFrameComponent.GetPathFileNameDontContainFileType(path) + ".bytes",
-                    md5 = FileOperation.GetMD5HashFromFile(path),
+                    name = DataFrameComponent.Path_GetPathFileNameDontContainFileType(path) + ".bytes",
+                    md5 = FileOperationComponent.GetMD5HashFromFile(path),
                     path = "HotFix/Metadata/",
-                    size = FileOperation.GetFileSize(path).ToString()
+                    size = FileOperationComponent.GetFileSize(path).ToString()
                 });
             }
 
 
-            FileOperation.SaveTextToLoad(Application.streamingAssetsPath + "/HotFix/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
+            FileOperationComponent.SaveTextToLoad(Application.streamingAssetsPath + "/HotFix/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
         }
 
         OnLoadConfig();
@@ -275,14 +275,14 @@ public class AssetBundleManager : BaseEditor
 
     public override void OnSaveConfig()
     {
-        FileOperation.SaveTextToLoad(Application.dataPath + "/Config/BuildAssetBundleConfig.json", JsonMapper.ToJson(this));
+        FileOperationComponent.SaveTextToLoad(Application.dataPath + "/Config/BuildAssetBundleConfig.json", JsonMapper.ToJson(this));
     }
 
     public override void OnLoadConfig()
     {
         if (File.Exists(Application.dataPath + "/Config/BuildAssetBundleConfig.json"))
         {
-            AssetBundleManager loadAssetBundleManager = JsonMapper.ToObject<AssetBundleManager>(FileOperation.GetTextToLoad(Application.dataPath + "/Config/BuildAssetBundleConfig.json"));
+            AssetBundleManager loadAssetBundleManager = JsonMapper.ToObject<AssetBundleManager>(FileOperationComponent.GetTextToLoad(Application.dataPath + "/Config/BuildAssetBundleConfig.json"));
             buildSavePath = loadAssetBundleManager.buildSavePath;
             // targetBuildAssetBundleOptions = loadAssetBundleManager.targetBuildAssetBundleOptions;
             GameRootStartBundleDirectoryConfig = loadAssetBundleManager.GameRootStartBundleDirectoryConfig;

@@ -26,7 +26,7 @@ namespace DltFramework
                 return;
             }
 
-            List<Text> sceneAllText = DataFrameComponent.GetAllObjectsInScene<Text>();
+            List<Text> sceneAllText = DataFrameComponent.Hierarchy_GetAllObjectsInScene<Text>();
             foreach (Text text in sceneAllText)
             {
                 text.font = changeFont;
@@ -45,7 +45,7 @@ namespace DltFramework
         [Button("替换文字", ButtonSizes.Medium)]
         public void OnReplaceSceneGameObjectName()
         {
-            foreach (GameObject sceneObj in DataFrameComponent.GetAllObjectsOnlyInScene())
+            foreach (GameObject sceneObj in DataFrameComponent.Hierarchy_GetAllObjectsOnlyInScene())
             {
                 string replace = sceneObj.name.Replace(sceneReplaceBeforeName, sceneReplaceAfterName);
                 sceneObj.name = replace;
@@ -63,7 +63,7 @@ namespace DltFramework
         [Button("替换文字", ButtonSizes.Medium)]
         public void OnReplaceTextContent()
         {
-            foreach (Text text in DataFrameComponent.GetAllObjectsInScene<Text>())
+            foreach (Text text in DataFrameComponent.Hierarchy_GetAllObjectsInScene<Text>())
             {
                 string replace = text.text.Replace(textReplaceBeforeName, textReplaceAfterName);
                 text.text = replace;
@@ -138,19 +138,19 @@ namespace DltFramework
             List<string> tgaPaths;
             if (texturePath != string.Empty && Directory.Exists(texturePath))
             {
-                pngPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "png");
-                jpgPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "jpg");
-                tifPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "tif");
-                tiffPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "tiff");
-                tgaPaths = DataFrameComponent.GetGetSpecifyPathInAllTypePath(texturePath, "tga");
+                pngPaths = DataFrameComponent.Path_GetGetSpecifyPathInAllType(texturePath, "png");
+                jpgPaths = DataFrameComponent.Path_GetGetSpecifyPathInAllType(texturePath, "jpg");
+                tifPaths = DataFrameComponent.Path_GetGetSpecifyPathInAllType(texturePath, "tif");
+                tiffPaths = DataFrameComponent.Path_GetGetSpecifyPathInAllType(texturePath, "tiff");
+                tgaPaths = DataFrameComponent.Path_GetGetSpecifyPathInAllType(texturePath, "tga");
             }
             else
             {
-                pngPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("png");
-                jpgPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("jpg");
-                tifPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tif");
-                tiffPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tiff");
-                tgaPaths = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("tga");
+                pngPaths = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("png");
+                jpgPaths = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("jpg");
+                tifPaths = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("tif");
+                tiffPaths = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("tiff");
+                tgaPaths = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("tga");
             }
 
             OnTextureCompressByPath(pngPaths);

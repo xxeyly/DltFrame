@@ -32,14 +32,14 @@ namespace DltFramework
             _returnCallDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
             _allScriptsContentDic = new Dictionary<string, string>();
             allScriptPath = new List<string>();
-            List<string> classPath = DataFrameComponent.GetGetSpecifyPathInAllTypePath("Assets", "cs");
+            List<string> classPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets", "cs");
 
             for (int i = 0; i < classPath.Count; i++)
             {
-                if (!classPath[i].Contains("DltFramework") && !_allScriptsContentDic.ContainsKey(DataFrameComponent.GetPathFileNameDontContainFileType(classPath[i])))
+                if (!classPath[i].Contains("DltFramework") && !_allScriptsContentDic.ContainsKey(DataFrameComponent.Path_GetPathFileNameDontContainFileType(classPath[i])))
                 {
-                    allScriptPath.Add(DataFrameComponent.GetPathFileName(classPath[i]));
-                    _allScriptsContentDic.Add(DataFrameComponent.GetPathFileNameDontContainFileType(classPath[i]), FileOperation.GetTextToLoad(classPath[i]));
+                    allScriptPath.Add(DataFrameComponent.Path_GetPathFileName(classPath[i]));
+                    _allScriptsContentDic.Add(DataFrameComponent.Path_GetPathFileNameDontContainFileType(classPath[i]), FileOperationComponent.GetTextToLoad(classPath[i]));
                 }
             }
 
@@ -219,7 +219,7 @@ namespace DltFramework
             oldContent =
                 GenerateGeneral.ReplaceScriptContent(oldContent, GenerationMethod(_callDic, _returnCallDic), "//监听生成开始",
                     "//监听生成结束");
-            FileOperation.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), oldContent);
+            FileOperationComponent.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), oldContent);
 
             #endregion
 
@@ -412,7 +412,7 @@ namespace DltFramework
             //生成类
             foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
             {
-                generateClassContent += GenerateGeneral.Indents(8) + "[HideInInspector] public " + pair.Key + " " + DataFrameComponent.FirstCharToLower(pair.Key) + " = new " + pair.Key + "()" + ";" +
+                generateClassContent += GenerateGeneral.Indents(8) + "[HideInInspector] public " + pair.Key + " " + DataFrameComponent.String_FirstCharToLower(pair.Key) + " = new " + pair.Key + "()" + ";" +
                                         GenerateGeneral.LineFeed;
             }
 

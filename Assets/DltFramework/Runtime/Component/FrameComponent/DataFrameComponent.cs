@@ -114,67 +114,54 @@ namespace DltFramework
             { "9", 7 },
         };
 
-
         /// <summary>
-        /// 随机排序
+        /// 移除所有AssetBundle名称
         /// </summary>
-        /// <param name="list"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static List<T> RandomSort<T>(List<T> list)
+        public static void RemoveAllAssetBundleName()
         {
-            var random = new Random();
-            T time;
-            int index = 0;
-            for (int i = 0; i < list.Count; i++)
+#if UNITY_EDITOR
+
+            List<string> allAsstBundleName = new List<string>(AssetDatabase.GetAllAssetBundleNames());
+
+            foreach (string assetName in allAsstBundleName)
             {
-                index = random.Next(0, list.Count - 1);
-                if (index != i)
-                {
-                    time = list[i];
-                    list[i] = list[index];
-                    list[index] = time;
-                }
+                AssetDatabase.RemoveAssetBundleName(assetName, true);
             }
 
-            return list;
+            UnityEditor.AssetDatabase.Refresh();
+#endif
         }
 
-        /// <summary>
-        /// 首字母大写
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string FirstCharToUpper(string input)
+        [LabelText("获得两点之间的角度360")]
+        public static float Angle(Vector3 origin, Vector3 target)
         {
-            if (String.IsNullOrEmpty(input))
-                return input;
-            string str = input.First().ToString().ToUpper() + input.Substring(1);
-            return str;
+            //两点的x、y值
+            float x = origin.x - target.x;
+            float y = origin.y - target.y;
+
+            //斜边长度
+            float hypotenuse = Mathf.Sqrt(Mathf.Pow(x, 2f) + Mathf.Pow(y, 2f));
+
+            //求出弧度
+            float cos = x / hypotenuse;
+            float radian = Mathf.Acos(cos);
+
+            //用弧度算出角度    
+            float angle = 180 / (Mathf.PI / radian);
+            if (y > 0)
+            {
+                angle = 180 + (180 - angle);
+            }
+
+            return angle;
         }
 
-        /// <summary>
-        /// 首字母小写
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string FirstCharToLower(string input)
-        {
-            if (String.IsNullOrEmpty(input))
-                return input;
-            string str = input.First().ToString().ToLower() + input.Substring(1);
-            return str;
-        }
+        #region Hierarchy
 
-        /// <summary>
-        /// 查找场景中所有类型
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static List<T> GetAllObjectsInScene<T>()
+        [LabelText("查找场景中所有类型")]
+        public static List<T> Hierarchy_GetAllObjectsInScene<T>()
         {
-            // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
-            List<GameObject> objectsInScene = GetAllObjectsOnlyInScene();
+            List<GameObject> objectsInScene = Hierarchy_GetAllObjectsOnlyInScene();
             List<T> specifiedType = new List<T>();
             foreach (GameObject go in objectsInScene)
             {
@@ -191,15 +178,10 @@ namespace DltFramework
             return specifiedType;
         }
 
-        /// <summary>
-        /// 查找场景中所有类型
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static List<T> GetAllObjectsInScene<T>(string sceneName)
+        [LabelText("查找场景中所有类型")]
+        public static List<T> Hierarchy_GetAllObjectsInScene<T>(string sceneName)
         {
-            // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
-            List<GameObject> objectsInScene = GetAllObjectsOnlyInScene(sceneName);
+            List<GameObject> objectsInScene = Hierarchy_GetAllObjectsOnlyInScene(sceneName);
             List<T> specifiedType = new List<T>();
             foreach (GameObject go in objectsInScene)
             {
@@ -216,15 +198,10 @@ namespace DltFramework
             return specifiedType;
         }
 
-        /// <summary>
-        /// 查找场景中第一个类型
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static T GetObjectsInScene<T>()
+        [LabelText("查找场景中第一个类型")]
+        public static T Hierarchy_GetObjectsInScene<T>()
         {
-            // List<GameObject> objectsInScene = GetAllSceneObjectsWithInactive();
-            GameObject objectsInScene = GetObjectsOnlyInScene<T>();
+            GameObject objectsInScene = Hierarchy_GetObjectsOnlyInScene<T>();
             if (objectsInScene != null)
             {
                 return objectsInScene.GetComponent<T>();
@@ -233,11 +210,8 @@ namespace DltFramework
             return default(T);
         }
 
-        /// <summary>
-        /// 获得场景中所有物体
-        /// </summary>
-        /// <returns></returns>
-        public static List<GameObject> GetAllObjectsOnlyInScene()
+        [LabelText("获得场景中所有物体")]
+        public static List<GameObject> Hierarchy_GetAllObjectsOnlyInScene()
         {
             List<GameObject> objectsInScene = new List<GameObject>();
             foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
@@ -260,11 +234,8 @@ namespace DltFramework
             return objectsInScene;
         }
 
-        /// <summary>
-        /// 获得场景中所有物体
-        /// </summary>
-        /// <returns></returns>
-        public static List<GameObject> GetAllObjectsOnlyInScene(string sceneName)
+        [LabelText("获得场景中所有物体")]
+        public static List<GameObject> Hierarchy_GetAllObjectsOnlyInScene(string sceneName)
         {
             List<GameObject> objectsInScene = new List<GameObject>();
             foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
@@ -289,27 +260,8 @@ namespace DltFramework
             return objectsInScene;
         }
 
-        /// <summary>
-        /// 获得物体所在跟目录层级
-        /// </summary>
-        /// <returns></returns>
-        public static int GetObjWhereRootLevel(Transform target)
-        {
-            int level = 0;
-            while (target.parent != null)
-            {
-                target = target.parent;
-                level += 1;
-            }
-
-            return level;
-        }
-
-        /// <summary>
-        /// 获得场景中所有第一个物体
-        /// </summary>
-        /// <returns></returns>
-        private static GameObject GetObjectsOnlyInScene<T>()
+        [LabelText("获得场景中所有第一个物体")]
+        private static GameObject Hierarchy_GetObjectsOnlyInScene<T>()
         {
             foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
             {
@@ -333,293 +285,21 @@ namespace DltFramework
             return null;
         }
 
-        /// <summary>
-        /// 获得所有文件的路径(.meta文件除外)
-        /// </summary>
-        /// <returns></returns>
-        public static Dictionary<string, List<string>> GetAllObjectsOnlyInAssetsPath()
+        [LabelText("获得物体所在跟目录层级")]
+        public static int Hierarchy_GetObjWhereRootLevel(Transform target)
         {
-            Dictionary<string, List<string>> assetsTypePathDic = new Dictionary<string, List<string>>();
-            DirectoryInfo direction = new DirectoryInfo("Assets");
-            FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
-            for (int i = 0; i < files.Length; i++)
+            int level = 0;
+            while (target.parent != null)
             {
-                if (files[i].Name.EndsWith(".meta"))
-                {
-                    continue;
-                }
-
-                //后缀名
-                string extension = files[i].Extension.Replace(".", "");
-                //绝对路径
-                string absolutePath = files[i].FullName;
-                //相对路径
-                string relativePath = absolutePath.Substring(absolutePath.IndexOf("Assets", StringComparison.Ordinal));
-                if (!assetsTypePathDic.ContainsKey(extension))
-                {
-                    assetsTypePathDic.Add(extension, new List<string>() { relativePath });
-                }
-                else
-                {
-                    assetsTypePathDic[extension].Add(relativePath);
-                }
+                target = target.parent;
+                level += 1;
             }
 
-            return assetsTypePathDic;
+            return level;
         }
 
-        /// <summary>
-        /// 返回所有类路径
-        /// </summary>
-        /// <returns></returns>
-        public static List<string> GetAllScriptsPathOnlyInAssetsPath()
-        {
-            Dictionary<string, List<string>> allObject = GetAllObjectsOnlyInAssetsPath();
-            if (allObject.ContainsKey("cs"))
-            {
-                return allObject["cs"];
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// 返回所有类路径
-        /// </summary>
-        /// <returns></returns>
-        public static List<string> GetAllScriptsNameOnlyInAssetsPath()
-        {
-            List<string> scriptsPath = GetAllScriptsPathOnlyInAssetsPath();
-            List<string> scriptName = new List<string>();
-            if (scriptsPath != null)
-            {
-                foreach (string scriptPath in scriptsPath)
-                {
-                    List<string> scriptPathSpice = new List<string>(scriptPath.Split('\\'));
-                    scriptName.Add(scriptPathSpice[scriptPathSpice.Count - 1]);
-                }
-            }
-
-            return scriptName;
-        }
-
-
-        /// <summary>
-        /// 获得指定类型文件路径
-        /// </summary>
-        /// <returns></returns>
-        public static List<string> GetSpecifyTypeOnlyInAssetsPath(string fileExtension)
-        {
-            if (GetAllObjectsOnlyInAssetsPath().ContainsKey(fileExtension))
-            {
-                return GetAllObjectsOnlyInAssetsPath()[fileExtension];
-            }
-
-            return new List<string>();
-        }
-
-        /// <summary>
-        /// 获得指定路径下指定类型的所有物体路径
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static List<string> GetGetSpecifyPathInAllTypePath(string path, string type)
-        {
-            List<string> allPath = new List<string>();
-            foreach (KeyValuePair<string, List<string>> pair in GetAllObjectsOnlyInAssetsPath())
-            {
-                if (pair.Key == type)
-                {
-                    foreach (string filePath in pair.Value)
-                    {
-                        if (GetPathDontContainFileName(filePath).Contains(path))
-                        {
-                            allPath.Add(filePath);
-                        }
-                    }
-                }
-            }
-
-            return allPath;
-        }
-
-        /// <summary>
-        /// 获得指定类型文件
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static List<T> GetSpecifyTypeOnlyInAssetsByFilePath<T>(List<string> filePath) where T : Object
-        {
-            List<T> specifyType = new List<T>();
-#if UNITY_EDITOR
-
-            foreach (string path in filePath)
-            {
-                specifyType.Add(UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path));
-            }
-#endif
-
-            return specifyType;
-        }
-
-        /// <summary>
-        /// 获得文件类型
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string GetPathFileType(string path)
-        {
-            List<string> split = new List<string>(path.Split('.'));
-
-            return split[split.Count - 1];
-        }
-
-        /// <summary>
-        /// 获得文件名称
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string GetPathFileName(string path)
-        {
-            FileInfo fileInfo = new FileInfo(path);
-            return fileInfo.Name;
-        }
-
-        /// <summary>
-        /// 返回文件名称,不包含类型
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string GetPathFileNameDontContainFileType(string path)
-        {
-            // return GetPathFileName(path).Replace("." + GetPathFileType(path), "");
-            return Path.GetFileNameWithoutExtension(path);
-        }
-
-        /// <summary>
-        /// 获得文件路径,不包包含文件名称
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string GetPathDontContainFileName(string path)
-        {
-            return Path.GetDirectoryName(path).Replace(@"\", "/");
-        }
-
-        /// <summary>
-        /// 设置文件夹内Prefab的AssetBundle名称,路径名称不带/
-        /// </summary>
-        /// <param name="prefabPath"></param>
-        /// <param name="buildPath"></param>
-        public static void SetFolderFileBuildAssetBundleName(string prefabPath, string buildPath, string variant = "")
-        {
-#if UNITY_EDITOR
-            DirectoryInfo uiDirection = new DirectoryInfo(prefabPath);
-            foreach (FileInfo fileInfo in uiDirection.GetFiles("*.prefab"))
-            {
-                AssetImporter assetImporter = AssetImporter.GetAtPath(prefabPath + "/" + fileInfo.Name);
-                string assetBundleName = GetPathFileNameDontContainFileType(fileInfo.Name);
-                string buildAssetBundlePath = buildPath.Replace("Assets/StreamingAssets/", "") + "/" + assetBundleName;
-
-                assetImporter.SetAssetBundleNameAndVariant(buildAssetBundlePath, variant);
-                assetImporter.SaveAndReimport();
-            }
-#endif
-        }
-
-        /// <summary>
-        /// 移除所有AssetBundle名称
-        /// </summary>
-        public static void RemoveAllAssetBundleName()
-        {
-#if UNITY_EDITOR
-
-            List<string> allAsstBundleName = new List<string>(AssetDatabase.GetAllAssetBundleNames());
-
-            foreach (string assetName in allAsstBundleName)
-            {
-                AssetDatabase.RemoveAssetBundleName(assetName, true);
-            }
-
-            UnityEditor.AssetDatabase.Refresh();
-#endif
-        }
-
-        /// <summary>
-        /// 所有转换为小写
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
-        public static string AllCharToLower(string input)
-        {
-            if (String.IsNullOrEmpty(input))
-                return input;
-            string str = "";
-            foreach (char c in input)
-            {
-                str = StringBuilderString(str, c.ToString().ToLower());
-            }
-
-            return str;
-        }
-
-        /// <summary>
-        /// 获得两点之间的角度360
-        /// </summary>
-        /// <param name="origin"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
-        public static float Angle(Vector3 origin, Vector3 target)
-        {
-            //两点的x、y值
-            float x = origin.x - target.x;
-            float y = origin.y - target.y;
-
-            //斜边长度
-            float hypotenuse = Mathf.Sqrt(Mathf.Pow(x, 2f) + Mathf.Pow(y, 2f));
-
-            //求出弧度
-            float cos = x / hypotenuse;
-            float radian = Mathf.Acos(cos);
-
-            //用弧度算出角度    
-            float angle = 180 / (Mathf.PI / radian);
-            if (y > 0)
-            {
-                angle = 180 + (180 - angle);
-            }
-
-            return angle;
-        }
-
-        /// <summary>
-        /// 集合合并
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static List<T> MergeList<T>(params List<T>[] needMergeList)
-        {
-            List<T> mergeList = new List<T>();
-
-            foreach (List<T> list in needMergeList)
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    mergeList.Add(list[i]);
-                }
-            }
-
-            return mergeList;
-        }
-
-        /// <summary>
-        /// 计算Hierarchy内容长度
-        /// </summary>
-        /// <param name="hierarchyContent"></param>
-        /// <returns></returns>
-        public static float CalculationHierarchyContentLength(string hierarchyContent)
+        [LabelText("计算Hierarchy内容长度")]
+        public static float Hierarchy_CalculationHierarchyContentLength(string hierarchyContent)
         {
             int length = 0;
 
@@ -631,7 +311,7 @@ namespace DltFramework
                 }
                 else
                 {
-                    if (CheckStringIsChinese(hierarchyContent[i].ToString()))
+                    if (String_CheckStringIsChinese(hierarchyContent[i].ToString()))
                     {
                         length += CharacterLengthDic["汉"];
                     }
@@ -641,125 +321,8 @@ namespace DltFramework
             return length;
         }
 
-        /// <summary>
-        /// 检查String是否是汉字
-        /// </summary>
-        /// <param name="str"></param>
-        /// <returns></returns>
-        public static bool CheckStringIsChinese(string str)
-        {
-            char[] ch = str.ToCharArray();
-            if (str != null)
-            {
-                for (int i = 0; i < ch.Length; i++)
-                {
-                    if (CharisChinese(ch[i]))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public static bool CharisChinese(char c)
-        {
-            return c >= 0x4E00 && c <= 0x9FA5;
-        }
-
-        /// <summary>
-        /// 集合删除重复项
-        /// </summary>
-        /// <param name="currentList"></param>
-        /// <param name="targetList"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static List<T> RemoveRepeat<T>(List<T> currentList, List<T> targetList)
-        {
-            for (int i = 0; i < targetList.Count; i++)
-            {
-                if (currentList.Contains(targetList[i]))
-                {
-                    currentList.Remove(targetList[i]);
-                }
-            }
-
-            return currentList;
-        }
-
-        /// <summary>
-        /// 文字换行
-        /// </summary>
-        /// <param name="content"></param>
-        /// <param name="lineFeedCount"></param>
-        /// <returns></returns>
-        public static string ContentAddLine(string content, int lineFeedCount)
-        {
-            int lineCount = 0;
-            string newContent = string.Empty;
-            for (int i = 0; i < content.Length; i++)
-            {
-                newContent += content[i];
-                int temp = (lineCount + 1) * lineFeedCount;
-                if (i >= lineFeedCount - 1 && (i + 1 - temp) == 0)
-                {
-                    lineCount += 1;
-                    newContent += "\n";
-                }
-            }
-
-            return newContent;
-        }
-
-        /// <summary>
-        /// 图片转byte数组
-        /// </summary>
-        /// <param name="img"></param>
-        /// <returns></returns>
-        public static byte[] ImageToByte(Image img)
-        {
-            return img.sprite.texture.EncodeToPNG();
-        }
-
-        /// <summary>
-        /// 数据转精灵
-        /// </summary>
-        /// <param name="imgByte"></param>
-        /// <param name="spriteWidth"></param>
-        /// <param name="spriteHeight"></param>
-        /// <returns></returns>
-        public static Sprite ByteToSprite(byte[] imgByte, int spriteWidth, int spriteHeight)
-        {
-            Texture2D texture2D = new Texture2D(spriteWidth, spriteHeight);
-            texture2D.LoadImage(imgByte);
-            return Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height),
-                new Vector2(0.5f, 0.5f));
-        }
-
-        /// <summary>
-        /// 值克隆
-        /// </summary>
-        /// <param name="targetValue"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static List<T> DataValueClone<T>(List<T> targetValue)
-        {
-            List<T> temp = new List<T>();
-            foreach (T t in targetValue)
-            {
-                temp.Add(t);
-            }
-
-            return temp;
-        }
-
-        /// <summary>
-        /// 获取面板上的值
-        /// </summary>
-        /// <param name="mTransform"></param>
-        /// <returns></returns>
-        public static Vector3 GetInspectorEuler(Transform mTransform, bool world = true)
+        [LabelText("获取面板上的值")]
+        public static Vector3 Hierarchy_GetInspectorEuler(Transform mTransform, bool world = true)
         {
             Vector3 angle;
             if (world)
@@ -815,40 +378,9 @@ namespace DltFramework
             return vector3;
         }
 
-        /// <summary>
-        /// 左斜杠转右斜杠
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string LeftSlashChangeRightSlash(string path)
-        {
-            return path.Replace("/", "\\");
-        }
 
-        /// <summary>
-        /// 获得上级目录
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="Hierarchy"></param>
-        /// <returns></returns>
-        public static string GetCombine(string path, int Hierarchy)
-        {
-            string newPath = String.Empty;
-            List<string> divisionPath = new List<string>(path.Split('/'));
-
-            for (int i = 0; i < divisionPath.Count - 1 - Hierarchy; i++)
-            {
-                newPath = StringBuilderString(newPath, divisionPath[i], "/");
-            }
-
-            return newPath;
-        }
-
-        /// <summary>
-        /// 获得路径
-        /// </summary>
-        /// <returns></returns>
-        public static string GetComponentPath(Transform target, bool containThis = true)
+        [LabelText("获得路径")]
+        public static string Hierarchy_GetTransformHierarchy(Transform target, bool containThis = true)
         {
             string path = String.Empty;
             Transform defaultUiTr = target;
@@ -862,10 +394,10 @@ namespace DltFramework
 
             for (int i = 1; i <= hierarchy; i++)
             {
-                target = GetParentByHierarchy(defaultUiTr, i);
+                target = Hierarchy_GetParentHierarchy(defaultUiTr, i);
                 if (containThis)
                 {
-                    path = StringBuilderString(target.name, "/", path);
+                    path = String_BuilderString(target.name, "/", path);
                 }
                 else
                 {
@@ -875,14 +407,14 @@ namespace DltFramework
                     }
                     else
                     {
-                        path = StringBuilderString(target.name, "/", path);
+                        path = String_BuilderString(target.name, "/", path);
                     }
                 }
             }
 
             if (containThis)
             {
-                return StringBuilderString(path, defaultUiTr.name);
+                return String_BuilderString(path, defaultUiTr.name);
             }
             else
             {
@@ -890,13 +422,8 @@ namespace DltFramework
             }
         }
 
-        /// <summary>
-        /// 根据UI层级获得父物体
-        /// </summary>
-        /// <param name="uiTr"></param>
-        /// <param name="hierarchy"></param>
-        /// <returns></returns>
-        private static Transform GetParentByHierarchy(Transform uiTr, int hierarchy)
+        [LabelText("根据UI层级获得父物体")]
+        private static Transform Hierarchy_GetParentHierarchy(Transform uiTr, int hierarchy)
         {
             for (int i = 0; i < hierarchy; i++)
             {
@@ -906,12 +433,149 @@ namespace DltFramework
             return uiTr;
         }
 
-        /// <summary>
-        /// 获得继承类的所有子类
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static List<T> GetInheritAllSubclass<T>() where T : class
+        #endregion
+
+        #region 字符串
+
+        [LabelText("首字母大写")]
+        public static string String_FirstCharToUpper(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            return String_BuilderString(input.First().ToString().ToUpper(), input.Substring(1));
+        }
+
+        [LabelText("首字母小写")]
+        public static string String_FirstCharToLower(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            return String_BuilderString(input.First().ToString().ToLower() + input.Substring(1));
+        }
+
+        [LabelText("所有转换为小写")]
+        public static string String_AllCharToLower(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+                return input;
+            string str = "";
+            foreach (char c in input)
+            {
+                str = String_BuilderString(str, c.ToString().ToLower());
+            }
+
+            return str;
+        }
+
+        [LabelText("StringBuilder字符串拼接")]
+        public static string String_BuilderString(params string[] strList)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (string str in strList)
+            {
+                sb.Append(str);
+            }
+
+            return sb.ToString();
+        }
+
+        [LabelText("左斜杠转右斜杠")]
+        public static string String_LeftSlashChangeRightSlash(string path)
+        {
+            return path.Replace("/", "\\");
+        }
+
+        [LabelText("检查String是否是汉字")]
+        public static bool String_CheckStringIsChinese(string str)
+        {
+            char[] ch = str.ToCharArray();
+            if (str != null)
+            {
+                for (int i = 0; i < ch.Length; i++)
+                {
+                    if (String_CharisChinese(ch[i]))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        [LabelText("检查Char是否是汉字")]
+        public static bool String_CharisChinese(char c)
+        {
+            return c >= 0x4E00 && c <= 0x9FA5;
+        }
+
+        [LabelText("文字换行")]
+        public static string String_ContentAddLine(string content, int lineFeedCount)
+        {
+            int lineCount = 0;
+            string newContent = string.Empty;
+            for (int i = 0; i < content.Length; i++)
+            {
+                newContent += content[i];
+                int temp = (lineCount + 1) * lineFeedCount;
+                if (i >= lineFeedCount - 1 && (i + 1 - temp) == 0)
+                {
+                    lineCount += 1;
+                    newContent += "\n";
+                }
+            }
+
+            return newContent;
+        }
+
+        #endregion
+
+        #region 集合
+
+        [LabelText("随机排序")]
+        public static List<T> List_RandomSort<T>(List<T> list)
+        {
+            var random = new Random();
+            T time;
+            int index = 0;
+            for (int i = 0; i < list.Count; i++)
+            {
+                index = random.Next(0, list.Count - 1);
+                if (index != i)
+                {
+                    time = list[i];
+                    list[i] = list[index];
+                    list[index] = time;
+                }
+            }
+
+            return list;
+        }
+
+        [LabelText("集合合并")]
+        public static List<T> List_Merge<T>(params List<T>[] needMergeList)
+        {
+            List<T> mergeList = new List<T>();
+
+            foreach (List<T> list in needMergeList)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    mergeList.Add(list[i]);
+                }
+            }
+
+            return mergeList;
+        }
+
+        [LabelText("获得继承类的所有子类")]
+        public static List<T> List_GetInheritAllSubclass<T>() where T : class
         {
             // var types = Assembly.GetCallingAssembly().GetTypes();
             var types = typeof(T).Assembly.GetTypes();
@@ -945,284 +609,207 @@ namespace DltFramework
             return cList;
         }
 
-        //StringBuilder字符串拼接
-        public static string StringBuilderString(params string[] strList)
+        [LabelText("集合删除重复项")]
+        public static List<T> List_RemoveRepeat<T>(List<T> currentList, List<T> targetList)
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (string str in strList)
+            for (int i = 0; i < targetList.Count; i++)
             {
-                sb.Append(str);
-            }
-
-            return sb.ToString();
-        }
-
-
-#if UNITY_EDITOR
-
-#endif
-    }
-
-    /// <summary>
-    /// 本地文件操作
-    /// </summary>
-    public static class FileOperation
-    {
-        /// <summary>
-        /// 保存文本信息到本地
-        /// </summary>
-        /// <param name="path">文件路径</param>
-        /// <param name="fileName">文件名称</param>
-        /// <param name="information">保存信息</param>
-        public static void SaveTextToLoad(string path, string fileName, string information)
-        {
-            if (Directory.Exists(path))
-            {
-            }
-            else
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            File.WriteAllText(DataFrameComponent.StringBuilderString(path, "/", fileName), information, new System.Text.UTF8Encoding(false));
-#if UNITY_EDITOR
-            UnityEditor.AssetDatabase.Refresh();
-#endif
-        }
-
-        public static void SaveTextToLoad(string path, string information)
-        {
-            if (File.Exists(path))
-            {
-            }
-            else
-            {
-                Directory.CreateDirectory(DataFrameComponent.GetPathDontContainFileName(path));
-            }
-
-            FileStream aFile = new FileStream(path, FileMode.Create);
-            //得到字符串的UTF8 数据流
-            information = Regex.Unescape(information);
-            byte[] bts = System.Text.Encoding.UTF8.GetBytes(information);
-            // StreamWriter sw = new StreamWriter(aFile, Encoding.UTF8);
-            // sw.WriteLine(information);
-            // sw.Close();
-            aFile.Write(bts, 0, bts.Length);
-            if (aFile != null)
-            {
-                //清空缓存
-                aFile.Flush();
-                // 关闭流
-                aFile.Close();
-                //销毁资源
-                aFile.Dispose();
-            }
-
-#if UNITY_EDITOR
-            UnityEditor.AssetDatabase.Refresh();
-#endif
-        }
-
-        /// <summary>
-        /// 保存文件到本地
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="information"></param>
-        public static void SaveFileToLocal(string path, string fileName, byte[] information, FileMode fileMode, int buffSize = 1024 * 1024)
-        {
-            FileStream aFile = new FileStream(DataFrameComponent.StringBuilderString(path, "/", fileName), fileMode, FileAccess.Write);
-            if (File.Exists(path))
-            {
-            }
-            else
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            //是否被完整除开
-            bool integer = information.Length % buffSize == 0;
-            int numberCycles = 0;
-            if (integer)
-            {
-                numberCycles = information.Length / buffSize;
-            }
-            else
-            {
-                numberCycles = information.Length / buffSize + 1;
-            }
-
-            for (int i = 0; i < numberCycles; i++)
-            {
-                if (integer)
+                if (currentList.Contains(targetList[i]))
                 {
-                    aFile.Write(information, i * buffSize, buffSize);
+                    currentList.Remove(targetList[i]);
+                }
+            }
+
+            return currentList;
+        }
+
+        [LabelText("值克隆")]
+        public static List<T> List_DataValueClone<T>(List<T> targetValue)
+        {
+            List<T> temp = new List<T>();
+            foreach (T t in targetValue)
+            {
+                temp.Add(t);
+            }
+
+            return temp;
+        }
+
+        #endregion
+
+        #region 图片
+
+        [LabelText("图片转byte数组")]
+        public static byte[] ImageToByte(Image img)
+        {
+            return img.sprite.texture.EncodeToPNG();
+        }
+
+        [LabelText("数据转精灵")]
+        public static Sprite ByteToSprite(byte[] imgByte, int spriteWidth, int spriteHeight)
+        {
+            Texture2D texture2D = new Texture2D(spriteWidth, spriteHeight);
+            texture2D.LoadImage(imgByte);
+            return Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height),
+                new Vector2(0.5f, 0.5f));
+        }
+
+        #endregion
+
+        #region 路径
+
+        [LabelText("获得所有文件的路径(.meta文件除外)")]
+        public static Dictionary<string, List<string>> Path_GetAllObjectsOnlyInAssets()
+        {
+            Dictionary<string, List<string>> assetsTypePathDic = new Dictionary<string, List<string>>();
+            DirectoryInfo direction = new DirectoryInfo("Assets");
+            FileInfo[] files = direction.GetFiles("*", SearchOption.AllDirectories);
+            for (int i = 0; i < files.Length; i++)
+            {
+                if (files[i].Name.EndsWith(".meta"))
+                {
+                    continue;
+                }
+
+                //后缀名
+                string extension = files[i].Extension.Replace(".", "");
+                //绝对路径
+                string absolutePath = files[i].FullName;
+                //相对路径
+                string relativePath = absolutePath.Substring(absolutePath.IndexOf("Assets", StringComparison.Ordinal));
+                if (!assetsTypePathDic.ContainsKey(extension))
+                {
+                    assetsTypePathDic.Add(extension, new List<string>() { relativePath });
                 }
                 else
                 {
-                    if (i < numberCycles - 1)
-                    {
-                        aFile.Write(information, i * buffSize, buffSize);
-                    }
-                    else
-                    {
-                        aFile.Write(information, i * buffSize, information.Length - i * buffSize);
-                    }
+                    assetsTypePathDic[extension].Add(relativePath);
                 }
             }
 
-            // DebugFrameComponent.Log(fileName + "写入次数" + numberCycles);
-            // 关闭流
-            aFile.Close();
+            return assetsTypePathDic;
         }
 
-        /// <summary>
-        /// 读取本地文件信息
-        /// </summary>
-        /// <param name="path">路径</param>
-        /// <param name="fileName">文件名</param>
-        /// <returns></returns>
-        public static string GetTextToLoad(string path, string fileName)
+        [LabelText("返回所有类路径")]
+        public static List<string> Path_GetAllScriptsPathOnlyInAssets()
         {
-//            UnityEngine.DebugFrameComponent.Log(Path + "/" + FileName);
-            if (Directory.Exists(path))
+            Dictionary<string, List<string>> allObject = Path_GetAllObjectsOnlyInAssets();
+            if (allObject.ContainsKey("cs"))
             {
-            }
-            else
-            {
-                DebugFrameComponent.LogError("文件不存在:" + path + "/" + fileName);
-            }
-
-            FileStream aFile = new FileStream(DataFrameComponent.StringBuilderString(path, "/", fileName), FileMode.Open);
-            StreamReader sr = new StreamReader(aFile);
-            var textData = sr.ReadToEnd();
-            sr.Close();
-            return textData;
-        }
-
-        /// <summary>
-        /// 读取本地文件信息
-        /// </summary>
-        /// <param name="path">路径</param>
-        /// <returns></returns>
-        public static string GetTextToLoad(string path)
-        {
-            if (File.Exists(path))
-            {
-            }
-            else
-            {
-                DebugFrameComponent.LogError("文件不存在:" + path);
-            }
-
-            FileStream aFile = new FileStream(path, FileMode.Open);
-            StreamReader sr = new StreamReader(aFile);
-            var textData = sr.ReadToEnd();
-            sr.Close();
-            return textData;
-        }
-
-        /// <summary>
-        /// 转换为本地路径
-        /// </summary>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public static string ConvertToLocalPath(string path)
-        {
-            return path.Remove(0, path.IndexOf("Assets", StringComparison.Ordinal));
-        }
-
-        /// <summary>获取文件的md5校验码</summary>
-        public static string GetMD5HashFromFile(string fileName)
-        {
-            if (File.Exists(fileName))
-            {
-                FileStream file = new FileStream(fileName, FileMode.Open);
-                MD5 md5 = new MD5CryptoServiceProvider();
-                byte[] retVal = md5.ComputeHash(file);
-                file.Close();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < retVal.Length; i++)
-                {
-                    sb.Append(retVal[i].ToString("x2"));
-                }
-
-                return sb.ToString();
+                return allObject["cs"];
             }
 
             return null;
         }
 
-        public static long GetFileSize(string fileName)
+        [LabelText("返回所有类名称")]
+        public static List<string> Path_GetAllScriptsNameOnlyInAssets()
         {
-            if (File.Exists(fileName))
+            List<string> scriptsPath = Path_GetAllScriptsPathOnlyInAssets();
+            List<string> scriptName = new List<string>();
+            if (scriptsPath != null)
             {
-                FileStream file = new FileStream(fileName, FileMode.Open);
-                long size = file.Length;
-                file.Dispose();
-                return size;
-            }
-
-            return 0;
-        }
-
-        public static string GetFileByte(string filePath, int startIndex, int endIndex)
-        {
-            string byteContent = "";
-            byte[] content = File.ReadAllBytes(filePath);
-            for (int i = 0; i < content.Length; i++)
-            {
-                if (i >= startIndex && i < endIndex)
+                foreach (string scriptPath in scriptsPath)
                 {
-                    byteContent = DataFrameComponent.StringBuilderString(byteContent, content[i].ToString());
+                    List<string> scriptPathSpice = new List<string>(scriptPath.Split('\\'));
+                    scriptName.Add(scriptPathSpice[scriptPathSpice.Count - 1]);
                 }
             }
 
-            return byteContent;
+            return scriptName;
         }
 
-        /// <summary>
-        /// 拷贝文件夹
-        /// </summary>
-        /// <param name="sourceDirName"></param>
-        /// <param name="destDirName"></param>
-        public static void Copy(string sourceDirName, string destDirName)
+        [LabelText("获得指定类型文件路径")]
+        public static List<string> Path_GetSpecifyTypeOnlyInAssets(string fileExtension)
         {
-            if (Directory.Exists(sourceDirName))
+            if (Path_GetAllObjectsOnlyInAssets().ContainsKey(fileExtension))
             {
-                if (!Directory.Exists(destDirName))
-                {
-                    Directory.CreateDirectory(destDirName);
-                }
+                return Path_GetAllObjectsOnlyInAssets()[fileExtension];
+            }
 
-                foreach (string item in Directory.GetFiles(sourceDirName))
+            return new List<string>();
+        }
+
+        [LabelText("获得指定路径下指定类型的所有物体路径")]
+        public static List<string> Path_GetGetSpecifyPathInAllType(string path, string type)
+        {
+            List<string> allPath = new List<string>();
+            foreach (KeyValuePair<string, List<string>> pair in Path_GetAllObjectsOnlyInAssets())
+            {
+                if (pair.Key == type)
                 {
-                    if (item.Contains("meta"))
+                    foreach (string filePath in pair.Value)
                     {
-                        continue;
+                        if (Path_GetPathDontContainFileName(filePath).Contains(path))
+                        {
+                            allPath.Add(filePath);
+                        }
                     }
-
-                    if (destDirName[destDirName.Length - 1] != '/')
-                    {
-                        destDirName = DataFrameComponent.StringBuilderString(destDirName, "/");
-                    }
-
-                    File.Copy(item, DataFrameComponent.StringBuilderString(destDirName, "/", Path.GetFileName(item)), true);
-                }
-
-                foreach (string item in Directory.GetDirectories(sourceDirName))
-                {
-                    Copy(DataFrameComponent.StringBuilderString(item, "/"), DataFrameComponent.StringBuilderString(destDirName, "/", DataFrameComponent.GetPathFileName(item)));
                 }
             }
-            else
-            {
-                DebugFrameComponent.Log(sourceDirName + "不存在");
-            }
+
+            return allPath;
         }
 
-        public static void CopyFile(string sourcePath, string destinationPath)
+        [LabelText("获得指定类型文件")]
+        public static List<T> Path_GetSpecifyTypeOnlyInAssets<T>(List<string> filePath) where T : Object
         {
-            File.Copy(sourcePath, destinationPath, true);
+            List<T> specifyType = new List<T>();
+#if UNITY_EDITOR
+
+            foreach (string path in filePath)
+            {
+                specifyType.Add(UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path));
+            }
+#endif
+
+            return specifyType;
         }
+
+        [LabelText("获得文件类型")]
+        public static string Path_GetPathFileType(string path)
+        {
+            FileInfo fileInfo = new FileInfo(path);
+            return fileInfo.Extension.Replace(".", "");
+        }
+
+        [LabelText("获得文件名称")]
+        public static string Path_GetPathFileName(string path)
+        {
+            FileInfo fileInfo = new FileInfo(path);
+            return fileInfo.Name;
+        }
+
+        [LabelText("回文件名称,不包含类型")]
+        public static string Path_GetPathFileNameDontContainFileType(string path)
+        {
+            return Path.GetFileNameWithoutExtension(path);
+        }
+
+        [LabelText("获得文件路径,不包包含文件名称")]
+        public static string Path_GetPathDontContainFileName(string path)
+        {
+            return Path.GetDirectoryName(path);
+        }
+
+        [LabelText("获得上级目录")]
+        public static string Path_GetParentDirectory(string path, int hierarchy)
+        {
+            string newPath = path;
+            for (int i = 0; i < hierarchy; i++)
+            {
+                newPath = Path.GetDirectoryName(newPath);
+            }
+
+            return newPath;
+        }
+
+        #endregion
+
+
+#if UNITY_EDITOR
+
+#endif
     }
+   
 }

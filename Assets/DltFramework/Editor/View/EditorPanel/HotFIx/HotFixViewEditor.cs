@@ -49,16 +49,16 @@ namespace DltFramework
 #endif
             }
 
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
                 Application.streamingAssetsPath + "/HotFix/HotFixCode/" + "HotFixCode.dll.bytes", true);
             string path = "Assets/StreamingAssets/HotFix/HotFixCode/HotFixCode.dll.bytes";
 
             HotFixAssetConfig hotFixAssetConfig = new HotFixAssetConfig();
             hotFixAssetConfig.name = "HotFixCode.dll.bytes";
-            hotFixAssetConfig.md5 = FileOperation.GetMD5HashFromFile(path);
-            hotFixAssetConfig.size = FileOperation.GetFileSize(path).ToString();
+            hotFixAssetConfig.md5 = FileOperationComponent.GetMD5HashFromFile(path);
+            hotFixAssetConfig.size = FileOperationComponent.GetFileSize(path).ToString();
             hotFixAssetConfig.path = "HotFix/HotFixCode/";
-            FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFix/HotFixCodeConfig/" + "HotFixCodeConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
+            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/HotFixCodeConfig/" + "HotFixCodeConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
             Debug.Log("HotFixCode配置输出");
 
             OnLoadConfig();
@@ -94,10 +94,10 @@ namespace DltFramework
             File.Delete(filePath + ".manifest");
             HotFixAssetConfig hotFixAssetConfig = new HotFixAssetConfig();
             hotFixAssetConfig.name = "hotfixview"; //ab包打包后自带转换成小写
-            hotFixAssetConfig.md5 = FileOperation.GetMD5HashFromFile(filePath);
-            hotFixAssetConfig.size = FileOperation.GetFileSize(filePath).ToString();
+            hotFixAssetConfig.md5 = FileOperationComponent.GetMD5HashFromFile(filePath);
+            hotFixAssetConfig.size = FileOperationComponent.GetFileSize(filePath).ToString();
             hotFixAssetConfig.path = "HotFix/HotFixView/";
-            FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFix/HotFixViewConfig/" + "HotFixViewConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
+            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/HotFixViewConfig/" + "HotFixViewConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
             OnLoadConfig();
         }
 
@@ -113,7 +113,7 @@ namespace DltFramework
         public override void OnSaveConfig()
         {
             HotFixViewFilePath = AssetDatabase.GetAssetPath(HotFixView);
-            FileOperation.SaveTextToLoad(RuntimeGlobal.assetRootPath, "HotFixView.json", JsonUtility.ToJson(this));
+            FileOperationComponent.SaveTextToLoad(RuntimeGlobal.assetRootPath, "HotFixView.json", JsonUtility.ToJson(this));
         }
 
         public override void OnLoadConfig()
@@ -123,7 +123,7 @@ namespace DltFramework
                 return;
             }
 
-            HotFixViewEditor hotFixViewEditor = JsonMapper.ToObject<HotFixViewEditor>(FileOperation.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixView.json"));
+            HotFixViewEditor hotFixViewEditor = JsonMapper.ToObject<HotFixViewEditor>(FileOperationComponent.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixView.json"));
             this.HotFixView = AssetDatabase.LoadAssetAtPath<Object>(hotFixViewEditor.HotFixViewFilePath);
         }
 

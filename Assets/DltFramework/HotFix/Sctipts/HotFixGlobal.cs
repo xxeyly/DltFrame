@@ -168,6 +168,18 @@ public class HotFixGlobal
         return 0;
     }
 
+    //StringBuilder字符串拼接
+    public static string StringBuilderString(params string[] strList)
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (string str in strList)
+        {
+            sb.Append(str);
+        }
+
+        return sb.ToString();
+    }
+
     //获得数据的MD5值
     public static string GetMD5HashByte(byte[] fileByte)
     {

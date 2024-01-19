@@ -135,36 +135,6 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
     {
         //本地下载路径
         string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt";
-        /*
-        HotFixDebug.Log("File:" + File.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
-        //获取不到
-        //HotFixDebug.Log("File Jar:" + File.Exists(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
-        HotFixDebug.Log("HotFixDownPath内容:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/", "HotFixDownPath.txt"));
-        //获取不到
-        // HotFixDebug.Log("HotFixDownPath内容 Jar:" + HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/", "HotFixDownPath.txt"));
-        HotFixDebug.Log("HotFixDownPathMd5:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt"));
-        //获取不到
-        // HotFixDebug.Log("HotFixDownPathMd5 Jar:" + HotFixGlobal.GetMD5HashFromFile(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt"));
-        //获取不到
-        /*UnityWebRequest hotFixPathLoadLocalFile1 = UnityWebRequest.Get(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/" + "HotFixDownPath.txt");
-        yield return hotFixPathLoadLocalFile1.SendWebRequest();
-        HotFixDebug.Log("UnityWebRequest:" + hotFixPathLoadLocalFile1.responseCode);#1#
-
-        UnityWebRequest hotFixPathLoadLocalFile2 = UnityWebRequest.Get(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt");
-        yield return hotFixPathLoadLocalFile2.SendWebRequest();
-        HotFixDebug.Log("UnityWebRequest Jar:" + hotFixPathLoadLocalFile2.responseCode);
-
-
-        UnityWebRequest hotFixPathLoadLocalFile3 = UnityWebRequest.Get(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt");
-        yield return hotFixPathLoadLocalFile3.SendWebRequest();
-        HotFixDebug.Log("UnityWebRequest streamingAssetsPath:" + hotFixPathLoadLocalFile3.responseCode);
-        //获取不到
-        // HotFixDebug.Log("File streamingAssetsPath:" + File.Exists(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt"));
-        //获取不到
-        // HotFixDebug.Log("File Md5 streamingAssetsPath:" + HotFixGlobal.GetMD5HashFromFile(Application.streamingAssetsPath + "/HotFix/" + "HotFixDownPath.txt"));
-        */
-
-
         UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
         yield return hotFixPathLoadLocalFile.SendWebRequest();
         if (hotFixPathLoadLocalFile.responseCode == 200)

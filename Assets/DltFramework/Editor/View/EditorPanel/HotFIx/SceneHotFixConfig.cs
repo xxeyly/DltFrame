@@ -55,10 +55,10 @@ namespace DltFramework
             {
                 if (NormalSceneAssetBundleAsset.name != SceneManager.GetActiveScene().name)
                 {
-                    List<string> allScenePath = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("unity");
+                    List<string> allScenePath = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("unity");
                     for (int i = 0; i < allScenePath.Count; i++)
                     {
-                        if (DataFrameComponent.GetPathFileNameDontContainFileType(allScenePath[i]) == NormalSceneAssetBundleAsset.name)
+                        if (DataFrameComponent.Path_GetPathFileNameDontContainFileType(allScenePath[i]) == NormalSceneAssetBundleAsset.name)
                         {
                             UnityEditor.SceneManagement.EditorSceneManager.OpenScene(allScenePath[i]);
                         }
@@ -118,10 +118,10 @@ namespace DltFramework
             {
                 if (CopySceneAssetBundleAsset.name != SceneManager.GetActiveScene().name)
                 {
-                    List<string> allScenePath = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("unity");
+                    List<string> allScenePath = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("unity");
                     for (int i = 0; i < allScenePath.Count; i++)
                     {
-                        if (DataFrameComponent.GetPathFileNameDontContainFileType(allScenePath[i]) == NormalSceneAssetBundleAsset.name)
+                        if (DataFrameComponent.Path_GetPathFileNameDontContainFileType(allScenePath[i]) == NormalSceneAssetBundleAsset.name)
                         {
                             UnityEditor.SceneManagement.EditorSceneManager.OpenScene(allScenePath[i]);
                         }
@@ -186,7 +186,7 @@ namespace DltFramework
                 return;
             }
 
-            List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.GetAllObjectsInScene<HotFixAssetPathConfig>();
+            List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
             CopySceneAssetBundleAsset.scenePrefabPaths.Clear();
             //应用预制体,并且保存路径
             foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetPathConfigs)
@@ -304,7 +304,7 @@ namespace DltFramework
 //视图重新排序
         private void ViewSort()
         {
-            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>();
+            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
             List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
 
             for (int i = 0; i < sceneAllBaseWindow.Count; i++)

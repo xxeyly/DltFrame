@@ -41,7 +41,7 @@ namespace DltFramework
         public async UniTask<string> InstantiateHotFixAssetBundle()
         {
             //本地字体路径
-            string localFontPath = DataFrameComponent.StringBuilderString(
+            string localFontPath = DataFrameComponent.String_BuilderString(
                 RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundlePath, hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundleName);
             AssetBundle fontAssetBundle = null;
             if (File.Exists(localFontPath))
@@ -53,8 +53,8 @@ namespace DltFramework
             //加载内容
             for (int i = 0; i < hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
             {
-                string assetBundlePath = DataFrameComponent.StringBuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/", hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath);
-                string assetBundleName = DataFrameComponent.AllCharToLower(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
+                string assetBundlePath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/", hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath);
+                string assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
 
                 AssetBundle tempHotFixAssetBundle = await AssetBundle.LoadFromFileAsync(assetBundlePath + assetBundleName);
                 currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
@@ -106,7 +106,7 @@ namespace DltFramework
         /// <param name="sceneName"></param>
         public async UniTask<string> LoadHotFixSceneConfig(string sceneName)
         {
-            UnityWebRequest request = UnityWebRequest.Get(DataFrameComponent.StringBuilderString(RuntimeGlobal.GetDeviceStoragePath(true), "/HotFixRuntime/HotFixAssetBundleConfig/", sceneName, ".json"));
+            UnityWebRequest request = UnityWebRequest.Get(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(true), "/HotFixRuntime/HotFixAssetBundleConfig/", sceneName, ".json"));
             await request.SendWebRequest();
             string hotFixAssetConfig = request.downloadHandler.text;
             hotFixRuntimeSceneAssetBundleConfigs = JsonUtility.FromJson<HotFixRuntimeSceneAssetBundleConfig>(hotFixAssetConfig);
@@ -123,7 +123,7 @@ namespace DltFramework
             if (!Application.CanStreamedLevelBeLoaded(sceneName))
             {
                 //加载场景
-                await AssetBundle.LoadFromFileAsync(DataFrameComponent.StringBuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/HotFixRuntime/HotFixAssetBundle/", sceneName, "/scene/", sceneName));
+                await AssetBundle.LoadFromFileAsync(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/HotFixRuntime/HotFixAssetBundle/", sceneName, "/scene/", sceneName));
             }
 
             return string.Empty;

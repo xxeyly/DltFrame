@@ -34,7 +34,7 @@ namespace DltFramework
                         Rect viewNameRect;
                         if (GlobalHierarchy.HierarchyContentFollow)
                         {
-                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataFrameComponent.CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
+                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataFrameComponent.Hierarchy_CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
                         }
                         else
                         {

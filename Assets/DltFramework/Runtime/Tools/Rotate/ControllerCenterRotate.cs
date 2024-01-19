@@ -105,7 +105,7 @@ namespace DltFramework
 
             distance = Vector3.Distance(centerTarget.position, rotateTarget.transform.position);
             targetDistance = Vector3.Distance(centerTarget.position, rotateTarget.transform.position);
-            _startPos = DataFrameComponent.GetInspectorEuler(rotateTarget.transform);
+            _startPos = DataFrameComponent.Hierarchy_GetInspectorEuler(rotateTarget.transform);
             // _startPos = rotateTarget.transform.localEulerAngles.y;
 
             x = rotateTarget.transform.localEulerAngles.y;
@@ -253,7 +253,7 @@ namespace DltFramework
                         _yDis = (_currentMousePos.y - _oldMousePos.y) * movSpeed;
                         _xDis = (_currentMousePos.x - _oldMousePos.x) * movSpeed;
                         _oldMousePos = _currentMousePos;
-                        Vector3 cameraValue = DataFrameComponent.GetInspectorEuler(rotateTarget.transform);
+                        Vector3 cameraValue = DataFrameComponent.Hierarchy_GetInspectorEuler(rotateTarget.transform);
                         Quaternion rot = Quaternion.Euler(cameraValue.x, cameraValue.y, 0);
                         if (moveReversal)
                         {

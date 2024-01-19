@@ -35,7 +35,7 @@ namespace DltFramework
         public override void FrameSceneInitComponent()
         {
             //获得当前场景中的所有视图
-            List<BaseWindow> loadSceneBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>(GameRootStart.Instance.loadScene.name);
+            List<BaseWindow> loadSceneBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>(GameRootStart.Instance.loadScene.name);
             foreach (BaseWindow window in loadSceneBaseWindow)
             {
                 //子类或者已经存在的视图不添加

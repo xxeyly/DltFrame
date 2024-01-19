@@ -28,7 +28,7 @@ namespace DltFramework
         public override void StartComponent()
         {
             Instance = GetComponent<AnimatorControllerManager>();
-            allAnimController = DataFrameComponent.GetAllObjectsInScene<AnimatorControllerBase>();
+            allAnimController = DataFrameComponent.Hierarchy_GetAllObjectsInScene<AnimatorControllerBase>();
             foreach (AnimatorControllerBase animatorControllerBase in allAnimController)
             {
                 animatorControllerBase.Init();

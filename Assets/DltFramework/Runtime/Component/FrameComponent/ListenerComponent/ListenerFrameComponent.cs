@@ -627,17 +627,17 @@ namespace DltFramework
 
         public void GetAllAddListenerEvent()
         {
-            foreach (SceneComponent sceneComponent in DataFrameComponent.GetAllObjectsInScene<SceneComponent>())
+            foreach (SceneComponent sceneComponent in DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponent>())
             {
                 ReflexBinEventListener(sceneComponent);
             }
 
-            foreach (SceneComponentInit sceneComponentInit in DataFrameComponent.GetAllObjectsInScene<SceneComponentInit>())
+            foreach (SceneComponentInit sceneComponentInit in DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponentInit>())
             {
                 ReflexBinEventListener(sceneComponentInit);
             }
 
-            foreach (BaseWindow baseWindow in DataFrameComponent.GetAllObjectsInScene<BaseWindow>())
+            foreach (BaseWindow baseWindow in DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>())
             {
                 if (baseWindow.GetComponent<ChildBaseWindow>())
                 {

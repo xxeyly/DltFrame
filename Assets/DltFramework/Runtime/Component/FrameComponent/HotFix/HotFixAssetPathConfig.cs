@@ -18,9 +18,9 @@ public class HotFixAssetPathConfig : MonoBehaviour
     [GUIColor(0, 1, 0)]
     public void SetPathAndApplyPrefab()
     {
-        generateHierarchyPath = DataFrameComponent.GetComponentPath(transform, false);
+        generateHierarchyPath = DataFrameComponent.Hierarchy_GetTransformHierarchy(transform, false);
         prefabPath = UnityEditor.PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
-        string prefabPathDirectory = DataFrameComponent.StringBuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType());
+        string prefabPathDirectory = DataFrameComponent.String_BuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType());
         if (prefabPath == string.Empty)
         {
             if (!Directory.Exists(prefabPathDirectory))
@@ -30,8 +30,8 @@ public class HotFixAssetPathConfig : MonoBehaviour
             }
         }
 
-        assetBundlePath = DataFrameComponent.StringBuilderString("HotFixRuntime/HotFixAssetBundle", DataFrameComponent.AllCharToLower(prefabPath.Replace("Assets/HotFixPrefabs/Scene", "").Replace(".prefab", "")));
-        prefabPath = DataFrameComponent.StringBuilderString(prefabPathDirectory, "/", gameObject.name, ".prefab");
+        assetBundlePath = DataFrameComponent.String_BuilderString("HotFixRuntime/HotFixAssetBundle", DataFrameComponent.String_AllCharToLower(prefabPath.Replace("Assets/HotFixPrefabs/Scene", "").Replace(".prefab", "")));
+        prefabPath = DataFrameComponent.String_BuilderString(prefabPathDirectory, "/", gameObject.name, ".prefab");
         ApplyPrefab();
     }
 

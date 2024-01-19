@@ -48,9 +48,9 @@ namespace DltFramework
         private void OnEnable()
         {
             //场景中只有一个GameRootStart
-            if (DataFrameComponent.GetAllObjectsInScene<GameRootStart>().Count == 1)
+            if (DataFrameComponent.Hierarchy_GetAllObjectsInScene<GameRootStart>().Count == 1)
             {
-                if (DataFrameComponent.GetAllObjectsInScene<GameRootStart>()[0].dontDestroyOnLoad)
+                if (DataFrameComponent.Hierarchy_GetAllObjectsInScene<GameRootStart>()[0].dontDestroyOnLoad)
                 {
                     return;
                 }
@@ -58,7 +58,7 @@ namespace DltFramework
             //多余GameRootStart销毁
             else
             {
-                foreach (GameRootStart gameRootStart in DataFrameComponent.GetAllObjectsInScene<GameRootStart>())
+                foreach (GameRootStart gameRootStart in DataFrameComponent.Hierarchy_GetAllObjectsInScene<GameRootStart>())
                 {
                     if (!gameRootStart.dontDestroyOnLoad)
                     {
@@ -73,7 +73,7 @@ namespace DltFramework
             dontDestroyOnLoad = true;
             Instance = GetComponent<GameRootStart>();
             DebugFrameComponent.Log("框架初始化");
-            frameComponent = DataFrameComponent.GetAllObjectsInScene<FrameComponent>("DontDestroyOnLoad");
+            frameComponent = DataFrameComponent.Hierarchy_GetAllObjectsInScene<FrameComponent>("DontDestroyOnLoad");
             for (int i = 0; i < frameComponent.Count; i++)
             {
                 frameComponent[i].FrameInitComponent();
@@ -81,7 +81,7 @@ namespace DltFramework
 
             DebugFrameComponent.Log("框架初始化完毕");
             //框架组件开启
-            dontDestroyFrameSceneComponents = DataFrameComponent.GetAllObjectsInScene<SceneComponent>("DontDestroyOnLoad");
+            dontDestroyFrameSceneComponents = DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponent>("DontDestroyOnLoad");
             if (dontDestroyFrameSceneComponents.Count > 0)
             {
                 DebugFrameComponent.Log("不摧毁的SceneComponent加载完毕");
@@ -94,7 +94,7 @@ namespace DltFramework
 
             if (frameSceneInitStartSingletons.Count > 0)
             {
-                frameSceneInitStartSingletons = DataFrameComponent.GetAllObjectsInScene<SceneComponentInit>("DontDestroyOnLoad");
+                frameSceneInitStartSingletons = DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponentInit>("DontDestroyOnLoad");
                 for (int i = 0; i < frameSceneInitStartSingletons.Count; i++)
                 {
                     frameSceneInitStartSingletons[i].InitComponent();
@@ -155,7 +155,7 @@ namespace DltFramework
         //旧场景摧毁
         public void OldSceneDestroy(string destroySceneName)
         {
-            List<SceneComponent> destroySceneComponent = DataFrameComponent.GetAllObjectsInScene<SceneComponent>(destroySceneName);
+            List<SceneComponent> destroySceneComponent = DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponent>(destroySceneName);
             //场景组件结束
             foreach (SceneComponent sceneComponent in destroySceneComponent)
             {
@@ -172,7 +172,7 @@ namespace DltFramework
             }
 
             //场景初始化组件移除
-            List<SceneComponentInit> destroySceneComponentInit = DataFrameComponent.GetAllObjectsInScene<SceneComponentInit>(destroySceneName);
+            List<SceneComponentInit> destroySceneComponentInit = DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponentInit>(destroySceneName);
             foreach (SceneComponentInit sceneComponentInit in destroySceneComponentInit)
             {
                 if (sceneInitStartSingletons.Contains(sceneComponentInit))
@@ -223,7 +223,7 @@ namespace DltFramework
         [LabelText("开启场景组件")]
         public void SceneComponentStart(Scene scene)
         {
-            sceneComponents = DataFrameComponent.GetAllObjectsInScene<SceneComponent>(scene.name);
+            sceneComponents = DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponent>(scene.name);
             for (int i = 0; i < sceneComponents.Count; i++)
             {
                 sceneComponents[i].StartComponent();
@@ -233,7 +233,7 @@ namespace DltFramework
         [LabelText("开启场景初始化组件")]
         public void SceneComponentInitStart(Scene scene)
         {
-            sceneInitStartSingletons = DataFrameComponent.GetAllObjectsInScene<SceneComponentInit>(scene.name);
+            sceneInitStartSingletons = DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponentInit>(scene.name);
             for (int i = 0; i < sceneInitStartSingletons.Count; i++)
             {
                 sceneInitStartSingletons[i].InitComponent();
@@ -244,7 +244,7 @@ namespace DltFramework
         [LabelText("结束场景组件")]
         private void SceneComponentEnd()
         {
-            List<SceneComponent> tempSceneComponent = DataFrameComponent.GetAllObjectsInScene<SceneComponent>();
+            List<SceneComponent> tempSceneComponent = DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponent>();
             for (int i = 0; i < tempSceneComponent.Count; i++)
             {
                 tempSceneComponent[i].EndComponent();

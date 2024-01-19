@@ -100,7 +100,7 @@ namespace DltFramework
         [MenuItem("Xframe/视图重新排序索引")]
         public static void ViewSortSiblingIndex()
         {
-            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>();
+            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
             foreach (BaseWindow baseWindow in sceneAllBaseWindow)
             {
                 if (!baseWindow.GetComponent<ChildBaseWindow>())
@@ -113,7 +113,7 @@ namespace DltFramework
         [MenuItem("Xframe/视图重新排序")]
         public static void ViewSort()
         {
-            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>();
+            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
             List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
 
             for (int i = 0; i < sceneAllBaseWindow.Count; i++)

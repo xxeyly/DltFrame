@@ -126,10 +126,10 @@ namespace DltFramework
 
             //这里保存两份是因为,一份是在StreamingAssets下,一份是在UnStreamingAssets下,这样可以保证在打包时,引用StreamingAssets路径下的
             //编辑器模式下,引用UnStreamingAssets路径下的,打包后StreamingAssets路径下只有HotFixDownPath.txt和localIsUpdate.txt两个文件
-            FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "HotFixDownPath.txt", HotFixDownPath);
-            FileOperation.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "HotFixDownPath.txt", HotFixDownPath);
-            FileOperation.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "localIsUpdate.txt", localIsUpdate.ToString());
-            FileOperation.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "localIsUpdate.txt", localIsUpdate.ToString());
+            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "HotFixDownPath.txt", HotFixDownPath);
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "HotFixDownPath.txt", HotFixDownPath);
+            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "localIsUpdate.txt", localIsUpdate.ToString());
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "localIsUpdate.txt", localIsUpdate.ToString());
 
             List<string> hotFixServerResources = new List<string>();
             foreach (NormalSceneAssetBundleAsset normalSceneAssetBundleAsset in NormalSceneAssetBundleAssets)
@@ -137,7 +137,7 @@ namespace DltFramework
                 hotFixServerResources.Add(normalSceneAssetBundleAsset.name);
             }
 
-            FileOperation.SaveTextToLoad("Assets/UnStreamingAssets/HotFixRuntime/", "HotFixServerResourcesCount.json", JsonMapper.ToJson(hotFixServerResources));
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFixRuntime/", "HotFixServerResourcesCount.json", JsonMapper.ToJson(hotFixServerResources));
 
             if (File.Exists("Assets/UnStreamingAssets/HotFixRuntime/HotFixRuntime"))
             {
@@ -152,36 +152,36 @@ namespace DltFramework
             AssetDatabase.Refresh();
             if (Directory.Exists(targetOutPath))
             {
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/HotFixCode", targetOutPath + "/HotFix/HotFixCode");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/HotFixCodeConfig", targetOutPath + "/HotFix/HotFixCodeConfig");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/HotFixView", targetOutPath + "/HotFix/HotFixView");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/HotFixViewConfig", targetOutPath + "/HotFix/HotFixViewConfig");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/Metadata", targetOutPath + "/HotFix/Metadata");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/MetadataConfig", targetOutPath + "/HotFix/MetadataConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixCode", targetOutPath + "/HotFix/HotFixCode");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixCodeConfig", targetOutPath + "/HotFix/HotFixCodeConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixView", targetOutPath + "/HotFix/HotFixView");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixViewConfig", targetOutPath + "/HotFix/HotFixViewConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/Metadata", targetOutPath + "/HotFix/Metadata");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/MetadataConfig", targetOutPath + "/HotFix/MetadataConfig");
 
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/Assembly", targetOutPath + "/HotFixRuntime/Assembly");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/AssemblyConfig", targetOutPath + "/HotFixRuntime/AssemblyConfig");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundle", targetOutPath + "/HotFixRuntime/GameRootStartAssetBundle");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundleConfig", targetOutPath + "/HotFixRuntime/GameRootStartAssetBundleConfig");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundle", targetOutPath + "/HotFixRuntime/HotFixAssetBundle");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundleConfig", targetOutPath + "/HotFixRuntime/HotFixAssetBundleConfig");
-                FileOperation.CopyFile("Assets/UnStreamingAssets/HotFixRuntime/HotFixServerResourcesCount.json", targetOutPath + "/HotFixRuntime/HotFixServerResourcesCount.json");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/Assembly", targetOutPath + "/HotFixRuntime/Assembly");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/AssemblyConfig", targetOutPath + "/HotFixRuntime/AssemblyConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundle", targetOutPath + "/HotFixRuntime/GameRootStartAssetBundle");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundleConfig", targetOutPath + "/HotFixRuntime/GameRootStartAssetBundleConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundle", targetOutPath + "/HotFixRuntime/HotFixAssetBundle");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundleConfig", targetOutPath + "/HotFixRuntime/HotFixAssetBundleConfig");
+                FileOperationComponent.CopyFile("Assets/UnStreamingAssets/HotFixRuntime/HotFixServerResourcesCount.json", targetOutPath + "/HotFixRuntime/HotFixServerResourcesCount.json");
                 //备份
                 string backupVersion = "/Backups_" + targetResourceVersion.x + "." + targetResourceVersion.y + "." + targetResourceVersion.z;
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/HotFixCode", targetOutPath + backupVersion + "/HotFix/HotFixCode");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/HotFixCodeConfig", targetOutPath + backupVersion + "/HotFix/HotFixCodeConfig");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/HotFixView", targetOutPath + backupVersion + "/HotFix/HotFixView");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/HotFixViewConfig", targetOutPath + backupVersion + "/HotFix/HotFixViewConfig");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/Metadata", targetOutPath + backupVersion + "/HotFix/Metadata");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFix/MetadataConfig", targetOutPath + backupVersion + "/HotFix/MetadataConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixCode", targetOutPath + backupVersion + "/HotFix/HotFixCode");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixCodeConfig", targetOutPath + backupVersion + "/HotFix/HotFixCodeConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixView", targetOutPath + backupVersion + "/HotFix/HotFixView");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixViewConfig", targetOutPath + backupVersion + "/HotFix/HotFixViewConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/Metadata", targetOutPath + backupVersion + "/HotFix/Metadata");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/MetadataConfig", targetOutPath + backupVersion + "/HotFix/MetadataConfig");
 
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/Assembly", targetOutPath + backupVersion + "/HotFixRuntime/Assembly");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/AssemblyConfig", targetOutPath + backupVersion + "/HotFixRuntime/AssemblyConfig");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundle", targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundle");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundleConfig", targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundleConfig");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundle", targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundle");
-                FileOperation.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundleConfig", targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundleConfig");
-                FileOperation.CopyFile("Assets/UnStreamingAssets/HotFixRuntime/HotFixServerResourcesCount.json", targetOutPath + backupVersion + "/HotFixRuntime/HotFixServerResourcesCount.json");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/Assembly", targetOutPath + backupVersion + "/HotFixRuntime/Assembly");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/AssemblyConfig", targetOutPath + backupVersion + "/HotFixRuntime/AssemblyConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundle", targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundle");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundleConfig", targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundleConfig");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundle", targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundle");
+                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundleConfig", targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundleConfig");
+                FileOperationComponent.CopyFile("Assets/UnStreamingAssets/HotFixRuntime/HotFixServerResourcesCount.json", targetOutPath + backupVersion + "/HotFixRuntime/HotFixServerResourcesCount.json");
             }
 
             OnLoadConfig();
@@ -212,7 +212,7 @@ namespace DltFramework
                 NormalSceneAssetBundleAssetsPath.Add(AssetDatabase.GetAssetPath(normalSceneAssetBundleAsset));
             }
 
-            FileOperation.SaveTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json", JsonUtility.ToJson(this));
+            FileOperationComponent.SaveTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json", JsonUtility.ToJson(this));
         }
 
         public override void OnLoadConfig()
@@ -222,7 +222,7 @@ namespace DltFramework
                 return;
             }
 
-            HotFixCollect hotFixCollect = JsonUtil.FromJson<HotFixCollect>(FileOperation.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
+            HotFixCollect hotFixCollect = JsonUtil.FromJson<HotFixCollect>(FileOperationComponent.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
             this.localIsUpdate = hotFixCollect.localIsUpdate;
             this.HotFixDownPath = hotFixCollect.HotFixDownPath;
             this.targetResourceVersion = hotFixCollect.targetResourceVersion;
@@ -284,10 +284,10 @@ namespace DltFramework
             File.Delete(filePath + ".manifest");
             HotFixAssetConfig hotFixAssetConfig = new HotFixAssetConfig();
             hotFixAssetConfig.name = "hotfixview"; //ab包打包后自带转换成小写
-            hotFixAssetConfig.md5 = FileOperation.GetMD5HashFromFile(filePath);
-            hotFixAssetConfig.size = FileOperation.GetFileSize(filePath).ToString();
+            hotFixAssetConfig.md5 = FileOperationComponent.GetMD5HashFromFile(filePath);
+            hotFixAssetConfig.size = FileOperationComponent.GetFileSize(filePath).ToString();
             hotFixAssetConfig.path = "HotFix/HotFixView/";
-            FileOperation.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/HotFixViewConfig/" + "HotFixViewConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/HotFixViewConfig/" + "HotFixViewConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
             Debug.Log("HotFixView配置输出");
 
             OnLoadConfig();
@@ -324,16 +324,16 @@ namespace DltFramework
 #endif
             }
 
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
                 RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + "HotFixCode.dll.bytes", true);
             string path = "Assets/UnStreamingAssets/HotFix/HotFixCode/HotFixCode.dll.bytes";
 
             HotFixAssetConfig hotFixAssetConfig = new HotFixAssetConfig();
             hotFixAssetConfig.name = "HotFixCode.dll.bytes";
-            hotFixAssetConfig.md5 = FileOperation.GetMD5HashFromFile(path);
-            hotFixAssetConfig.size = FileOperation.GetFileSize(path).ToString();
+            hotFixAssetConfig.md5 = FileOperationComponent.GetMD5HashFromFile(path);
+            hotFixAssetConfig.size = FileOperationComponent.GetFileSize(path).ToString();
             hotFixAssetConfig.path = "HotFix/HotFixCode/";
-            FileOperation.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/HotFixCodeConfig/" + "HotFixCodeConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/HotFixCodeConfig/" + "HotFixCodeConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
             Debug.Log("HotFixCode配置输出");
             OnLoadConfig();
         }
@@ -376,14 +376,14 @@ namespace DltFramework
 #endif
             }
 
-            File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll",
                 RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes", true);
             HotFixRuntimeDownConfig hotFixAssemblyConfig = new HotFixRuntimeDownConfig();
-            hotFixAssemblyConfig.md5 = FileOperation.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
+            hotFixAssemblyConfig.md5 = FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes");
             hotFixAssemblyConfig.name = "Assembly-CSharp.dll.bytes";
-            hotFixAssemblyConfig.size = FileOperation.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes").ToString();
+            hotFixAssemblyConfig.size = FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Assembly/" + "Assembly-CSharp.dll.bytes").ToString();
             hotFixAssemblyConfig.path = "HotFixRuntime/Assembly/";
-            FileOperation.SaveTextToLoad(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/AssemblyConfig", "AssemblyConfig.json", JsonMapper.ToJson(hotFixAssemblyConfig));
+            FileOperationComponent.SaveTextToLoad(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/AssemblyConfig", "AssemblyConfig.json", JsonMapper.ToJson(hotFixAssemblyConfig));
             Debug.Log("移动完毕");
         }
 
@@ -425,25 +425,25 @@ namespace DltFramework
                         break;
                 }
 
-                File.Copy(DataFrameComponent.GetCombine(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
+                File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 0) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
                     RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/" + metadataName + ".bytes", true);
             }
 #endif
-            List<string> buildPath = DataFrameComponent.GetGetSpecifyPathInAllTypePath("Assets/UnStreamingAssets/HotFix/Metadata", "bytes");
+            List<string> buildPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets/UnStreamingAssets/HotFix/Metadata", "bytes");
             List<HotFixRuntimeDownConfig> hotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             foreach (string path in buildPath)
             {
                 hotFixMetaAssemblyConfigs.Add(new HotFixRuntimeDownConfig()
                 {
-                    name = DataFrameComponent.GetPathFileNameDontContainFileType(path) + ".bytes",
-                    md5 = FileOperation.GetMD5HashFromFile(path),
+                    name = DataFrameComponent.Path_GetPathFileNameDontContainFileType(path) + ".bytes",
+                    md5 = FileOperationComponent.GetMD5HashFromFile(path),
                     path = "HotFix/Metadata/",
-                    size = FileOperation.GetFileSize(path).ToString()
+                    size = FileOperationComponent.GetFileSize(path).ToString()
                 });
             }
 
 
-            FileOperation.SaveTextToLoad(RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
+            FileOperationComponent.SaveTextToLoad(RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
         }
 
         private void GameRootStartBuild()
@@ -472,11 +472,11 @@ namespace DltFramework
             UnityEditor.AssetDatabase.Refresh();
 
             HotFixRuntimeDownConfig hotFixGameRootStartConfig = new HotFixRuntimeDownConfig();
-            hotFixGameRootStartConfig.md5 = FileOperation.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart");
+            hotFixGameRootStartConfig.md5 = FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart");
             hotFixGameRootStartConfig.name = "gamerootstart";
-            hotFixGameRootStartConfig.size = FileOperation.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart").ToString();
+            hotFixGameRootStartConfig.size = FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart").ToString();
             hotFixGameRootStartConfig.path = "HotFixRuntime/GameRootStartAssetBundle/";
-            FileOperation.SaveTextToLoad(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json", JsonMapper.ToJson(hotFixGameRootStartConfig));
+            FileOperationComponent.SaveTextToLoad(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json", JsonMapper.ToJson(hotFixGameRootStartConfig));
         }
 
         private void CopySceneBuild()
@@ -501,10 +501,10 @@ namespace DltFramework
         //打开场景
         private void OpenScene(string sceneName)
         {
-            List<string> allScenePath = DataFrameComponent.GetSpecifyTypeOnlyInAssetsPath("unity");
+            List<string> allScenePath = DataFrameComponent.Path_GetSpecifyTypeOnlyInAssets("unity");
             for (int i = 0; i < allScenePath.Count; i++)
             {
-                if (DataFrameComponent.GetPathFileNameDontContainFileType(allScenePath[i]) == sceneName)
+                if (DataFrameComponent.Path_GetPathFileNameDontContainFileType(allScenePath[i]) == sceneName)
                 {
                     UnityEditor.SceneManagement.EditorSceneManager.OpenScene(allScenePath[i]);
                 }
@@ -523,7 +523,7 @@ namespace DltFramework
 #endif
             }
 
-            List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.GetAllObjectsInScene<HotFixAssetPathConfig>();
+            List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
             copySceneAssetBundleAsset.scenePrefabPaths.Clear();
             for (int i = 0; i < hotFixAssetPathConfigs.Count; i++)
             {
@@ -591,7 +591,7 @@ namespace DltFramework
 #endif
             }
 
-            List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.GetAllObjectsInScene<HotFixAssetPathConfig>();
+            List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
             normalSceneAssetBundleAsset.scenePrefabPaths.Clear();
             for (int i = 0; i < hotFixAssetPathConfigs.Count; i++)
             {
@@ -697,7 +697,7 @@ namespace DltFramework
         //视图重新排序
         private void ViewSort()
         {
-            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.GetAllObjectsInScene<BaseWindow>();
+            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
             List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
 
             for (int i = 0; i < sceneAllBaseWindow.Count; i++)
@@ -723,7 +723,7 @@ namespace DltFramework
 
         private void GenerateBuildConfig(CopySceneAssetBundleAsset copySceneAssetBundleAsset)
         {
-            string sceneName = DataFrameComponent.AllCharToLower(SceneManager.GetActiveScene().name);
+            string sceneName = DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name);
             HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = new HotFixRuntimeSceneAssetBundleConfig();
             //字体
             //场景中可能不包含字体,不包含,设为空
@@ -737,9 +737,9 @@ namespace DltFramework
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = sceneName + "font";
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/";
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
-                    FileOperation.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
+                    FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
-                    FileOperation.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
+                    FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleInstantiatePath = "";
             }
 
@@ -752,37 +752,37 @@ namespace DltFramework
                 assetImporter.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
                 HotFixRuntimeAssetBundleConfig hot = new HotFixRuntimeAssetBundleConfig();
 
-                hot.assetBundleName = DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name);
-                hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name), "");
+                hot.assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name);
+                hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), "");
                 hot.assetBundleInstantiatePath = hotFixAssetPathConfig.GetHierarchyGeneratePath();
                 string adPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hot.assetBundlePath + hot.assetBundleName;
-                hot.assetBundleSize = FileOperation.GetFileSize(adPath).ToString();
-                hot.md5 = FileOperation.GetMD5HashFromFile(adPath);
+                hot.assetBundleSize = FileOperationComponent.GetFileSize(adPath).ToString();
+                hot.md5 = FileOperationComponent.GetMD5HashFromFile(adPath);
                 hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hot);
             }
 
-            string hotFixAssetBundleConfigPath = RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + DataFrameComponent.AllCharToLower(SceneManager.GetActiveScene().name) + ".json";
+            string hotFixAssetBundleConfigPath = RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name) + ".json";
             if (File.Exists(hotFixAssetBundleConfigPath))
             {
                 File.Delete(hotFixAssetBundleConfigPath);
             }
 
-            FileOperation.SaveTextToLoad(hotFixAssetBundleConfigPath, JsonUtility.ToJson(hotFixRuntimeSceneAssetBundleConfig));
+            FileOperationComponent.SaveTextToLoad(hotFixAssetBundleConfigPath, JsonUtility.ToJson(hotFixRuntimeSceneAssetBundleConfig));
             Debug.Log("打包 配置信息完成");
         }
 
         [LabelText("生成配置信息")]
         private void GenerateBuildConfig(NormalSceneAssetBundleAsset normalSceneAssetBundleAsset)
         {
-            string sceneName = DataFrameComponent.AllCharToLower(SceneManager.GetActiveScene().name);
+            string sceneName = DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name);
             HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = new HotFixRuntimeSceneAssetBundleConfig();
             //场景数据
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleName = sceneName;
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/";
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleSize =
-                FileOperation.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName).ToString();
+                FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName).ToString();
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.md5 =
-                FileOperation.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
+                FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleInstantiatePath = "";
             //字体
             if (normalSceneAssetBundleAsset.copySceneAssetBundleAsset == null)
@@ -798,22 +798,22 @@ namespace DltFramework
                     hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = sceneName + "font";
                     hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/";
                     hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
-                        FileOperation.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
+                        FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font").ToString();
                     hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
-                        FileOperation.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
+                        FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/font/" + sceneName + "font");
                     hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleInstantiatePath = "";
                 }
             }
             else
             {
-                string copySceneName = DataFrameComponent.AllCharToLower(normalSceneAssetBundleAsset.copySceneAssetBundleAsset.name.Replace("Copy", ""));
+                string copySceneName = DataFrameComponent.String_AllCharToLower(normalSceneAssetBundleAsset.copySceneAssetBundleAsset.name.Replace("Copy", ""));
                 //场景字体
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleName = copySceneName + "font";
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/";
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.assetBundleSize =
-                    FileOperation.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font").ToString();
+                    FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font").ToString();
                 hotFixRuntimeSceneAssetBundleConfig.sceneFontFixRuntimeAssetConfig.md5 =
-                    FileOperation.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font");
+                    FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + copySceneName + "/font/" + copySceneName + "font");
 
                 //场景AssetBundle
                 foreach (string scenePrefabPath in normalSceneAssetBundleAsset.copySceneAssetBundleAsset.scenePrefabPaths)
@@ -823,12 +823,12 @@ namespace DltFramework
                     assetImporter.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
                     HotFixRuntimeAssetBundleConfig hot = new HotFixRuntimeAssetBundleConfig();
 
-                    hot.assetBundleName = DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name);
-                    hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name), "");
+                    hot.assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name);
+                    hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), "");
                     hot.assetBundleInstantiatePath = hotFixAssetPathConfig.GetHierarchyGeneratePath();
                     string adPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hot.assetBundlePath + hot.assetBundleName;
-                    hot.assetBundleSize = FileOperation.GetFileSize(adPath).ToString();
-                    hot.md5 = FileOperation.GetMD5HashFromFile(adPath);
+                    hot.assetBundleSize = FileOperationComponent.GetFileSize(adPath).ToString();
+                    hot.md5 = FileOperationComponent.GetMD5HashFromFile(adPath);
                     hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hot);
                 }
             }
@@ -842,22 +842,22 @@ namespace DltFramework
                 assetImporter.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
                 HotFixRuntimeAssetBundleConfig hot = new HotFixRuntimeAssetBundleConfig();
 
-                hot.assetBundleName = DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name);
-                hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.AllCharToLower(hotFixAssetPathConfig.name), "");
+                hot.assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name);
+                hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), "");
                 hot.assetBundleInstantiatePath = hotFixAssetPathConfig.GetHierarchyGeneratePath();
                 string adPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hot.assetBundlePath + hot.assetBundleName;
-                hot.assetBundleSize = FileOperation.GetFileSize(adPath).ToString();
-                hot.md5 = FileOperation.GetMD5HashFromFile(adPath);
+                hot.assetBundleSize = FileOperationComponent.GetFileSize(adPath).ToString();
+                hot.md5 = FileOperationComponent.GetMD5HashFromFile(adPath);
                 hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hot);
             }
 
-            string hotFixAssetBundleConfigPath = RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + DataFrameComponent.AllCharToLower(SceneManager.GetActiveScene().name) + ".json";
+            string hotFixAssetBundleConfigPath = RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name) + ".json";
             if (File.Exists(hotFixAssetBundleConfigPath))
             {
                 File.Delete(hotFixAssetBundleConfigPath);
             }
 
-            FileOperation.SaveTextToLoad(hotFixAssetBundleConfigPath, JsonUtility.ToJson(hotFixRuntimeSceneAssetBundleConfig));
+            FileOperationComponent.SaveTextToLoad(hotFixAssetBundleConfigPath, JsonUtility.ToJson(hotFixRuntimeSceneAssetBundleConfig));
         }
     }
 }
