@@ -18,11 +18,10 @@ namespace DltFramework
 
         #region 异步加载场景
 
-        public delegate void AsyncLoadSceneProgressDelegate(float progress, bool over);
-
-        [LabelText("异步加载进度委托")] public AsyncLoadSceneProgressDelegate asyncLoadSceneProgress;
+        private List<ISceneLoadFrame> sceneLoadFrames = new List<ISceneLoadFrame>();
 
         #endregion
+
 
         private AsyncOperation tempSceneAsyncOperation;
 
@@ -34,6 +33,7 @@ namespace DltFramework
 
         public override void FrameSceneInitComponent()
         {
+            sceneLoadFrames = DataFrameComponent.Hierarchy_GetAllObjectsInScene<ISceneLoadFrame>();
         }
 
         public override void FrameSceneEndComponent()
@@ -61,13 +61,9 @@ namespace DltFramework
         {
             if (tempSceneAsyncOperation != null)
             {
-                if (tempSceneAsyncOperation.progress >= 1)
+                foreach (ISceneLoadFrame sceneLoadFrame in sceneLoadFrames)
                 {
-                    asyncLoadSceneProgress?.Invoke(1, true);
-                }
-                else
-                {
-                    asyncLoadSceneProgress?.Invoke(1, false);
+                    sceneLoadFrame.AsyncLoadSceneProgressDelegate(tempSceneAsyncOperation.progress / 0.9f, tempSceneAsyncOperation.isDone);
                 }
             }
         }

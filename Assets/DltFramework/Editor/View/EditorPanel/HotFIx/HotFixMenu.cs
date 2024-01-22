@@ -9,9 +9,6 @@ namespace DltFramework
 {
     public class HotFixMenu : OdinMenuEditorWindow
     {
-        public HotFixViewEditor HotFixViewEditor;
-        private SceneHotfixAssetManager SceneHotfixAssetManager = new SceneHotfixAssetManager();
-        private AssetBundleManager _assetBundleManager = new AssetBundleManager();
         private HotFixCollect _hotFixCollect = new HotFixCollect();
         private SceneHotFixConfig _sceneHotFixConfig = new SceneHotFixConfig();
 
@@ -19,18 +16,10 @@ namespace DltFramework
         {
             var tree = new OdinMenuTree();
             CreateInitDirectory();
-            HotFixViewEditor = new HotFixViewEditor();
-            HotFixViewEditor.OnLoadConfig();
-            SceneHotfixAssetManager.OnLoadConfig();
-            _assetBundleManager.OnLoadConfig();
             _sceneHotFixConfig.OnInit();
             _sceneHotFixConfig.OnLoadConfig();
             _hotFixCollect.OnLoadConfig();
-            
             tree.Add("集合", _hotFixCollect);
-            // tree.Add("HotFix", HotFixViewEditor);
-            // tree.Add("场景热更资源", SceneHotfixAssetManager);
-            // tree.Add("资源打包", _assetBundleManager);
             tree.Add("场景资源", _sceneHotFixConfig);
 
             return tree;
@@ -39,16 +28,12 @@ namespace DltFramework
 
         private void Update()
         {
-            SceneHotfixAssetManager.Update();
             _sceneHotFixConfig.Update();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            HotFixViewEditor.OnSaveConfig();
-            SceneHotfixAssetManager.OnSaveConfig();
-            _assetBundleManager.OnSaveConfig();
             _hotFixCollect.OnSaveConfig();
         }
 

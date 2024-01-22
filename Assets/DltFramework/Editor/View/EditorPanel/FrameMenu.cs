@@ -17,14 +17,6 @@ namespace DltFramework
         {
         }
 
-#if !DltFrameInit
-        [MenuItem("Xframe/框架初始化")]
-        private static void FrameInit()
-        {
-            AddMacro("DltFrameInit");
-            AddMacro("!HybridCLR");
-        }
-#endif
         //添加宏定义
         private static void AddMacro(string macroName)
         {
@@ -61,7 +53,6 @@ namespace DltFramework
             PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, symbols);
         }
 
-#if DltFrameInit
         [MenuItem("Xframe/框架界面")]
         private static void OpenWindow()
         {
@@ -141,7 +132,6 @@ namespace DltFramework
         [MenuItem("Xframe/开启热更功能")]
         public static void OpenHotFix()
         {
-            RemoveMacro("!HybridCLR");
             AddMacro("HybridCLR");
         }
 #endif
@@ -151,13 +141,12 @@ namespace DltFramework
         public static void CloseHotFix()
         {
             RemoveMacro("HybridCLR");
-            AddMacro("!HybridCLR");
         }
 #endif
 
 #endif
 
-#if HybridCLR && DltFrameInit
+#if HybridCLR
         [MenuItem("Xframe/热更界面")]
         private static void OpenHotFixWindow()
         {
@@ -172,7 +161,6 @@ namespace DltFramework
             _frameImportComponent.OnDisable();
             AssetDatabase.SaveAssets();
         }
-
 
         //音频组件
         private AudioComponentEditor _audioComponentEditor = new AudioComponentEditor();
@@ -204,5 +192,3 @@ namespace DltFramework
         }
     }
 }
-
-#endif

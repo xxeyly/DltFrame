@@ -41,8 +41,7 @@ namespace DltFramework
         public async UniTask<string> InstantiateHotFixAssetBundle()
         {
             //本地字体路径
-            string localFontPath = DataFrameComponent.String_BuilderString(
-                RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundlePath, hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundleName);
+            string localFontPath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundlePath, hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundleName);
             AssetBundle fontAssetBundle = null;
             if (File.Exists(localFontPath))
             {

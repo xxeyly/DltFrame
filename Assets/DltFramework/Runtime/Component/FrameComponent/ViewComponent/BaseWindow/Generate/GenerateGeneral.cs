@@ -20,7 +20,7 @@ namespace DltFramework
             string temp = String.Empty;
             for (int i = 0; i < number; i++)
             {
-                temp += " ";
+                temp = DataFrameComponent.String_BuilderString(temp, " ");
             }
 
             return temp;
@@ -62,8 +62,9 @@ namespace DltFramework
                 scriptUsingContent = stringBuilder.ToString();
 
                 string tempInsertContent = String.Empty;
-                tempInsertContent += insertContent;
-                tempInsertContent = insertStartMark + "\n" + tempInsertContent + "\n";
+
+                tempInsertContent = DataFrameComponent.String_BuilderString(tempInsertContent, insertContent);
+                tempInsertContent = DataFrameComponent.String_BuilderString(tempInsertContent, insertStartMark, "\n", tempInsertContent, "\n");
                 //替换新内容
                 return scriptsContent.Replace(scriptUsingContent, tempInsertContent);
             }

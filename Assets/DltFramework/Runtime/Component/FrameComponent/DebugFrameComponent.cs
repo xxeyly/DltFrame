@@ -5,7 +5,7 @@ namespace DltFramework
     public partial class DebugFrameComponent
     {
         
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if !UNITY_EDITOR || DEVELOPMENT_BUILD
         /// <summary>
         ///   <para>Logs a message to the Unity Console.</para>
         /// </summary>

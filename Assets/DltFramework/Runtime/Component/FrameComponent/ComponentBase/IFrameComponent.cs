@@ -1,6 +1,6 @@
 ﻿namespace DltFramework
 {
-    public interface IComponent
+    public interface IFrameComponent
     {
         /// <summary>
         /// 框架初始化

@@ -73,6 +73,9 @@ namespace DltFramework
         [HideInInspector] [LabelText("NormalSceneAssetBundleAsset")]
         public List<string> NormalSceneAssetBundleAssetsPath = new List<string>();
 
+        [LabelText("当前打开场景名称")] [HideInInspector]
+        public string currentOpenSceneName;
+
         [GUIColor(0, 1, 0)]
         [Button("打包", ButtonSizes.Large)]
         public void OnBuild()
@@ -185,6 +188,7 @@ namespace DltFramework
             }
 
             OnLoadConfig();
+            OpenScene(this.currentOpenSceneName);
             Debug.Log("资源打包完毕");
         }
 
@@ -198,6 +202,7 @@ namespace DltFramework
 
         public override void OnSaveConfig()
         {
+            currentOpenSceneName = SceneManager.GetActiveScene().name;
             HotFixViewPrePath = AssetDatabase.GetAssetPath(HotFixViewPrefab);
             GameRootStartPath = AssetDatabase.GetAssetPath(GameRootStartPrefab);
             CopySceneAssetBundleAssetPath.Clear();
@@ -221,7 +226,6 @@ namespace DltFramework
             {
                 return;
             }
-
             HotFixCollect hotFixCollect = JsonUtil.FromJson<HotFixCollect>(FileOperationComponent.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
             this.localIsUpdate = hotFixCollect.localIsUpdate;
             this.HotFixDownPath = hotFixCollect.HotFixDownPath;
@@ -240,6 +244,7 @@ namespace DltFramework
             this.GameRootStartPath = hotFixCollect.GameRootStartPath;
             this.GameRootStartPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(hotFixCollect.GameRootStartPath);
             this.BuildScene = hotFixCollect.BuildScene;
+            this.currentOpenSceneName = hotFixCollect.currentOpenSceneName;
             CopySceneAssetBundleAsset.Clear();
             NormalSceneAssetBundleAssets.Clear();
             for (int i = 0; i < hotFixCollect.CopySceneAssetBundleAssetPath.Count; i++)
@@ -430,7 +435,6 @@ namespace DltFramework
             }
 #endif
             List<string> buildPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets/UnStreamingAssets/HotFix/Metadata", "bytes");
-            Debug.Log(buildPath.Count);
             List<HotFixRuntimeDownConfig> hotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             foreach (string path in buildPath)
             {
