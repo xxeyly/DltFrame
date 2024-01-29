@@ -14,16 +14,15 @@ namespace DltFramework
     public class SceneLoadFrameComponent : FrameComponent
     {
         public static SceneLoadFrameComponent Instance;
-        private bool _asyncLoad;
 
         #region 异步加载场景
 
-        private List<ISceneLoadFrame> sceneLoadFrames = new List<ISceneLoadFrame>();
+        private List<ISceneLoadFrame> _sceneLoadFrames = new List<ISceneLoadFrame>();
 
         #endregion
 
 
-        private AsyncOperation tempSceneAsyncOperation;
+        private AsyncOperation _tempSceneAsyncOperation;
 
 
         public override void FrameInitComponent()
@@ -33,7 +32,7 @@ namespace DltFramework
 
         public override void FrameSceneInitComponent()
         {
-            sceneLoadFrames = DataFrameComponent.Hierarchy_GetAllObjectsInScene<ISceneLoadFrame>();
+            _sceneLoadFrames = DataFrameComponent.Hierarchy_GetAllObjectsInScene<ISceneLoadFrame>();
         }
 
         public override void FrameSceneEndComponent()
@@ -47,23 +46,23 @@ namespace DltFramework
         [LabelText("获得异步加载进度")]
         public float GetAsyncSceneProgress(string sceneName)
         {
-            if (tempSceneAsyncOperation.isDone)
+            if (_tempSceneAsyncOperation.isDone)
             {
                 return 1;
             }
             else
             {
-                return tempSceneAsyncOperation.progress;
+                return _tempSceneAsyncOperation.progress;
             }
         }
 
         private void Update()
         {
-            if (tempSceneAsyncOperation != null)
+            if (_tempSceneAsyncOperation != null)
             {
-                foreach (ISceneLoadFrame sceneLoadFrame in sceneLoadFrames)
+                foreach (ISceneLoadFrame sceneLoadFrame in _sceneLoadFrames)
                 {
-                    sceneLoadFrame.AsyncLoadSceneProgressDelegate(tempSceneAsyncOperation.progress / 0.9f, tempSceneAsyncOperation.isDone);
+                    sceneLoadFrame.AsyncLoadSceneProgressDelegate(_tempSceneAsyncOperation.progress / 0.9f, _tempSceneAsyncOperation.isDone);
                 }
             }
         }
@@ -124,9 +123,9 @@ namespace DltFramework
                 await HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
             }
 
-            tempSceneAsyncOperation = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
-            tempSceneAsyncOperation.allowSceneActivation = false;
-            await tempSceneAsyncOperation;
+            _tempSceneAsyncOperation = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
+            _tempSceneAsyncOperation.allowSceneActivation = false;
+            await _tempSceneAsyncOperation;
         }
 
         /// <summary>
@@ -153,7 +152,7 @@ namespace DltFramework
         [LabelText("场景加载完毕")]
         public void AsyncSceneIsDone()
         {
-            tempSceneAsyncOperation.allowSceneActivation = true;
+            _tempSceneAsyncOperation.allowSceneActivation = true;
         }
 
         #endregion
@@ -168,7 +167,6 @@ namespace DltFramework
             {
                 Application.Quit();
                 Resources.UnloadUnusedAssets();
-                System.GC.Collect();
             }
             else if (Application.platform == RuntimePlatform.WebGLPlayer)
             {

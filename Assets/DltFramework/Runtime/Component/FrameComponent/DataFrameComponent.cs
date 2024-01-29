@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -14,7 +12,7 @@ using Random = System.Random;
 
 namespace DltFramework
 {
-    public static partial class DataFrameComponent
+    public static  class DataFrameComponent
     {
         [LabelText("字符长度")] public static Dictionary<string, int> CharacterLengthDic = new Dictionary<string, int>()
         {
@@ -128,7 +126,7 @@ namespace DltFramework
                 AssetDatabase.RemoveAssetBundleName(assetName, true);
             }
 
-            UnityEditor.AssetDatabase.Refresh();
+            AssetDatabase.Refresh();
 #endif
         }
 
@@ -241,7 +239,7 @@ namespace DltFramework
             foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
             {
 #if UNITY_EDITOR
-                if (!UnityEditor.EditorUtility.IsPersistent(go.transform.root.gameObject) &&
+                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) &&
                     !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
                 {
                     if (go.scene.name == sceneName)
@@ -765,7 +763,7 @@ namespace DltFramework
 
             foreach (string path in filePath)
             {
-                specifyType.Add(UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path));
+                specifyType.Add(AssetDatabase.LoadAssetAtPath<T>(path));
             }
 #endif
 

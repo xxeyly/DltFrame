@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using UnityEngine;
-using UnityEngine.Events;
-
+﻿
 namespace DltFramework
 {
     partial class BaseWindow
@@ -142,7 +137,7 @@ namespace DltFramework
         /// 移除事件监听
         /// </summary>
         /// <param name="eventType"></param>
-        /// <param name="unityAction"></param>
+        /// <param name="callBack"></param>
         protected void RemoveListenerEvent(string eventType, ListenerFrameComponent.CallBack callBack)
         {
             ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
@@ -201,7 +196,7 @@ namespace DltFramework
         /// <summary>
         /// 移除事件监听
         /// </summary>
-        private void RemoveListenerEvent(string eventType)
+        protected void RemoveListenerEvent(string eventType)
         {
             ListenerFrameComponent.Instance.RemoveDelegateToListenerEvent(eventType);
         }

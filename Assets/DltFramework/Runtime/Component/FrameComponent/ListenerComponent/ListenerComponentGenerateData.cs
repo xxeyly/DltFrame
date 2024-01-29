@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace DltFramework
 {
@@ -12,7 +11,6 @@ namespace DltFramework
         [LabelText("生成脚本内容")] private Dictionary<string, Dictionary<string, List<List<string>>>> _returnCallDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
 
         [LabelText("所有脚本内容")] private Dictionary<string, string> _allScriptsContentDic;
-        [LabelText("所有脚本")] [SerializeField] private List<string> allScriptPath;
 
         [Button(ButtonSizes.Large)]
         [GUIColor(0, 1, 0)]
@@ -31,14 +29,12 @@ namespace DltFramework
             _callDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
             _returnCallDic = new Dictionary<string, Dictionary<string, List<List<string>>>>();
             _allScriptsContentDic = new Dictionary<string, string>();
-            allScriptPath = new List<string>();
             List<string> classPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets", "cs");
 
             for (int i = 0; i < classPath.Count; i++)
             {
                 if (!classPath[i].Contains("DltFramework") && !_allScriptsContentDic.ContainsKey(DataFrameComponent.Path_GetPathFileNameDontContainFileType(classPath[i])))
                 {
-                    allScriptPath.Add(DataFrameComponent.Path_GetPathFileName(classPath[i]));
                     _allScriptsContentDic.Add(DataFrameComponent.Path_GetPathFileNameDontContainFileType(classPath[i]), FileOperationComponent.GetTextToLoad(classPath[i]));
                 }
             }
@@ -230,6 +226,7 @@ namespace DltFramework
         /// 生成方法
         /// </summary>
         /// <param name="method"></param>
+        /// <param name="returnMethod"></param>
         /// <returns></returns>
         private string GenerationMethod(Dictionary<string, Dictionary<string, List<List<string>>>> method,
             Dictionary<string, Dictionary<string, List<List<string>>>> returnMethod)
@@ -238,7 +235,7 @@ namespace DltFramework
             Dictionary<string, List<string>> classMethodGroup = new Dictionary<string, List<string>>();
             //生成类
             string generateClassContent = String.Empty;
-            string methodName = String.Empty;
+            string methodName;
 
             #region 无返回值
 

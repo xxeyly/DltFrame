@@ -1,9 +1,5 @@
 ﻿#define SFRAMEWORK
-using System;
-using System.Linq;
-using System.Reflection;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace DltFramework
 {
@@ -39,20 +35,20 @@ namespace DltFramework
         /// <summary>
         /// 数据初始化
         /// </summary>
-        /// <param name="itemIndex"></param>
-        public virtual void InitData(int itemIndex)
+        /// <param name="itemIndexValue"></param>
+        public virtual void InitData(int itemIndexValue)
         {
-            this.itemIndex = itemIndex;
+            this.itemIndex = itemIndexValue;
         }
 
         /// <summary>
         /// 数据初始化
         /// </summary>
-        /// <param name="itemIndex"></param>
+        /// <param name="itemIndexValue"></param>
         /// <param name="content"></param>
-        public virtual void InitData(int itemIndex, string content)
+        public virtual void InitData(int itemIndexValue, string content)
         {
-            this.itemIndex = itemIndex;
+            this.itemIndex = itemIndexValue;
         }
     }
 }

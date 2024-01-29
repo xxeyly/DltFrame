@@ -12,20 +12,10 @@ namespace DltFramework
     {
         public static ViewFrameComponent Instance;
 
-        [LabelText("视图类型与视图窗口的键值对")] [SerializeField]
+        [LabelText("视图类型与视图窗口的键值对")] 
         public Dictionary<Type, BaseWindow> activeViewDlc = new Dictionary<Type, BaseWindow>();
 
         [LabelText("层级排序")] [SerializeField] private bool isResetSetSiblingIndex;
-
-        /// <summary>
-        /// 视图计时任务ID
-        /// </summary>
-        private string _viewTimeTaskId;
-
-        /// <summary>
-        /// 版本信息加载完毕任务
-        /// </summary>
-        private int _checkVersionInfoLoadOverTaskTime;
 
         public override void FrameInitComponent()
         {
@@ -127,7 +117,7 @@ namespace DltFramework
         /// 获得视图是否存在
         /// </summary>
         /// <returns></returns>
-        private bool GetViewExistence(Type view)
+        public bool GetViewExistence(Type view)
         {
             if (activeViewDlc != null && activeViewDlc.ContainsKey(view))
             {

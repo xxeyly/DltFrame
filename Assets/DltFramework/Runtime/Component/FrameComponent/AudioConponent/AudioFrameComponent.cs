@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+// ReSharper disable CollectionNeverUpdated.Local
 
 namespace DltFramework
 {

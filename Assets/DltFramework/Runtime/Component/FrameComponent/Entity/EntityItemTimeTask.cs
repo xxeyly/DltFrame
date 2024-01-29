@@ -36,7 +36,6 @@ namespace DltFramework
         /// <summary>
         /// 删除计时任务
         /// </summary>
-        /// <param name="timeTaskId"></param>
         protected void DeleteTimeTask(string taskName)
         {
             UniTaskFrameComponent.Instance.RemoveTask(taskName);
@@ -45,7 +44,6 @@ namespace DltFramework
         /// <summary>
         /// 删除计时任务
         /// </summary>
-        /// <param name="timeTaskId"></param>
         protected void DeleteSwitchTask(string taskName)
         {
             UniTaskFrameComponent.Instance.RemoveTask(taskName);

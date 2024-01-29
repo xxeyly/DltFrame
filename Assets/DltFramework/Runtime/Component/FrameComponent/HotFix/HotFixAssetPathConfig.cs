@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -19,14 +16,14 @@ public class HotFixAssetPathConfig : MonoBehaviour
     public void SetPathAndApplyPrefab()
     {
         generateHierarchyPath = DataFrameComponent.Hierarchy_GetTransformHierarchy(transform, false);
-        prefabPath = UnityEditor.PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
+        prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
         string prefabPathDirectory = DataFrameComponent.String_BuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType());
         if (prefabPath == string.Empty)
         {
             if (!Directory.Exists(prefabPathDirectory))
             {
                 Directory.CreateDirectory(prefabPathDirectory);
-                UnityEditor.AssetDatabase.Refresh();
+                AssetDatabase.Refresh();
             }
         }
 
@@ -37,29 +34,29 @@ public class HotFixAssetPathConfig : MonoBehaviour
 
     private string GetHotFixAssetType()
     {
-        string HotFixAssetType = string.Empty;
+        string hotFixAssetType;
         if (gameObject.GetComponent<BaseWindow>())
         {
-            HotFixAssetType = "UI";
+            hotFixAssetType = "UI";
         }
         else if (gameObject.GetComponent<SceneComponent>())
         {
-            HotFixAssetType = "SceneComponent";
+            hotFixAssetType = "SceneComponent";
         }
         else if (gameObject.GetComponent<SceneComponentInit>())
         {
-            HotFixAssetType = "SceneComponentInit";
+            hotFixAssetType = "SceneComponentInit";
         }
         else if (gameObject.GetComponent<EntityItem>())
         {
-            HotFixAssetType = "Entity";
+            hotFixAssetType = "Entity";
         }
         else
         {
-            HotFixAssetType = "Env";
+            hotFixAssetType = "Env";
         }
 
-        return HotFixAssetType;
+        return hotFixAssetType;
     }
 
     [Button("保存预制体")]
@@ -80,9 +77,10 @@ public class HotFixAssetPathConfig : MonoBehaviour
         }
 
         GameObject prefabObj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-        prefabObj.transform.localPosition = transform.localPosition;
-        prefabObj.transform.localEulerAngles = transform.localEulerAngles;
-        prefabObj.transform.localScale = transform.localScale;
+        var thisTransform = transform;
+        prefabObj.transform.localPosition = thisTransform.localPosition;
+        prefabObj.transform.localEulerAngles = thisTransform.localEulerAngles;
+        prefabObj.transform.localScale = thisTransform.localScale;
         AssetDatabase.SaveAssets();
     }
 

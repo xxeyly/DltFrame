@@ -5,7 +5,7 @@ namespace DltFramework
 {
     public partial class SceneComponent
     {
-        [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("视图名称")] [LabelWidth(50)]
+        [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("视图名称")] [LabelWidth(50)]
         public string viewName;
 
         /// <summary>

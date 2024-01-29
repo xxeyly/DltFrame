@@ -25,11 +25,7 @@ namespace DltFramework
     /// 视图基类
     /// </summary>
     [RequireComponent(typeof(BaseWindowGenerateScripts))]
-#if UNITY_EDITOR
-    public abstract partial class BaseWindow : SerializedMonoBehaviour
-#else
-        public abstract partial class BaseWindow : MonoBehaviour
-#endif
+    public abstract partial class BaseWindow : MonoBehaviour
     {
         protected GameObject window;
         protected CanvasGroup canvasGroup;
@@ -40,10 +36,10 @@ namespace DltFramework
         [BoxGroup("标签/属性")] [LabelText("UI层级")] [LabelWidth(100)] [Tooltip("ViewFrame勾选层级排序会根据索引进行排序")]
         public int sceneLayerIndex;
 
-        [BoxGroup("标签/属性")] [LabelText("初始化")] [SerializeField] [LabelWidth(50)] [Tooltip("该属性影响是否一开始执行Init操作")]
-        public bool viewInit = false;
+        [BoxGroup("标签/属性")] [LabelText("初始化")] [LabelWidth(50)] [Tooltip("该属性影响是否一开始执行Init操作")]
+        public bool viewInit ;
 
-        [BoxGroup("调试")] [ToggleLeft] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("日志输出")]
+        [BoxGroup("调试")] [ToggleLeft] [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("日志输出")]
         public bool isLog;
 
         [BoxGroup("调试")] [TableList(AlwaysExpanded = true, DrawScrollView = false)] [Searchable] [SerializeField] [LabelText("计时任务列表")]
@@ -51,10 +47,10 @@ namespace DltFramework
 
         public Type viewType;
 
-        [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("视图名称")] [LabelWidth(50)]
+        [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("视图名称")] [LabelWidth(50)]
         public string viewName;
 
-        [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f, 1f)] [LabelText("类名称")] [LabelWidth(50)]
+        [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("类名称")] [LabelWidth(50)]
         public string typeName;
 
         [BoxGroup("标签/命名")]
@@ -65,11 +61,6 @@ namespace DltFramework
             gameObject.name = viewType.Name;
             typeName = viewType.Name;
         }
-
-        /// <summary>
-        /// 视图显示任务
-        /// </summary>
-        private int _viewShowTimeTask;
 
         protected BaseWindow()
         {

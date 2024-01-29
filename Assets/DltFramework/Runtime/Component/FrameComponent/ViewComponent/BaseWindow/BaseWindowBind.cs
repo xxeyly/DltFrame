@@ -13,23 +13,23 @@ namespace DltFramework
         /// <summary>
         /// 绑定UI
         /// </summary>
-        /// <param name="viewType">需要绑定的组件</param>
+        /// <param name="bindViewtype">需要绑定的组件</param>
         /// <param name="path">当前组件的路径</param>
         // ReSharper disable once VirtualMemberCallInConstructor
-        protected void BindUi<T>(ref T viewType, string path)
+        protected void BindUi<T>(ref T bindViewtype, string path)
         {
-            viewType = window.transform.Find(path).GetComponent<T>();
+            bindViewtype = window.transform.Find(path).GetComponent<T>();
         }
 
         /// <summary>
         /// 绑定UI
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="viewType"></param>
+        /// <param name="type"></param>
         /// <param name="path"></param>
-        protected void BindUi<T>(ref List<T> viewType, string path)
+        protected void BindUi<T>(ref List<T> type, string path)
         {
-            viewType = new List<T>(window.transform.Find(path).GetComponentsInChildren<T>(true));
+            type = new List<T>(window.transform.Find(path).GetComponentsInChildren<T>(true));
         }
 
         /// <summary>

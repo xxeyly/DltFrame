@@ -17,9 +17,6 @@
         protected override void InitListener()
         {
         }
-
-        /*protected override void InitData()
-        {
-        }*/
+        
     }
 }

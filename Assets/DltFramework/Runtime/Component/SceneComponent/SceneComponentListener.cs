@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-using Sirenix.OdinInspector;
-using UnityEngine;
+// ReSharper disable InconsistentNaming
 
 namespace DltFramework
 {
@@ -140,7 +138,7 @@ namespace DltFramework
         /// 移除事件监听
         /// </summary>
         /// <param name="eventType"></param>
-        /// <param name="unityAction"></param>
+        /// <param name="callBack"></param>
         protected void RemoveListenerEvent(string eventType, ListenerFrameComponent.CallBack callBack)
         {
             ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
@@ -154,7 +152,6 @@ namespace DltFramework
         protected void RemoveListenerEvent<T>(string eventType, ListenerFrameComponent.CallBack<T> callBack)
         {
             ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
-
         }
 
         /// <summary>
@@ -165,7 +162,6 @@ namespace DltFramework
         protected void RemoveListenerEvent<T, X>(string eventType, ListenerFrameComponent.CallBack<T, X> callBack)
         {
             ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
-
         }
 
         /// <summary>
@@ -176,7 +172,6 @@ namespace DltFramework
         protected void RemoveListenerEvent<T, X, Y>(string eventType, ListenerFrameComponent.CallBack<T, X, Y> callBack)
         {
             ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
-
         }
 
         /// <summary>
@@ -187,7 +182,6 @@ namespace DltFramework
         protected void RemoveListenerEvent<T, X, Y, Z>(string eventType, ListenerFrameComponent.CallBack<T, X, Y, Z> callBack)
         {
             ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
-
         }
 
         /// <summary>
@@ -198,13 +192,12 @@ namespace DltFramework
         protected void RemoveListenerEvent<T, X, Y, Z, W>(string eventType, ListenerFrameComponent.CallBack<T, X, Y, Z, W> callBack)
         {
             ListenerFrameComponent.Instance.RemoveListenerEvent(DataFrameComponent.String_BuilderString(GetType().ToString(), "-", eventType), callBack);
-
         }
 
         /// <summary>
         /// 移除事件监听
         /// </summary>
-        private void RemoveListenerEvent(string eventType)
+        protected void RemoveListenerEvent(string eventType)
         {
             ListenerFrameComponent.Instance.RemoveDelegateToListenerEvent(eventType);
         }

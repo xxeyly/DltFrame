@@ -8,7 +8,6 @@ namespace DltFramework
         ///   <para>Logs a message to the Unity Console.</para>
         /// </summary>
         /// <param name="message">String or object to be converted to string representation for display.</param>
-        /// <param name="context">Object to which the message applies.</param>
         public  void Log(object message)
         {
             DebugFrameComponent.Log(message);
@@ -29,9 +28,6 @@ namespace DltFramework
         /// </summary>
         /// <param name="format">A composite format string.</param>
         /// <param name="args">Format arguments.</param>
-        /// <param name="context">Object to which the message applies.</param>
-        /// <param name="logType">Type of message e.g. warn or error etc.</param>
-        /// <param name="logOptions">Option flags to treat the log message special.</param>
         public  void LogFormat(string format, params object[] args)
         {
             DebugFrameComponent.LogFormat(format, args);
@@ -43,8 +39,6 @@ namespace DltFramework
         /// <param name="format">A composite format string.</param>
         /// <param name="args">Format arguments.</param>
         /// <param name="context">Object to which the message applies.</param>
-        /// <param name="logType">Type of message e.g. warn or error etc.</param>
-        /// <param name="logOptions">Option flags to treat the log message special.</param>
         public  void LogFormat(Object context, string format, params object[] args)
         {
             DebugFrameComponent.LogFormat(context, format, args);
@@ -67,7 +61,6 @@ namespace DltFramework
         ///   <para>A variant of Debug.Log that logs an error message to the console.</para>
         /// </summary>
         /// <param name="message">String or object to be converted to string representation for display.</param>
-        /// <param name="context">Object to which the message applies.</param>
         public  void LogError(object message)
         {
             DebugFrameComponent.LogError(message);
@@ -88,7 +81,6 @@ namespace DltFramework
         /// </summary>
         /// <param name="format">A composite format string.</param>
         /// <param name="args">Format arguments.</param>
-        /// <param name="context">Object to which the message applies.</param>
         public  void LogErrorFormat(string format, params object[] args)
         {
             DebugFrameComponent.LogErrorFormat(format, args);
@@ -125,7 +117,6 @@ namespace DltFramework
         /// </summary>
         /// <param name="format">A composite format string.</param>
         /// <param name="args">Format arguments.</param>
-        /// <param name="context">Object to which the message applies.</param>
         public  void LogWarningFormat(string format, params object[] args)
         {
             DebugFrameComponent.LogWarningFormat(format, args);
@@ -146,8 +137,6 @@ namespace DltFramework
         ///   <para>Assert a condition and logs an error message to the Unity console on failure.</para>
         /// </summary>
         /// <param name="condition">Condition you expect to be true.</param>
-        /// <param name="context">Object to which the message applies.</param>
-        /// <param name="message">String or object to be converted to string representation for display.</param>
         public  void Assert(bool condition)
         {
             DebugFrameComponent.Assert(condition);
@@ -158,7 +147,6 @@ namespace DltFramework
         /// </summary>
         /// <param name="condition">Condition you expect to be true.</param>
         /// <param name="context">Object to which the message applies.</param>
-        /// <param name="message">String or object to be converted to string representation for display.</param>
         public  void Assert(bool condition, Object context)
         {
             DebugFrameComponent.Assert(condition, context);
@@ -168,7 +156,6 @@ namespace DltFramework
         ///   <para>Assert a condition and logs an error message to the Unity console on failure.</para>
         /// </summary>
         /// <param name="condition">Condition you expect to be true.</param>
-        /// <param name="context">Object to which the message applies.</param>
         /// <param name="message">String or object to be converted to string representation for display.</param>
         public  void Assert(bool condition, object message)
         {
@@ -202,7 +189,6 @@ namespace DltFramework
         /// <param name="condition">Condition you expect to be true.</param>
         /// <param name="format">A composite format string.</param>
         /// <param name="args">Format arguments.</param>
-        /// <param name="context">Object to which the message applies.</param>
         public  void AssertFormat(bool condition, string format, params object[] args)
         {
             DebugFrameComponent.AssertFormat(condition, format, args);

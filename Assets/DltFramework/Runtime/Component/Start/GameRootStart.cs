@@ -6,11 +6,7 @@ using UnityEngine.SceneManagement;
 namespace DltFramework
 {
     [InfoBox("框架开始")]
-#if UNITY_EDITOR
-    public class GameRootStart : SerializedMonoBehaviour
-#else
-        public class GameRootStart : MonoBehaviour
-#endif
+    public class GameRootStart : MonoBehaviour
     {
         public static GameRootStart Instance;
 #pragma warning disable 649

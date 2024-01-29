@@ -5,11 +5,19 @@ using UnityEngine;
 
 namespace DltFramework
 {
+    [LabelText("场景重复实体")]
+    [Serializable]
+    public struct SceneRepeatEntity
+    {
+        [LabelText("实体名称")] public string entityName;
+        [LabelText("实体列表")] public List<GameObject> entityList;
+    }
+
     public partial class EntityFrameComponent : FrameComponent
     {
         public static EntityFrameComponent Instance;
         [Searchable] [LabelText("场景所有实体")] public List<EntityItem> sceneEntity;
-        [LabelText("场景重复实体名称")] public Dictionary<string, List<GameObject>> sceneRepeatEntity;
+        [LabelText("场景中重复名实体")] public List<SceneRepeatEntity> sceneRepeatEntityList;
 
         public GameObject Instantiate(GameObject instantiate)
         {
@@ -62,7 +70,7 @@ namespace DltFramework
         public void EntityInit()
         {
             sceneEntity.Clear();
-            List<EntityItem> tempEntity = new List<EntityItem>();
+            List<EntityItem> tempEntity;
             //首场景,加载全部
             if (GameRootStart.Instance.loadScene.name == String.Empty)
             {
@@ -87,10 +95,9 @@ namespace DltFramework
         [GUIColor(0, 1, 0)]
         public void EntityRepeat()
         {
+            sceneRepeatEntityList.Clear();
             Dictionary<string, List<GameObject>> temp = new Dictionary<string, List<GameObject>>();
-            sceneRepeatEntity = new Dictionary<string, List<GameObject>>();
-            List<EntityItem> tempEntity = new List<EntityItem>();
-            tempEntity = DataFrameComponent.Hierarchy_GetAllObjectsInScene<EntityItem>();
+            List<EntityItem> tempEntity = DataFrameComponent.Hierarchy_GetAllObjectsInScene<EntityItem>();
             foreach (EntityItem entityItem in tempEntity)
             {
                 if (!temp.ContainsKey(entityItem.entityName))
@@ -107,7 +114,7 @@ namespace DltFramework
             {
                 if (pair.Value.Count > 1)
                 {
-                    sceneRepeatEntity.Add(pair.Key, pair.Value);
+                    sceneRepeatEntityList.Add(new SceneRepeatEntity() { entityName = pair.Key, entityList = pair.Value });
                 }
             }
         }
@@ -239,6 +246,7 @@ namespace DltFramework
 
             return false;
         }
+
         /// <summary>
         /// 移除实体
         /// </summary>

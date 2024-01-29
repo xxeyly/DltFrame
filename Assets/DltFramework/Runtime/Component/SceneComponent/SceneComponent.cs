@@ -1,13 +1,8 @@
-﻿using Sirenix.OdinInspector;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace DltFramework
 {
-#if UNITY_EDITOR
-    public abstract partial class SceneComponent : SerializedMonoBehaviour, ISceneComponent
-#else
-        public abstract partial class SceneComponent : MonoBehaviour, ISceneComponent
-#endif
+    public abstract partial class SceneComponent : MonoBehaviour, ISceneComponent
     {
         public abstract void StartComponent();
         public abstract void EndComponent();

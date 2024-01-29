@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Sirenix.OdinInspector;
-using UnityEngine;
 using Object = System.Object;
 
 
 // ReSharper disable once CheckNamespace
+// ReSharper disable once TypeParameterCanBeVariant
+
 namespace DltFramework
 {
     [SuppressMessage("ReSharper", "UnusedMember.Local")]

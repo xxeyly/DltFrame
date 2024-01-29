@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Sirenix.OdinInspector;
-using UnityEngine;
 using DltFramework;
 
-public class GenerateListenerComponent
+public abstract class GenerateListenerComponent
 {
-    [SerializeField] private static List<GenerateClassData> _generateClassData = new List<GenerateClassData>();
-    private static Assembly assembly;
+    // ReSharper disable once FieldCanBeMadeReadOnly.Local
+    private static List<GenerateClassData> _generateClassDataList = new List<GenerateClassData>();
+    private static Assembly _assembly;
     public static string listenerComponentDataPath = "";
 
     public static void GenerateListener()
@@ -26,9 +25,9 @@ public class GenerateListenerComponent
             return;
         }
 
-        _generateClassData.Clear();
-        assembly = Assembly.Load("Assembly-CSharp");
-        foreach (Type type in assembly.GetTypes())
+        _generateClassDataList.Clear();
+        _assembly = Assembly.Load("Assembly-CSharp");
+        foreach (Type type in _assembly.GetTypes())
         {
             GenerateClassData tempGenerateClassData = new GenerateClassData();
             tempGenerateClassData.className = type.Name;
@@ -53,7 +52,7 @@ public class GenerateListenerComponent
 
             if (tempGenerateClassData.generateMethodData.Count > 0)
             {
-                _generateClassData.Add(tempGenerateClassData);
+                _generateClassDataList.Add(tempGenerateClassData);
             }
         }
 
@@ -61,7 +60,7 @@ public class GenerateListenerComponent
         string oldContent = GenerateGeneral.GetOldScriptsContent("ListenerComponentData");
 
         string generateClassContent = String.Empty;
-        foreach (GenerateClassData generateClassData in _generateClassData)
+        foreach (GenerateClassData generateClassData in _generateClassDataList)
         {
             generateClassContent = DataFrameComponent.String_BuilderString(
                 generateClassContent, GenerateGeneral.Indents(8), "[HideInInspector] public ", generateClassData.className, GenerateGeneral.Indents(1),
@@ -69,7 +68,7 @@ public class GenerateListenerComponent
                 GenerateGeneral.LineFeed);
         }
 
-        foreach (GenerateClassData generateClassData in _generateClassData)
+        foreach (GenerateClassData generateClassData in _generateClassDataList)
         {
             //类
             generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(8), "public class ", generateClassData.className, GenerateGeneral.LineFeed);
@@ -156,19 +155,6 @@ public class GenerateListenerComponent
     /// <summary>
     /// 替换内容
     /// </summary>
-    /// <param name="scriptsContent"></param>
-    /// <param name="insertContent"></param>
-    /// <param name="insertStartMark"></param>
-    /// <param name="insertEndMark"></param>
-    /// <returns></returns>
-    /// <summary>
-    /// 替换内容
-    /// </summary>
-    /// <param name="scriptsContent"></param>
-    /// <param name="insertContent"></param>
-    /// <param name="insertStartMark"></param>
-    /// <param name="insertEndMark"></param>
-    /// <returns></returns>
     private static string ReplaceScriptContent(string scriptsContent, string insertContent, string insertStartMark, string insertEndMark)
     {
         if (scriptsContent.Contains(insertStartMark) && scriptsContent.Contains(insertEndMark))
@@ -184,7 +170,6 @@ public class GenerateListenerComponent
             }
 
             //查找要被替换的内容
-            string scriptUsingContent = String.Empty;
             StringBuilder stringBuilder = new StringBuilder();
             for (int i = 0; i < scriptsContent.Length; i++)
             {
@@ -194,7 +179,7 @@ public class GenerateListenerComponent
                 }
             }
 
-            scriptUsingContent = stringBuilder.ToString();
+            var scriptUsingContent = stringBuilder.ToString();
 
             string tempInsertContent = String.Empty;
             tempInsertContent = DataFrameComponent.String_BuilderString(tempInsertContent, insertContent);

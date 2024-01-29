@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Sirenix.OdinInspector;
-using UnityEngine;
 
 namespace DltFramework
 {
@@ -49,7 +48,7 @@ namespace DltFramework
                 }
 
                 //查找要被替换的内容
-                string scriptUsingContent = String.Empty;
+                string scriptUsingContent;
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int i = 0; i < scriptsContent.Length; i++)
                 {
