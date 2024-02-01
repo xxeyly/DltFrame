@@ -74,12 +74,27 @@ public class UniTaskFrameComponent : FrameComponent
     {
         cancellationToken.ThrowIfCancellationRequested();
         initAction?.Invoke();
-        for (int i = 0; i < taskCount; i++)
+        //0代表无限循环
+        if (taskCount == 0)
         {
-            foreach (UnityAction unityAction in action)
+            while (true)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: cancellationToken);
-                unityAction?.Invoke();
+                foreach (UnityAction unityAction in action)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: cancellationToken);
+                    unityAction?.Invoke();
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < taskCount; i++)
+            {
+                foreach (UnityAction unityAction in action)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: cancellationToken);
+                    unityAction?.Invoke();
+                }
             }
         }
 
@@ -94,5 +109,4 @@ public class UniTaskFrameComponent : FrameComponent
     {
         return cancellationTokenSources.ContainsKey(taskName);
     }
-    
 }

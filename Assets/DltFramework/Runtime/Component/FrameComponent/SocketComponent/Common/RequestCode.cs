@@ -1,4 +1,7 @@
 ﻿public enum RequestCode
 {
-    None = 999,
+    None = 0,
+
+    //心跳
+    Heartbeat
 }

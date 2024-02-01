@@ -1,0 +1,16 @@
+using System;
+using UnityEngine;
+
+public class HeartbeatDetection
+{
+    public void StartHeartbeatDetection()
+    {
+        UniTaskFrameComponent.Instance.AddTask("心跳检测", 1, 0, null, null, OnHeartbeatDetection);
+    }
+
+    private void OnHeartbeatDetection()
+    {
+        //发送心跳包
+        ClientSocketFrameComponent.Instance.Send(RequestCode.Heartbeat, "0");
+    }
+}

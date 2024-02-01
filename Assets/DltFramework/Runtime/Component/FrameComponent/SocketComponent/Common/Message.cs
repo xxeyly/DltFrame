@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using Sirenix.OdinInspector;
-using UnityEngine;
 
 public class Message
 {

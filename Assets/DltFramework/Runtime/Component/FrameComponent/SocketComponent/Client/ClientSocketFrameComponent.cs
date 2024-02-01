@@ -9,19 +9,18 @@ using UnityEngine;
 
 public class ClientSocketFrameComponent : FrameComponent
 {
+    public static ClientSocketFrameComponent Instance;
     private Socket _clientSocket;
-    private ServerSocketFrameComponent serverSocketFrameComponent;
     private Message _msg = new Message();
-    [LabelText("IP地址")] [SerializeField] private string ip = "";
+    [LabelText("IP地址")] [SerializeField] private string ip = "12";
     [LabelText("端口")] [SerializeField] private int port = 0;
     [LabelText("反射数据")] private Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
 
 
     public override void FrameInitComponent()
     {
+        Instance = this;
         ReflectionRequestCode();
-        serverSocketFrameComponent = new ServerSocketFrameComponent();
-        serverSocketFrameComponent.StartServer();
         _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         _clientSocket.Connect(ip, port);
 
@@ -36,8 +35,6 @@ public class ClientSocketFrameComponent : FrameComponent
         Assembly _assembly = Assembly.Load("Assembly-CSharp");
         foreach (Type type in _assembly.GetTypes())
         {
-            GenerateListenerComponent.GenerateClassData tempGenerateClassData = new GenerateListenerComponent.GenerateClassData();
-            tempGenerateClassData.className = type.Name;
             foreach (MethodInfo methodInfo in type.GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static))
             {
                 foreach (Attribute customAttribute in methodInfo.GetCustomAttributes())
@@ -70,7 +67,6 @@ public class ClientSocketFrameComponent : FrameComponent
 
     public override void FrameEndComponent()
     {
-        serverSocketFrameComponent.Close();
         _clientSocket.Close();
     }
 
@@ -92,23 +88,33 @@ public class ClientSocketFrameComponent : FrameComponent
         int count = _clientSocket.EndReceive(ar);
         if (count > 0)
         {
-            _msg.ReadMessage(count, BindingNetworkEvents);
+            _msg.ReadMessage(count, ExecuteReflection);
         }
 
         Receive();
     }
-
+    
     /// <summary>
-    /// 根据事件代码绑定逻辑
-    /// 线程中,先放到缓存列表
+    /// 执行反射逻辑
     /// </summary>
-    /// <param name="requestCode">事件码</param>
-    /// <param name="data">返回数据</param>
-    private void BindingNetworkEvents(RequestCode requestCode, string data)
+    /// <param name="requestCode"></param>
+    /// <param name="data"></param>
+    private void ExecuteReflection(RequestCode requestCode, string data)
     {
         foreach (MethodInfoData methodInfoData in _requestCodes[requestCode])
         {
             methodInfoData.methodInfo.Invoke(Activator.CreateInstance(methodInfoData.type), new object[] { data });
         }
+    }
+
+    /// <summary>
+    /// 发送消息
+    /// </summary>
+    /// <param name="requestCode"></param>
+    /// <param name="data"></param>
+    public void Send(RequestCode requestCode, string data)
+    {
+        byte[] bytes = _msg.PackData(requestCode, data);
+        _clientSocket.Send(bytes);
     }
 }

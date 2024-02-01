@@ -6,5 +6,7 @@ public class ConnectSuccessfully
     public void OnConnectSuccessfully(string data)
     {
         Debug.Log(data);
+        HeartbeatDetection heartbeatDetection = new HeartbeatDetection();
+        heartbeatDetection.StartHeartbeatDetection();
     }
 }
