@@ -23,9 +23,9 @@ namespace DltFramework
             typeof(AudioFrameComponent),
             typeof(HttpFrameComponent),
             // typeof(MouseFrameComponent),
-            // typeof(TimeFrameComponent),
             typeof(ViewFrameComponent),
             typeof(UniTaskFrameComponent),
+            typeof(ClientSocketFrameComponent),
 #if HybridCLR
             typeof(HotFixFrameComponent),
 #endif
