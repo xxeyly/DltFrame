@@ -264,7 +264,7 @@ namespace DltFramework
             foreach (GameObject go in (GameObject[])Resources.FindObjectsOfTypeAll(typeof(GameObject)))
             {
 #if UNITY_EDITOR
-                if (!UnityEditor.EditorUtility.IsPersistent(go.transform.root.gameObject) &&
+                if (!EditorUtility.IsPersistent(go.transform.root.gameObject) &&
                     !(go.hideFlags == HideFlags.NotEditable || go.hideFlags == HideFlags.HideAndDontSave))
                 {
                     if (go.GetComponent<T>() != null)
@@ -499,14 +499,11 @@ namespace DltFramework
         public static bool String_CheckStringIsChinese(string str)
         {
             char[] ch = str.ToCharArray();
-            if (str != null)
+            for (int i = 0; i < ch.Length; i++)
             {
-                for (int i = 0; i < ch.Length; i++)
+                if (String_CharisChinese(ch[i]))
                 {
-                    if (String_CharisChinese(ch[i]))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -547,7 +544,7 @@ namespace DltFramework
         {
             var random = new Random();
             T time;
-            int index = 0;
+            int index;
             for (int i = 0; i < list.Count; i++)
             {
                 index = random.Next(0, list.Count - 1);
@@ -593,12 +590,15 @@ namespace DltFramework
                 {
                     if (baseType.Name == cType.Name)
                     {
-                        Type objtype = Type.GetType(type.FullName, true);
-                        object obj = Activator.CreateInstance(objtype);
-                        if (obj != null)
+                        if (type.FullName != null)
                         {
-                            T info = obj as T;
-                            cList.Add(info);
+                            Type objType = Type.GetType(type.FullName, true);
+                            object obj = Activator.CreateInstance(objType);
+                            if (obj != null)
+                            {
+                                T info = obj as T;
+                                cList.Add(info);
+                            }
                         }
 
                         break;
