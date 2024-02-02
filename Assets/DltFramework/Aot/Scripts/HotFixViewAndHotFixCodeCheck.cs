@@ -50,6 +50,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         // AotDebug.Log("检测本地更新是否开始");
         if (!File.Exists(AotGlobal.StringBuilderString(AotGlobal.GetDeviceStoragePath(), "/HotFix/localIsUpdate.txt")))
         {
+            Debug.Log("本地未找到,拷贝文件");
             await CopyStreamingAssetsPathToPersistentDataPath(AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/localIsUpdate.txt"), Application.persistentDataPath + "/HotFix/", "localIsUpdate.txt");
         }
 

@@ -12,8 +12,8 @@ public class ClientSocketFrameComponent : FrameComponent
     public static ClientSocketFrameComponent Instance;
     private Socket _clientSocket;
     private Message _msg = new Message();
-    [LabelText("IP地址")] [SerializeField] private string ip = "12";
-    [LabelText("端口")] [SerializeField] private int port = 0;
+    [LabelText("IP地址")] [SerializeField] private string ip = "127.0.0.1";
+    [LabelText("端口")] [SerializeField] private int port = 828;
     [LabelText("反射数据")] private Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
 
 
@@ -75,6 +75,7 @@ public class ClientSocketFrameComponent : FrameComponent
     /// </summary>
     private void Receive()
     {
+        Debug.Log("接收到新数据");
         _clientSocket.BeginReceive(_msg.Data, _msg.StartIndex, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
     }
 
@@ -93,7 +94,7 @@ public class ClientSocketFrameComponent : FrameComponent
 
         Receive();
     }
-    
+
     /// <summary>
     /// 执行反射逻辑
     /// </summary>

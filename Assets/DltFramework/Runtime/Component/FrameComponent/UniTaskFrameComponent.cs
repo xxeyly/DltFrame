@@ -11,6 +11,7 @@ public class UniTaskFrameComponent : FrameComponent
 {
     public static UniTaskFrameComponent Instance;
     [LabelText("事件列表")] public Dictionary<string, CancellationTokenSource> cancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
+    [LabelText("场景事件列表")] public Dictionary<string, CancellationTokenSource> sceneLoadCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
 
     public override void FrameInitComponent()
     {
@@ -36,6 +37,23 @@ public class UniTaskFrameComponent : FrameComponent
     }
 
     [LabelText("添加任务")]
+    public string AddSceneTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
+    {
+        if (IsSceneContainCurrentTask(taskName))
+        {
+            Debug.LogError(taskName + "已存在");
+            return String.Empty;
+        }
+
+        CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+        sceneLoadCancellationTokenSources.Add(taskName, cancellationTokenSource);
+#pragma warning disable 4014
+        ExecuteSceneTask(taskName, cancellationTokenSource.Token, delay, taskCount, initAction, endAction, action);
+#pragma warning restore 4014
+        return taskName;
+    }
+
+    [LabelText("添加任务")]
     public string AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
     {
         if (IsContainCurrentTask(taskName))
@@ -52,6 +70,41 @@ public class UniTaskFrameComponent : FrameComponent
         return taskName;
     }
 
+
+    [LabelText("执行任务")]
+    private async UniTask<string> ExecuteSceneTask(string taskName, CancellationToken cancellationToken, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        initAction?.Invoke();
+        //0代表无限循环
+        if (taskCount == 0)
+        {
+            while (true)
+            {
+                foreach (UnityAction unityAction in action)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: cancellationToken);
+                    unityAction?.Invoke();
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < taskCount; i++)
+            {
+                foreach (UnityAction unityAction in action)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(delay), cancellationToken: cancellationToken);
+                    unityAction?.Invoke();
+                }
+            }
+        }
+
+        endAction?.Invoke();
+        RemoveSceneTask(taskName);
+        return taskName;
+    }
+
     [LabelText("移除任务")]
     public void RemoveTask(string taskName)
     {
@@ -63,6 +116,17 @@ public class UniTaskFrameComponent : FrameComponent
         }
     }
 
+
+    [LabelText("移除任务")]
+    public void RemoveSceneTask(string taskName)
+    {
+        if (IsContainCurrentTask(taskName))
+        {
+            sceneLoadCancellationTokenSources[taskName].Cancel();
+            sceneLoadCancellationTokenSources[taskName].Dispose();
+            sceneLoadCancellationTokenSources.Remove(taskName);
+        }
+    }
 
     public override void FrameEndComponent()
     {
@@ -106,6 +170,12 @@ public class UniTaskFrameComponent : FrameComponent
 
     [LabelText("包含当前任务")]
     private bool IsContainCurrentTask(string taskName)
+    {
+        return cancellationTokenSources.ContainsKey(taskName);
+    }
+
+    [LabelText("包含当前任务")]
+    private bool IsSceneContainCurrentTask(string taskName)
     {
         return cancellationTokenSources.ContainsKey(taskName);
     }

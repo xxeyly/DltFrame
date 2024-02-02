@@ -1,6 +1,7 @@
-D:\Unity\2021\XFrame\SocketServer\obj\Debug\SocketServer.csproj.AssemblyReference.cache
-D:\Unity\2021\XFrame\SocketServer\obj\Debug\SocketServer.csproj.CoreCompileInputs.cache
-D:\Unity\2021\XFrame\SocketServer\bin\Debug\SocketServer.exe
-D:\Unity\2021\XFrame\SocketServer\bin\Debug\SocketServer.pdb
-D:\Unity\2021\XFrame\SocketServer\obj\Debug\SocketServer.exe
-D:\Unity\2021\XFrame\SocketServer\obj\Debug\SocketServer.pdb
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\SocketServer.exe
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\SocketServer.pdb
+G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.csproj.AssemblyReference.cache
+G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.csproj.SuggestedBindingRedirects.cache
+G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.csproj.CoreCompileInputs.cache
+G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.exe
+G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.pdb
