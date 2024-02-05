@@ -38,8 +38,7 @@ public class ClientSocket
         //如果是连接状态
         if (socket.Connected)
         {
-            socket.BeginReceive(_msg.Data, _msg.StartIndex, _msg.RemainSize, SocketFlags.None,
-                ReceiveCallback, null);
+            socket.BeginReceive(_msg.Data, _msg.StartIndex, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
         }
     }
 

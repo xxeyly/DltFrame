@@ -234,7 +234,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
+            AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await HotFixViewConfigCheck();
         }
@@ -271,7 +271,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            AotDebug.Log(e.ToString());
+            AotDebug.LogWarning(e.ToString());
             hotFixViewIsNeedDown = true;
         }
 
@@ -295,7 +295,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, _hotFixUnityWebRequest.responseCode.ToString()));
+            AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, _hotFixUnityWebRequest.responseCode.ToString()));
             await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
             await HotFixCodeConfigCheck();
         }
@@ -332,7 +332,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         }
         catch (Exception e)
         {
-            AotDebug.Log(e.ToString());
+            AotDebug.LogWarning(e.ToString());
             hotFixCodeIsNeedDown = true;
         }
 
@@ -363,7 +363,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         {
             //本地缓存文件的Md5
             string localCacheMd5 = AotGlobal.GetMD5HashFromFile(downFileCachePath);
-            AotDebug.Log(AotGlobal.StringBuilderString("存在缓存文件:", downFileCachePath, ":", "本地文件Md5:", localCacheMd5));
+            AotDebug.LogWarning(AotGlobal.StringBuilderString("存在缓存文件:", downFileCachePath, ":", "本地文件Md5:", localCacheMd5));
             //当前下载量加上已经下载的缓存量
             currentDownloadValue += AotGlobal.GetFileSize(downFileCachePath);
             //缓存文件的Md5和服务器的Md5相同,表示已经下载完毕
@@ -423,8 +423,8 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
             if (localCacheMd5 != hotFixAssetConfig.md5)
             {
                 AotDebug.LogError(AotGlobal.StringBuilderString("Md5不匹配,删除文件重新下载:", _hotFixUnityWebRequest.url));
-                AotDebug.Log(AotGlobal.StringBuilderString("本地下载的Md5:", localCacheMd5));
-                AotDebug.Log(AotGlobal.StringBuilderString("服务器的Md5:" + hotFixAssetConfig.md5));
+                AotDebug.LogWarning(AotGlobal.StringBuilderString("本地下载的Md5:", localCacheMd5));
+                AotDebug.LogWarning(AotGlobal.StringBuilderString("服务器的Md5:" + hotFixAssetConfig.md5));
                 //旧大小清空
                 oldDownByteLength = 0;
                 //清除已经下载的大小

@@ -5,7 +5,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HotFixUpdatePanel : MonoBehaviour, IHotFixViewAndHotFixCode
+public class HotFixUpdatePanel : MonoBehaviour, IHotFixViewAndHotFixCode, IAotNetworking
 {
     [LabelText("背景")] public GameObject back;
     [LabelText("初始化面板")] public GameObject initPanel;
@@ -15,16 +15,6 @@ public class HotFixUpdatePanel : MonoBehaviour, IHotFixViewAndHotFixCode
     [LabelText("下载速度")] public Text downTextSpeed;
     [LabelText("总下载大小")] public Text totalDownload;
     [LabelText("网络状况")] public GameObject networkPanel;
-
-    private void Awake()
-    {
-        AotNetworking.NetworkingState += AotNetworking_NetworkingState;
-    }
-
-    private void AotNetworking_NetworkingState(bool state)
-    {
-        networkPanel.SetActive(!state);
-    }
 
     public void HotFixViewAndHotFixCodeLocalIsUpdate(bool localIsUpdate)
     {
@@ -51,5 +41,10 @@ public class HotFixUpdatePanel : MonoBehaviour, IHotFixViewAndHotFixCode
         totalDownload.text = AotGlobal.FileSizeString(currentDownValue) + "/" + AotGlobal.FileSizeString(totalDownValue);
         downSliderProgress.value = (float)(currentDownValue / totalDownValue);
         downTextProgress.text = (currentDownValue / totalDownValue * 100).ToString("0") + "/100";
+    }
+
+    public void NetworkingState(bool state)
+    {
+        networkPanel.SetActive(!state);
     }
 }
