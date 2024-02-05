@@ -54,7 +54,6 @@ public class ClientSocket
             {
                 return;
             }
-
             int count = socket.EndReceive(ar);
             //没有数据
             if (count == 0)
@@ -71,7 +70,6 @@ public class ClientSocket
         catch (Exception e)
         {
             CloseConnection();
-            Console.WriteLine(e);
         }
     }
 

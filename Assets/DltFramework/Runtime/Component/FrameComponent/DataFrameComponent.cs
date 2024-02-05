@@ -12,7 +12,7 @@ using Random = System.Random;
 
 namespace DltFramework
 {
-    public static  class DataFrameComponent
+    public static class DataFrameComponent
     {
         [LabelText("字符长度")] public static Dictionary<string, int> CharacterLengthDic = new Dictionary<string, int>()
         {
@@ -166,6 +166,7 @@ namespace DltFramework
                 List<T> ts = new List<T>(go.GetComponents<T>());
                 for (int i = 0; i < ts.Count; i++)
                 {
+                    Debug.Log("go:" + go.name);
                     if (ts[i] != null)
                     {
                         specifiedType.Add(ts[i]);

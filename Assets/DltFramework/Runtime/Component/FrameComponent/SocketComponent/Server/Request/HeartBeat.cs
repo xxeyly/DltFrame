@@ -66,7 +66,7 @@ public class HeartBeat
         return Convert.ToInt32((DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds);
     }
 
-    [AddRequestCode(RequestCode.HeartbeatPacket)]
+    [AddRequestCode(RequestCode.HeartbeatPacket, RequestType.Server)]
     public void OnHeartbeat(string data, ClientSocket clientSocket)
     {
         if (IsContainsClientSocket(clientSocket))
@@ -96,6 +96,7 @@ public class HeartBeat
             if (heartBeatData.clientSocket == clientSocket)
             {
                 heartBeatData.time = 10;
+                clientSocket.Send(RequestCode.HeartbeatPacket, "1");
                 break;
             }
         }

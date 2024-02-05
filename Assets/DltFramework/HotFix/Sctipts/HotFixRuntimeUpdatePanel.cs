@@ -18,36 +18,6 @@ public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileCheck, 
     [LabelText("总下载大小")] public Text totalDownload;
     public GameObject networkPanel;
 
-    private void HotFixNetworking_NetworkingState(bool state)
-    {
-        networkPanel.SetActive(!state);
-    }
-
-
-    private void HotFixRuntimeFileDown_HotFixRuntimeDownOver()
-    {
-        downPanel.SetActive(false);
-    }
-
-    private void HotFixRuntimeFileDown_HotFixRuntimeDownStart()
-    {
-        downPanel.SetActive(true);
-    }
-
-
-    private void HotFixRuntimeFileDown_HotFixRuntimeCurrentDownValue(double current, double total)
-    {
-        totalDownload.text = HotFixGlobal.FileSizeString(current) + "/" + HotFixGlobal.FileSizeString(total);
-        downSliderProgress.value = (float)(current / total);
-        downTextProgress.text = (current / total * 100).ToString("0") + "/100";
-    }
-
-    private void HotFixRuntimeFileDown_HotFixRuntimeDownSpeed(float downSpeed)
-    {
-        downTextSpeed.text = HotFixGlobal.FileSizeString(downSpeed) + "/s";
-    }
-
-
     public void HotFixRuntimeTableDownStart()
     {
         initPanel.SetActive(true);
@@ -94,6 +64,7 @@ public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileCheck, 
 
     public void NetworkingState(bool state)
     {
+        Debug.Log("网络状态：" + state);
         networkPanel.SetActive(!state);
     }
 }

@@ -11,6 +11,7 @@ public class HotFixOver
 {
     public static void Over()
     {
+        HotFixNetworking.networkStatusDetection = false;
         HotFixDebug.Log("开始加载原数据");
         LoadMetadataForAOTAssemblies();
         HotFixDebug.Log("开始加载Assembly-CSharp");

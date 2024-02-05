@@ -38,7 +38,9 @@ public class Message
                 string s = Encoding.UTF8.GetString(data, 8, count - 4);
                 processDataCallback(requestCode, s);
                 Array.Copy(data, count + 4, data, 0, startIndex - 4 - count);
+
                 startIndex -= (count + 4);
+                
             }
             else
             {

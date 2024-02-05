@@ -282,10 +282,6 @@ public class AotGlobal
         return specifiedType;
     }
 
-    /// <summary>
-    /// 获得场景中所有物体
-    /// </summary>
-    /// <returns></returns>
     public static List<GameObject> GetAllObjectsOnlyInScene()
     {
         List<GameObject> objectsInScene = new List<GameObject>();

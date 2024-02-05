@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class ConnectSuccessfully
+public class ConnectSuccessFully
 {
-    [AddRequestCode(RequestCode.None)]
-    public void OnConnectSuccessfully(string data)
+    [AddRequestCode(RequestCode.None, RequestType.Client)]
+    public void OnConnectSuccessFully(string data)
     {
         HeartbeatDetection heartbeatDetection = new HeartbeatDetection();
         heartbeatDetection.StartHeartbeatDetection();

@@ -1,69 +1,47 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using System.Threading;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
 public class AotNetworking : MonoBehaviour
 {
-    public float time = 0;
-    public float timer = 1;
     List<IAotNetworking> _aotNetworkings = new List<IAotNetworking>();
-
     private UnityWebRequest _webRequest;
+
+    //开启网络状态检测
+    public static bool networkStatusDetection = true;
 
     private void Start()
     {
         _aotNetworkings = AotGlobal.GetAllObjectsInScene<IAotNetworking>();
+        Debug.Log(_aotNetworkings.Count);
+        StartCoroutine(Networking());
     }
 
-    private void Update()
+    IEnumerator Networking()
     {
-        time += Time.deltaTime;
-        if (time > timer)
+        yield return new WaitForSeconds(1f);
+        _webRequest = UnityWebRequest.Get("https://www.baidu.com");
+        yield return _webRequest.SendWebRequest();
+        if (_webRequest.responseCode != 200)
         {
-            time = 0;
-            if (PingIsHaveNet("https://www.baidu.com"))
+            foreach (var aotNetworking in _aotNetworkings)
             {
-                foreach (var aotNetworking in _aotNetworkings)
-                {
-                    aotNetworking.NetworkingState(true);
-                }
-            }
-            else
-            {
-                foreach (var aotNetworking in _aotNetworkings)
-                {
-                    aotNetworking.NetworkingState(false);
-                }
+                aotNetworking.NetworkingState(false);
             }
         }
-    }
-
-    public bool PingIsHaveNet(string url)
-    {
-        System.Net.NetworkInformation.Ping ping = new System.Net.NetworkInformation.Ping();
-
-        try
+        else
         {
-            PingReply ret = ping.Send(url);
-            if (ret.Status != IPStatus.Success)
+            foreach (var aotNetworking in _aotNetworkings)
             {
-                // AotDebug.Log("未联网");
-                return false;
-            }
-            else
-            {
-                // AotDebug.Log("已联网");
-                return true;
+                aotNetworking.NetworkingState(true);
             }
         }
-        catch (Exception e)
+
+        if (networkStatusDetection)
         {
-            // AotDebug.Log("Ping URL 失败");
-            return false;
+            StartCoroutine(Networking());
         }
     }
 }

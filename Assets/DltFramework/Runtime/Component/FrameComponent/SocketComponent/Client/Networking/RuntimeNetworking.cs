@@ -1,21 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using DltFramework;
 using UnityEngine;
 using UnityEngine.Networking;
 
-
-public class HotFixNetworking : MonoBehaviour
+public class RuntimeNetworking : SceneComponent
 {
-    List<IHotFixNetworking> _aotNetworkings = new List<IHotFixNetworking>();
-    private UnityWebRequest _webRequest;
+    public List<IRuntimeNetworking> _aotNetworkings;
 
     //开启网络状态检测
-    public static bool networkStatusDetection = true;
+    public bool networkStatusDetection = true;
+    private UnityWebRequest _webRequest;
 
-    private void Start()
+    public override void StartComponent()
     {
-        _aotNetworkings = HotFixGlobal.GetAllObjectsInScene<IHotFixNetworking>();
+        _aotNetworkings = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRuntimeNetworking>();
         StartCoroutine(Networking());
+    }
+
+    public override void EndComponent()
+    {
     }
 
     IEnumerator Networking()

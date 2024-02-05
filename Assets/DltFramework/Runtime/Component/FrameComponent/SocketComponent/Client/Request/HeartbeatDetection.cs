@@ -14,9 +14,5 @@ public class HeartbeatDetection
         ClientSocketFrameComponent.Instance.Send(RequestCode.HeartbeatPacket, "0");
     }
 
-    [AddRequestCode(RequestCode.HeartbeatPacket)]
-    public void OnHeartbeat(string data)
-    {
-        Debug.Log("接收到服务器的心跳包:" + data);
-    }
+    
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Threading;
 
 public class ServerSocketFrameComponent
 {
@@ -61,7 +60,7 @@ public class ServerSocketFrameComponent
         {
             foreach (MethodInfoData methodInfoData in _requestCodes[requestCode])
             {
-                methodInfoData.methodInfo.Invoke(Activator.CreateInstance(methodInfoData.type), new object[] { data, clientSocket, });
+                methodInfoData.methodInfo.Invoke(methodInfoData.obj, new object[] { data, clientSocket, });
             }
         }
         else
@@ -90,15 +89,19 @@ public class ServerSocketFrameComponent
                     if (customAttribute is AddRequestCodeAttribute)
                     {
                         RequestCode requestCode = ((AddRequestCodeAttribute)customAttribute).RequestCode;
-                        if (!_requestCodes.ContainsKey(requestCode))
+                        RequestType requestType = ((AddRequestCodeAttribute)customAttribute).RequestType;
+                        if (requestType == RequestType.Server)
                         {
-                            _requestCodes.Add(requestCode, new List<MethodInfoData>());
-                        }
+                            if (!_requestCodes.ContainsKey(requestCode))
+                            {
+                                _requestCodes.Add(requestCode, new List<MethodInfoData>());
+                            }
 
-                        _requestCodes[requestCode].Add(new MethodInfoData()
-                        {
-                            type = type, methodInfo = methodInfo
-                        });
+                            _requestCodes[requestCode].Add(new MethodInfoData()
+                            {
+                                obj = Activator.CreateInstance(type), methodInfo = methodInfo
+                            });
+                        }
                     }
                 }
             }

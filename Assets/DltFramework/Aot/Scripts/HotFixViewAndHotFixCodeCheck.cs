@@ -453,6 +453,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     //加载DltFrameworkHotFix数据
     private void LoadHotFixCode()
     {
+        AotNetworking.networkStatusDetection = false;
         // Editor环境下，HotUpdate.dll.bytes已经被自动加载，不需要加载，重复加载反而会出问题。  
 #if !UNITY_EDITOR
         Assembly hotFix = Assembly.Load(File.ReadAllBytes($"{AotGlobal.GetDeviceStoragePath()}/HotFix/HotFixCode/HotFixCode.dll.bytes"));
