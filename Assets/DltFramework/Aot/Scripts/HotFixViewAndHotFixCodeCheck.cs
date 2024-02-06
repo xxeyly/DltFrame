@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -31,6 +33,9 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     [LabelText("当前检测时间")] [SerializeField] private float currentCheckTime;
     [LabelText("检测时间")] [SerializeField] private float checkTime = 1;
     [LabelText("下载流")] private FileStream _hotFixFileStream;
+
+    private CancellationTokenSource cts;
+    [LabelText("超时时间")] private float timeout = 1;
     [LabelText("下载请求")] private UnityWebRequest _hotFixUnityWebRequest;
     [LabelText("上一次下载字节长度")] public int oldDownByteLength;
     [LabelText("缓存更改路径")] public List<string> replaceCacheFile = new List<string>();
@@ -42,6 +47,9 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     {
         await UniTask.DelayFrame(5);
         _hotFixViewAndHotFixCodes = AotGlobal.GetAllObjectsInScene<IHotFixViewAndHotFixCode>();
+        cts = new CancellationTokenSource();
+        timeout = 5;
+        cts.CancelAfterSlim(TimeSpan.FromSeconds(timeout));
         await LocalIsUpdate();
     }
 
@@ -109,20 +117,20 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         await CopyStreamingAssetsPathToPersistentDataPath(
             AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/HotFixDownPath.txt"), AotGlobal.StringBuilderString(Application.persistentDataPath, "/HotFix/"), "HotFixDownPath.txt");
         //HotFix路径
-        // AotDebug.Log("HotFix路径");
+        AotDebug.Log("HotFix路径");
         await HotFixPathLocalLoad();
         //HotFixView服务器配置表检测
-        // AotDebug.Log("HotFixView服务器配置表检测");
+        AotDebug.Log("HotFixView服务器配置表检测");
         await HotFixViewConfigCheck();
         //HotFixView本地检查
-        // AotDebug.Log("HotFixView本地检查");
+        AotDebug.Log("HotFixView本地检查");
         await HotFixViewLocalCheck();
         //HotFixCode服务器配置表检测
-        // AotDebug.Log("HotFixCode服务器配置表检测");
+        AotDebug.Log("HotFixCode服务器配置表检测");
 
         await HotFixCodeConfigCheck();
         //HotFixCode本地检查
-        // AotDebug.Log("HotFixCode本地检查");
+        AotDebug.Log("HotFixCode本地检查");
 
         await HotFixCodeLocalCheck();
         //更新总的下载量
@@ -202,7 +210,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         _hotFixUnityWebRequest = UnityWebRequest.Get(hotFixDownPath);
         try
         {
-            await _hotFixUnityWebRequest.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest().WithCancellation(cts.Token);
             if (_hotFixUnityWebRequest.responseCode == 200)
             {
                 hotFixPath = _hotFixUnityWebRequest.downloadHandler.text;
@@ -216,7 +224,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         catch (Exception e)
         {
             AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
-            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+            await UniTask.Delay(TimeSpan.FromSeconds(timeout));
             await HotFixPathLocalLoad();
         }
     }
@@ -228,14 +236,29 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         _hotFixUnityWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixViewConfig/HotFixViewConfig.json"));
         try
         {
-            await _hotFixUnityWebRequest.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest().WithCancellation(cts.Token);
             //读取远程配置表数据
             hotFixViewHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(_hotFixUnityWebRequest.downloadHandler.text);
         }
-        catch (Exception e)
+        catch (OperationCanceledException e)
         {
+            if (e.CancellationToken == cts.Token)
+            {
+                AotDebug.LogWarning("超时");
+            }
+            foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
+                {
+                    if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        Debug.Log(ip.Address.ToString());
+                    }
+                }
+            }
+
             AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
-            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+            await UniTask.Delay(TimeSpan.FromSeconds(timeout));
             await HotFixViewConfigCheck();
         }
     }
@@ -250,7 +273,8 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         _hotFixUnityWebRequest = UnityWebRequest.Get(localHotFixViewPath);
         try
         {
-            await _hotFixUnityWebRequest.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest().WithCancellation(cts.Token);
+            ;
             //本地文件数据大于0
             if (_hotFixUnityWebRequest.downloadHandler.data.Length > 0)
             {
@@ -289,14 +313,15 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         _hotFixUnityWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixCodeConfig/HotFixCodeConfig.json"));
         try
         {
-            await _hotFixUnityWebRequest.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest().WithCancellation(cts.Token);
+            ;
             //读取配置表
             hotFixCodeHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(_hotFixUnityWebRequest.downloadHandler.text);
         }
         catch (Exception e)
         {
             AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, _hotFixUnityWebRequest.responseCode.ToString()));
-            await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+            await UniTask.Delay(TimeSpan.FromSeconds(timeout));
             await HotFixCodeConfigCheck();
         }
     }
@@ -311,7 +336,8 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         _hotFixUnityWebRequest = UnityWebRequest.Get(localHotFixCodePath);
         try
         {
-            await _hotFixUnityWebRequest.SendWebRequest();
+            await _hotFixUnityWebRequest.SendWebRequest().WithCancellation(cts.Token);
+            ;
             //本地文件数据大于0
             if (_hotFixUnityWebRequest.downloadHandler.data.Length > 0)
             {

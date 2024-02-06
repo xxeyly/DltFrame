@@ -15,14 +15,20 @@ public class HeartBeat
     private long oldHeartBeatTime;
 
     //心跳间隔
-    private long heartBeatInterval = 1;
+    private int heartBeatInterval = 1;
+
+    //心跳时间上限
+    private int heartBeatTimeLimit = 30;
+
+    //心跳异常提示时间
+    private int heartBeatAbnormalTime = 5;
 
     public void AddClientSocket(ClientSocket clientSocket)
     {
         heartBeatDataList.Add(new HeartBeatData()
         {
             clientSocket = clientSocket,
-            time = 5
+            time = heartBeatTimeLimit
         });
     }
 
@@ -52,6 +58,11 @@ public class HeartBeat
                 for (int i = 0; i < heartBeatDataList.Count; i++)
                 {
                     heartBeatDataList[i].time -= 1;
+                    if (heartBeatDataList[i].time < heartBeatTimeLimit - heartBeatAbnormalTime)
+                    {
+                        Console.WriteLine(heartBeatDataList[i].clientSocket.socket.RemoteEndPoint + "心跳状态异常:" + heartBeatDataList[i].time);
+                    }
+
                     if (heartBeatDataList[i].time <= 0)
                     {
                         heartBeatDataList[i].clientSocket.CloseConnection();
@@ -95,7 +106,13 @@ public class HeartBeat
         {
             if (heartBeatData.clientSocket == clientSocket)
             {
-                heartBeatData.time = 10;
+                if (heartBeatData.time < heartBeatTimeLimit - heartBeatAbnormalTime)
+                {
+                    Console.WriteLine("心跳恢复:" + clientSocket.socket.RemoteEndPoint);
+                }
+
+                Console.WriteLine("心跳正常");
+                heartBeatData.time = heartBeatTimeLimit;
                 clientSocket.Send(RequestCode.HeartbeatPacket, "1");
                 break;
             }

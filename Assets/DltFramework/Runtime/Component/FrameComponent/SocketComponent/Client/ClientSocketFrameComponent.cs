@@ -8,24 +8,42 @@ using DltFramework;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class ClientSocketFrameComponent : FrameComponent
+
+public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
 {
     public static ClientSocketFrameComponent Instance;
+    [LabelText("自动开启连接")] public bool autoConnect = true;
+    [LabelText("是否连接")] public bool isConnect;
     private Socket _clientSocket;
     private Message _msg = new Message();
     [LabelText("IP地址")] [SerializeField] private string ip = "127.0.0.1";
     [LabelText("端口")] [SerializeField] private int port = 828;
     [LabelText("反射数据")] private Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
     private static Queue<RequestData> _requestData = new Queue<RequestData>();
-    RuntimeNetworking _runtimeNetworking;
 
     public override void FrameInitComponent()
     {
         Instance = this;
         ReflectionRequestCode();
+        if (autoConnect)
+        {
+            StartConnect();
+        }
+    }
+
+    [LabelText("开启连接")]
+    public void StartConnect()
+    {
         _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         _clientSocket.Connect(ip, port);
         Receive();
+    }
+
+    [LabelText("重新连接")]
+    public void ReConnect()
+    {
+        _clientSocket.Close();
+        StartConnect();
     }
 
     private void Update()
@@ -81,6 +99,7 @@ public class ClientSocketFrameComponent : FrameComponent
 
     public override void FrameEndComponent()
     {
+        Send(RequestCode.Disconnect, "主动断开连接");
         _clientSocket.Close();
     }
 
@@ -98,7 +117,11 @@ public class ClientSocketFrameComponent : FrameComponent
     /// <param name="ar"></param>
     private void ReceiveCallback(IAsyncResult ar)
     {
-        if (_clientSocket == null || _clientSocket.Connected == false) return;
+        if (_clientSocket == null || _clientSocket.Connected == false || ar == null)
+        {
+            return;
+        }
+
         try
         {
             int count = _clientSocket.EndReceive(ar);
@@ -109,7 +132,7 @@ public class ClientSocketFrameComponent : FrameComponent
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.Log(e.ToString());
         }
 
         Receive();
@@ -142,5 +165,23 @@ public class ClientSocketFrameComponent : FrameComponent
     {
         byte[] bytes = _msg.PackData(requestCode, data);
         _clientSocket.Send(bytes);
+    }
+
+    public void HeartbeatAbnormal(int remainderCount)
+    {
+        Debug.Log("尝试再次连接");
+        StartConnect();
+    }
+
+    public void HeartbeatRestoreNormal()
+    {
+    }
+
+    public void HeartbeatStop()
+    {
+    }
+
+    public void HeartbeatNormal()
+    {
     }
 }

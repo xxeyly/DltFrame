@@ -166,7 +166,6 @@ namespace DltFramework
                 List<T> ts = new List<T>(go.GetComponents<T>());
                 for (int i = 0; i < ts.Count; i++)
                 {
-                    Debug.Log("go:" + go.name);
                     if (ts[i] != null)
                     {
                         specifiedType.Add(ts[i]);

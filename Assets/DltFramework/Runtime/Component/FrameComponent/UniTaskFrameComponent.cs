@@ -108,6 +108,7 @@ public class UniTaskFrameComponent : FrameComponent
     [LabelText("移除任务")]
     public void RemoveTask(string taskName)
     {
+        Debug.Log(taskName);
         if (IsContainCurrentTask(taskName))
         {
             cancellationTokenSources[taskName].Cancel();

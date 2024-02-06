@@ -12,27 +12,39 @@ using UnityEngine.SceneManagement;
 
 namespace DltFramework
 {
+    [Serializable]
+    public class PlatformPath
+    {
+        public string path;
+        public BuildTarget buildTarget;
+    }
+
     public class HotFixCollect : BaseEditor
     {
         [LabelText("打包压缩方式")] [LabelWidth(120)] [EnumPaging]
         public BuildAssetBundleOptions targetBuildAssetBundleOptions;
 
-        [LabelText("更新数据下载地址")] [LabelWidth(120)]
-        public string HotFixDownPath;
+        [LabelText("更新数据下载地址")] [LabelWidth(120)] [ShowInInspector]
+        private string hotFixDownPath;
 
-        [LabelText("本地是否开启更新")] public bool localIsUpdate = false;
+        [LabelText("平台下载地址")][HideInInspector] public List<PlatformPath> hotFixDownPathData = new List<PlatformPath>();
 
-        [InfoBox("打包后会拷贝所有资源到当前路径下,并且还会复制一份以当前版本号的为名的备份文件夹")] [LabelText("资源外部拷贝路径")] [LabelWidth(120)] [FolderPath(AbsolutePath = true)]
-        public string targetOutPath;
+        [LabelText("本地是否开启更新")] public bool localIsUpdate;
+
+        [InfoBox("打包后会拷贝所有资源到当前路径下,并且还会复制一份以当前版本号的为名的备份文件夹")] [LabelText("资源外部拷贝路径")] [LabelWidth(120)] [FolderPath(AbsolutePath = true)] [ShowInInspector]
+        private string targetOutPath;
+
+        [LabelText("平台拷贝地址")] [HideInInspector]
+        public List<PlatformPath> targetOutPathData = new List<PlatformPath>();
 
         [InfoBox("当勾选版本号自增,会默认勾选所有资源,并且资源版本号+1")] [LabelText("版本号自增")] [LabelWidth(120)]
-        public bool isUpdateVersion = false;
+        public bool isUpdateVersion;
 
         [InfoBox("版本号分3个等级,\n等级1是特大改动(需要手动更改),\n等级2每次需要重新出包时变动(需要手动更改),\n等级3是每次小更新时变动(勾选版本自增每次打包会自增1)")] [LabelText("当前资源版本号")] [LabelWidth(120)]
         public Vector3 targetResourceVersion;
 
         [ToggleGroup("buildHotFixView", "HotFixView")]
-        public bool buildHotFixView = false;
+        public bool buildHotFixView;
 
         [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体")] [AssetSelector]
         public GameObject HotFixViewPrefab;
@@ -41,7 +53,7 @@ namespace DltFramework
         public string HotFixViewPrePath;
 
         [ToggleGroup("buildHotFixCode", "HotFixCode")]
-        public bool buildHotFixCode = false;
+        public bool buildHotFixCode;
 
         [ToggleGroup("buildMetaAssemblyParticipatePackaging", "MetaAssembly")]
         public bool buildMetaAssemblyParticipatePackaging;
@@ -129,8 +141,8 @@ namespace DltFramework
 
             //这里保存两份是因为,一份是在StreamingAssets下,一份是在UnStreamingAssets下,这样可以保证在打包时,引用StreamingAssets路径下的
             //编辑器模式下,引用UnStreamingAssets路径下的,打包后StreamingAssets路径下只有HotFixDownPath.txt和localIsUpdate.txt两个文件
-            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "HotFixDownPath.txt", HotFixDownPath);
-            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "HotFixDownPath.txt", HotFixDownPath);
+            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "HotFixDownPath.txt", hotFixDownPath);
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "HotFixDownPath.txt", hotFixDownPath);
             FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "localIsUpdate.txt", localIsUpdate.ToString());
             FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "localIsUpdate.txt", localIsUpdate.ToString());
 
@@ -203,6 +215,26 @@ namespace DltFramework
         public override void OnSaveConfig()
         {
             currentOpenSceneName = SceneManager.GetActiveScene().name;
+
+            if (IsContainHotFixDownPathData())
+            {
+                SetHotFixDownPathData(hotFixDownPath);
+            }
+            else
+            {
+                AddHotFixDownPathData(hotFixDownPath);
+            }
+
+            if (IsContainTargetOutPathData())
+            {
+                SetTargetOutPathData(targetOutPath);
+            }
+            else
+            {
+                AddTargetOutPathData(targetOutPath);
+            }
+
+
             HotFixViewPrePath = AssetDatabase.GetAssetPath(HotFixViewPrefab);
             GameRootStartPath = AssetDatabase.GetAssetPath(GameRootStartPrefab);
             CopySceneAssetBundleAssetPath.Clear();
@@ -226,12 +258,23 @@ namespace DltFramework
             {
                 return;
             }
+
             HotFixCollect hotFixCollect = JsonUtil.FromJson<HotFixCollect>(FileOperationComponent.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
             this.localIsUpdate = hotFixCollect.localIsUpdate;
-            this.HotFixDownPath = hotFixCollect.HotFixDownPath;
+            this.hotFixDownPathData = hotFixCollect.hotFixDownPathData;
+            if (IsContainHotFixDownPathData())
+            {
+                this.hotFixDownPath = GetHotFixDownPathData();
+            }
+
+            this.targetOutPathData = hotFixCollect.targetOutPathData;
             this.targetResourceVersion = hotFixCollect.targetResourceVersion;
             this.targetBuildAssetBundleOptions = hotFixCollect.targetBuildAssetBundleOptions;
-            this.targetOutPath = hotFixCollect.targetOutPath;
+            if (IsContainTargetOutPathData())
+            {
+                this.targetOutPath = GetTargetOutPathData();
+            }
+
             this.targetResourceVersion = hotFixCollect.targetResourceVersion;
             this.isUpdateVersion = hotFixCollect.isUpdateVersion;
             this.buildHotFixView = hotFixCollect.buildHotFixView;
@@ -283,7 +326,7 @@ namespace DltFramework
             hotFixViewImporter.assetBundleName = "HotFix/HotFixView/hotfixview";
             BuildPipeline.BuildAssetBundles("Assets/UnStreamingAssets", targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
             DataFrameComponent.RemoveAllAssetBundleName();
-            UnityEditor.AssetDatabase.Refresh();
+            AssetDatabase.Refresh();
 
             string filePath = "Assets/UnStreamingAssets/HotFix/HotFixView/" + "hotfixview";
             File.Delete(filePath + ".manifest");
@@ -467,14 +510,14 @@ namespace DltFramework
                 return;
             }
 
-            AssetImporter gameRootStartImporter = null;
+            AssetImporter gameRootStartImporter;
             gameRootStartImporter = AssetImporter.GetAtPath(GameRootStartPath);
             gameRootStartImporter.assetBundleName = "GameRootStartAssetBundle/GameRootStart";
             BuildPipeline.BuildAssetBundles("Assets/UnStreamingAssets/HotFixRuntime", targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
 
             DataFrameComponent.RemoveAllAssetBundleName();
             File.Delete("Assets/UnStreamingAssets/HotFixRuntime" + "/" + "GameRootStartAssetBundle/gamerootstart.manifest");
-            UnityEditor.AssetDatabase.Refresh();
+            AssetDatabase.Refresh();
 
             HotFixRuntimeDownConfig hotFixGameRootStartConfig = new HotFixRuntimeDownConfig();
             hotFixGameRootStartConfig.md5 = FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundle/" + "gamerootstart");
@@ -483,6 +526,101 @@ namespace DltFramework
             hotFixGameRootStartConfig.path = "HotFixRuntime/GameRootStartAssetBundle/";
             FileOperationComponent.SaveTextToLoad(RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json", JsonMapper.ToJson(hotFixGameRootStartConfig));
         }
+
+        [LabelText("获取更新下载路径")]
+        private bool IsContainHotFixDownPathData()
+        {
+            foreach (PlatformPath platformPath in hotFixDownPathData)
+            {
+                if (platformPath.buildTarget == EditorUserBuildSettings.activeBuildTarget)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void SetHotFixDownPathData(string path)
+        {
+            foreach (PlatformPath platformPath in hotFixDownPathData)
+            {
+                if (platformPath.buildTarget == EditorUserBuildSettings.activeBuildTarget)
+                {
+                    platformPath.path = path;
+                    return;
+                }
+            }
+        }
+
+        private void AddHotFixDownPathData(string path)
+        {
+            PlatformPath platformPath = new PlatformPath();
+            platformPath.buildTarget = EditorUserBuildSettings.activeBuildTarget;
+            platformPath.path = path;
+            hotFixDownPathData.Add(platformPath);
+        }
+
+        private string GetHotFixDownPathData()
+        {
+            foreach (PlatformPath platformPath in hotFixDownPathData)
+            {
+                if (platformPath.buildTarget == EditorUserBuildSettings.activeBuildTarget)
+                {
+                    return platformPath.path;
+                }
+            }
+
+            return string.Empty;
+        }
+
+        [LabelText("获取输出路径")]
+        private bool IsContainTargetOutPathData()
+        {
+            foreach (PlatformPath platformPath in targetOutPathData)
+            {
+                if (platformPath.buildTarget == EditorUserBuildSettings.activeBuildTarget)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void SetTargetOutPathData(string path)
+        {
+            foreach (PlatformPath platformPath in targetOutPathData)
+            {
+                if (platformPath.buildTarget == EditorUserBuildSettings.activeBuildTarget)
+                {
+                    platformPath.path = path;
+                    return;
+                }
+            }
+        }
+
+        private void AddTargetOutPathData(string path)
+        {
+            PlatformPath platformPath = new PlatformPath();
+            platformPath.buildTarget = EditorUserBuildSettings.activeBuildTarget;
+            platformPath.path = path;
+            targetOutPathData.Add(platformPath);
+        }
+
+        private string GetTargetOutPathData()
+        {
+            foreach (PlatformPath platformPath in targetOutPathData)
+            {
+                if (platformPath.buildTarget == EditorUserBuildSettings.activeBuildTarget)
+                {
+                    return platformPath.path;
+                }
+            }
+
+            return string.Empty;
+        }
+
 
         private void CopySceneBuild()
         {

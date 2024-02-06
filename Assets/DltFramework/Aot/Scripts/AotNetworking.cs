@@ -15,7 +15,6 @@ public class AotNetworking : MonoBehaviour
     private void Start()
     {
         _aotNetworkings = AotGlobal.GetAllObjectsInScene<IAotNetworking>();
-        Debug.Log(_aotNetworkings.Count);
         StartCoroutine(Networking());
     }
 

@@ -43,34 +43,25 @@ public class ClientSocket
     }
 
     /// <summary>
-    /// 异步接受
+    /// 异步接收
     /// </summary>
     /// <param name="ar"></param>
     private void ReceiveCallback(IAsyncResult ar)
     {
-        try
+        if (socket == null || socket.Connected == false || ar == null)
         {
-            if (socket == null || socket.Connected == false || ar == null)
-            {
-                return;
-            }
-            int count = socket.EndReceive(ar);
-            //没有数据
-            if (count == 0)
-            {
-                //关闭连接
-                CloseConnection();
-            }
+            return;
+        }
 
+        int count = socket.EndReceive(ar);
+        if (count > 0)
+        {
             //读取消息
             _msg.ReadMessage(count, ExecuteReflection);
-            //递归接受
-            StartReceiveCallback();
         }
-        catch (Exception e)
-        {
-            CloseConnection();
-        }
+
+        //递归接受
+        StartReceiveCallback();
     }
 
     public void ExecuteReflection(RequestCode requestCode, string data)
