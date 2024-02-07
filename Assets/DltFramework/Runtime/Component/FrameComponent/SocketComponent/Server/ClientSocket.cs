@@ -19,6 +19,9 @@ public class ClientSocket
     //客户端Socket
     public Socket socket;
 
+    //心跳维持
+    public bool isHeartBeat = true;
+
 
     public ClientSocket(ServerSocketFrameComponent server, ClientSocketManager clientSocketManager, HeartBeat heartBeat, Socket socket)
     {
@@ -48,20 +51,27 @@ public class ClientSocket
     /// <param name="ar"></param>
     private void ReceiveCallback(IAsyncResult ar)
     {
-        if (socket == null || socket.Connected == false || ar == null)
+        try
         {
-            return;
-        }
+            if (socket == null || socket.Connected == false || ar == null)
+            {
+                return;
+            }
 
-        int count = socket.EndReceive(ar);
-        if (count > 0)
+            int count = socket.EndReceive(ar);
+            if (count > 0)
+            {
+                //读取消息
+                _msg.ReadMessage(count, ExecuteReflection);
+            }
+
+            //递归接受
+            StartReceiveCallback();
+        }
+        catch (Exception e)
         {
-            //读取消息
-            _msg.ReadMessage(count, ExecuteReflection);
+            Console.WriteLine("客户端异常:" + e);
         }
-
-        //递归接受
-        StartReceiveCallback();
     }
 
     public void ExecuteReflection(RequestCode requestCode, string data)

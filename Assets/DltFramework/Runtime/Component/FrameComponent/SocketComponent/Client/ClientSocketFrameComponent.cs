@@ -9,7 +9,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 
-public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
+public class ClientSocketFrameComponent : FrameComponent,IHeartbeat
 {
     public static ClientSocketFrameComponent Instance;
     [LabelText("自动开启连接")] public bool autoConnect = true;
@@ -34,9 +34,17 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     [LabelText("开启连接")]
     public void StartConnect()
     {
+        Debug.Log("开启连接");
         _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        _clientSocket.Connect(ip, port);
-        Receive();
+        try
+        {
+            _clientSocket.Connect(ip, port);
+            Receive();
+        }
+        catch (Exception e)
+        {
+            Debug.Log("连接失败...");
+        }
     }
 
     [LabelText("重新连接")]
@@ -99,8 +107,11 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
 
     public override void FrameEndComponent()
     {
-        Send(RequestCode.Disconnect, "主动断开连接");
-        _clientSocket.Close();
+        if (_clientSocket.Connected)
+        {
+            Send(RequestCode.Disconnect, "主动断开连接");
+            _clientSocket.Close();
+        }
     }
 
     /// <summary>
@@ -132,6 +143,7 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
         }
         catch (Exception e)
         {
+            
             Debug.Log(e.ToString());
         }
 
@@ -169,8 +181,7 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
 
     public void HeartbeatAbnormal(int remainderCount)
     {
-        Debug.Log("尝试再次连接");
-        StartConnect();
+        ReConnect();
     }
 
     public void HeartbeatRestoreNormal()
