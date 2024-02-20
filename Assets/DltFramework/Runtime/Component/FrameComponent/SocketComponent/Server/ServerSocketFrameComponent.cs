@@ -7,10 +7,8 @@ using System.Reflection;
 public class ServerSocketFrameComponent
 {
     private Socket _serverSocket;
-    private string ip = "192.168.3.3";
+    private string ip = "192.168.7.32";
     private int port = 828;
-    public HeartBeat heartBeat = new HeartBeat();
-    private ClientSocketManager clientSocketManager;
     private Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
 
     private bool isInit = false;
@@ -31,20 +29,20 @@ public class ServerSocketFrameComponent
         Console.WriteLine("服务器开启成功...");
         //异步加载用户
         _serverSocket.BeginAccept(AcceptCallBack, _serverSocket);
-        //客户端管理
-        clientSocketManager = new ClientSocketManager();
         //心跳包
-        heartBeat = new HeartBeat();
-        heartBeat.CreateHeartBeat();
+        HeartBeat.CreateHeartBeat();
+        //帧同步
+        ServerFrameSync.CreateFrameSync();
     }
 
     private void AcceptCallBack(IAsyncResult ar)
     {
-        ClientSocket clientSocket = new ClientSocket(this, clientSocketManager, heartBeat, _serverSocket.EndAccept(ar));
-        clientSocketManager.AddClientSocket(clientSocket);
-        heartBeat.AddClientSocket(clientSocket);
+        ClientSocket clientSocket = new ClientSocket(this, _serverSocket.EndAccept(ar));
+        ClientSocketManager.AddClientSocket(clientSocket);
+        HeartBeat.AddClientSocket(clientSocket);
         Console.WriteLine(clientSocket.socket.RemoteEndPoint + ":加入系统...");
         clientSocket.Send(RequestCode.None, "服务器登录成功");
+        ServerPlayerMove.OnPlayerInit(clientSocket);
         _serverSocket.BeginAccept(AcceptCallBack, _serverSocket);
     }
 

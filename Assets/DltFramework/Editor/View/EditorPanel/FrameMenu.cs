@@ -53,20 +53,20 @@ namespace DltFramework
             PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, symbols);
         }
 
-        [MenuItem("Xframe/框架界面")]
+        [MenuItem("DltFrame/框架界面")]
         private static void OpenWindow()
         {
             GetWindow<FrameMenu>().Show();
         }
 
-        [MenuItem("Xframe/监听生成 &l")]
+        [MenuItem("DltFrame/监听生成 &l")]
         private static void OnListenerGenerate()
         {
             GenerateListenerComponent.GenerateListener();
             Debug.Log("监听生成结束!");
         }
 
-        [MenuItem("Xframe/生成框架 &F")]
+        [MenuItem("DltFrame/生成框架 &F")]
         public static void Generate()
         {
             GameObject gameRootStart = GameObject.Find("GameRootStart");
@@ -88,7 +88,7 @@ namespace DltFramework
             }
         }
 
-        [MenuItem("Xframe/视图重新排序索引")]
+        [MenuItem("DltFrame/视图重新排序索引")]
         public static void ViewSortSiblingIndex()
         {
             List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
@@ -101,7 +101,7 @@ namespace DltFramework
             }
         }
 
-        [MenuItem("Xframe/视图重新排序")]
+        [MenuItem("DltFrame/视图重新排序")]
         public static void ViewSort()
         {
             List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
@@ -129,7 +129,7 @@ namespace DltFramework
         }
 
 #if !HybridCLR
-        [MenuItem("Xframe/开启热更功能")]
+        [MenuItem("DltFrame/开启热更功能")]
         public static void OpenHotFix()
         {
             AddMacro("HybridCLR");
@@ -137,7 +137,7 @@ namespace DltFramework
 #endif
 
 #if HybridCLR
-        [MenuItem("Xframe/关闭热更功能")]
+        [MenuItem("DltFrame/关闭热更功能")]
         public static void CloseHotFix()
         {
             RemoveMacro("HybridCLR");
@@ -147,7 +147,7 @@ namespace DltFramework
 #endif
 
 #if HybridCLR
-        [MenuItem("Xframe/热更界面")]
+        [MenuItem("DltFrame/热更界面")]
         private static void OpenHotFixWindow()
         {
             GetWindow<HotFixMenu>().Show();

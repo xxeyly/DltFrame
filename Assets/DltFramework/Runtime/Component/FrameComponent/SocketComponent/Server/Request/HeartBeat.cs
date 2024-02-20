@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 
 public class HeartBeat
@@ -10,42 +11,49 @@ public class HeartBeat
     private long oldHeartBeatTime;
 
     //心跳间隔
-    private int heartBeatInterval = 5;
+    private static int heartBeatInterval = 5;
 
-    public void AddClientSocket(ClientSocket clientSocket)
+    public static void AddClientSocket(ClientSocket clientSocket)
     {
         heartBeatDataList.Add(clientSocket);
     }
 
-    public void RemoveClientSocket(ClientSocket clientSocket)
+    public static void RemoveClientSocket(ClientSocket clientSocket)
     {
         heartBeatDataList.Remove(clientSocket);
     }
 
     //创建心跳包
-    public void CreateHeartBeat()
+    public static void CreateHeartBeat()
     {
         //创建心跳包,等于当前时间
-        oldHeartBeatTime = GetTimeStamp();
+        new Thread(HeartBeatThread).Start();
         //创建心跳包
+    }
+
+    private static void HeartBeatThread()
+    {
         while (true)
         {
-            if (GetTimeStamp() - oldHeartBeatTime >= heartBeatInterval)
+            Thread.Sleep(heartBeatInterval * 1000);
+            // Console.WriteLine("服务器心跳");
+            for (int i = 0; i < heartBeatDataList.Count; i++)
             {
-                oldHeartBeatTime = GetTimeStamp();
-                for (int i = 0; i < heartBeatDataList.Count; i++)
+                if (heartBeatDataList[i].isHeartBeat == false)
                 {
-                    if (heartBeatDataList[i].isHeartBeat == false)
-                    {
-                        heartBeatDataList[i].CloseConnection();
-                    }
-                    else
-                    {
-                        heartBeatDataList[i].isHeartBeat = false;
-                        heartBeatDataList[i].Send(RequestCode.HeartbeatPacket, "1");
-                    }
+                    heartBeatDataList[i].CloseConnection();
+                }
+                else
+                {
+                    heartBeatDataList[i].isHeartBeat = false;
+                    heartBeatDataList[i].Send(RequestCode.HeartbeatPacket, "1");
                 }
             }
+
+            /*if (GetTimeStamp() - oldHeartBeatTime >= heartBeatInterval)
+            {
+                oldHeartBeatTime = GetTimeStamp();
+            }*/
         }
     }
 

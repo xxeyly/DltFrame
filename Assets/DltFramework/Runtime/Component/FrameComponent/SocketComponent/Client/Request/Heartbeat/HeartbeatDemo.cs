@@ -20,7 +20,7 @@ public class HeartbeatDemo : SceneComponentInit, IHeartbeat
 
     public void HeartbeatNormal()
     {
-        Debug.Log("心跳正常");
+        // Debug.Log("心跳正常");
     }
 
     public override void StartComponent()

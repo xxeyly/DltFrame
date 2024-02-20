@@ -5,3 +5,15 @@ G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.csproj.SuggestedBinding
 G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.csproj.CoreCompileInputs.cache
 G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.exe
 G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.pdb
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\SocketServer.exe.config
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Buffers.dll
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Collections.Immutable.dll
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Memory.dll
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Numerics.Vectors.dll
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Buffers.xml
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Collections.Immutable.xml
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Memory.xml
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Numerics.Vectors.xml
+G:\Unity\2020\XFrame\SocketServer\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+G:\Unity\2020\XFrame\SocketServer\obj\Debug\SocketServer.csproj.CopyComplete

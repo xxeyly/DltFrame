@@ -116,6 +116,7 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
         await HotFixPathLocalLoad();
         //HotFixView服务器配置表检测
         AotDebug.Log("HotFixView服务器配置表检测");
+        AotDebug.Log(hotFixPath);
         await HotFixViewConfigCheck();
         //HotFixView本地检查
         AotDebug.Log("HotFixView本地检查");

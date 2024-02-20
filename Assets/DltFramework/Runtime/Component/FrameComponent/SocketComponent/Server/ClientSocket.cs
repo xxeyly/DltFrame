@@ -1,7 +1,5 @@
 using System;
 using System.Net.Sockets;
-using System.Runtime.Remoting.Messaging;
-using System.Threading;
 
 public class ClientSocket
 {
@@ -11,11 +9,6 @@ public class ClientSocket
     //服务器
     private ServerSocketFrameComponent _server;
 
-    //客户端管理
-    private ClientSocketManager _clientSocketManager;
-
-    private HeartBeat _heartBeat;
-
     //客户端Socket
     public Socket socket;
 
@@ -23,11 +16,9 @@ public class ClientSocket
     public bool isHeartBeat = true;
 
 
-    public ClientSocket(ServerSocketFrameComponent server, ClientSocketManager clientSocketManager, HeartBeat heartBeat, Socket socket)
+    public ClientSocket(ServerSocketFrameComponent server, Socket socket)
     {
         _server = server;
-        _clientSocketManager = clientSocketManager;
-        _heartBeat = heartBeat;
         this.socket = socket;
         _msg = new Message();
         StartReceiveCallback();
@@ -38,10 +29,17 @@ public class ClientSocket
     /// </summary>
     void StartReceiveCallback()
     {
-        //如果是连接状态
-        if (socket.Connected)
+        try
         {
-            socket.BeginReceive(_msg.Data, _msg.StartIndex, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
+            //如果是连接状态
+            if (socket.Connected)
+            {
+                socket.BeginReceive(_msg.Data, _msg.StartIndex, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
+            }
+        }
+        catch (Exception e)
+        {
+            CloseConnection();
         }
     }
 
@@ -86,17 +84,31 @@ public class ClientSocket
     /// <param name="data"></param>
     public void Send(RequestCode requestCode, string data)
     {
+        // Console.WriteLine(requestCode + " " + data);
         byte[] bytes = _msg.PackData(requestCode, data);
-        socket.Send(bytes);
+        ServerFrameSync.AddFrameSync(this, bytes);
+    }
+
+    public void Send(byte[] bytes)
+    {
+        try
+        {
+            socket.Send(bytes);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
     }
 
     public void CloseConnection()
     {
+        ServerPlayerMove.OnPlayerExit(this);
         Console.WriteLine(socket.RemoteEndPoint + "断开连接...");
         //用户列表移除自身
-        _clientSocketManager.RemoveClientSocket(this);
+        ClientSocketManager.RemoveClientSocket(this);
         //心跳列表移除自身
-        _heartBeat.RemoveClientSocket(this);
+        HeartBeat.RemoveClientSocket(this);
         socket.Close();
     }
 }

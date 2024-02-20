@@ -3,21 +3,21 @@ using System.Collections.Generic;
 
 public class ClientSocketManager
 {
-    private Random random = new Random();
+    private static Random random = new Random();
 
     //客户端SocketId列表
-    public List<int> clientSocketIdList = new List<int>();
+    public static List<int> clientSocketIdList = new List<int>();
 
     //客户端Socket列表
     public static List<ClientSocket> clientSocketList = new List<ClientSocket>();
 
-    public void AddClientSocket(ClientSocket clientSocket)
+    public static void AddClientSocket(ClientSocket clientSocket)
     {
         clientSocket.clientSocketId = GetClientSocketId();
         clientSocketList.Add(clientSocket);
     }
 
-    public void RemoveClientSocket(ClientSocket clientSocket)
+    public static void RemoveClientSocket(ClientSocket clientSocket)
     {
         clientSocketIdList.Remove(clientSocket.clientSocketId);
         clientSocketList.Remove(clientSocket);
@@ -27,7 +27,7 @@ public class ClientSocketManager
     /// 生成随机数
     /// </summary>
     /// <returns></returns>
-    private int GetClientSocketId()
+    private static int GetClientSocketId()
     {
         //生成随机数
         int id = random.Next();
