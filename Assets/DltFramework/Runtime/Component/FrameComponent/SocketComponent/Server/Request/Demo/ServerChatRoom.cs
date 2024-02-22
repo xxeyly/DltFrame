@@ -9,12 +9,13 @@ public class ServerChatRoom
         {
             if (socket != clientSocket)
             {
-                socket.Send(RequestCode.ChatRoom, clientSocket.socket.RemoteEndPoint + ":" + data);
+                socket.TcpSend(RequestCode.ChatRoom, clientSocket.socket.RemoteEndPoint + ":" + data);
             }
             else
             {
-                socket.Send(RequestCode.ChatRoom, "自己" + ":" + data);
+                socket.TcpSend(RequestCode.ChatRoom, "自己" + ":" + data);
             }
         }
     }
+   
 }

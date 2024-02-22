@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 
 public class ClientSocketManager
 {
@@ -10,6 +11,7 @@ public class ClientSocketManager
 
     //客户端Socket列表
     public static List<ClientSocket> clientSocketList = new List<ClientSocket>();
+
 
     public static void AddClientSocket(ClientSocket clientSocket)
     {
@@ -22,6 +24,22 @@ public class ClientSocketManager
         clientSocketIdList.Remove(clientSocket.clientSocketId);
         clientSocketList.Remove(clientSocket);
     }
+
+    //获得指定客户端
+    public static ClientSocket GetClientSocket(int connectCode)
+    {
+        foreach (ClientSocket clientSocket in clientSocketList)
+        {
+            if (clientSocket.clientSocketId == connectCode)
+            {
+                return clientSocket;
+            }
+        }
+
+
+        return null;
+    }
+
 
     /// <summary>
     /// 生成随机数

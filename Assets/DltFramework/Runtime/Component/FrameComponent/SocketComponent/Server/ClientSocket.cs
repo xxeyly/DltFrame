@@ -1,5 +1,7 @@
 using System;
+using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 public class ClientSocket
 {
@@ -7,27 +9,48 @@ public class ClientSocket
     private Message _msg;
 
     //服务器
-    private ServerSocketFrameComponent _server;
+    public ServerSocketFrameComponent server;
 
     //客户端Socket
     public Socket socket;
+    private UdpClient _udpClient;
 
     //心跳维持
     public bool isHeartBeat = true;
 
+    private IPEndPoint remoteIpEndPoint;
 
-    public ClientSocket(ServerSocketFrameComponent server, Socket socket)
+    public ClientSocket()
     {
-        _server = server;
-        this.socket = socket;
         _msg = new Message();
+    }
+
+    public void SetServer(ServerSocketFrameComponent server)
+    {
+        this.server = server;
+    }
+
+
+    public void SetTcpClient(Socket socket)
+    {
+        this.socket = socket;
         StartReceiveCallback();
+    }
+
+    public void SetUdpClient(UdpClient udpClient)
+    {
+        _udpClient = udpClient;
+    }
+
+    public void SetUdpClient(IPEndPoint remoteIpEndPoint)
+    {
+        this.remoteIpEndPoint = remoteIpEndPoint;
     }
 
     /// <summary>
     /// 开始异步接受
     /// </summary>
-    void StartReceiveCallback()
+    private void StartReceiveCallback()
     {
         try
         {
@@ -74,7 +97,7 @@ public class ClientSocket
 
     public void ExecuteReflection(RequestCode requestCode, string data)
     {
-        _server.ExecuteReflection(requestCode, data, this);
+        server.ExecuteReflection(requestCode, data, this);
     }
 
     /// <summary>
@@ -82,18 +105,23 @@ public class ClientSocket
     /// </summary>
     /// <param name="requestCode"></param>
     /// <param name="data"></param>
-    public void Send(RequestCode requestCode, string data)
+    public void TcpSend(RequestCode requestCode, string data)
     {
-        // Console.WriteLine(requestCode + " " + data);
+        byte[] bytes = _msg.PackData(requestCode, data);
+        socket.Send(bytes);
+    }
+
+    public void UdpSend(RequestCode requestCode, string data)
+    {
         byte[] bytes = _msg.PackData(requestCode, data);
         ServerFrameSync.AddFrameSync(this, bytes);
     }
 
-    public void Send(byte[] bytes)
+    public void UdpSend(byte[] bytes)
     {
         try
         {
-            socket.Send(bytes);
+            _udpClient.Send(bytes, bytes.Length, remoteIpEndPoint);
         }
         catch (Exception e)
         {

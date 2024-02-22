@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Text;
 
 public class ServerSocketFrameComponent
 {
     private Socket _serverSocket;
     private string ip = "192.168.7.32";
     private int port = 828;
+    private int udpPort = 829;
     private Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
+    private UdpClient _udpClient;
+    private IPEndPoint remoteIpEndPoint;
 
     private bool isInit = false;
 
@@ -21,14 +25,16 @@ public class ServerSocketFrameComponent
         //开启服务器
         _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         //Ip地址绑定
-        var ipEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+        IPEndPoint tcpIpEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
         //服务器与Ip地址绑定
-        _serverSocket.Bind(ipEndPoint);
+        _serverSocket.Bind(tcpIpEndPoint);
         //设定监听数量
         _serverSocket.Listen(0);
-        Console.WriteLine("服务器开启成功...");
-        //异步加载用户
         _serverSocket.BeginAccept(AcceptCallBack, _serverSocket);
+        Console.WriteLine("Tcp服务器开启成功...");
+        //异步加载用户
+        _udpClient = new UdpClient(udpPort);
+        Console.WriteLine("Udp服务器开启成功...");
         //心跳包
         HeartBeat.CreateHeartBeat();
         //帧同步
@@ -37,14 +43,36 @@ public class ServerSocketFrameComponent
 
     private void AcceptCallBack(IAsyncResult ar)
     {
-        ClientSocket clientSocket = new ClientSocket(this, _serverSocket.EndAccept(ar));
+        ClientSocket clientSocket = new ClientSocket();
+        clientSocket.SetServer(this);
+        clientSocket.SetTcpClient(_serverSocket.EndAccept(ar));
+        clientSocket.SetUdpClient(_udpClient);
+        //添加客户端Socket
         ClientSocketManager.AddClientSocket(clientSocket);
-        HeartBeat.AddClientSocket(clientSocket);
+        //心跳包
         Console.WriteLine(clientSocket.socket.RemoteEndPoint + ":加入系统...");
-        clientSocket.Send(RequestCode.None, "服务器登录成功");
-        ServerPlayerMove.OnPlayerInit(clientSocket);
-        _serverSocket.BeginAccept(AcceptCallBack, _serverSocket);
+        clientSocket.TcpSend(RequestCode.ConnectCode, clientSocket.clientSocketId.ToString());
+        HeartBeat.AddClientSocket(clientSocket);
+        _serverSocket.BeginAccept(AcceptCallBack, null);
+        _udpClient.BeginReceive(UdpReceiveCallback, null);
     }
+
+    private void UdpReceiveCallback(IAsyncResult ar)
+    {
+        remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        byte[] receivedBytes = _udpClient.EndReceive(ar, ref remoteIpEndPoint);
+        Message.UdpReadMessage(receivedBytes, remoteIpEndPoint, UdpExecuteReflection);
+        _udpClient.BeginReceive(UdpReceiveCallback, null);
+    }
+
+    private void UdpExecuteReflection(RequestCode requestCode, int connectCode, string data, IPEndPoint remoteIpEndPoint)
+    {
+        // Console.WriteLine(requestCode + " " + data + " " + remoteIpEndPoint);
+        ClientSocket clientSocket = ClientSocketManager.GetClientSocket(connectCode);
+        clientSocket.SetUdpClient(remoteIpEndPoint);
+        clientSocket.ExecuteReflection(requestCode, data);
+    }
+
 
     /// <summary>
     /// 执行反射逻辑

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Text;
+
+// using UnityEngine;
 
 public class Message
 {
@@ -22,6 +25,25 @@ public class Message
         get { return data.Length - startIndex; }
     }
 
+    //Client 向服务器发送数据时,不需要connectCode
+    public static void UdpReadMessage(byte[] data, Action<RequestCode, string> processDataCallback)
+    {
+        int count = BitConverter.ToInt32(data, 0);
+        RequestCode requestCode = (RequestCode)BitConverter.ToInt32(data, 4);
+        string s = Encoding.UTF8.GetString(data, 8, count - 4);
+        processDataCallback(requestCode, s);
+    }
+
+    //Server
+    public static void UdpReadMessage(byte[] data, IPEndPoint ipEndPoint, Action<RequestCode, int, string, IPEndPoint> processDataCallback)
+    {
+        int count = BitConverter.ToInt32(data, 0);
+        RequestCode requestCode = (RequestCode)BitConverter.ToInt32(data, 4);
+        int connectCode = BitConverter.ToInt32(data, 8);
+        string s = Encoding.UTF8.GetString(data, 12, count - 8);
+        processDataCallback(requestCode, connectCode, s, ipEndPoint);
+    }
+
     /// <summary>
     /// 解析数据
     /// </summary>
@@ -40,7 +62,6 @@ public class Message
                 Array.Copy(data, count + 4, data, 0, startIndex - 4 - count);
 
                 startIndex -= (count + 4);
-                
             }
             else
             {
@@ -71,5 +92,21 @@ public class Message
         // Debug.Log(dataAmountBytes.Length);
         //返回组装成功的数据
         return dataAmountBytes.Concat(requestCodeBytes).ToArray().Concat(dataBytes).ToArray();
+    }
+
+    public byte[] UdpPackData(RequestCode requestCode, int connectCode, string data)
+    {
+        //请求码
+        byte[] requestCodeBytes = BitConverter.GetBytes((int)requestCode);
+        //连接码
+        byte[] connectCodeBytes = BitConverter.GetBytes(connectCode);
+        //字符串长度
+        byte[] dataBytes = Encoding.UTF8.GetBytes(data);
+        //数据总长度
+        int dataAmount = requestCodeBytes.Length + connectCodeBytes.Length + dataBytes.Length;
+        //长度字节
+        byte[] dataAmountBytes = BitConverter.GetBytes(dataAmount);
+        //返回组装成功的数据
+        return dataAmountBytes.Concat(requestCodeBytes).ToArray().Concat(connectCodeBytes).ToArray().Concat(dataBytes).ToArray();
     }
 }

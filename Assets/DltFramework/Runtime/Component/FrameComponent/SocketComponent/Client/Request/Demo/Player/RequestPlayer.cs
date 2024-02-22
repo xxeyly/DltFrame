@@ -27,6 +27,7 @@ public class RequestPlayer
     [AddRequestCode(RequestCode.OtherPlayerMove, RequestType.Client)]
     public void OnOtherPlayerMove(string data)
     {
+        Debug.Log(data);
         ListenerFrameComponent.Instance.playerSceneComponent.OtherPlayerMove(JsonUtil.FromJson<PlayerData>(data));
     }
 

@@ -2,11 +2,17 @@
 {
     None = 0,
 
+    //连接码
+    ConnectCode = 1,
+
     //心跳
-    HeartbeatPacket = 1,
+    HeartbeatPacket = 2,
 
     //主动断开连接
-    Disconnect = 2,
+    Disconnect = 3,
+
+    //UDP初始化
+    UdpInit,
 
     //聊天室
     ChatRoom,
@@ -27,5 +33,5 @@
     OtherPlayerMove,
 
     //其他角色退出
-    OtherPlayerExit
+    OtherPlayerExit,
 }

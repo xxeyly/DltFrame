@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using DltFramework;
 using Sirenix.OdinInspector;
@@ -14,9 +16,12 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
     [LabelText("自动开启连接")] public bool autoConnect = true;
     [LabelText("是否连接")] public bool isConnect;
     private Socket _clientSocket;
+    private UdpClient _udpClient;
     private Message _msg = new Message();
     [LabelText("IP地址")] [SerializeField] private string ip = "127.0.0.1";
     [LabelText("端口")] [SerializeField] private int port = 828;
+    [LabelText("端口")] [SerializeField] private int udpPort = 829;
+    [LabelText("连接码")] public int connectCode = 0;
 
     [LabelText("帧发送间隔,单位毫秒")] [SerializeField]
     public int frameInterval = 20;
@@ -26,25 +31,22 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
     [LabelText("反射数据")] private static Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
     private static Queue<RequestData> _requestData = new Queue<RequestData>();
 
-    public override void FrameInitComponent()
+    public override async void FrameInitComponent()
     {
         Instance = this;
         ReflectionRequestCode();
         if (autoConnect)
         {
-            StartConnect();
+            await StartConnect();
         }
     }
 
 
     public void FrameSync()
     {
-        if (_clientSocket != null && _clientSocket.Connected)
+        foreach (KeyValuePair<RequestCode, byte[]> pair in frameSendData)
         {
-            foreach (KeyValuePair<RequestCode, byte[]> pair in frameSendData)
-            {
-                _clientSocket.Send(pair.Value);
-            }
+            _udpClient.Send(pair.Value, pair.Value.Length);
         }
 
         frameSendData.Clear();
@@ -58,15 +60,30 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
         try
         {
             await _clientSocket.ConnectAsync(ip, port);
-
-            Receive();
+            _udpClient = new UdpClient();
+            _udpClient.Connect(ip, udpPort);
+            _udpClient.BeginReceive(UdpReceiveCallback, null);
+            TcpReceive();
         }
         catch (Exception e)
         {
-            Debug.Log("连接失败...");
+            Debug.Log("连接失败..." + e.ToString());
             await UniTask.Delay(TimeSpan.FromSeconds(1));
-            await StartConnect();
+            // await StartConnect();
         }
+    }
+
+    private void UdpReceiveCallback(IAsyncResult ar)
+    {
+        IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        byte[] data = _udpClient.EndReceive(ar, ref ipEndPoint);
+        Message.UdpReadMessage(data, UdpExecuteReflection);
+        _udpClient.BeginReceive(UdpReceiveCallback, null);
+    }
+
+    private void UdpExecuteReflection(RequestCode requestCode, string data)
+    {
+        AddToExecuteReflection(requestCode, data);
     }
 
     [LabelText("重新连接")]
@@ -77,7 +94,7 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
         try
         {
             _clientSocket.Connect(ip, port);
-            Receive();
+            TcpReceive();
         }
         catch (Exception e)
         {
@@ -148,10 +165,11 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
     /// <summary>
     /// 接收消息
     /// </summary>
-    private void Receive()
+    private void TcpReceive()
     {
         _clientSocket.BeginReceive(_msg.Data, _msg.StartIndex, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
     }
+
 
     /// <summary>
     /// 异步接受数据回调
@@ -177,14 +195,13 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
             Debug.Log(e.ToString());
         }
 
-        Receive();
+        TcpReceive();
     }
 
     //执行反射逻辑
     private void AddToExecuteReflection(RequestCode requestCode, string data)
     {
         _requestData.Enqueue(new RequestData(requestCode, data));
-        // ExecuteReflection(requestCode, data);
     }
 
     //执行反射逻辑
@@ -208,7 +225,12 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
     public void Send(RequestCode requestCode, string data)
     {
         byte[] bytes = _msg.PackData(requestCode, data);
-        // _clientSocket.Send(bytes);
+        _clientSocket.Send(bytes);
+    }
+
+    public void SendUdp(RequestCode requestCode, int connectCode, string message)
+    {
+        byte[] bytes = _msg.UdpPackData(requestCode, connectCode, message);
         //加入帧同步数据
         if (!frameSendData.ContainsKey(requestCode))
         {

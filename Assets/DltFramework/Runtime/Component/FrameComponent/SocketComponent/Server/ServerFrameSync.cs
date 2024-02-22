@@ -28,7 +28,7 @@ public class ServerFrameSync
             {
                 for (int j = 0; j < frameSyncDataList[i].data.Count; j++)
                 {
-                    frameSyncDataList[i].clientSocket.Send(frameSyncDataList[i].data[j]);
+                    frameSyncDataList[i].clientSocket.UdpSend(frameSyncDataList[i].data[j]);
                 }
             }
 

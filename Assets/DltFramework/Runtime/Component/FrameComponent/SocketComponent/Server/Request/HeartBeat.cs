@@ -46,7 +46,7 @@ public class HeartBeat
                 else
                 {
                     heartBeatDataList[i].isHeartBeat = false;
-                    heartBeatDataList[i].Send(RequestCode.HeartbeatPacket, "1");
+                    heartBeatDataList[i].TcpSend(RequestCode.HeartbeatPacket, "1");
                 }
             }
 
