@@ -1,18 +1,22 @@
 ﻿public enum RequestCode
 {
     None = 0,
+    ConnectSuccessFully,
 
     //连接码
-    ConnectCode = 1,
+    Token,
 
     //心跳
-    HeartbeatPacket = 2,
+    HeartbeatPacket,
 
     //主动断开连接
-    Disconnect = 3,
+    Disconnect,
 
-    //UDP初始化
-    UdpInit,
+    //进入
+    EnterGame,
+
+    //帧同步
+    FrameSync,
 
     //聊天室
     ChatRoom,

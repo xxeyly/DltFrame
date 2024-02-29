@@ -809,6 +809,43 @@ namespace DltFramework
             return newPath;
         }
 
+        [LabelText("获得设备存储路径")]
+        public static string Path_DeviceStorage(bool unityWebRequestPath = false)
+        {
+            string path = String.Empty;
+
+            switch (Application.platform)
+            {
+                case RuntimePlatform.WindowsEditor:
+                    path = Application.dataPath + "/UnStreamingAssets";
+                    break;
+                case RuntimePlatform.WindowsPlayer:
+                    path = Application.streamingAssetsPath;
+                    break;
+                case RuntimePlatform.WSAPlayerX64:
+                case RuntimePlatform.WSAPlayerX86:
+                case RuntimePlatform.WSAPlayerARM:
+                    path = Application.persistentDataPath;
+                    break;
+                case RuntimePlatform.Android:
+                    if (unityWebRequestPath)
+                    {
+                        path = "file://" + Application.persistentDataPath;
+                    }
+                    else
+                    {
+                        path = Application.persistentDataPath;
+                    }
+
+                    break;
+                case RuntimePlatform.IPhonePlayer:
+                    path = Application.persistentDataPath;
+                    break;
+            }
+
+            return path;
+        }
+
         #endregion
 
 

@@ -11,17 +11,16 @@ public class ClientSocketManager
 
     //客户端Socket列表
     public static List<ClientSocket> clientSocketList = new List<ClientSocket>();
-
+    
 
     public static void AddClientSocket(ClientSocket clientSocket)
     {
-        clientSocket.clientSocketId = GetClientSocketId();
         clientSocketList.Add(clientSocket);
     }
 
     public static void RemoveClientSocket(ClientSocket clientSocket)
     {
-        clientSocketIdList.Remove(clientSocket.clientSocketId);
+        clientSocketIdList.Remove(clientSocket.token);
         clientSocketList.Remove(clientSocket);
     }
 
@@ -30,7 +29,7 @@ public class ClientSocketManager
     {
         foreach (ClientSocket clientSocket in clientSocketList)
         {
-            if (clientSocket.clientSocketId == connectCode)
+            if (clientSocket.token == connectCode)
             {
                 return clientSocket;
             }
@@ -45,13 +44,13 @@ public class ClientSocketManager
     /// 生成随机数
     /// </summary>
     /// <returns></returns>
-    private static int GetClientSocketId()
+    public static int GetClientToken()
     {
         //生成随机数
         int id = random.Next();
         if (clientSocketIdList.Contains(id))
         {
-            GetClientSocketId();
+            GetClientToken();
         }
         else
         {

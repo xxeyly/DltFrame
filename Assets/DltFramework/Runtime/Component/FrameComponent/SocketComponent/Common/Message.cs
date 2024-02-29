@@ -25,23 +25,20 @@ public class Message
         get { return data.Length - startIndex; }
     }
 
-    //Client 向服务器发送数据时,不需要connectCode
-    public static void UdpReadMessage(byte[] data, Action<RequestCode, string> processDataCallback)
+    //Client
+    public static void UdpReadMessage(byte[] data, Action<int, string> processDataCallback)
     {
-        int count = BitConverter.ToInt32(data, 0);
-        RequestCode requestCode = (RequestCode)BitConverter.ToInt32(data, 4);
-        string s = Encoding.UTF8.GetString(data, 8, count - 4);
-        processDataCallback(requestCode, s);
+        int topData = BitConverter.ToInt32(data, 0);
+        string s = Encoding.UTF8.GetString(data, 4, data.Length - 4);
+        processDataCallback(topData, s);
     }
 
     //Server
-    public static void UdpReadMessage(byte[] data, IPEndPoint ipEndPoint, Action<RequestCode, int, string, IPEndPoint> processDataCallback)
+    public static void UdpReadMessage(byte[] data, IPEndPoint ipEndPoint, Action<int, string, IPEndPoint> processDataCallback)
     {
-        int count = BitConverter.ToInt32(data, 0);
-        RequestCode requestCode = (RequestCode)BitConverter.ToInt32(data, 4);
-        int connectCode = BitConverter.ToInt32(data, 8);
-        string s = Encoding.UTF8.GetString(data, 12, count - 8);
-        processDataCallback(requestCode, connectCode, s, ipEndPoint);
+        int topData = BitConverter.ToInt32(data, 0);
+        string s = Encoding.UTF8.GetString(data, 4, data.Length - 4);
+        processDataCallback(topData, s, ipEndPoint);
     }
 
     /// <summary>
@@ -50,6 +47,11 @@ public class Message
     public void ReadMessage(int newDataAmount, Action<RequestCode, string> processDataCallback)
     {
         startIndex += newDataAmount;
+        if (startIndex >= data.Length)
+        {
+            Array.Resize(ref data, startIndex * 2);
+        }
+
         while (true)
         {
             if (startIndex <= 4) return;
@@ -94,19 +96,15 @@ public class Message
         return dataAmountBytes.Concat(requestCodeBytes).ToArray().Concat(dataBytes).ToArray();
     }
 
-    public byte[] UdpPackData(RequestCode requestCode, int connectCode, string data)
+    public byte[] UdpPackData(int frameIndex, string data)
     {
-        //请求码
-        byte[] requestCodeBytes = BitConverter.GetBytes((int)requestCode);
-        //连接码
-        byte[] connectCodeBytes = BitConverter.GetBytes(connectCode);
+        //帧索引
+        byte[] requestCodeBytes = BitConverter.GetBytes(frameIndex);
+        // Debug.Log(requestCodeBytes.Length);
         //字符串长度
         byte[] dataBytes = Encoding.UTF8.GetBytes(data);
-        //数据总长度
-        int dataAmount = requestCodeBytes.Length + connectCodeBytes.Length + dataBytes.Length;
-        //长度字节
-        byte[] dataAmountBytes = BitConverter.GetBytes(dataAmount);
+        // Debug.Log(dataAmountBytes.Length);
         //返回组装成功的数据
-        return dataAmountBytes.Concat(requestCodeBytes).ToArray().Concat(connectCodeBytes).ToArray().Concat(dataBytes).ToArray();
+        return requestCodeBytes.ToArray().Concat(dataBytes).ToArray();
     }
 }

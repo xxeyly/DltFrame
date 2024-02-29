@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
+using LitJson;
 
 public class ServerSocketFrameComponent
 {
@@ -13,9 +14,6 @@ public class ServerSocketFrameComponent
     private int udpPort = 829;
     private Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
     private UdpClient _udpClient;
-    private IPEndPoint remoteIpEndPoint;
-
-    private bool isInit = false;
 
     public void StartServer()
     {
@@ -36,7 +34,7 @@ public class ServerSocketFrameComponent
         _udpClient = new UdpClient(udpPort);
         Console.WriteLine("Udp服务器开启成功...");
         //心跳包
-        HeartBeat.CreateHeartBeat();
+        // HeartBeat.CreateHeartBeat();
         //帧同步
         ServerFrameSync.CreateFrameSync();
     }
@@ -51,28 +49,45 @@ public class ServerSocketFrameComponent
         ClientSocketManager.AddClientSocket(clientSocket);
         //心跳包
         Console.WriteLine(clientSocket.socket.RemoteEndPoint + ":加入系统...");
-        clientSocket.TcpSend(RequestCode.ConnectCode, clientSocket.clientSocketId.ToString());
-        HeartBeat.AddClientSocket(clientSocket);
+        clientSocket.TcpSend(RequestCode.ConnectSuccessFully, "1");
+        // HeartBeat.AddClientSocket(clientSocket);
         _serverSocket.BeginAccept(AcceptCallBack, null);
         _udpClient.BeginReceive(UdpReceiveCallback, null);
     }
 
     private void UdpReceiveCallback(IAsyncResult ar)
     {
-        remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        IPEndPoint remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         byte[] receivedBytes = _udpClient.EndReceive(ar, ref remoteIpEndPoint);
+        // Console.WriteLine(remoteIpEndPoint);
         Message.UdpReadMessage(receivedBytes, remoteIpEndPoint, UdpExecuteReflection);
         _udpClient.BeginReceive(UdpReceiveCallback, null);
     }
 
-    private void UdpExecuteReflection(RequestCode requestCode, int connectCode, string data, IPEndPoint remoteIpEndPoint)
+    private void UdpExecuteReflection(int clientFrameIndex, string content, IPEndPoint ipEndPoint)
     {
-        // Console.WriteLine(requestCode + " " + data + " " + remoteIpEndPoint);
-        ClientSocket clientSocket = ClientSocketManager.GetClientSocket(connectCode);
-        clientSocket.SetUdpClient(remoteIpEndPoint);
-        clientSocket.ExecuteReflection(requestCode, data);
-    }
+        Console.WriteLine("客户端:" + clientFrameIndex);
+        Console.WriteLine("服务器:" + FrameRecord.frameIndex);
+        Console.WriteLine(content);
+        // Console.WriteLine(ipEndPoint);
 
+        FrameRecordData frameRecordData = JsonMapper.ToObject<FrameRecordData>(content);
+        if (clientFrameIndex < FrameRecord.frameIndex)
+        {
+            Console.WriteLine("超时:丢弃帧数据");
+            return;
+        }
+
+        //记录帧数据
+        ServerFrameSync.RecordFrameSyncData(clientFrameIndex, frameRecordData);
+        // Console.WriteLine(frameRecordData.id);
+        ClientSocket clientSocket = ClientSocketManager.GetClientSocket(frameRecordData.id);
+        //客户端发来的会比服务器的多一帧,表示客户端已经同步过上一帧了
+        clientSocket.FrameIndex = clientFrameIndex - 1;
+        clientSocket.SetUdpClient(ipEndPoint);
+
+        //记录地址
+    }
 
     /// <summary>
     /// 执行反射逻辑

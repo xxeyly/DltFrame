@@ -1,11 +1,10 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
-using System.Text;
 
 public class ClientSocket
 {
-    public int clientSocketId;
+    public int token;
     private Message _msg;
 
     //服务器
@@ -13,12 +12,14 @@ public class ClientSocket
 
     //客户端Socket
     public Socket socket;
-    private UdpClient _udpClient;
+    public UdpClient udpClient;
 
     //心跳维持
     public bool isHeartBeat = true;
 
-    private IPEndPoint remoteIpEndPoint;
+    public IPEndPoint remoteIpEndPoint;
+
+    public int FrameIndex;
 
     public ClientSocket()
     {
@@ -39,11 +40,12 @@ public class ClientSocket
 
     public void SetUdpClient(UdpClient udpClient)
     {
-        _udpClient = udpClient;
+        this.udpClient = udpClient;
     }
 
     public void SetUdpClient(IPEndPoint remoteIpEndPoint)
     {
+        // Console.WriteLine("客户端地址:" + remoteIpEndPoint);
         this.remoteIpEndPoint = remoteIpEndPoint;
     }
 
@@ -100,6 +102,7 @@ public class ClientSocket
         server.ExecuteReflection(requestCode, data, this);
     }
 
+
     /// <summary>
     /// 发送请求
     /// </summary>
@@ -111,17 +114,18 @@ public class ClientSocket
         socket.Send(bytes);
     }
 
-    public void UdpSend(RequestCode requestCode, string data)
+    public void UdpSend(int frameIndex, string data)
     {
-        byte[] bytes = _msg.PackData(requestCode, data);
-        ServerFrameSync.AddFrameSync(this, bytes);
+        byte[] bytes = _msg.UdpPackData(frameIndex, data);
+        UdpSend(bytes);
     }
 
     public void UdpSend(byte[] bytes)
     {
         try
         {
-            _udpClient.Send(bytes, bytes.Length, remoteIpEndPoint);
+            udpClient.Send(bytes, bytes.Length, remoteIpEndPoint);
+            // Console.WriteLine("发送帧数据到:" + remoteIpEndPoint + "数据:" + Encoding.UTF8.GetString(bytes));
         }
         catch (Exception e)
         {

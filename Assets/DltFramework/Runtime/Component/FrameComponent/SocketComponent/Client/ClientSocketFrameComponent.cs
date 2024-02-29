@@ -21,12 +21,10 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
     [LabelText("IP地址")] [SerializeField] private string ip = "127.0.0.1";
     [LabelText("端口")] [SerializeField] private int port = 828;
     [LabelText("端口")] [SerializeField] private int udpPort = 829;
-    [LabelText("连接码")] public int connectCode = 0;
+    [LabelText("连接码")] public int Token = 0;
 
     [LabelText("帧发送间隔,单位毫秒")] [SerializeField]
-    public int frameInterval = 20;
-
-    [LabelText("帧同步发送数据-每帧只存在一个相同操作")] public Dictionary<RequestCode, byte[]> frameSendData = new Dictionary<RequestCode, byte[]>();
+    public int frameInterval = 60;
 
     [LabelText("反射数据")] private static Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
     private static Queue<RequestData> _requestData = new Queue<RequestData>();
@@ -41,75 +39,7 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
         }
     }
 
-
-    public void FrameSync()
-    {
-        foreach (KeyValuePair<RequestCode, byte[]> pair in frameSendData)
-        {
-            _udpClient.Send(pair.Value, pair.Value.Length);
-        }
-
-        frameSendData.Clear();
-    }
-
-    [LabelText("开启连接")]
-    public async UniTask StartConnect()
-    {
-        Debug.Log("开启连接");
-        _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        try
-        {
-            await _clientSocket.ConnectAsync(ip, port);
-            _udpClient = new UdpClient();
-            _udpClient.Connect(ip, udpPort);
-            _udpClient.BeginReceive(UdpReceiveCallback, null);
-            TcpReceive();
-        }
-        catch (Exception e)
-        {
-            Debug.Log("连接失败..." + e.ToString());
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
-            // await StartConnect();
-        }
-    }
-
-    private void UdpReceiveCallback(IAsyncResult ar)
-    {
-        IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
-        byte[] data = _udpClient.EndReceive(ar, ref ipEndPoint);
-        Message.UdpReadMessage(data, UdpExecuteReflection);
-        _udpClient.BeginReceive(UdpReceiveCallback, null);
-    }
-
-    private void UdpExecuteReflection(RequestCode requestCode, string data)
-    {
-        AddToExecuteReflection(requestCode, data);
-    }
-
-    [LabelText("重新连接")]
-    public void ReConnect()
-    {
-        _clientSocket.Close();
-        _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        try
-        {
-            _clientSocket.Connect(ip, port);
-            TcpReceive();
-        }
-        catch (Exception e)
-        {
-            Debug.Log("连接失败...");
-        }
-    }
-
-    private void Update()
-    {
-        if (_requestData.Count > 0)
-        {
-            RequestData requestData = _requestData.Dequeue();
-            ExecuteReflection(requestData.requestCode, requestData.data);
-        }
-    }
+    #region 反射请求数据
 
     /// <summary>
     /// 反射请求数据
@@ -144,6 +74,80 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
             }
         }
     }
+
+    #endregion
+
+
+    public void FrameSync()
+    {
+    }
+
+    [LabelText("开启连接")]
+    public async UniTask StartConnect()
+    {
+        //开启快照
+        Snapshot.StartSnapshot();
+        Debug.Log("开启连接");
+        _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        try
+        {
+            await _clientSocket.ConnectAsync(ip, port);
+            _udpClient = new UdpClient();
+            _udpClient.Connect(ip, udpPort);
+            _udpClient.BeginReceive(UdpReceiveCallback, null);
+            TcpReceive();
+        }
+        catch (Exception e)
+        {
+            Debug.Log("连接失败..." + e.ToString());
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
+            // await StartConnect();
+        }
+    }
+
+    private void UdpReceiveCallback(IAsyncResult ar)
+    {
+        IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
+        byte[] data = _udpClient.EndReceive(ar, ref ipEndPoint);
+        Message.UdpReadMessage(data, UdpExecuteReflection);
+
+        _udpClient.BeginReceive(UdpReceiveCallback, null);
+    }
+
+    //帧同步解析
+    private void UdpExecuteReflection(int frameIndex, string data)
+    {
+        Debug.Log(frameIndex + ":" + data);
+        ClientFrameSync.ExecuteReflection(frameIndex, data);
+    }
+
+    [LabelText("重新连接")]
+    public void ReConnect()
+    {
+        _clientSocket.Close();
+        _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        try
+        {
+            _clientSocket.Connect(ip, port);
+            TcpReceive();
+        }
+        catch (Exception e)
+        {
+            Debug.Log("连接失败...");
+        }
+    }
+
+    private void Update()
+    {
+        if (_requestData.Count > 0)
+        {
+            RequestData requestData = _requestData.Dequeue();
+            ExecuteReflection(requestData.requestCode, requestData.data);
+        }
+
+        ClientFrameSync.Update();
+    }
+
 
     public override void FrameSceneInitComponent()
     {
@@ -228,18 +232,18 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat, IFrameSync
         _clientSocket.Send(bytes);
     }
 
-    public void SendUdp(RequestCode requestCode, int connectCode, string message)
+    public void UdpSend(FrameRecordData frameRecordData, bool IsForecast = true)
     {
-        byte[] bytes = _msg.UdpPackData(requestCode, connectCode, message);
-        //加入帧同步数据
-        if (!frameSendData.ContainsKey(requestCode))
-        {
-            frameSendData.Add(requestCode, bytes);
-        }
-        else
-        {
-            frameSendData[requestCode] = bytes;
-        }
+        ClientFrameSync.AddFrameRecordData(frameRecordData, IsForecast);
+    }
+
+    public void UdpStartSend(FrameRecordData frameRecordData, bool IsForecast = true)
+    {
+        //记录当前操作
+        FrameRecord.ClientRecordFrameSyncData(frameRecordData, IsForecast);
+        //客户端发送的要比服务器快一帧
+        byte[] bytes = _msg.UdpPackData(FrameRecord.frameIndex + 1, JsonUtil.ToJson(frameRecordData));
+        _udpClient.Send(bytes, bytes.Length);
     }
 
     public void HeartbeatAbnormal(int remainderCount)

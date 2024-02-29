@@ -1,9 +1,10 @@
 using System;
+using System.Net.Sockets;
 
 public class ServerChatRoom
 {
     [AddRequestCode(RequestCode.ChatRoom, RequestType.Server)]
-    public void OnHeartbeat(string data, ClientSocket clientSocket)
+    public void OnHeartbeat(string data,ClientSocket clientSocket)
     {
         foreach (ClientSocket socket in ClientSocketManager.clientSocketList)
         {
@@ -17,5 +18,4 @@ public class ServerChatRoom
             }
         }
     }
-   
 }
