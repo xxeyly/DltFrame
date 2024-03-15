@@ -40,13 +40,18 @@ namespace DltFramework
         /// </summary>
         public async UniTask<string> InstantiateHotFixAssetBundle()
         {
-            //本地字体路径
-            string localFontPath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundlePath, hotFixRuntimeSceneAssetBundleConfigs.sceneFontFixRuntimeAssetConfig.assetBundleName);
-            AssetBundle fontAssetBundle = null;
-            if (File.Exists(localFontPath))
+            //本地重复资源
+            foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFontFixRuntimeAssetConfig)
             {
-                //加载字体
-                fontAssetBundle = await AssetBundle.LoadFromFileAsync(localFontPath);
+                string localFontPath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath,
+                    hotFixRuntimeAssetBundleConfig.assetBundleName);
+                if (File.Exists(localFontPath))
+                {
+                    Debug.Log(hotFixRuntimeAssetBundleConfig.assetBundleName);
+                    //加载重复资源
+                    AssetBundle repeatAssetBundle = await AssetBundle.LoadFromFileAsync(localFontPath);
+                    currentSceneAllAssetBundle.Add(repeatAssetBundle);
+                }
             }
 
             //加载内容
@@ -74,11 +79,6 @@ namespace DltFramework
             }
 
             currentSceneAllAssetBundle.Clear();
-            if (File.Exists(localFontPath))
-            {
-                fontAssetBundle?.Unload(false);
-            }
-
             return string.Empty;
         }
 

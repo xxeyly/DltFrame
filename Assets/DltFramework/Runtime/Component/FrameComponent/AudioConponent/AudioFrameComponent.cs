@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
 // ReSharper disable CollectionNeverUpdated.Local
 
 namespace DltFramework
@@ -23,6 +24,11 @@ namespace DltFramework
         public override void FrameInitComponent()
         {
             Instance = this;
+            foreach (AudioComponentData.AudioInfo audioInfo in audioData.audioInfos)
+            {
+                _audioDlc.Add(audioInfo.audioName, audioInfo.audioClip);
+            }
+
             //创建音效组件
             if (_effectAudioSource == null)
             {
@@ -47,14 +53,13 @@ namespace DltFramework
             }
         }
 
-        
+
         public override void FrameSceneInitComponent()
         {
         }
 
         public override void FrameSceneEndComponent()
         {
-            
         }
 
         public override void FrameEndComponent()
@@ -70,6 +75,10 @@ namespace DltFramework
                 _effectAudioSource.volume = 1;
                 _effectAudioSource.clip = _audioDlc[audioName];
                 _effectAudioSource.Play();
+            }
+            else
+            {
+                Debug.LogWarning(audioName + "音效不存在");
             }
         }
 

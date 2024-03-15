@@ -494,8 +494,12 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
         {
             //添加场景
             hotFixAssetAssetBundleAssetConfigs.Add(hotFixAssetAssetBundleSceneConfig.sceneHotFixRuntimeAssetBundleConfig);
-            //添加字体
-            hotFixAssetAssetBundleAssetConfigs.Add(hotFixAssetAssetBundleSceneConfig.sceneFontFixRuntimeAssetConfig);
+            //添加重复资源
+            foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixAssetAssetBundleSceneConfig.repeatSceneFontFixRuntimeAssetConfig)
+            {
+                hotFixAssetAssetBundleAssetConfigs.Add(hotFixRuntimeAssetBundleConfig);
+            }
+
             //添加其他
             for (int i = 0; i < hotFixAssetAssetBundleSceneConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
             {

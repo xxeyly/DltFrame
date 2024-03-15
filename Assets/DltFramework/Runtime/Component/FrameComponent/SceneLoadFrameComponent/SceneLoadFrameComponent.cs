@@ -163,19 +163,19 @@ namespace DltFramework
         /// </summary>
         public void SceneEsc()
         {
-            if (Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-            {
-                Application.Quit();
-                Resources.UnloadUnusedAssets();
-            }
-            else if (Application.platform == RuntimePlatform.WebGLPlayer)
-            {
-            }
-            else if (Application.platform == RuntimePlatform.WindowsEditor)
+            if (Application.platform == RuntimePlatform.WindowsEditor)
             {
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
 #endif
+            }
+            else if (Application.platform == RuntimePlatform.WebGLPlayer)
+            {
+            }
+            else
+            {
+                Application.Quit();
+                Resources.UnloadUnusedAssets();
             }
         }
     }

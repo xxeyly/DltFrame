@@ -112,7 +112,8 @@ namespace DltFramework
         {
             WebGl,
             Android,
-            PC
+            PC,
+            UWP
         }
 
         [BoxGroup("图片压缩/信息")] [LabelText("指定路径压缩")] [FolderPath]
@@ -205,7 +206,18 @@ namespace DltFramework
                                 overridden = true,
                                 format = TextureImporterFormat.DXT5Crunched
                             });
+                            break; 
+                        case PlatformType.UWP:
+                            textureImporter.SetPlatformTextureSettings(new TextureImporterPlatformSettings()
+                            {
+                                maxTextureSize = 1024,
+                                compressionQuality = 50,
+                                name = "Windows Store Apps",
+                                overridden = true,
+                                format = TextureImporterFormat.DXT5Crunched
+                            });
                             break;
+                        
                         default:
                             throw new ArgumentOutOfRangeException();
                     }

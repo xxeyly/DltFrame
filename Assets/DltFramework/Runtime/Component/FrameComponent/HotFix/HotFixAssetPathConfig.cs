@@ -73,7 +73,9 @@ public class HotFixAssetPathConfig : MonoBehaviour
         }
         else
         {
-            PrefabUtility.ApplyPrefabInstance(gameObject, InteractionMode.AutomatedAction);
+            // PrefabUtility.UnpackPrefabInstance(gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+            PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
+            // PrefabUtility.ApplyPrefabInstance(gameObject, InteractionMode.AutomatedAction);
         }
 
         GameObject prefabObj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);

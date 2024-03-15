@@ -8,9 +8,9 @@ namespace DltFramework
         /// 增加计时任务
         /// </summary>
         /// <returns></returns>
-        protected string AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
+        protected string AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
         {
-            return UniTaskFrameComponent.Instance.AddTask(taskName, delay, count, null, null, callback);
+            return UniTaskFrameComponent.Instance.AddTask(taskName, delay, taskCount, initAction, endAction, action);
         }
 
         /// <summary>

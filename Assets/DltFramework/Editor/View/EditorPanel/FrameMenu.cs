@@ -97,6 +97,10 @@ namespace DltFramework
                 if (!baseWindow.GetComponent<ChildBaseWindow>())
                 {
                     baseWindow.sceneLayerIndex = baseWindow.transform.GetSiblingIndex();
+                    if (baseWindow.GetComponent<HotFixAssetPathConfig>() != null)
+                    {
+                        baseWindow.GetComponent<HotFixAssetPathConfig>().SetPathAndApplyPrefab();
+                    }
                 }
             }
         }

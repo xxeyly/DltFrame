@@ -25,7 +25,6 @@ namespace DltFramework
             // typeof(MouseFrameComponent),
             typeof(ViewFrameComponent),
             typeof(UniTaskFrameComponent),
-            typeof(ClientSocketFrameComponent),
 #if HybridCLR
             typeof(HotFixFrameComponent),
 #endif
