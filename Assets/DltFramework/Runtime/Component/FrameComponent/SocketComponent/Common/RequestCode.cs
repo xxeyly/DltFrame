@@ -1,41 +1,28 @@
-﻿public enum RequestCode
+﻿
+
+public partial class RequestCode
 {
-    None = 0,
-    ConnectSuccessFully,
+    public const int None = 0;
+    public const int ConnectSuccessFully = 1;
 
     //连接码
-    Token,
+    public const int Token = 2;
 
     //心跳
-    HeartbeatPacket,
+    public const int HeartbeatPacket = 3;
 
     //主动断开连接
-    Disconnect,
+    public const int Disconnect = 4;
 
     //进入
-    EnterGame,
+    public const int EnterGame = 5;
 
     //帧同步
-    FrameSync,
+    public const int FrameSync = 6;
 
     //聊天室
-    ChatRoom,
-
-    //角色初始化
-    PlayerInit,
-
-    //角色移动
-    PlayerMove,
-
-    //角色退出
-    PlayerExit,
-
-    //其他角色初始化
-    OtherPlayerInit,
-
-    //其他角色移动
-    OtherPlayerMove,
+    public const int ChatRoom = 7;
 
     //其他角色退出
-    OtherPlayerExit,
+    public const int OtherPlayerExit = 13;
 }

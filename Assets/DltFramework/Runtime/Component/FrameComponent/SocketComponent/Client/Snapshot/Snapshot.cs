@@ -25,13 +25,13 @@ public class Snapshot
     
     public static void AddSnapshot(SnapshotData snapshotData)
     {
-        if (!snapshotDic.ContainsKey(FrameRecord.frameIndex))
+        if (!snapshotDic.ContainsKey(ClientFrameSync.serverFrameIndex))
         {
-            snapshotDic.Add(FrameRecord.frameIndex, new List<SnapshotData>());
+            snapshotDic.Add(ClientFrameSync.serverFrameIndex, new List<SnapshotData>());
         }
         else
         {
-            snapshotDic[FrameRecord.frameIndex].Add(snapshotData);
+            snapshotDic[ClientFrameSync.serverFrameIndex].Add(snapshotData);
         }
     }
 

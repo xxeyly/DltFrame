@@ -3,8 +3,6 @@ using System.Collections.Generic;
 
 public class FrameRecord
 {
-    public static int frameIndex = 0;
-
     //帧记录
     public static List<FrameRecordDataGroup> frameRecord = new List<FrameRecordDataGroup>();
 
@@ -37,7 +35,7 @@ public class FrameRecord
     //记录所有操作
     public static void ClientRecordFrameSyncData(FrameRecordData frameRecordData, bool isForecast = true)
     {
-        int nextFrameIndex = frameIndex + 1;
+        int nextFrameIndex = ClientFrameSync.clientFrameIndex + 1;
         if (!ContainsFrameIndex(nextFrameIndex))
         {
             AddFrameRecordData(nextFrameIndex, frameRecordData);
@@ -56,14 +54,14 @@ public class FrameRecord
     //记录发过来的所有操作
     public static void ServerRecordFrameSyncData(FrameRecordData frameRecordData)
     {
-        if (!ContainsFrameIndex(frameIndex))
+        if (!ContainsFrameIndex(ClientFrameSync.serverFrameIndex))
         {
-            AddFrameRecordData(frameIndex, frameRecordData);
+            AddFrameRecordData(ClientFrameSync.serverFrameIndex, frameRecordData);
         }
 
-        if (!noForecastFrameRecordDic.ContainsKey(frameIndex))
+        if (!noForecastFrameRecordDic.ContainsKey(ClientFrameSync.serverFrameIndex))
         {
-            noForecastFrameRecordDic.Add(frameIndex, frameRecordData);
+            noForecastFrameRecordDic.Add(ClientFrameSync.serverFrameIndex, frameRecordData);
         }
     }
 
@@ -72,11 +70,9 @@ public class FrameRecord
         FrameRecordDataGroup frameRecordDataGroup = null;
         if (!ContainsFrameIndex(frameIndex))
         {
-            frameRecordDataGroup = new FrameRecordDataGroup()
-            {
-                frameIndex = frameIndex,
-                frameRecordData = new List<FrameRecordData>() { frameRecordData }
-            };
+            frameRecordDataGroup = new FrameRecordDataGroup();
+            frameRecordDataGroup.frameIndex = frameIndex;
+            frameRecordDataGroup.frameRecordData = new List<FrameRecordData>() { };
             frameRecord.Add(frameRecordDataGroup);
         }
         else
@@ -84,8 +80,10 @@ public class FrameRecord
             frameRecordDataGroup = GetFrameRecordDataGroup(frameIndex);
         }
 
-        frameRecordDataGroup.frameRecordData.Add(frameRecordData);
-        // Console.WriteLine("记录帧+" + frameIndex);
+        if (frameRecordData != null)
+        {
+            frameRecordDataGroup.frameRecordData.Add(frameRecordData);
+        }
     }
 
     public static FrameRecordDataGroup GetFrameRecordDataGroup(int frameIndex)

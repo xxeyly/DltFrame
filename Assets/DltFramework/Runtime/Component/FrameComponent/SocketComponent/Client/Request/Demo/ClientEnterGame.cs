@@ -8,9 +8,10 @@ public class ClientEnterGame
     [AddRequestCode(RequestCode.EnterGame, RequestType.Client)]
     public async void OnClientEnterGame(string data)
     {
-        ViewFrameComponent.Instance.HideView(typeof(EnterGame));
+        // ViewFrameComponent.Instance.HideView(typeof(EnterGame));
         FrameInitData frameInitData = JsonUtil.FromJson<FrameInitData>(data);
-        FrameRecord.frameIndex = frameInitData.frameIndex;
+        Debug.Log(data);
+        ClientFrameSync.serverFrameIndex = frameInitData.frameIndex;
         for (int i = 0; i < frameInitData.frameIndex; i++)
         {
             //数据为空,自己计算
@@ -34,8 +35,8 @@ public class ClientEnterGame
         }
 
         Debug.Log("开始回放");
-        //等待回放结束
         Debug.Log(frameInitData.frameRecord.Count);
+        //等待回放结束
         await RecordReplays.RecordReplay();
         Debug.Log("回放结束");
         //创建本地角色

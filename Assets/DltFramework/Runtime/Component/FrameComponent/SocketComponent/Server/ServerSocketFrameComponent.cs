@@ -12,7 +12,7 @@ public class ServerSocketFrameComponent
     private string ip = "192.168.7.32";
     private int port = 828;
     private int udpPort = 829;
-    private Dictionary<RequestCode, List<MethodInfoData>> _requestCodes = new Dictionary<RequestCode, List<MethodInfoData>>();
+    private Dictionary<int, List<MethodInfoData>> _requestCodes = new Dictionary<int, List<MethodInfoData>>();
     private UdpClient _udpClient;
 
     public void StartServer()
@@ -66,27 +66,37 @@ public class ServerSocketFrameComponent
 
     private void UdpExecuteReflection(int clientFrameIndex, string content, IPEndPoint ipEndPoint)
     {
-        Console.WriteLine("客户端:" + clientFrameIndex);
-        Console.WriteLine("服务器:" + FrameRecord.frameIndex);
-        Console.WriteLine(content);
+        Console.WriteLine("客户端:" + clientFrameIndex + ":" + content);
+        Console.WriteLine("服务器:" + ClientFrameSync.serverFrameIndex);
+        // Console.WriteLine(content);
         // Console.WriteLine(ipEndPoint);
 
         FrameRecordData frameRecordData = JsonMapper.ToObject<FrameRecordData>(content);
-        if (clientFrameIndex < FrameRecord.frameIndex)
-        {
-            Console.WriteLine("超时:丢弃帧数据");
-            return;
-        }
-
-        //记录帧数据
-        ServerFrameSync.RecordFrameSyncData(clientFrameIndex, frameRecordData);
-        // Console.WriteLine(frameRecordData.id);
         ClientSocket clientSocket = ClientSocketManager.GetClientSocket(frameRecordData.id);
         //客户端发来的会比服务器的多一帧,表示客户端已经同步过上一帧了
-        clientSocket.FrameIndex = clientFrameIndex - 1;
         clientSocket.SetUdpClient(ipEndPoint);
+        clientSocket.FrameIndex = clientFrameIndex;
+        //客户端和服务器的帧是时间是一样的
+        //服务器第1帧的时候向客户端发送数据
+        //客户端第1帧的时候也接收到了服务器第1帧的数据(最理想的状态)
+        //客户端第2帧向服务器发送数据,数据帧是第一帧的帧序列
+        //服务器接收的时候是第2帧
+        //所以要消除这个1帧的差异
 
-        //记录地址
+        
+        if (clientFrameIndex + 1 < ClientFrameSync.serverFrameIndex)
+        {
+            Console.WriteLine("超时:丢弃帧数据");
+            //向客户端发送最新帧数据
+        }
+        else
+        {
+            Console.WriteLine("帧记录:" + (clientFrameIndex + 1) + ":" + content);
+            //记录下一帧数据
+            ServerFrameSync.RecordFrameSyncData(clientFrameIndex + 1, frameRecordData);
+            // Console.WriteLine(frameRecordData.id);
+            //记录地址
+        }
     }
 
     /// <summary>
@@ -95,7 +105,7 @@ public class ServerSocketFrameComponent
     /// <param name="requestCode"></param>
     /// <param name="data"></param>
     /// <param name="clientSocket"></param>
-    public void ExecuteReflection(RequestCode requestCode, string data, ClientSocket clientSocket)
+    public void ExecuteReflection(int requestCode, string data, ClientSocket clientSocket)
     {
         if (_requestCodes.ContainsKey(requestCode))
         {
@@ -129,7 +139,7 @@ public class ServerSocketFrameComponent
                 {
                     if (customAttribute is AddRequestCodeAttribute)
                     {
-                        RequestCode requestCode = ((AddRequestCodeAttribute)customAttribute).RequestCode;
+                        int requestCode = ((AddRequestCodeAttribute)customAttribute).RequestCode;
                         RequestType requestType = ((AddRequestCodeAttribute)customAttribute).RequestType;
                         if (requestType == RequestType.Server)
                         {

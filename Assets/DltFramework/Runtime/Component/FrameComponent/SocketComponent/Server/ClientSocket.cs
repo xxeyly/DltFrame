@@ -97,7 +97,7 @@ public class ClientSocket
         }
     }
 
-    public void ExecuteReflection(RequestCode requestCode, string data)
+    public void ExecuteReflection(int requestCode, string data)
     {
         server.ExecuteReflection(requestCode, data, this);
     }
@@ -108,7 +108,7 @@ public class ClientSocket
     /// </summary>
     /// <param name="requestCode"></param>
     /// <param name="data"></param>
-    public void TcpSend(RequestCode requestCode, string data)
+    public void TcpSend(int requestCode, string data)
     {
         byte[] bytes = _msg.PackData(requestCode, data);
         socket.Send(bytes);
@@ -116,7 +116,7 @@ public class ClientSocket
 
     public void UdpSend(int frameIndex, string data)
     {
-        byte[] bytes = _msg.UdpPackData(frameIndex, data);
+        byte[] bytes = Message.UdpPackData(frameIndex, data);
         UdpSend(bytes);
     }
 

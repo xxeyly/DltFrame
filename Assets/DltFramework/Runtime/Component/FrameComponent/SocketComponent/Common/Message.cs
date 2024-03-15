@@ -44,7 +44,7 @@ public class Message
     /// <summary>
     /// 解析数据
     /// </summary>
-    public void ReadMessage(int newDataAmount, Action<RequestCode, string> processDataCallback)
+    public void ReadMessage(int newDataAmount, Action<int, string> processDataCallback)
     {
         startIndex += newDataAmount;
         if (startIndex >= data.Length)
@@ -58,7 +58,7 @@ public class Message
             int count = BitConverter.ToInt32(data, 0);
             if (startIndex - 4 >= count)
             {
-                RequestCode requestCode = (RequestCode)BitConverter.ToInt32(data, 4);
+                int requestCode = BitConverter.ToInt32(data, 4);
                 string s = Encoding.UTF8.GetString(data, 8, count - 4);
                 processDataCallback(requestCode, s);
                 Array.Copy(data, count + 4, data, 0, startIndex - 4 - count);
@@ -78,7 +78,7 @@ public class Message
     /// <param name="requestCode"></param>
     /// <param name="data"></param>
     /// <returns></returns>
-    public byte[] PackData(RequestCode requestCode, string data)
+    public byte[] PackData(int requestCode, string data)
     {
         //请求码
         byte[] requestCodeBytes = BitConverter.GetBytes((int)requestCode);
@@ -96,7 +96,7 @@ public class Message
         return dataAmountBytes.Concat(requestCodeBytes).ToArray().Concat(dataBytes).ToArray();
     }
 
-    public byte[] UdpPackData(int frameIndex, string data)
+    public static byte[] UdpPackData(int frameIndex, string data)
     {
         //帧索引
         byte[] requestCodeBytes = BitConverter.GetBytes(frameIndex);

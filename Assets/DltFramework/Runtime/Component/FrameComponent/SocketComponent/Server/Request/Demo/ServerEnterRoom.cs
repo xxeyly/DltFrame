@@ -11,7 +11,7 @@ public class ServerEnterRoom
         //第一次使用Tcp传输,后面使用Udp传输
         //获得所有帧数据
         FrameInitData frameInitData = new FrameInitData();
-        frameInitData.frameIndex = FrameRecord.frameIndex;
+        frameInitData.frameIndex = ClientFrameSync.serverFrameIndex;
         frameInitData.startTime = ServerFrameSync.startTime;
         frameInitData.currentTime = ServerFrameSync.currentTime;
         //精简了帧数据,无操作的帧数据不传输,需要客户端自己计算
@@ -34,7 +34,7 @@ public class ServerEnterRoom
             }
         }
 
-        // frameInitData.frameRecord = FrameRecord.frameRecord;
+        frameInitData.frameRecord = FrameRecord.frameRecord;
         clientSocket.TcpSend(RequestCode.EnterGame, JsonMapper.ToJson(frameInitData));
     }
 }
