@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace DltFramework
 {
-    public partial class SceneComponent
+    public partial class SceneComponentInit
     {
         [HideInInspector] public bool HotFixAssetPathConfigIsExist;
 #if UNITY_EDITOR

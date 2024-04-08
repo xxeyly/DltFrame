@@ -41,7 +41,7 @@ namespace DltFramework
         public async UniTask<string> InstantiateHotFixAssetBundle()
         {
             //本地重复资源
-            foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFontFixRuntimeAssetConfig)
+            foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig)
             {
                 string localFontPath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath,
                     hotFixRuntimeAssetBundleConfig.assetBundleName);

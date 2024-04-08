@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DltFramework
 {
@@ -486,6 +487,22 @@ namespace DltFramework
                             }
 
                             break;
+
+                        case UiType.Null:
+                        {
+                            break;
+                        }
+                    }
+
+
+                    foreach (Object expansionObj in bindUiType.expansionType)
+                    {
+                        List<string> expansionObjSplit = new List<string>(expansionObj.GetType().ToString().Split('.'));
+                        string expansion = expansionObjSplit[expansionObjSplit.Count - 1];
+                        allUiVariableName.Add(
+                            Indents(4) + "private " + expansion + " _" +
+                            DataFrameComponent.String_FirstCharToLower(child.name) + expansion + Semicolon
+                        );
                     }
                 }
             }
@@ -501,15 +518,28 @@ namespace DltFramework
             allUiVariableBind = new List<string>();
             foreach (Transform child in window.GetComponentsInChildren<Transform>(true))
             {
-                if (child.GetComponent<BindUiType>() && !GetUiComponentContainLocalBaseWindow(child))
+                BindUiType bindUiType = child.GetComponent<BindUiType>();
+                if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
                 {
-                    allUiVariableBind.Add(Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) +
-                                          ",\"" +
-                                          GetUiComponentPath(child, "") + "\");");
+                    if (bindUiType.type != UiType.Null)
+                    {
+                        allUiVariableBind.Add(
+                            Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) + ",\"" +
+                            GetUiComponentPath(child, "") + "\");");
+                    }
+
+
+                    foreach (Object expansionObj in bindUiType.expansionType)
+                    {
+                        List<string> expansionObjSplit = new List<string>(expansionObj.GetType().ToString().Split('.'));
+                        string expansion = expansionObjSplit[expansionObjSplit.Count - 1];
+                        allUiVariableBind.Add(
+                            Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) + expansion + ",\"" +
+                            GetUiComponentPath(child, "") + "\");");
+                    }
                 }
 
-                if (child.GetComponent<BindUiType>() &&
-                    child.GetComponent<BindUiType>().type == UiType.ChildList)
+                if (child.GetComponent<BindUiType>() && child.GetComponent<BindUiType>().type == UiType.ChildList)
                 {
                     string listChildBaseWindowContent = String.Empty;
                     listChildBaseWindowContent +=
@@ -518,8 +548,7 @@ namespace DltFramework
                         Indents(1) + "i" + Indents(1) + "<" + Indents(1) + "_" +
                         DataFrameComponent.String_FirstCharToLower(child.name) + ".Count" + Semicolon + Indents(1) + "i++" +
                         ")" + LineFeed + Indents(8) + "{"
-                        + LineFeed + Indents(12) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) + "[i]" + "." +
-                        "ViewStartInit();"
+                        + LineFeed + Indents(12) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) + "[i]" + "." + "ViewStartInit();"
                         + LineFeed + Indents(12) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) + "[i]" + "." +
                         "InitData(i);" + LineFeed + Indents(8) + "}";
 
@@ -625,9 +654,7 @@ namespace DltFramework
                     else if (bindUiType.type == UiType.Toggle)
                     {
                         bindStr = Indents(8) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) +
-                                  ".onValueChanged.AddListener(" +
-                                  "On" +
-                                  child.name + ");";
+                                  ".onValueChanged.AddListener(" + "On" + child.name + ");";
                         allUiVariableBindListener.Add(bindStr);
                         AddUsing("using UnityEngine.EventSystems;");
                     }

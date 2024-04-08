@@ -24,7 +24,6 @@ namespace DltFramework
     /// <summary>
     /// 视图基类
     /// </summary>
-    [RequireComponent(typeof(BaseWindowGenerateScripts))]
     public abstract partial class BaseWindow : MonoBehaviour
     {
         protected GameObject window;
@@ -37,7 +36,7 @@ namespace DltFramework
         public int sceneLayerIndex;
 
         [BoxGroup("标签/属性")] [LabelText("初始化")] [LabelWidth(50)] [Tooltip("该属性影响是否一开始执行Init操作")]
-        public bool viewInit ;
+        public bool viewInit;
 
         [BoxGroup("调试")] [ToggleLeft] [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("日志输出")]
         public bool isLog;

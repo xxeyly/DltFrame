@@ -58,6 +58,8 @@ namespace DltFramework
 
                     #endregion
 
+                    #region 开关
+
                     Rect rectCheck = new Rect(selectionrect);
                     rectCheck.x += rectCheck.width - 20;
                     rectCheck.width = 18;
@@ -76,6 +78,14 @@ namespace DltFramework
                     SceneVisibilityManager.instance.DisablePicking(obj, false);
                     SceneVisibilityManager.instance.DisablePicking(window, false);
 #endif
+
+                    #endregion
+
+                    #region 热更
+
+                    tempBaseWindow.HotFixAssetPathConfigIsExist = tempBaseWindow.GetComponent<HotFixAssetPathConfig>() != null;
+
+                    #endregion
                 }
             }
         }

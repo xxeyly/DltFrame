@@ -61,6 +61,12 @@ namespace DltFramework
                     }
 
                     #endregion
+
+                    #region 热更
+
+                    entityItem.HotFixAssetPathConfigIsExist = entityItem.GetComponent<HotFixAssetPathConfig>() != null;
+
+                    #endregion
                 }
             }
         }

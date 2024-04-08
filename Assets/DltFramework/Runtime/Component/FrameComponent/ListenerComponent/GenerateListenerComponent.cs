@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using DltFramework;
 
@@ -112,7 +113,7 @@ public abstract class GenerateListenerComponent
                             returnParameterTypeContent = DataFrameComponent.String_BuilderString(returnParameterTypeContent, CommonTypeConversion(generateMethodData.parameterType[i]), ",");
                         }
 
-                        executeEventContent = DataFrameComponent.String_BuilderString(executeEventContent, "return Instance.ExecuteReturnEvent,<", returnParameterTypeContent, CommonTypeConversion(generateMethodData.returnType), ">");
+                        executeEventContent = DataFrameComponent.String_BuilderString(executeEventContent, "return Instance.ExecuteReturnEvent<", returnParameterTypeContent, CommonTypeConversion(generateMethodData.returnType), ">");
                     }
                 }
 
@@ -274,6 +275,11 @@ public abstract class GenerateListenerComponent
         if (type.Name == typeof(List<>).Name)
         {
             return DataFrameComponent.String_BuilderString("List<", CommonTypeConversion(type.GetGenericArguments()[0]), ">");
+        }
+
+        if (type.Name == typeof(UniTask<>).Name)
+        {
+            return CommonTypeConversion(type.GetGenericArguments()[0]);
         }
 
         if (type.Name == typeof(Dictionary<,>).Name)

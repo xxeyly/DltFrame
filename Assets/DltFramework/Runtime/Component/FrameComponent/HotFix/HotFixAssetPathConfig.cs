@@ -11,7 +11,7 @@ public class HotFixAssetPathConfig : MonoBehaviour
     [LabelText("预制体路径")] public string prefabPath;
     [LabelText("Ab包路径")] public string assetBundlePath;
 #if UNITY_EDITOR
-    [Button("生成路径", ButtonSizes.Medium)]
+    [Button("生成路径并应用预制体", ButtonSizes.Medium)]
     [GUIColor(0, 1, 0)]
     public void SetPathAndApplyPrefab()
     {
@@ -59,7 +59,6 @@ public class HotFixAssetPathConfig : MonoBehaviour
         return hotFixAssetType;
     }
 
-    [Button("保存预制体")]
     private void ApplyPrefab()
     {
         if (!File.Exists(prefabPath))

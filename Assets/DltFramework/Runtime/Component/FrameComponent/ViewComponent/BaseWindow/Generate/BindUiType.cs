@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DltFramework
 {
@@ -28,6 +32,7 @@ namespace DltFramework
         // ReSharper disable once InconsistentNaming
         TMP_InputField,
         ChildList,
+        Null,
     }
 
     /// <summary>
@@ -58,7 +63,6 @@ namespace DltFramework
               EndDrag | Submit | Cancel
     }
 
-
     public class BindUiType : MonoBehaviour
     {
         [LabelText("UI组件类型")] public UiType type;
@@ -68,5 +72,23 @@ namespace DltFramework
 
         [ShowIf("@type == UiType.Button")] [LabelText("UI触发事件类型")]
         public UIEventTriggerType eventTriggerType;
+
+        [LabelText("扩展类型")] [ValueDropdown("GetListOfMonoBehaviours")]
+        public List<Object> expansionType = new List<Object>();
+
+        private IEnumerable<Object> GetListOfMonoBehaviours()
+        {
+            List<Object> all = new List<Object>(transform.GetComponents<Component>());
+            List<Object> selfObj = new List<Object>();
+            foreach (Object obj in all)
+            {
+                if (obj.GetType() != typeof(BindUiType) && !expansionType.Contains(obj))
+                {
+                    selfObj.Add(obj);
+                }
+            }
+
+            return selfObj;
+        }
     }
 }

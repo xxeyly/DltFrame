@@ -45,10 +45,15 @@ namespace DltFramework
                     }
 
                     #endregion
+
+                    #region 热更
+
+                    sceneComponent.HotFixAssetPathConfigIsExist = sceneComponent.GetComponent<HotFixAssetPathConfig>() != null;
+
+                    #endregion
                 }
             }
         }
-        
     }
 }
 #endif

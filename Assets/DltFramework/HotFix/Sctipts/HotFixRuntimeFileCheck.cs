@@ -495,7 +495,7 @@ public class HotFixRuntimeFileCheck : MonoBehaviour
             //添加场景
             hotFixAssetAssetBundleAssetConfigs.Add(hotFixAssetAssetBundleSceneConfig.sceneHotFixRuntimeAssetBundleConfig);
             //添加重复资源
-            foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixAssetAssetBundleSceneConfig.repeatSceneFontFixRuntimeAssetConfig)
+            foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixAssetAssetBundleSceneConfig.repeatSceneFixRuntimeAssetConfig)
             {
                 hotFixAssetAssetBundleAssetConfigs.Add(hotFixRuntimeAssetBundleConfig);
             }
