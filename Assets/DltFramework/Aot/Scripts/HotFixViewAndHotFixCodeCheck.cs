@@ -109,8 +109,12 @@ public class HotFixViewAndHotFixCodeCheck : MonoBehaviour
     async UniTask StartCheckAssetBundleUpdate()
     {
         //拷贝HotFixDownPath.txt
-        await CopyStreamingAssetsPathToPersistentDataPath(
-            AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/HotFixDownPath.txt"), AotGlobal.StringBuilderString(Application.persistentDataPath, "/HotFix/"), "HotFixDownPath.txt");
+        if (!File.Exists(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixDownPath.txt"))
+        {
+            await CopyStreamingAssetsPathToPersistentDataPath(
+                AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/HotFixDownPath.txt"), AotGlobal.StringBuilderString(Application.persistentDataPath, "/HotFix/"), "HotFixDownPath.txt");
+        }
+
         //HotFix路径
         AotDebug.Log("HotFix路径");
         await HotFixPathLocalLoad();

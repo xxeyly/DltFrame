@@ -24,9 +24,12 @@ namespace DltFramework
         public override void FrameInitComponent()
         {
             Instance = this;
-            foreach (AudioComponentData.AudioInfo audioInfo in audioData.audioInfos)
+            if (audioData != null)
             {
-                _audioDlc.Add(audioInfo.audioName, audioInfo.audioClip);
+                foreach (AudioComponentData.AudioInfo audioInfo in audioData.audioInfos)
+                {
+                    _audioDlc.Add(audioInfo.audioName, audioInfo.audioClip);
+                }
             }
 
             //创建音效组件
