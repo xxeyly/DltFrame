@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// 帧记录
+/// </summary>
 public class FrameRecord
 {
-    //帧记录
+    //所有客户端帧记录
     public static List<FrameRecordDataGroup> frameRecord = new List<FrameRecordDataGroup>();
 
     //不参与预测的帧,一般指帧同步时不好回退的帧,比如UI交互等,这些帧不参与预测,等服务器返回了当前帧,再执行,这样可以保证帧同步的准确性
@@ -35,7 +38,7 @@ public class FrameRecord
     //记录所有操作
     public static void ClientRecordFrameSyncData(FrameRecordData frameRecordData, bool isForecast = true)
     {
-        int nextFrameIndex = ClientFrameSync.clientFrameIndex + 1;
+        int nextFrameIndex = ServerFrameSync.serverFrameIndex + 1;
         if (!ContainsFrameIndex(nextFrameIndex))
         {
             AddFrameRecordData(nextFrameIndex, frameRecordData);
@@ -51,20 +54,28 @@ public class FrameRecord
         }
     }
 
-    //记录发过来的所有操作
+    /// <summary>
+    /// 记录发过来的所有操作
+    /// </summary>
+    /// <param name="frameRecordData"></param>
     public static void ServerRecordFrameSyncData(FrameRecordData frameRecordData)
     {
-        if (!ContainsFrameIndex(ClientFrameSync.serverFrameIndex))
+        if (!ContainsFrameIndex(ServerFrameSync.serverFrameIndex))
         {
-            AddFrameRecordData(ClientFrameSync.serverFrameIndex, frameRecordData);
+            AddFrameRecordData(ServerFrameSync.serverFrameIndex, frameRecordData);
         }
 
-        if (!noForecastFrameRecordDic.ContainsKey(ClientFrameSync.serverFrameIndex))
+        if (!noForecastFrameRecordDic.ContainsKey(ServerFrameSync.serverFrameIndex))
         {
-            noForecastFrameRecordDic.Add(ClientFrameSync.serverFrameIndex, frameRecordData);
+            noForecastFrameRecordDic.Add(ServerFrameSync.serverFrameIndex, frameRecordData);
         }
     }
 
+    /// <summary>
+    /// 记录帧数据
+    /// </summary>
+    /// <param name="frameIndex"></param>
+    /// <param name="frameRecordData"></param>
     public static void AddFrameRecordData(int frameIndex, FrameRecordData frameRecordData)
     {
         FrameRecordDataGroup frameRecordDataGroup = null;
@@ -86,6 +97,11 @@ public class FrameRecord
         }
     }
 
+    /// <summary>
+    /// 获得当前帧数据组
+    /// </summary>
+    /// <param name="frameIndex"></param>
+    /// <returns></returns>
     public static FrameRecordDataGroup GetFrameRecordDataGroup(int frameIndex)
     {
         for (int i = 0; i < frameRecord.Count; i++)
@@ -99,6 +115,11 @@ public class FrameRecord
         return null;
     }
 
+    /// <summary>
+    /// 包含当前帧
+    /// </summary>
+    /// <param name="frameIndex"></param>
+    /// <returns></returns>
     public static bool ContainsFrameIndex(int frameIndex)
     {
         for (int i = 0; i < frameRecord.Count; i++)

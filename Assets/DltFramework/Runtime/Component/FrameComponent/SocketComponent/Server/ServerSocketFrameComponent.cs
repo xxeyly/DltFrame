@@ -9,11 +9,18 @@ using LitJson;
 public class ServerSocketFrameComponent
 {
     private Socket _serverSocket;
-    private string ip = "192.168.7.32";
+    private string ip = "127.0.0.1";
     private int port = 828;
+
     private int udpPort = 829;
+
+    //反射请求代码
     private Dictionary<int, List<MethodInfoData>> _requestCodes = new Dictionary<int, List<MethodInfoData>>();
+
+    //Udp
     private UdpClient _udpClient;
+
+   
 
     public void StartServer()
     {
@@ -33,6 +40,8 @@ public class ServerSocketFrameComponent
         //异步加载用户
         _udpClient = new UdpClient(udpPort);
         Console.WriteLine("Udp服务器开启成功...");
+        
+        
         //心跳包
         // HeartBeat.CreateHeartBeat();
         //帧同步
@@ -67,7 +76,7 @@ public class ServerSocketFrameComponent
     private void UdpExecuteReflection(int clientFrameIndex, string content, IPEndPoint ipEndPoint)
     {
         Console.WriteLine("客户端:" + clientFrameIndex + ":" + content);
-        Console.WriteLine("服务器:" + ClientFrameSync.serverFrameIndex);
+        Console.WriteLine("服务器:" + ServerFrameSync.serverFrameIndex);
         // Console.WriteLine(content);
         // Console.WriteLine(ipEndPoint);
 
@@ -83,8 +92,8 @@ public class ServerSocketFrameComponent
         //服务器接收的时候是第2帧
         //所以要消除这个1帧的差异
 
-        
-        if (clientFrameIndex + 1 < ClientFrameSync.serverFrameIndex)
+
+        if (clientFrameIndex + 1 < ServerFrameSync.serverFrameIndex)
         {
             Console.WriteLine("超时:丢弃帧数据");
             //向客户端发送最新帧数据

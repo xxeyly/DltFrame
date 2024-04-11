@@ -7,6 +7,7 @@ using Cysharp.Threading.Tasks;
 using DltFramework;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
@@ -21,6 +22,16 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     [LabelText("端口")] [SerializeField] private int port = 828;
     [LabelText("端口")] [SerializeField] private int udpPort = 829;
     [LabelText("Token")] public int Token;
+
+    [HorizontalGroup("Room")] [LabelText("房间ID")]
+    public int roomId;
+
+    [Button("随机房间ID")]
+    [HorizontalGroup("Room")]
+    public void RandomRoomId()
+    {
+        roomId = Random.Range(0, Int32.MaxValue);
+    }
 
     //TCP
     [LabelText("反射数据")] private static Dictionary<int, List<MethodInfoData>> _requestCodes = new Dictionary<int, List<MethodInfoData>>();
@@ -261,6 +272,11 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     {
         byte[] bytes = _msg.PackData(requestCode, data);
         _clientSocket.Send(bytes);
+    }
+
+    public void Send(int requestCode, int data)
+    {
+        Send(requestCode, data.ToString());
     }
 
     public void UdpSend(FrameRecordData frameRecordData, bool IsForecast = true)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using HotFix;
 #if HybridCLR
 using HybridCLR.Editor.Commands;
 using Sirenix.OdinInspector;

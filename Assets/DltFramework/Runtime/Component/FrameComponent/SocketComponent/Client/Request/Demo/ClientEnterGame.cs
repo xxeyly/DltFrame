@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
 using DltFramework;
+using HotFix;
 using UnityEngine;
 
 public class ClientEnterGame
 {
-    [AddRequestCode(RequestCode.EnterGame, RequestType.Client)]
+    [AddRequestCode(RequestCode.EnterRoom, RequestType.Client)]
     public async void OnClientEnterGame(string data)
     {
-        // ViewFrameComponent.Instance.HideView(typeof(EnterGame));
+        Debug.Log(data);
+        /*// ViewFrameComponent.Instance.HideView(typeof(EnterGame));
         FrameInitData frameInitData = JsonUtil.FromJson<FrameInitData>(data);
         Debug.Log(data);
         ClientFrameSync.serverFrameIndex = frameInitData.frameIndex;
@@ -23,6 +25,7 @@ public class ClientEnterGame
                 frameInitData.frameRecord.Add(temp);
             }
         }
+
         RecordReplays.isReplay = true;
         //开始帧同步,即使是回放模式也要一直同步数据
         //回放时间有长又有短,根据回放时间来计算
@@ -43,6 +46,6 @@ public class ClientEnterGame
         FrameRecordData frameRecordData = new FrameRecordData();
         frameRecordData.id = ClientSocketFrameComponent.Instance.Token;
         frameRecordData.create = true;
-        ClientSocketFrameComponent.Instance.UdpSend(frameRecordData, false);
+        ClientSocketFrameComponent.Instance.UdpSend(frameRecordData, false);*/
     }
 }

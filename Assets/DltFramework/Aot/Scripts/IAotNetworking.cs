@@ -1,4 +1,7 @@
-public interface IAotNetworking
+namespace Aot
 {
-    public void NetworkingState(bool state);
+    public interface IAotNetworking
+    {
+        public void NetworkingState(bool state);
+    }
 }

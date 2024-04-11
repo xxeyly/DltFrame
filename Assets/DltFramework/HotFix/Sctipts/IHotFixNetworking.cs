@@ -1,4 +1,7 @@
-public interface IHotFixNetworking
+namespace HotFix
 {
-    public void NetworkingState(bool state);
+    public interface IHotFixNetworking
+    {
+        public void NetworkingState(bool state);
+    }
 }

@@ -1,10 +1,13 @@
 using System;
 
-[Serializable]
-public class HotFixRuntimeDownConfig
+namespace HotFix
 {
-    public string name;
-    public string path;
-    public string size;
-    public string md5;
+    [Serializable]
+    public class HotFixRuntimeDownConfig
+    {
+        public string name;
+        public string path;
+        public string size;
+        public string md5;
+    }
 }

@@ -4,7 +4,6 @@ using LitJson;
 
 public class ServerPlayerMove
 {
-  
     public static void OnPlayerExit(ClientSocket clientSocket)
     {
         foreach (ClientSocket socket in ClientSocketManager.clientSocketList)

@@ -1,6 +1,7 @@
 #if HybridCLR
 using System;
 using System.IO;
+using Aot;
 using HybridCLR.Editor.Commands;
 using Sirenix.OdinInspector;
 using UnityEditor;

@@ -5,66 +5,69 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileCheck, IHotFixRuntimeFileDown, IHotFixNetworking
+namespace HotFix
 {
-    public GameObject initPanel;
-    public GameObject localFileCheckPanel;
-    public Slider localFileCheckSlider;
-    public Text localFileCheckText;
-    public GameObject downPanel;
-    [LabelText("下载进度条")] public Slider downSliderProgress;
-    [LabelText("下载进度")] public Text downTextProgress;
-    [LabelText("下载速度")] public Text downTextSpeed;
-    [LabelText("总下载大小")] public Text totalDownload;
-    public GameObject networkPanel;
-
-    public void HotFixRuntimeTableDownStart()
+    public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileCheck, IHotFixRuntimeFileDown, IHotFixNetworking
     {
-        initPanel.SetActive(true);
-    }
+        public GameObject initPanel;
+        public GameObject localFileCheckPanel;
+        public Slider localFileCheckSlider;
+        public Text localFileCheckText;
+        public GameObject downPanel;
+        [LabelText("下载进度条")] public Slider downSliderProgress;
+        [LabelText("下载进度")] public Text downTextProgress;
+        [LabelText("下载速度")] public Text downTextSpeed;
+        [LabelText("总下载大小")] public Text totalDownload;
+        public GameObject networkPanel;
 
-    public void HotFixRuntimeTableDownOver()
-    {
-        initPanel.SetActive(false);
-        localFileCheckPanel.SetActive(true);
-    }
+        public void HotFixRuntimeTableDownStart()
+        {
+            initPanel.SetActive(true);
+        }
 
-    public void HotFixRuntimeLocalFileCheck(int currentCount, int maxCount)
-    {
-        localFileCheckSlider.value = (float)currentCount / maxCount;
-        localFileCheckText.text = (int)(localFileCheckSlider.value * 100) + "/100";
-    }
+        public void HotFixRuntimeTableDownOver()
+        {
+            initPanel.SetActive(false);
+            localFileCheckPanel.SetActive(true);
+        }
 
-    public void HotFixRuntimeLocalFileCheckOver()
-    {
-        localFileCheckPanel.SetActive(false);
-    }
+        public void HotFixRuntimeLocalFileCheck(int currentCount, int maxCount)
+        {
+            localFileCheckSlider.value = (float)currentCount / maxCount;
+            localFileCheckText.text = (int)(localFileCheckSlider.value * 100) + "/100";
+        }
 
-    public void HotFixRuntimeDownStart()
-    {
-        downPanel.SetActive(true);
-    }
+        public void HotFixRuntimeLocalFileCheckOver()
+        {
+            localFileCheckPanel.SetActive(false);
+        }
 
-    public void HotFixRuntimeDownSpeed(float downSpeed)
-    {
-        downTextSpeed.text = HotFixGlobal.FileSizeString(downSpeed) + "/s";
-    }
+        public void HotFixRuntimeDownStart()
+        {
+            downPanel.SetActive(true);
+        }
 
-    public void HotFixRuntimeDownloadValue(double current, double total)
-    {
-        totalDownload.text = HotFixGlobal.FileSizeString(current) + "/" + HotFixGlobal.FileSizeString(total);
-        downSliderProgress.value = (float)(current / total);
-        downTextProgress.text = (current / total * 100).ToString("0") + "/100";
-    }
+        public void HotFixRuntimeDownSpeed(float downSpeed)
+        {
+            downTextSpeed.text = HotFixGlobal.FileSizeString(downSpeed) + "/s";
+        }
 
-    public void HotFixRuntimeDownOver()
-    {
-        downPanel.SetActive(false);
-    }
+        public void HotFixRuntimeDownloadValue(double current, double total)
+        {
+            totalDownload.text = HotFixGlobal.FileSizeString(current) + "/" + HotFixGlobal.FileSizeString(total);
+            downSliderProgress.value = (float)(current / total);
+            downTextProgress.text = (current / total * 100).ToString("0") + "/100";
+        }
 
-    public void NetworkingState(bool state)
-    {
-        Debug.Log("网络状态：" + state);
-        networkPanel.SetActive(!state);
+        public void HotFixRuntimeDownOver()
+        {
+            downPanel.SetActive(false);
+        }
+
+        public void NetworkingState(bool state)
+        {
+            Debug.Log("网络状态：" + state);
+            networkPanel.SetActive(!state);
+        }
     }
 }

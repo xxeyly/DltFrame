@@ -1,4 +1,6 @@
 using DltFramework;
+using Google.Protobuf;
+using UnityEngine;
 
 public class RequestChatRoom
 {
@@ -6,5 +8,6 @@ public class RequestChatRoom
     public void OnChatRoom(string data)
     {
         ListenerFrameComponent.Instance.chatRoom.AddChatRoom(data);
+      
     }
 }

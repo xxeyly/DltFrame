@@ -5,7 +5,7 @@ public class Token
     [AddRequestCode(RequestCode.Token, RequestType.Server)]
     public void OnToken(string data, ClientSocket clientSocket)
     {
-        Console.WriteLine(data);
+        Console.WriteLine("Token:" + data);
         //该设备还没有Token
         if (data == "0")
         {
