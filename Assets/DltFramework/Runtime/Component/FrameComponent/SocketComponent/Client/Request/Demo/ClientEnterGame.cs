@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ClientEnterGame
 {
-    [AddRequestCode(RequestCode.EnterRoom, RequestType.Client)]
+    [AddRequestCode(RequestCode.Room_EnterRoom, RequestType.Client)]
     public async void OnClientEnterGame(string data)
     {
         Debug.Log(data);

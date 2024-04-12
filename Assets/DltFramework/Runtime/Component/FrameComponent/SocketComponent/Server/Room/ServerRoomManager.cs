@@ -44,11 +44,29 @@ public static class ServerRoomManager
     /// <summary>
     ///  添加房间
     /// </summary>
-    public static void AddServerRoom(ServerRoomData serverRoomData)
+    public static void CreateServerRoom(ServerRoomData serverRoomData)
     {
         ServerRoom serverRoom = new ServerRoom();
         serverRoom.ServerRoomData = serverRoomData;
+        Console.WriteLine("房间:" + serverRoomData.roomId + "创建");
         serverRooms.Add(serverRoom);
+    }
+
+    /// <summary>
+    /// 移除房间
+    /// </summary>
+    /// <param name="serverRoomData"></param>
+    public static void RemoveRoom(ServerRoomData serverRoomData)
+    {
+        foreach (ServerRoom serverRoom in serverRooms)
+        {
+            if (serverRoom.ServerRoomData.roomId == serverRoomData.roomId)
+            {
+                Console.WriteLine("房间:" + serverRoomData.roomId + "移除");
+                serverRooms.Remove(serverRoom);
+                return;
+            }
+        }
     }
 
     /// <summary>
@@ -82,5 +100,24 @@ public static class ServerRoomManager
         }
 
         return serverRoomDatas;
+    }
+    /// <summary>
+    /// 玩家退出房间
+    /// </summary>
+    /// <param name="clientToken"></param>
+    public static void ExitRoom(int clientToken)
+    {
+        foreach (ServerRoom serverRoom in serverRooms)
+        {
+            foreach (ClientSocket clientSocket in serverRoom.clientSockets)
+            {
+                //当前玩家在这个房间
+                if (clientSocket.token == clientToken)
+                {
+                    serverRoom.ClientExitRoom(clientSocket);
+                    return;
+                }
+            }
+        }
     }
 }

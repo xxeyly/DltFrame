@@ -13,29 +13,49 @@
     public const int Disconnect = 4;
 
     //获得房间
-    public const int GetRoom = 100;
-
+    public const int Room_GetRoom = 100;
 
     //创建房间
-    public const int CreateRoom = 102;
+    public const int Room_CreateRoom = 102;
 
     //进入房间
-    public const int EnterRoom = 101;
+    public const int Room_EnterRoom = 101;
 
     //进入房间失败,房间已满
-    public const int EnterRoomFailedRoomFull = 103;
+    public const int Room_EnterRoomFailedRoomFull = 103;
+
+    //进入房间失败,房间不存在
+    public const int Room_EnterRoomFailedRoomNotExistent = 104;
 
     //进入房间失败,密码错误
-    public const int EnterRoomFailedRoomPasswordError = 104;
+    public const int Room_EnterRoomFailedRoomPasswordError = 105;
 
     //进入房间成功
-    public const int EnterRoomSuccessFully = 105;
+    public const int Room_EnterRoomSuccessFully = 106;
 
     //进入房间,获得房间玩家
-    public const int EnterRoomGetRoomPlayer = 106;
+    public const int Room_GetRoomPlayer = 107;
+
+    //房间玩家准备
+    public const int Room_Ready = 108;
+
+    //房间玩家退出
+    public const int Room_ExitRoom = 109;
+
+    //房间玩家退出成功
+    public const int Room_ExitRoomSuccessFully = 110;
+
+    //房间其他玩家进入
+    public const int Room_OtherPlayerEnterRoom = 111;
+
+    //房间其他玩家准备
+    public const int Room_OtherPlayerReady = 112;
+
+    //房间其他玩家退出
+    public const int Room_OtherPlayerExitRoom = 113;
 
     //创建房间成功
-    public const int CreateRoomSuccessFully = 7;
+    public const int Room_CreateRoomSuccessFully = 7;
 
     //帧同步
     public const int FrameSync = 10000;

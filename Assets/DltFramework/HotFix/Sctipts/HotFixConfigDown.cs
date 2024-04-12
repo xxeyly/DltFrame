@@ -12,7 +12,8 @@ using UnityEngine.Networking;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-
+namespace HotFix
+{
     public class HotFixConfigDown : MonoBehaviour
     {
         public static HotFixConfigDown Instance;
@@ -187,3 +188,4 @@ using UnityEngine.UI;
             }
         }
     }
+}

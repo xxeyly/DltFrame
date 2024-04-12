@@ -9,7 +9,7 @@ using LitJson;
 public class ServerSocketFrameComponent
 {
     private Socket _serverSocket;
-    private string ip = "127.0.0.1";
+    private string ip = "192.168.3.3";
     private int port = 828;
 
     private int udpPort = 829;

@@ -1,6 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-
+[Serializable]
 public class ServerRoomData
 {
     /// <summary>
@@ -13,6 +14,10 @@ public class ServerRoomData
     /// </summary>
     public string roomName;
 
+    /// <summary>
+    /// 房间玩家数量
+    /// </summary>
+    public int roomPlayerCount;
     /// <summary>
     /// 房间玩家上限数量
     /// </summary>

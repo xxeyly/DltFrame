@@ -18,7 +18,7 @@ public class ConnectSuccessFully
             connectSuccessFully.ConnectSuccessFully();
         }
 
-        /*//发送Token
+        //发送Token
         if (File.Exists(DataFrameComponent.Path_DeviceStorage() + "/Token.txt"))
         {
             ClientSocketFrameComponent.Instance.Send(RequestCode.Token, FileOperationComponent.GetTextToLoad(DataFrameComponent.Path_DeviceStorage() + "/Token.txt"));
@@ -26,6 +26,6 @@ public class ConnectSuccessFully
         else
         {
             ClientSocketFrameComponent.Instance.Send(RequestCode.Token, "0");
-        }*/
+        }
     }
 }

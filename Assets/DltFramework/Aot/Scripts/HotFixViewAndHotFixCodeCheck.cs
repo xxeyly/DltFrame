@@ -472,7 +472,7 @@ namespace Aot
             // Editor下无需加载，直接查找获得HotFix程序集  
             Assembly hotFix = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "HotFixCode");
 #endif
-            Type type = hotFix.GetType("HotFixInit");
+            Type type = hotFix.GetType("HotFix.HotFixInit");
             type.GetMethod("Init")?.Invoke(null, null);
             AotDebug.Log("Aot加载完毕");
         }

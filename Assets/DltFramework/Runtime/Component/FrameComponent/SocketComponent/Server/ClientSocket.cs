@@ -114,6 +114,16 @@ public class ClientSocket
         socket.Send(bytes);
     }
 
+    /// <summary>
+    /// 发送请求
+    /// </summary>
+    /// <param name="requestCode"></param>
+    /// <param name="data"></param>
+    public void TcpSend(int requestCode, int data)
+    {
+        TcpSend(requestCode, data.ToString());
+    }
+
     public void UdpSend(int frameIndex, string data)
     {
         byte[] bytes = Message.UdpPackData(frameIndex, data);
@@ -135,8 +145,9 @@ public class ClientSocket
 
     public void CloseConnection()
     {
-        ServerPlayerMove.OnPlayerExit(this);
         Console.WriteLine(socket.RemoteEndPoint + "断开连接...");
+        //玩家退出房间
+        ServerRoomManager.ExitRoom(token);
         //用户列表移除自身
         ClientSocketManager.RemoveClientSocket(this);
         //心跳列表移除自身
