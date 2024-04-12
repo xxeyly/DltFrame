@@ -65,11 +65,13 @@ namespace DltFramework
     {
         [LabelText("UI组件类型")] public UiType type;
 
-        [LabelText("子级类型")] [ShowIf("@type ==UiType.ChildList")]
-        public MonoBehaviour childType;
+        [LabelText("子级类型")] [ShowIf("@type ==UiType.ChildList")] [ValueDropdown("GetListOfChildBaseWindow")]
+        public string childType;
 
         [ShowIf("@type == UiType.Button")] [LabelText("UI触发事件类型")]
         public UIEventTriggerType eventTriggerType;
+
+        [LabelText("描述名称")] public string descriptionName;
 
         [LabelText("扩展类型")] [ValueDropdown("GetListOfMonoBehaviours")]
         public List<Object> expansionType = new List<Object>();
@@ -83,6 +85,21 @@ namespace DltFramework
                 if (obj.GetType() != typeof(BindUiType) && !expansionType.Contains(obj))
                 {
                     selfObj.Add(obj);
+                }
+            }
+
+            return selfObj;
+        }
+
+        private IEnumerable<string> GetListOfChildBaseWindow()
+        {
+            List<ChildBaseWindow> all = new List<ChildBaseWindow>(DataFrameComponent.List_GetInheritAllSubclass<ChildBaseWindow>());
+            List<string> selfObj = new List<string>();
+            foreach (Object obj in all)
+            {
+                if (obj.GetType() != typeof(ChildBaseWindowTemplate) && obj.GetType() != typeof(ChildUiBaseWindow))
+                {
+                    selfObj.Add(obj.GetType().ToString());
                 }
             }
 

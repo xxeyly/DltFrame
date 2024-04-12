@@ -11,7 +11,6 @@ public class ServerSocketFrameComponent
     private Socket _serverSocket;
     private string ip = "192.168.3.3";
     private int port = 828;
-
     private int udpPort = 829;
 
     //反射请求代码
@@ -19,8 +18,6 @@ public class ServerSocketFrameComponent
 
     //Udp
     private UdpClient _udpClient;
-
-   
 
     public void StartServer()
     {
@@ -40,8 +37,6 @@ public class ServerSocketFrameComponent
         //异步加载用户
         _udpClient = new UdpClient(udpPort);
         Console.WriteLine("Udp服务器开启成功...");
-        
-        
         //心跳包
         // HeartBeat.CreateHeartBeat();
         //帧同步

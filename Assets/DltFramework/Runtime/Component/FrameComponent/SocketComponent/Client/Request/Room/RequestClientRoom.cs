@@ -9,7 +9,7 @@ public class RequestClientRoom
     [AddRequestCode(RequestCode.Room_GetRoom, RequestType.Client)]
     public void Room_GetRoom(string roomData)
     {
-        List<IRequestClientRoomGetRoom> requestClientRoomGetRoomList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRequestClientRoomGetRoom>();
+        List<IRoom_GetRoom> requestClientRoomGetRoomList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_GetRoom>();
         List<ServerRoomData> serverRoomDataList = new List<ServerRoomData>();
         if (roomData == "[]")
         {
@@ -20,9 +20,9 @@ public class RequestClientRoom
             serverRoomDataList = JsonUtil.FromJson<List<ServerRoomData>>(roomData);
         }
 
-        foreach (IRequestClientRoomGetRoom requestClientRoomGetRoom in requestClientRoomGetRoomList)
+        foreach (IRoom_GetRoom requestClientRoomGetRoom in requestClientRoomGetRoomList)
         {
-            requestClientRoomGetRoom.OnGetRoom(serverRoomDataList);
+            requestClientRoomGetRoom.Room_GetRoom(serverRoomDataList);
         }
     }
 
@@ -30,9 +30,11 @@ public class RequestClientRoom
     public void Room_CreateRoomSuccessFully(string data)
     {
         ServerRoomData serverRoomData = JsonUtil.FromJson<ServerRoomData>(data);
-        ListenerFrameComponent.Instance.serverRoomList.AddServerRoomListItem(serverRoomData);
-        ListenerFrameComponent.Instance.serverRoomList.JoinRoom(serverRoomData);
-        ViewFrameComponent.Instance.HideView(typeof(ClientCreateRoom));
+        List<IRoom_CreateRoomSuccessFully> requestClientRoomCreateRoomSuccessFullyList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_CreateRoomSuccessFully>();
+        foreach (IRoom_CreateRoomSuccessFully requestClientRoomCreateRoomSuccessFully in requestClientRoomCreateRoomSuccessFullyList)
+        {
+            requestClientRoomCreateRoomSuccessFully.Room_CreateRoomSuccessFully(serverRoomData);
+        }
     }
 
     [AddRequestCode(RequestCode.Room_EnterRoomFailedRoomNotExistent, RequestType.Client)]
@@ -70,11 +72,12 @@ public class RequestClientRoom
     [AddRequestCode(RequestCode.Room_EnterRoomSuccessFully, RequestType.Client)]
     public void Room_EnterRoomSuccessFully(string data)
     {
-        Debug.Log("进入房间成功:" + data);
-        ViewFrameComponent.Instance.HideView(typeof(ClientJoinRoom));
-        ViewFrameComponent.Instance.HideView(typeof(ServerRoomList));
-        ListenerFrameComponent.Instance.clientRoomReady.SetServerRoomData(JsonUtil.FromJson<ServerRoomData>(data));
-        ViewFrameComponent.Instance.ShowView(typeof(ClientRoomReady));
+        List<IRoom_EnterRoomSuccessFully> room_EnterRoomSuccessFully = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_EnterRoomSuccessFully>();
+        ServerRoomData serverRoomData = JsonUtil.FromJson<ServerRoomData>(data);
+        foreach (IRoom_EnterRoomSuccessFully roomEnterRoomSuccessFully in room_EnterRoomSuccessFully)
+        {
+            roomEnterRoomSuccessFully.Room_EnterRoomSuccessFully(serverRoomData);
+        }
     }
 
     [AddRequestCode(RequestCode.Room_GetRoomPlayer, RequestType.Client)]
@@ -88,28 +91,44 @@ public class RequestClientRoom
     public void Room_OtherPlayerEnterRoom(string data)
     {
         ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(data);
-        ListenerFrameComponent.Instance.clientRoomReady.Room_OtherPlayerEnterRoom(serverRoomPlayerReadyState);
+        List<IRoom_OtherPlayerEnterRoom> IRoom_OtherPlayerEnterRoom = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_OtherPlayerEnterRoom>();
+        foreach (IRoom_OtherPlayerEnterRoom roomOtherPlayerEnterRoom in IRoom_OtherPlayerEnterRoom)
+        {
+            roomOtherPlayerEnterRoom.Room_OtherPlayerEnterRoom(serverRoomPlayerReadyState);
+        }
     }
 
     [AddRequestCode(RequestCode.Room_Ready, RequestType.Client)]
     public void Room_Ready(string data)
     {
         ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(data);
-        ListenerFrameComponent.Instance.clientRoomReady.UpdateRoomPlayerReadyState(serverRoomPlayerReadyState);
+        List<IRoom_Ready> IRoom_Ready = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_Ready>();
+        foreach (IRoom_Ready roomReady in IRoom_Ready)
+        {
+            roomReady.Room_Ready(serverRoomPlayerReadyState);
+        }
     }
 
     [AddRequestCode(RequestCode.Room_OtherPlayerReady, RequestType.Client)]
     public void Room_OtherPlayerReady(string data)
     {
         ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(data);
-        ListenerFrameComponent.Instance.clientRoomReady.UpdateRoomOtherPlayerReadyState(serverRoomPlayerReadyState);
+        List<IRoom_OtherPlayerReady> IRoom_OtherPlayerReady = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_OtherPlayerReady>();
+        foreach (IRoom_OtherPlayerReady roomOtherPlayerReady in IRoom_OtherPlayerReady)
+        {
+            roomOtherPlayerReady.Room_OtherPlayerReady(serverRoomPlayerReadyState);
+        }
     }
 
     [AddRequestCode(RequestCode.Room_OtherPlayerExitRoom, RequestType.Client)]
     public void Room_OtherPlayerExitRoom(string data)
     {
         ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(data);
-        ListenerFrameComponent.Instance.clientRoomReady.Room_OtherPlayerExitRoom(serverRoomPlayerReadyState);
+        List<IRoom_OtherPlayerExitRoom> IRoom_OtherPlayerExitRoom = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_OtherPlayerExitRoom>();
+        foreach (IRoom_OtherPlayerExitRoom roomOtherPlayerExitRoom in IRoom_OtherPlayerExitRoom)
+        {
+            roomOtherPlayerExitRoom.Room_OtherPlayerExitRoom(serverRoomPlayerReadyState);
+        }
     }
 
     [AddRequestCode(RequestCode.Room_ExitRoomSuccessFully, RequestType.Client)]

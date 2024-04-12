@@ -292,7 +292,6 @@ namespace DltFramework
         protected static string GetPath(string scriptName)
         {
 #if UNITY_EDITOR
-
             string[] path = UnityEditor.AssetDatabase.FindAssets(scriptName);
 
             for (int i = 0; i < path.Length; i++)
@@ -465,18 +464,17 @@ namespace DltFramework
                         case UiType.ChildList:
 
                             string childTypeName;
-                            Type childType;
+
                             if (bindUiType.childType != null)
                             {
-                                childType = bindUiType.childType.GetType();
-                                if (childType == typeof(ChildUiBaseWindow))
+                                if (bindUiType.childType == "ChildUiBaseWindow")
                                 {
                                     childTypeName = child.GetComponentInChildren<ChildUiBaseWindow>().uiType.ToString();
                                     AddUsing("using System.Collections.Generic;");
                                 }
                                 else
                                 {
-                                    childTypeName = bindUiType.childType.GetType().ToString();
+                                    childTypeName = bindUiType.childType;
                                     AddUsing("using System.Collections.Generic;");
                                 }
 
