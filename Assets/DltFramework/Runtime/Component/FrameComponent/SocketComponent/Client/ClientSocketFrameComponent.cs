@@ -26,19 +26,16 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     [HorizontalGroup("Room")] [LabelText("房间ID")]
     public int roomId;
 
-    [Button("随机房间ID")]
-    [HorizontalGroup("Room")]
-    public void RandomRoomId()
-    {
-        roomId = Random.Range(0, Int32.MaxValue);
-    }
-
     //TCP
     [LabelText("反射数据")] private static Dictionary<int, List<MethodInfoData>> _requestCodes = new Dictionary<int, List<MethodInfoData>>();
     private static Queue<RequestData> tcpRequestData = new Queue<RequestData>();
 
     //UDP
     private static Queue<UdpRequestData> udpRequestData = new Queue<UdpRequestData>();
+
+    public delegate void OnUpdate();
+
+    public OnUpdate onUpdate;
 
     public override async void FrameInitComponent()
     {
@@ -68,6 +65,20 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
                     {
                         int requestCode = ((AddRequestCodeAttribute)customAttribute).RequestCode;
                         RequestType requestType = ((AddRequestCodeAttribute)customAttribute).RequestType;
+                        //参数长度
+                        int parameterTypeLength = methodInfo.GetParameters().Length;
+                        //参数类型个数
+                        if (parameterTypeLength != 1)
+                        {
+                            continue;
+                        }
+
+                        //参数类型
+                        if (methodInfo.GetParameters()[0].ParameterType != typeof(byte[]))
+                        {
+                            continue;
+                        }
+
                         if (requestType == RequestType.Client)
                         {
                             if (!_requestCodes.ContainsKey(requestCode))
@@ -183,6 +194,8 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
 
         #endregion
 
+        onUpdate?.Invoke();
+
         ClientFrameSync.Update();
     }
 
@@ -211,7 +224,7 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     /// </summary>
     private void TcpReceive()
     {
-        _clientSocket.BeginReceive(_msg.Data, _msg.StartIndex, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
+        _clientSocket.BeginReceive(_msg.Data, _msg.StoredSize, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
     }
 
     /// <summary>
@@ -242,19 +255,26 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     }
 
     //执行反射逻辑
-    private void AddToExecuteReflection(int requestCode, string data)
+    private void AddToExecuteReflection(int requestCode, byte[] data)
     {
         tcpRequestData.Enqueue(new RequestData(requestCode, data));
     }
 
     //执行反射逻辑
-    private void ExecuteReflection(int requestCode, string data)
+    private void ExecuteReflection(int requestCode, byte[] data)
     {
         if (_requestCodes.ContainsKey(requestCode))
         {
             foreach (MethodInfoData methodInfoData in _requestCodes[requestCode])
             {
-                methodInfoData.methodInfo.Invoke(methodInfoData.obj, new object[] { data });
+                try
+                {
+                    methodInfoData.methodInfo.Invoke(methodInfoData.obj, new object[] { data });
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError("请求码:" + requestCode + "异常" + methodInfoData.obj.ToString() + methodInfoData.methodInfo.Name + ":" + e);
+                }
             }
         }
         else

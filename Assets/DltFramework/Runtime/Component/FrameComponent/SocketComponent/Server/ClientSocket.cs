@@ -1,6 +1,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 public class ClientSocket
 {
@@ -59,7 +60,7 @@ public class ClientSocket
             //如果是连接状态
             if (socket.Connected)
             {
-                socket.BeginReceive(_msg.Data, _msg.StartIndex, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
+                socket.BeginReceive(_msg.Data, _msg.StoredSize, _msg.RemainSize, SocketFlags.None, ReceiveCallback, null);
             }
         }
         catch (Exception e)
@@ -81,11 +82,11 @@ public class ClientSocket
                 return;
             }
 
-            int count = socket.EndReceive(ar);
-            if (count > 0)
+            int dataCount = socket.EndReceive(ar);
+            if (dataCount > 0)
             {
                 //读取消息
-                _msg.ReadMessage(count, ExecuteReflection);
+                _msg.ReadMessage(dataCount, ExecuteReflection);
             }
 
             //递归接受
@@ -97,7 +98,7 @@ public class ClientSocket
         }
     }
 
-    public void ExecuteReflection(int requestCode, string data)
+    public void ExecuteReflection(int requestCode, byte[] data)
     {
         server.ExecuteReflection(requestCode, data, this);
     }
@@ -109,6 +110,11 @@ public class ClientSocket
     /// <param name="requestCode"></param>
     /// <param name="data"></param>
     public void TcpSend(int requestCode, string data)
+    {
+        TcpSend(requestCode, Encoding.UTF8.GetBytes(data));
+    }
+
+    public void TcpSend(int requestCode, byte[] data)
     {
         byte[] bytes = _msg.PackData(requestCode, data);
         socket.Send(bytes);
@@ -127,6 +133,8 @@ public class ClientSocket
     public void UdpSend(int frameIndex, string data)
     {
         byte[] bytes = Message.UdpPackData(frameIndex, data);
+
+
         UdpSend(bytes);
     }
 

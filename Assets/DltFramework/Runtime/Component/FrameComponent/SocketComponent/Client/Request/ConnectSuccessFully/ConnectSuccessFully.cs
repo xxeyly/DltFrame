@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using DltFramework;
 using UnityEngine;
@@ -8,7 +9,7 @@ using UnityEngine;
 public class ConnectSuccessFully
 {
     [AddRequestCode(RequestCode.ConnectSuccessFully, RequestType.Client)]
-    public async void OnConnectSuccessFully(string data)
+    public async void OnConnectSuccessFully(byte[] data)
     {
         //获得所有客户端IConnectSuccessFully
         List<IConnectSuccessFully> connectSuccessFullyList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IConnectSuccessFully>();
@@ -28,4 +29,5 @@ public class ConnectSuccessFully
             ClientSocketFrameComponent.Instance.Send(RequestCode.Token, "0");
         }
     }
+
 }

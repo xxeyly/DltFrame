@@ -54,6 +54,9 @@
     //房间其他玩家退出
     public const int Room_OtherPlayerExitRoom = 113;
 
+    //房间开始游戏
+    public const int Room_StartGame = 114;
+
     //创建房间成功
     public const int Room_CreateRoomSuccessFully = 7;
 
@@ -65,4 +68,7 @@
 
     //其他角色退出
     public const int OtherPlayerExit = 100013;
+    
+    //Map 获得存在的帧数据
+    public const int Map_EnterMap = 100014;
 }

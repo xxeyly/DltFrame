@@ -34,12 +34,12 @@ public class ClientFrameSync
 
 
     //执行帧逻辑
-    public static void ExecuteFrameLogic(List<FrameRecordData> frameRecordDataList)
+    public static void ExecuteFrameLogic(List<FrameData> frameRecordDataList)
     {
-        foreach (FrameRecordData frameRecordData in frameRecordDataList)
+        foreach (FrameData frameRecordData in frameRecordDataList)
         {
             //创建接口与别的接口不大一样,需要一个类去继承这个接口,然后去实例化,只有这个接口被创建出来了,才行执行后续操作
-            if (frameRecordData.create)
+            /*if (frameRecordData.create)
             {
                 foreach (IFrameSyncCreate frameSync in _frameSyncCreate)
                 {
@@ -55,14 +55,14 @@ public class ClientFrameSync
                         frameSync.PullFrameRecordData(frameRecordData);
                     }
                 }
-            }
+            }*/
         }
     }
 
     //执行帧逻辑
-    public static void ExecuteFrameLogic(FrameRecordData frameRecordData)
+    public static void ExecuteFrameLogic(FrameData frameRecordData)
     {
-        //创建接口与别的接口不大一样,需要一个类去继承这个接口,然后去实例化,只有这个接口被创建出来了,才行执行后续操作
+        /*//创建接口与别的接口不大一样,需要一个类去继承这个接口,然后去实例化,只有这个接口被创建出来了,才行执行后续操作
         if (frameRecordData.create)
         {
             foreach (IFrameSyncCreate frameSync in _frameSyncCreate)
@@ -79,7 +79,7 @@ public class ClientFrameSync
                     frameSync.PullFrameRecordData(frameRecordData);
                 }
             }
-        }
+        }*/
     }
 
     //添加到帧同步
@@ -103,11 +103,12 @@ public class ClientFrameSync
         //更新当前客户端帧
         clientFrameIndex = frameIndex;
 
-        FrameRecordDataGroup frameRecordDataGroup = JsonUtil.FromJson<FrameRecordDataGroup>(data);
+        FrameDataGroup frameDataGroup = JsonUtil.FromJson<FrameDataGroup>(data);
         //如果还处于回放模式,要一致记录接收的数据
+        /*
         if (RecordReplays.isReplay)
         {
-            RecordReplays.AddFrameData(frameRecordDataGroup.frameRecordData);
+            RecordReplays.AddFrameData(frameDataGroup.frameRecordData);
         }
         else
         {
@@ -115,7 +116,7 @@ public class ClientFrameSync
             if (FrameRecord.ContainsFrameIndex(frameIndex))
             {
                 //本地的数据与服务器相同
-                if (IsSameFrame(FrameRecord.GetFrameRecordDataGroup(frameIndex).frameRecordData, frameRecordDataGroup.frameRecordData))
+                if (IsSameFrame(FrameRecord.GetFrameRecordDataGroup(frameIndex).frameRecordData, frameDataGroup.frameRecordData))
                 {
                     // Debug.Log("本地数据与服务器相同");
                     if (FrameRecord.IsNoForecastFrameRecordData(frameIndex))
@@ -131,17 +132,18 @@ public class ClientFrameSync
                     //读取上一帧的快照
                     // Snapshot.GetSnapshot(frameIndex - 1);
                     //直接执行服务器逻辑
-                    ExecuteFrameLogic(frameRecordDataGroup.frameRecordData);
+                    ExecuteFrameLogic(frameDataGroup.frameRecordData);
                 }
             }
             else
             {
                 // Debug.Log("本地无数据");
                 //直接执行服务器逻辑
-                ExecuteFrameLogic(frameRecordDataGroup.frameRecordData);
+                ExecuteFrameLogic(frameDataGroup.frameRecordData);
                 Snapshot.AddSnapshot();
             }
         }
+        */
 
         //服务器帧数据
     }
@@ -301,14 +303,14 @@ public class ClientFrameSync
         // Debug.Log("当前时间:" + currentTime);
         // Debug.Log("当前时间:" + frameInitData.currentTime);
         // Debug.Log("当前服务器帧:" + frameInitData.frameIndex);
-        clientFrameIndex = frameInitData.frameIndex;
+        clientFrameIndex = frameInitData.FrameIndex;
         Debug.Log("当前客户端帧:" + clientFrameIndex);
         //传输过来用了多少时间
-        long transmissionInterval = currentTime - frameInitData.currentTime;
+        long transmissionInterval = currentTime - frameInitData.CurrentTime;
         // Debug.Log("传输过来用了多少时间:" + transmissionInterval);
         //服务器传输时到下个帧的所需时间
         //加入服务器发送时帧是59_20,那么下个帧是60_00,那么下个帧时间是60-20=40
-        long serverTransmissionNextFrameTime = frameInterval - (frameInitData.currentTime - frameInitData.startTime) % frameInterval;
+        long serverTransmissionNextFrameTime = frameInterval - (frameInitData.CurrentTime - frameInitData.StartTime) % frameInterval;
         // Debug.Log("服务器到下个帧时间:" + serverTransmissionNextFrameTime);
 
         //服务器到下一帧所需时间
@@ -320,21 +322,21 @@ public class ClientFrameSync
         if (transmissionInterval >= serverTransmissionNextFrameTime)
         {
             //补充上一服务器帧剩余的帧
-            frameInitData.currentTime += serverTransmissionNextFrameTime;
-            frameInitData.frameIndex += 1;
+            frameInitData.CurrentTime += serverTransmissionNextFrameTime;
+            frameInitData.FrameIndex += 1;
             //剩下的帧数
             transmissionInterval -= serverTransmissionNextFrameTime;
 
             // Debug.Log("剩下传输时间:" + transmissionInterval);
-            serverNextFrameTime = frameInitData.currentTime + (transmissionInterval / frameInterval + 1) * frameInterval;
-            serverCurrentFrameIndex = frameInitData.frameIndex += (int)(transmissionInterval / frameInterval);
+            serverNextFrameTime = frameInitData.CurrentTime + (transmissionInterval / frameInterval + 1) * frameInterval;
+            serverCurrentFrameIndex = frameInitData.FrameIndex += (int)(transmissionInterval / frameInterval);
             // Debug.Log("服务器到下个帧时间:" + serverNextFrameTime + "当前时间指针:" + serverCurrentFrameIndex);
         }
         else
         {
             //时间小于不用进行补帧,服务器还没到一帧发送的时间,我们已经向服务器发了最新数据
-            serverNextFrameTime = frameInitData.currentTime + serverTransmissionNextFrameTime;
-            serverCurrentFrameIndex = frameInitData.frameIndex;
+            serverNextFrameTime = frameInitData.CurrentTime + serverTransmissionNextFrameTime;
+            serverCurrentFrameIndex = frameInitData.FrameIndex;
 
             // Debug.Log("服务器到下个帧时间:" + serverNextFrameTime + "当前时间指针:" + serverCurrentFrameIndex);
         }

@@ -6,7 +6,7 @@ using LitJson;
 public class RequestServerRoom
 {
     [AddRequestCode(RequestCode.Room_GetRoom, RequestType.Server)]
-    public void OnGetRoom(string data, ClientSocket clientSocket)
+    public void OnGetRoom(byte[] data, ClientSocket clientSocket)
     {
         List<ServerRoomData> serverRoomDataList = ServerRoomManager.GetServerRoomData();
         string serverRoomDataListJson = JsonMapper.ToJson(serverRoomDataList);
@@ -14,9 +14,10 @@ public class RequestServerRoom
     }
 
     [AddRequestCode(RequestCode.Room_CreateRoom, RequestType.Server)]
-    public void OnCreateRoom(string data, ClientSocket clientSocket)
+    public void OnCreateRoom(byte[] data, ClientSocket clientSocket)
     {
-        ServerRoomData serverRoomData = JsonMapper.ToObject<ServerRoomData>(data);
+        string content = System.Text.Encoding.UTF8.GetString(data);
+        ServerRoomData serverRoomData = JsonMapper.ToObject<ServerRoomData>(content);
         serverRoomData.roomId = ServerRoomManager.GenerateRoomId();
         /*Console.WriteLine(serverRoomData.roomName);
         Console.WriteLine(serverRoomData.roomId);
@@ -27,9 +28,10 @@ public class RequestServerRoom
     }
 
     [AddRequestCode(RequestCode.Room_EnterRoom, RequestType.Server)]
-    public void OnEnterRoom(string roomData, ClientSocket clientSocket)
+    public void OnEnterRoom(byte[] data, ClientSocket clientSocket)
     {
-        ServerRoomData clientServerRoomData = JsonMapper.ToObject<ServerRoomData>(roomData);
+        string content = System.Text.Encoding.UTF8.GetString(data);
+        ServerRoomData clientServerRoomData = JsonMapper.ToObject<ServerRoomData>(content);
         ServerRoom serverRoom = ServerRoomManager.GetServerRoom(clientServerRoomData.roomId);
         if (serverRoom == null)
         {
@@ -81,9 +83,10 @@ public class RequestServerRoom
     }
 
     [AddRequestCode(RequestCode.Room_GetRoomPlayer, RequestType.Server)]
-    public void OnEnterRoomGetRoomPlayer(string data, ClientSocket clientSocket)
+    public void OnEnterRoomGetRoomPlayer(byte[] data, ClientSocket clientSocket)
     {
-        ServerRoom serverRoom = ServerRoomManager.GetServerRoom(int.Parse(data));
+        string content = System.Text.Encoding.UTF8.GetString(data);
+        ServerRoom serverRoom = ServerRoomManager.GetServerRoom(int.Parse(content));
         if (serverRoom == null)
         {
             Console.Error.WriteLine("房间不存在");
@@ -95,9 +98,10 @@ public class RequestServerRoom
     }
 
     [AddRequestCode(RequestCode.Room_Ready, RequestType.Server)]
-    public void OnPlayerReady(string data, ClientSocket clientSocket)
+    public void OnPlayerReady(byte[] data, ClientSocket clientSocket)
     {
-        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonMapper.ToObject<ServerRoomPlayerReadyState>(data);
+        string content = System.Text.Encoding.UTF8.GetString(data);
+        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonMapper.ToObject<ServerRoomPlayerReadyState>(content);
         ServerRoom serverRoom = ServerRoomManager.GetServerRoom(serverRoomPlayerReadyState.roomId);
         if (serverRoom == null)
         {
@@ -109,7 +113,7 @@ public class RequestServerRoom
     }
 
     [AddRequestCode(RequestCode.Room_ExitRoom, RequestType.Server)]
-    public void Room_Exit(string data, ClientSocket clientSocket)
+    public void Room_Exit(byte[] data, ClientSocket clientSocket)
     {
         ServerRoom serverRoom = ServerRoomManager.GetServerRoom(Convert.ToInt32(data));
         serverRoom.ClientExitRoom(clientSocket);

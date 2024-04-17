@@ -6,12 +6,12 @@ public class RecordReplays
 {
     //回放间隔倍数
     public static int replayInterval = 2;
-    public static Queue<List<FrameRecordData>> allFrameData = new Queue<List<FrameRecordData>>();
+    public static Queue<List<FrameData>> allFrameData = new Queue<List<FrameData>>();
 
     public static bool isReplay = false;
 
     //添加回放数据
-    public static void AddFrameData(List<FrameRecordData> frameRecordData)
+    public static void AddFrameData(List<FrameData> frameRecordData)
     {
         allFrameData.Enqueue(frameRecordData);
     }
@@ -22,11 +22,11 @@ public class RecordReplays
         isReplay = true;
         for (int i = 0; i < allFrameData.Count; i++)
         {
-            List<FrameRecordData> frameRecordDatas = allFrameData.Dequeue();
+            List<FrameData> frameRecordDatas = allFrameData.Dequeue();
             if (frameRecordDatas.Count > 0)
             {
-                await UniTask.Delay(TimeSpan.FromMilliseconds(ClientFrameSync.frameInterval / replayInterval));
-                foreach (FrameRecordData frameRecordData in frameRecordDatas)
+                await UniTask.Delay(TimeSpan.FromMilliseconds(ClientMapManager.frameInterval / replayInterval));
+                foreach (FrameData frameRecordData in frameRecordDatas)
                 {
                     ClientFrameSync.ExecuteFrameLogic(frameRecordData);
                 }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 public class FrameRecord
 {
     //所有客户端帧记录
-    public static List<FrameRecordDataGroup> frameRecord = new List<FrameRecordDataGroup>();
+    public static List<FrameDataGroup> frameRecord = new List<FrameDataGroup>();
 
     //不参与预测的帧,一般指帧同步时不好回退的帧,比如UI交互等,这些帧不参与预测,等服务器返回了当前帧,再执行,这样可以保证帧同步的准确性
     public static Dictionary<int, FrameRecordData> noForecastFrameRecordDic = new Dictionary<int, FrameRecordData>();
@@ -78,23 +78,23 @@ public class FrameRecord
     /// <param name="frameRecordData"></param>
     public static void AddFrameRecordData(int frameIndex, FrameRecordData frameRecordData)
     {
-        FrameRecordDataGroup frameRecordDataGroup = null;
+        FrameDataGroup frameDataGroup = null;
         if (!ContainsFrameIndex(frameIndex))
         {
-            frameRecordDataGroup = new FrameRecordDataGroup();
-            frameRecordDataGroup.frameIndex = frameIndex;
-            frameRecordDataGroup.frameRecordData = new List<FrameRecordData>() { };
-            frameRecord.Add(frameRecordDataGroup);
+            frameDataGroup = new FrameDataGroup();
+            frameDataGroup.FrameIndex = frameIndex;
+            // frameDataGroup.frameRecordData = new List<FrameRecordData>() { };
+            frameRecord.Add(frameDataGroup);
         }
         else
         {
-            frameRecordDataGroup = GetFrameRecordDataGroup(frameIndex);
+            frameDataGroup = GetFrameRecordDataGroup(frameIndex);
         }
 
         if (frameRecordData != null)
         {
-            frameRecordDataGroup.frameRecordData.Add(frameRecordData);
-        }
+            // frameDataGroup.frameRecordData.Add(frameRecordData);
+        }   
     }
 
     /// <summary>
@@ -102,11 +102,11 @@ public class FrameRecord
     /// </summary>
     /// <param name="frameIndex"></param>
     /// <returns></returns>
-    public static FrameRecordDataGroup GetFrameRecordDataGroup(int frameIndex)
+    public static FrameDataGroup GetFrameRecordDataGroup(int frameIndex)
     {
         for (int i = 0; i < frameRecord.Count; i++)
         {
-            if (frameRecord[i].frameIndex == frameIndex)
+            if (frameRecord[i].FrameIndex == frameIndex)
             {
                 return frameRecord[i];
             }
@@ -124,7 +124,7 @@ public class FrameRecord
     {
         for (int i = 0; i < frameRecord.Count; i++)
         {
-            if (frameRecord[i].frameIndex == frameIndex)
+            if (frameRecord[i].FrameIndex == frameIndex)
             {
                 return true;
             }

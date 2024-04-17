@@ -26,11 +26,16 @@ public class ServerFrameSync
 
     //帧记录间隔 = 
     public static int frameInterval = 60;
+
     //服务器当前帧
     public static int serverFrameIndex;
 
     //开始帧记录
     public static bool startFrameRecord = false;
+
+    public delegate void FrameSync(int frameIndex);
+
+    public static FrameSync frameSync;
 
     public static void CreateFrameSync()
     {
@@ -57,7 +62,12 @@ public class ServerFrameSync
                 //有时可能会多出来1-2,减去偏差,下次不用计算了
                 oldTime -= timeOffset;
                 serverFrameIndex += 1;
-                // Console.WriteLine(FrameRecord.serverFrameIndex + ":" + currentTime);
+                if (frameSync != null)
+                {
+                    frameSync(serverFrameIndex);
+                }
+
+                /*// Console.WriteLine(FrameRecord.serverFrameIndex + ":" + currentTime);
                 if (!FrameRecord.ContainsFrameIndex(serverFrameIndex))
                 {
                     //没有任何客户端连接,服务器自创建
@@ -80,7 +90,7 @@ public class ServerFrameSync
 
                         Console.WriteLine("---------------------------------------------------------");
                     }
-                }
+                }*/
             }
         }
     }

@@ -1,9 +1,0 @@
-// 指定版本
-syntax = "proto3";
-
-message FrameData {
-    int32 roomId = 1;
-    int32 frameIndex = 2;
-    string dataType = 3;
-    bytes data = 4;
-}

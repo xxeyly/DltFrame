@@ -109,7 +109,7 @@ public class ServerSocketFrameComponent
     /// <param name="requestCode"></param>
     /// <param name="data"></param>
     /// <param name="clientSocket"></param>
-    public void ExecuteReflection(int requestCode, string data, ClientSocket clientSocket)
+    public void ExecuteReflection(int requestCode, byte[] data, ClientSocket clientSocket)
     {
         if (_requestCodes.ContainsKey(requestCode))
         {

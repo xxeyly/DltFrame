@@ -1,0 +1,22 @@
+// 指定版本
+syntax = "proto3";
+
+message FrameData {
+    int32 frameIndex = 1;
+    int32 clientToken = 2;
+    string dataType = 3;
+    bytes data = 4;
+}
+
+message FrameDataGroup {
+    int32 frameIndex = 1;
+    repeated FrameData frameData = 2;
+}
+
+message FrameInitData {
+    string mapName = 1;
+    int32 frameIndex = 2;
+    int64 startTime = 3;
+    int64 currentTime = 4;
+    repeated FrameDataGroup frameRecord = 5;
+}

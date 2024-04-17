@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
 using DltFramework;
+using UnityEngine;
 
 public class ClientToken
 {
     [AddRequestCode(RequestCode.Token, RequestType.Client)]
-    public void OnToken(string data)
+    public void OnToken(byte[] data)
     {
-        FileOperationComponent.SaveTextToLoad(DataFrameComponent.Path_DeviceStorage(), "Token.txt", data);
-        ClientSocketFrameComponent.Instance.Token = Convert.ToInt32(data);
+        string content = System.Text.Encoding.UTF8.GetString(data);
+        FileOperationComponent.SaveTextToLoad(DataFrameComponent.Path_DeviceStorage(), "Token.txt", content);
+        ClientSocketFrameComponent.Instance.Token = Convert.ToInt32(content);
         //获得所有客户端IClientToken
         List<IClientToken> clientTokenList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IClientToken>();
         foreach (IClientToken clientToken in clientTokenList)
         {
             //分发Token请求
-            clientToken.ClientToken(data);
+            clientToken.ClientToken(content);
         }
-
-       
     }
 }

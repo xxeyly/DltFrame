@@ -6,12 +6,6 @@ public class ServerRoom
 {
     public ServerRoomData ServerRoomData = new ServerRoomData();
 
-
-    /// <summary>
-    /// 房间初始化帧索引
-    /// </summary>
-    public int roomInitFrameIndex;
-
     /// <summary>
     /// 房间内玩家
     /// </summary>
@@ -83,7 +77,6 @@ public class ServerRoom
         {
             ServerRoomManager.RemoveRoom(ServerRoomData);
         }
-        
     }
 
     /// <summary>
@@ -123,6 +116,24 @@ public class ServerRoom
                 socket.TcpSend(RequestCode.Room_OtherPlayerReady, JsonMapper.ToJson(serverRoomPlayerReadyState));
             }
         }
+
+        if (ready)
+        {
+            //全部准备完毕
+            if (IsAllReady())
+            {
+                //开始游戏
+                foreach (ClientSocket socket in clientSockets)
+                {
+                    socket.TcpSend(RequestCode.Room_StartGame, "1");
+                }
+
+                //创建地图
+                ServerMapManager.CreateServerMap(ServerRoomData);
+                //移除当前房间
+                ServerRoomManager.RemoveRoom(ServerRoomData);
+            }
+        }
     }
 
     /// <summary>
@@ -144,5 +155,29 @@ public class ServerRoom
         }
 
         return serverRoomPlayerReadyStates;
+    }
+
+    /// <summary>
+    /// 全部准备
+    /// </summary>
+    /// <returns></returns>
+    public bool IsAllReady()
+    {
+        //房间人未满
+        if (playerReady.Count < ServerRoomData.roomPlayerMaxCount)
+        {
+            return false;
+        }
+
+        //有人未准备
+        foreach (bool ready in playerReady.Values)
+        {
+            if (!ready)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

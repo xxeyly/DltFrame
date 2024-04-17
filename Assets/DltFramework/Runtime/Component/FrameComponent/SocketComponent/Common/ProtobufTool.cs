@@ -6,15 +6,7 @@ public class ProtobufTool
 {
     public static byte[] SerializeToByteArray<T>(T message) where T : IMessage<T>
     {
-        using (var stream = new MemoryStream())
-        {
-            var writer = new CodedOutputStream(stream);
-
-            message.WriteTo(writer);
-            writer.Flush();
-
-            return stream.ToArray();
-        }
+        return message.ToByteArray();
     }
 
     public static T DeserializeFromByteArray<T>(byte[] data) where T : class, IMessage<T>, new()
@@ -30,4 +22,5 @@ public class ProtobufTool
             throw;
         }
     }
+    
 }

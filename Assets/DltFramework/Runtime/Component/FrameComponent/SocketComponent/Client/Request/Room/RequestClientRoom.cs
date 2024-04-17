@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using DltFramework;
 using HotFix;
 using UnityEngine;
@@ -7,8 +8,9 @@ using UnityEngine;
 public class RequestClientRoom
 {
     [AddRequestCode(RequestCode.Room_GetRoom, RequestType.Client)]
-    public void Room_GetRoom(string roomData)
+    public void Room_GetRoom(byte[] data)
     {
+        string roomData = Encoding.UTF8.GetString(data);
         List<IRoom_GetRoom> requestClientRoomGetRoomList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_GetRoom>();
         List<ServerRoomData> serverRoomDataList = new List<ServerRoomData>();
         if (roomData == "[]")
@@ -27,9 +29,10 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_CreateRoomSuccessFully, RequestType.Client)]
-    public void Room_CreateRoomSuccessFully(string data)
+    public void Room_CreateRoomSuccessFully(byte[] data)
     {
-        ServerRoomData serverRoomData = JsonUtil.FromJson<ServerRoomData>(data);
+        string content = Encoding.UTF8.GetString(data);
+        ServerRoomData serverRoomData = JsonUtil.FromJson<ServerRoomData>(content);
         List<IRoom_CreateRoomSuccessFully> requestClientRoomCreateRoomSuccessFullyList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_CreateRoomSuccessFully>();
         foreach (IRoom_CreateRoomSuccessFully requestClientRoomCreateRoomSuccessFully in requestClientRoomCreateRoomSuccessFullyList)
         {
@@ -38,8 +41,9 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_EnterRoomFailedRoomNotExistent, RequestType.Client)]
-    public void Room_EnterRoomFailedRoomNotExistent(string data)
+    public void Room_EnterRoomFailedRoomNotExistent(byte[] data)
     {
+        string content = Encoding.UTF8.GetString(data);
         List<IRoom_EnterRoomFailedRoomNotExistent> Room_EnterRoomFailedRoomNotExistent = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_EnterRoomFailedRoomNotExistent>();
         foreach (IRoom_EnterRoomFailedRoomNotExistent roomEnterRoomFailedRoomNotExistent in Room_EnterRoomFailedRoomNotExistent)
         {
@@ -48,8 +52,9 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_EnterRoomFailedRoomFull, RequestType.Client)]
-    public void Room_EnterRoomFailedRoomFull(string data)
+    public void Room_EnterRoomFailedRoomFull(byte[] data)
     {
+        string content = Encoding.UTF8.GetString(data);
         List<IRoom_EnterRoomFailedRoomFull> requestClientRoomRoomFullList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_EnterRoomFailedRoomFull>();
         foreach (IRoom_EnterRoomFailedRoomFull requestClientRoomRoomFull in requestClientRoomRoomFullList)
         {
@@ -58,8 +63,9 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_EnterRoomFailedRoomPasswordError, RequestType.Client)]
-    public void Room_EnterRoomFailedRoomPasswordError(string data)
+    public void Room_EnterRoomFailedRoomPasswordError(byte[] data)
     {
+        string content = Encoding.UTF8.GetString(data);
         List<IRoom_EnterRoomFailedRoomPasswordError> requestClientRoomEnterRoomPasswordErrorList = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_EnterRoomFailedRoomPasswordError>();
         foreach (IRoom_EnterRoomFailedRoomPasswordError requestClientRoomEnterRoomPasswordError in requestClientRoomEnterRoomPasswordErrorList)
         {
@@ -70,10 +76,12 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_EnterRoomSuccessFully, RequestType.Client)]
-    public void Room_EnterRoomSuccessFully(string data)
+    public void Room_EnterRoomSuccessFully(byte[] data)
     {
+        string content = Encoding.UTF8.GetString(data);
         List<IRoom_EnterRoomSuccessFully> room_EnterRoomSuccessFully = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_EnterRoomSuccessFully>();
-        ServerRoomData serverRoomData = JsonUtil.FromJson<ServerRoomData>(data);
+        ServerRoomData serverRoomData = JsonUtil.FromJson<ServerRoomData>(content);
+        ClientSocketFrameComponent.Instance.roomId = serverRoomData.roomId;
         foreach (IRoom_EnterRoomSuccessFully roomEnterRoomSuccessFully in room_EnterRoomSuccessFully)
         {
             roomEnterRoomSuccessFully.Room_EnterRoomSuccessFully(serverRoomData);
@@ -81,16 +89,18 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_GetRoomPlayer, RequestType.Client)]
-    public void Room_GetRoomPlayer(string data)
+    public void Room_GetRoomPlayer(byte[] data)
     {
-        List<ServerRoomPlayerReadyState> serverRoomPlayerReadyStates = JsonUtil.FromJson<List<ServerRoomPlayerReadyState>>(data);
+        string content = Encoding.UTF8.GetString(data);
+        List<ServerRoomPlayerReadyState> serverRoomPlayerReadyStates = JsonUtil.FromJson<List<ServerRoomPlayerReadyState>>(content);
         ListenerFrameComponent.Instance.clientRoomReady.SetRoomPlayer(serverRoomPlayerReadyStates);
     }
 
     [AddRequestCode(RequestCode.Room_OtherPlayerEnterRoom, RequestType.Client)]
-    public void Room_OtherPlayerEnterRoom(string data)
+    public void Room_OtherPlayerEnterRoom(byte[] data)
     {
-        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(data);
+        string content = Encoding.UTF8.GetString(data);
+        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(content);
         List<IRoom_OtherPlayerEnterRoom> IRoom_OtherPlayerEnterRoom = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_OtherPlayerEnterRoom>();
         foreach (IRoom_OtherPlayerEnterRoom roomOtherPlayerEnterRoom in IRoom_OtherPlayerEnterRoom)
         {
@@ -99,9 +109,10 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_Ready, RequestType.Client)]
-    public void Room_Ready(string data)
+    public void Room_Ready(byte[] data)
     {
-        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(data);
+        string content = Encoding.UTF8.GetString(data);
+        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(content);
         List<IRoom_Ready> IRoom_Ready = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_Ready>();
         foreach (IRoom_Ready roomReady in IRoom_Ready)
         {
@@ -110,9 +121,10 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_OtherPlayerReady, RequestType.Client)]
-    public void Room_OtherPlayerReady(string data)
+    public void Room_OtherPlayerReady(byte[] data)
     {
-        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(data);
+        string content = Encoding.UTF8.GetString(data);
+        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(content);
         List<IRoom_OtherPlayerReady> IRoom_OtherPlayerReady = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_OtherPlayerReady>();
         foreach (IRoom_OtherPlayerReady roomOtherPlayerReady in IRoom_OtherPlayerReady)
         {
@@ -121,9 +133,10 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_OtherPlayerExitRoom, RequestType.Client)]
-    public void Room_OtherPlayerExitRoom(string data)
+    public void Room_OtherPlayerExitRoom(byte[] data)
     {
-        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(data);
+        string content = Encoding.UTF8.GetString(data);
+        ServerRoomPlayerReadyState serverRoomPlayerReadyState = JsonUtil.FromJson<ServerRoomPlayerReadyState>(content);
         List<IRoom_OtherPlayerExitRoom> IRoom_OtherPlayerExitRoom = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_OtherPlayerExitRoom>();
         foreach (IRoom_OtherPlayerExitRoom roomOtherPlayerExitRoom in IRoom_OtherPlayerExitRoom)
         {
@@ -132,12 +145,26 @@ public class RequestClientRoom
     }
 
     [AddRequestCode(RequestCode.Room_ExitRoomSuccessFully, RequestType.Client)]
-    public void Room_ExitRoomSuccessFully(string data)
+    public void Room_ExitRoomSuccessFully(byte[] data)
     {
+        string content = Encoding.UTF8.GetString(data);
         List<IRoom_ExitRoomSuccessFully> IRoom_ExitRoomSuccessFully = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_ExitRoomSuccessFully>();
         foreach (IRoom_ExitRoomSuccessFully roomExitRoomSuccessFully in IRoom_ExitRoomSuccessFully)
         {
             roomExitRoomSuccessFully.Room_ExitRoomSuccessFully();
+        }
+
+        ClientSocketFrameComponent.Instance.roomId = -1;
+    }
+
+    [AddRequestCode(RequestCode.Room_StartGame, RequestType.Client)]
+    public void Room_StartGame(byte[] data)
+    {
+        string content = Encoding.UTF8.GetString(data);
+        List<IRoom_StartGame> IRoom_StartGame = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IRoom_StartGame>();
+        foreach (IRoom_StartGame roomStartGame in IRoom_StartGame)
+        {
+            roomStartGame.Room_StartGame();
         }
     }
 }
