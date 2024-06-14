@@ -3,6 +3,9 @@ using UnityEngine.Events;
 
 namespace DltFramework
 {
+    /// <summary>
+    /// 实体计时器
+    /// </summary>
     public partial class EntityItem
     {
         /// <summary>

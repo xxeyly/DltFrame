@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace DltFramework
 {
+    /// <summary>
+    /// 实体
+    /// </summary>
     [Serializable]
     public partial class EntityItem : MonoBehaviour
     {

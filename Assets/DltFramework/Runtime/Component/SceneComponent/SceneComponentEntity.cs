@@ -1,9 +1,7 @@
-﻿
-namespace DltFramework
+﻿namespace DltFramework
 {
     public partial class SceneComponent
     {
-
         /// <summary>
         /// 实体全部隐藏
         /// </summary>
@@ -26,7 +24,7 @@ namespace DltFramework
         /// <param name="entityName"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected T GetEntity<T>(string entityName) 
+        protected T GetEntity<T>(string entityName)
         {
             return EntityFrameComponent.Instance.GetEntity<T>(entityName);
         }
@@ -56,6 +54,16 @@ namespace DltFramework
             EntityFrameComponent.Instance.DisplayEntity(display, entityNames);
         }
 
+        protected void DisplayEntity(string processName, bool display,params string[] entityNames)
+        {
+            EntityFrameComponent.Instance.DisplayEntity(processName, display, entityNames);
+        }
+
+        protected void EntityReleaseProcess(string processName)
+        {
+            EntityFrameComponent.Instance.EntityReleaseProcess(processName);
+        }
+
         /// <summary>
         /// 获得实体的状态
         /// </summary>
@@ -65,6 +73,5 @@ namespace DltFramework
         {
             return EntityFrameComponent.Instance.GetEntityState(entityName);
         }
- 
     }
 }

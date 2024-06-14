@@ -63,43 +63,31 @@ public class ServerSocketFrameComponent
     {
         IPEndPoint remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         byte[] receivedBytes = _udpClient.EndReceive(ar, ref remoteIpEndPoint);
-        // Console.WriteLine(remoteIpEndPoint);
-        Message.UdpReadMessage(receivedBytes, remoteIpEndPoint, UdpExecuteReflection);
+        FrameData frameData = ProtobufTool.DeserializeFromByteArray<FrameData>(receivedBytes);
+        // Console.WriteLine("客户端:" + frameData.ClientToken + ":" + frameData.FrameIndex + ":" + frameData.DataType);
+
+        UdpExecuteReflection(frameData, remoteIpEndPoint);
         _udpClient.BeginReceive(UdpReceiveCallback, null);
     }
 
-    private void UdpExecuteReflection(int clientFrameIndex, string content, IPEndPoint ipEndPoint)
+    private void UdpExecuteReflection(FrameData frameData, IPEndPoint ipEndPoint)
     {
-        Console.WriteLine("客户端:" + clientFrameIndex + ":" + content);
-        Console.WriteLine("服务器:" + ServerFrameSync.serverFrameIndex);
-        // Console.WriteLine(content);
-        // Console.WriteLine(ipEndPoint);
-
-        FrameRecordData frameRecordData = JsonMapper.ToObject<FrameRecordData>(content);
-        ClientSocket clientSocket = ClientSocketManager.GetClientSocket(frameRecordData.id);
-        //客户端发来的会比服务器的多一帧,表示客户端已经同步过上一帧了
+        Console.WriteLine("客户端:" + frameData.FrameIndex);
+        Console.WriteLine("服务器:" + ServerMapManager.GetServerMap(ClientSocketManager.GetClientSocket(frameData.ClientToken)).mapFrameIndex);
+        ClientSocket clientSocket = ClientSocketManager.GetClientSocket(frameData.ClientToken);
         clientSocket.SetUdpClient(ipEndPoint);
-        clientSocket.FrameIndex = clientFrameIndex;
-        //客户端和服务器的帧是时间是一样的
-        //服务器第1帧的时候向客户端发送数据
-        //客户端第1帧的时候也接收到了服务器第1帧的数据(最理想的状态)
-        //客户端第2帧向服务器发送数据,数据帧是第一帧的帧序列
-        //服务器接收的时候是第2帧
-        //所以要消除这个1帧的差异
+        clientSocket.FrameIndex = frameData.FrameIndex;
 
-
-        if (clientFrameIndex + 1 < ServerFrameSync.serverFrameIndex)
+        ServerMap serverMap = ServerMapManager.GetServerMap(clientSocket);
+        if (frameData.FrameIndex != ServerMapManager.GetServerMap(ClientSocketManager.GetClientSocket(frameData.ClientToken)).mapFrameIndex)
         {
             Console.WriteLine("超时:丢弃帧数据");
             //向客户端发送最新帧数据
         }
         else
         {
-            Console.WriteLine("帧记录:" + (clientFrameIndex + 1) + ":" + content);
-            //记录下一帧数据
-            ServerFrameSync.RecordFrameSyncData(clientFrameIndex + 1, frameRecordData);
-            // Console.WriteLine(frameRecordData.id);
-            //记录地址
+            Console.WriteLine("帧记录:");
+            serverMap.AddFrameData(clientSocket, frameData);
         }
     }
 

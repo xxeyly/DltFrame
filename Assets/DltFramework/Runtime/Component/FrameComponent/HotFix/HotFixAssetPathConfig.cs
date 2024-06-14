@@ -16,8 +16,23 @@ public class HotFixAssetPathConfig : MonoBehaviour
     public void SetPathAndApplyPrefab()
     {
         generateHierarchyPath = DataFrameComponent.Hierarchy_GetTransformHierarchy(transform, false);
-        prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
+        // Debug.Log("生成路径:" + generateHierarchyPath);
+        if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
+        {
+            prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
+        }
+        else if (PrefabUtility.IsPrefabAssetMissing(gameObject))
+        {
+            prefabPath = DataFrameComponent.String_BuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType(), "/", gameObject.name, ".prefab");
+        }
+        else
+        {
+            prefabPath = DataFrameComponent.String_BuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType(), "/", gameObject.name, ".prefab");
+        }
+
+        // Debug.Log("Prefab路径:" + prefabPath);
         string prefabPathDirectory = DataFrameComponent.String_BuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType());
+        // Debug.Log("预制体文件夹:" + prefabPathDirectory);
         if (prefabPath == string.Empty)
         {
             if (!Directory.Exists(prefabPathDirectory))
@@ -28,7 +43,7 @@ public class HotFixAssetPathConfig : MonoBehaviour
         }
 
         assetBundlePath = DataFrameComponent.String_BuilderString("HotFixRuntime/HotFixAssetBundle", DataFrameComponent.String_AllCharToLower(prefabPath.Replace("Assets/HotFixPrefabs/Scene", "").Replace(".prefab", "")));
-        prefabPath = DataFrameComponent.String_BuilderString(prefabPathDirectory, "/", gameObject.name, ".prefab");
+        // Debug.Log("Ab包路径:" + assetBundlePath);
         ApplyPrefab();
     }
 
@@ -77,12 +92,32 @@ public class HotFixAssetPathConfig : MonoBehaviour
             // PrefabUtility.ApplyPrefabInstance(gameObject, InteractionMode.AutomatedAction);
         }
 
-        GameObject prefabObj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-        var thisTransform = transform;
-        prefabObj.transform.localPosition = thisTransform.localPosition;
-        prefabObj.transform.localEulerAngles = thisTransform.localEulerAngles;
-        prefabObj.transform.localScale = thisTransform.localScale;
+        AgainCheckPath();
         AssetDatabase.SaveAssets();
+    }
+
+    /// <summary>
+    /// 再次检查路径
+    /// </summary>
+    private void AgainCheckPath()
+    {
+        GameObject prefabObj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        HotFixAssetPathConfig hotFixAssetPathConfig = prefabObj.GetComponent<HotFixAssetPathConfig>();
+        if (hotFixAssetPathConfig != null)
+        {
+            hotFixAssetPathConfig.generateHierarchyPath = generateHierarchyPath;
+            hotFixAssetPathConfig.assetBundlePath = assetBundlePath;
+            hotFixAssetPathConfig.prefabPath = prefabPath;
+        }
+
+        EditorUtility.SetDirty(hotFixAssetPathConfig);
+        EditorUtility.SetDirty(prefabObj);
+        prefabObj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        hotFixAssetPathConfig = prefabObj.GetComponent<HotFixAssetPathConfig>();
+        if (hotFixAssetPathConfig.generateHierarchyPath != generateHierarchyPath || hotFixAssetPathConfig.assetBundlePath != assetBundlePath || hotFixAssetPathConfig.prefabPath != prefabPath)
+        {
+            AgainCheckPath();
+        }
     }
 
     /// <summary>

@@ -34,6 +34,8 @@ public class ServerMapManager
         serverMap.ServerMapData.mapPlayerCount = serverRoomData.roomPlayerCount;
         serverMap.ServerMapData.mapPlayerMaxCount = serverRoomData.roomPlayerMaxCount;
         serverMap.MapInit();
+        //房间内玩家转移到地图中
+        serverMap.clientSockets = ServerRoomManager.GetServerRoom(serverRoomData.roomId).clientSockets;
         Console.WriteLine("地图:" + serverMap.ServerMapData.mapId + "创建");
         serverMaps.Add(serverMap);
     }
@@ -67,6 +69,27 @@ public class ServerMapManager
             if (serverMap.ServerMapData.mapId == mapId)
             {
                 return serverMap;
+            }
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// 获得地图
+    /// </summary>
+    /// <param name="clientSocket"></param>
+    /// <returns></returns>
+    public static ServerMap GetServerMap(ClientSocket clientSocket)
+    {
+        foreach (ServerMap serverMap in serverMaps)
+        {
+            foreach (ClientSocket socket in serverMap.clientSockets)
+            {
+                if (socket.token == clientSocket.token)
+                {
+                    return serverMap;
+                }
             }
         }
 

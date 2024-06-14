@@ -23,16 +23,18 @@ public static partial class FrameDataProtoReflection {
           "ChRGcmFtZURhdGFQcm90by5wcm90byJUCglGcmFtZURhdGESEgoKZnJhbWVJ",
           "bmRleBgBIAEoBRITCgtjbGllbnRUb2tlbhgCIAEoBRIQCghkYXRhVHlwZRgD",
           "IAEoCRIMCgRkYXRhGAQgASgMIkMKDkZyYW1lRGF0YUdyb3VwEhIKCmZyYW1l",
-          "SW5kZXgYASABKAUSHQoJZnJhbWVEYXRhGAIgAygLMgouRnJhbWVEYXRhIoIB",
-          "Cg1GcmFtZUluaXREYXRhEg8KB21hcE5hbWUYASABKAkSEgoKZnJhbWVJbmRl",
-          "eBgCIAEoBRIRCglzdGFydFRpbWUYAyABKAMSEwoLY3VycmVudFRpbWUYBCAB",
-          "KAMSJAoLZnJhbWVSZWNvcmQYBSADKAsyDy5GcmFtZURhdGFHcm91cGIGcHJv",
-          "dG8z"));
+          "SW5kZXgYASABKAUSHQoJZnJhbWVEYXRhGAIgAygLMgouRnJhbWVEYXRhIj0K",
+          "EkZyYW1lRGF0YUdyb3VwTGlzdBInCg5mcmFtZURhdGFHcm91cBgBIAMoCzIP",
+          "LkZyYW1lRGF0YUdyb3VwIoIBCg1GcmFtZUluaXREYXRhEg8KB21hcE5hbWUY",
+          "ASABKAkSEgoKZnJhbWVJbmRleBgCIAEoBRIRCglzdGFydFRpbWUYAyABKAMS",
+          "EwoLY3VycmVudFRpbWUYBCABKAMSJAoLZnJhbWVSZWNvcmQYBSADKAsyDy5G",
+          "cmFtZURhdGFHcm91cGIGcHJvdG8z"));
     descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
         new pbr::FileDescriptor[] { },
         new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
           new pbr::GeneratedClrTypeInfo(typeof(global::FrameData), global::FrameData.Parser, new[]{ "FrameIndex", "ClientToken", "DataType", "Data" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::FrameDataGroup), global::FrameDataGroup.Parser, new[]{ "FrameIndex", "FrameData" }, null, null, null),
+          new pbr::GeneratedClrTypeInfo(typeof(global::FrameDataGroupList), global::FrameDataGroupList.Parser, new[]{ "FrameDataGroup" }, null, null, null),
           new pbr::GeneratedClrTypeInfo(typeof(global::FrameInitData), global::FrameInitData.Parser, new[]{ "MapName", "FrameIndex", "StartTime", "CurrentTime", "FrameRecord" }, null, null, null)
         }));
   }
@@ -40,6 +42,9 @@ public static partial class FrameDataProtoReflection {
 
 }
 #region Messages
+/// <summary>
+///帧数据
+/// </summary>
 public sealed partial class FrameData : pb::IMessage<FrameData> {
   private static readonly pb::MessageParser<FrameData> _parser = new pb::MessageParser<FrameData>(() => new FrameData());
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -241,6 +246,9 @@ public sealed partial class FrameData : pb::IMessage<FrameData> {
 
 }
 
+/// <summary>
+///帧数据组
+/// </summary>
 public sealed partial class FrameDataGroup : pb::IMessage<FrameDataGroup> {
   private static readonly pb::MessageParser<FrameDataGroup> _parser = new pb::MessageParser<FrameDataGroup>(() => new FrameDataGroup());
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -378,6 +386,121 @@ public sealed partial class FrameDataGroup : pb::IMessage<FrameDataGroup> {
 
 }
 
+/// <summary>
+///帧数据组列表
+/// </summary>
+public sealed partial class FrameDataGroupList : pb::IMessage<FrameDataGroupList> {
+  private static readonly pb::MessageParser<FrameDataGroupList> _parser = new pb::MessageParser<FrameDataGroupList>(() => new FrameDataGroupList());
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pb::MessageParser<FrameDataGroupList> Parser { get { return _parser; } }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public static pbr::MessageDescriptor Descriptor {
+    get { return global::FrameDataProtoReflection.Descriptor.MessageTypes[2]; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  pbr::MessageDescriptor pb::IMessage.Descriptor {
+    get { return Descriptor; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public FrameDataGroupList() {
+    OnConstruction();
+  }
+
+  partial void OnConstruction();
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public FrameDataGroupList(FrameDataGroupList other) : this() {
+    frameDataGroup_ = other.frameDataGroup_.Clone();
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public FrameDataGroupList Clone() {
+    return new FrameDataGroupList(this);
+  }
+
+  /// <summary>Field number for the "frameDataGroup" field.</summary>
+  public const int FrameDataGroupFieldNumber = 1;
+  private static readonly pb::FieldCodec<global::FrameDataGroup> _repeated_frameDataGroup_codec
+      = pb::FieldCodec.ForMessage(10, global::FrameDataGroup.Parser);
+  private readonly pbc::RepeatedField<global::FrameDataGroup> frameDataGroup_ = new pbc::RepeatedField<global::FrameDataGroup>();
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public pbc::RepeatedField<global::FrameDataGroup> FrameDataGroup {
+    get { return frameDataGroup_; }
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override bool Equals(object other) {
+    return Equals(other as FrameDataGroupList);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public bool Equals(FrameDataGroupList other) {
+    if (ReferenceEquals(other, null)) {
+      return false;
+    }
+    if (ReferenceEquals(other, this)) {
+      return true;
+    }
+    if(!frameDataGroup_.Equals(other.frameDataGroup_)) return false;
+    return true;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override int GetHashCode() {
+    int hash = 1;
+    hash ^= frameDataGroup_.GetHashCode();
+    return hash;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public override string ToString() {
+    return pb::JsonFormatter.ToDiagnosticString(this);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void WriteTo(pb::CodedOutputStream output) {
+    frameDataGroup_.WriteTo(output, _repeated_frameDataGroup_codec);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public int CalculateSize() {
+    int size = 0;
+    size += frameDataGroup_.CalculateSize(_repeated_frameDataGroup_codec);
+    return size;
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(FrameDataGroupList other) {
+    if (other == null) {
+      return;
+    }
+    frameDataGroup_.Add(other.frameDataGroup_);
+  }
+
+  [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+  public void MergeFrom(pb::CodedInputStream input) {
+    uint tag;
+    while ((tag = input.ReadTag()) != 0) {
+      switch(tag) {
+        default:
+          input.SkipLastField();
+          break;
+        case 10: {
+          frameDataGroup_.AddEntriesFrom(input, _repeated_frameDataGroup_codec);
+          break;
+        }
+      }
+    }
+  }
+
+}
+
+/// <summary>
+///帧初始化数据
+/// </summary>
 public sealed partial class FrameInitData : pb::IMessage<FrameInitData> {
   private static readonly pb::MessageParser<FrameInitData> _parser = new pb::MessageParser<FrameInitData>(() => new FrameInitData());
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -385,7 +508,7 @@ public sealed partial class FrameInitData : pb::IMessage<FrameInitData> {
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
   public static pbr::MessageDescriptor Descriptor {
-    get { return global::FrameDataProtoReflection.Descriptor.MessageTypes[2]; }
+    get { return global::FrameDataProtoReflection.Descriptor.MessageTypes[3]; }
   }
 
   [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

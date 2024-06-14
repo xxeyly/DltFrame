@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace DltFramework
 {
+    /// <summary>
+    /// 实体Debug
+    /// </summary>
     public partial class EntityItem
     {
         /// <summary>

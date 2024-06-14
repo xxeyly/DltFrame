@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace DltFramework
 {
+    /// <summary>
+    /// 实体热更
+    /// </summary>
     public partial class EntityItem
     {
         [HideInInspector] public bool HotFixAssetPathConfigIsExist;

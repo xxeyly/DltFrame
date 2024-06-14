@@ -10,6 +10,7 @@ using UnityEngine.Networking;
 
 namespace HotFix
 {
+
     public class HotFixRuntimeFileCheck : MonoBehaviour
     {
         [LabelText("本地开启更新")] public bool localIsUpdate;

@@ -21,25 +21,101 @@ namespace DltFramework
 
         public delegate void CallBack<T>(T t);
 
-        public delegate void CallBack<T, X>(T t, X x);
+        public delegate void CallBack<T, T1>(T t, T1 t1);
 
-        public delegate void CallBack<T, X, Y>(T t, X x, Y y);
+        public delegate void CallBack<T, T1, T2>(T t, T1 t1, T2 t2);
 
-        public delegate void CallBack<T, X, Y, Z>(T t, X x, Y y, Z z);
+        public delegate void CallBack<T, T1, T2, T3>(T t, T1 t1, T2 t2, T3 t3);
 
-        public delegate void CallBack<T, X, Y, Z, W>(T t, X x, Y y, Z z, W w);
+        public delegate void CallBack<T, T1, T2, T3, T4>(T t, T1 t1, T2 t2, T3 t3, T4 t4);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15,
+            T16 t16);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15,
+            T16 t16, T17 t17);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
+            T15 t15, T16 t16, T17 t17, T18 t18);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
+            T15 t15, T16 t16, T17 t17, T18 t18, T19 t19);
+
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13,
+            T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19, T20 t20);
+
 
         public delegate R ReturnCallBack<R>();
 
         public delegate R ReturnCallBack<T, R>(T t);
 
-        public delegate R ReturnCallBack<T, X, R>(T t, X x);
+        public delegate R ReturnCallBack<T, T1, R>(T t, T1 x);
 
-        public delegate R ReturnCallBack<T, X, Y, R>(T t, X x, Y y);
+        public delegate R ReturnCallBack<T, T1, T2, R>(T t, T1 t1, T2 t2);
 
-        public delegate R ReturnCallBack<T, X, Y, Z, R>(T t, X x, Y y, Z z);
+        public delegate R ReturnCallBack<T, T1, T2, T3, R>(T t, T1 t1, T2 t2, T3 t3);
 
-        public delegate R ReturnCallBack<T, X, Y, Z, W, R>(T t, X x, Y y, Z z, W w);
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15,
+            T16 t16);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
+            T15 t15, T16 t16, T17 t17);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
+            T15 t15, T16 t16, T17 t17, T18 t18);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13,
+            T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19);
+
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+            T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19, T20 t20);
+
 
         [LabelText("所有触发事件")] public Dictionary<string, List<Delegate>> allListener = new Dictionary<string, List<Delegate>>();
 
@@ -112,7 +188,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, X>(string eventType, CallBack<T, X> callBack)
+        public void AddListenerEvent<T, T1>(string eventType, CallBack<T, T1> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
@@ -122,7 +198,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, X, Y>(string eventType, CallBack<T, X, Y> callBack)
+        public void AddListenerEvent<T, T1, T2>(string eventType, CallBack<T, T1, T2> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
@@ -132,7 +208,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, X, Y, Z>(string eventType, CallBack<T, X, Y, Z> callBack)
+        public void AddListenerEvent<T, T1, T2, T3>(string eventType, CallBack<T, T1, T2, T3> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
@@ -142,7 +218,90 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddListenerEvent<T, X, Y, Z, W>(string eventType, CallBack<T, X, Y, Z, W> callBack)
+        public void AddListenerEvent<T, T1, T2, T3, T4>(string eventType, CallBack<T, T1, T2, T3, T4> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5>(string eventType, CallBack<T, T1, T2, T3, T4, T5> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
@@ -178,7 +337,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddReturnListenerEvent<T, X, R>(string eventType, ReturnCallBack<T, X, R> callBack)
+        public void AddReturnListenerEvent<T, T1, R>(string eventType, ReturnCallBack<T, T1, R> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
@@ -189,29 +348,111 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddReturnListenerEvent<T, X, Y, R>(string eventType, ReturnCallBack<T, X, Y, R> callBack)
+        public void AddReturnListenerEvent<T, T1, T2, R>(string eventType, ReturnCallBack<T, T1, T2, R> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
-
 
         /// <summary>
         /// 添加事件监听
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddReturnListenerEvent<T, X, Y, Z, R>(string eventType, ReturnCallBack<T, X, Y, Z, R> callBack)
+        public void AddReturnListenerEvent<T, T1, T2, T3, R>(string eventType, ReturnCallBack<T, T1, T2, T3, R> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
-
 
         /// <summary>
         /// 添加事件监听
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void AddReturnListenerEvent<T, X, Y, Z, W, R>(string eventType, ReturnCallBack<T, X, Y, Z, W, R> callBack)
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>(string eventType,
+            ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>(string eventType,
+            ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>(string eventType,
+            ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R> callBack)
+        {
+            AddDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>(string eventType,
+            ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
@@ -254,7 +495,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void RemoveListenerEvent<T, X>(string eventType, CallBack<T, X> callBack)
+        public void RemoveListenerEvent<T, T1>(string eventType, CallBack<T, T1> callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
@@ -264,7 +505,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void RemoveListenerEvent<T, X, Y>(string eventType, CallBack<T, X, Y> callBack)
+        public void RemoveListenerEvent<T, T1, T2>(string eventType, CallBack<T, T1, T2> callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
@@ -274,7 +515,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void RemoveListenerEvent<T, X, Y, Z>(string eventType, CallBack<T, X, Y, Z> callBack)
+        public void RemoveListenerEvent<T, T1, T2, T3>(string eventType, CallBack<T, T1, T2, T3> callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
@@ -284,10 +525,95 @@ namespace DltFramework
         /// </summary>
         /// <param name="eventType"></param>
         /// <param name="callBack"></param>
-        public void RemoveListenerEvent<T, X, Y, Z, W>(string eventType, CallBack<T, X, Y, Z, W> callBack)
+        public void RemoveListenerEvent<T, T1, T2, T3, T4>(string eventType, CallBack<T, T1, T2, T3, T4> callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5>(string eventType, CallBack<T, T1, T2, T3, T4, T5> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20> callBack)
+        {
+            RemoveDelegateToListenerEvent(eventType, callBack);
+        }
+
 
         /// <summary>
         /// 移除监听
@@ -384,7 +710,7 @@ namespace DltFramework
             }
         }
 
-        private void ExecuteEvent<T, X>(string eventType, string delegateType, T t, X x)
+        private void ExecuteEvent<T, T1>(string eventType, string delegateType, T t, T1 t1)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -392,10 +718,10 @@ namespace DltFramework
                 {
                     if (customDelegate.Method.GetParameters().Length == 2 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        ((CallBack<T, X>)customDelegate)(t, x);
+                        ((CallBack<T, T1>)customDelegate)(t, t1);
                         return;
                     }
                 }
@@ -406,7 +732,7 @@ namespace DltFramework
             }
         }
 
-        private void ExecuteEvent<T, X, Y>(string eventType, string delegateType, T t, X x, Y y)
+        private void ExecuteEvent<T, T1, T2>(string eventType, string delegateType, T t, T1 t1, T2 t2)
         {
             if (allListener.ContainsKey(eventType))
 
@@ -415,11 +741,11 @@ namespace DltFramework
                 {
                     if (customDelegate.Method.GetParameters().Length == 3 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
-                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        ((CallBack<T, X, Y>)customDelegate)(t, x, y);
+                        ((CallBack<T, T1, T2>)customDelegate)(t, t1, t2);
                         return;
                     }
                 }
@@ -430,7 +756,7 @@ namespace DltFramework
             }
         }
 
-        private void ExecuteEvent<T, X, Y, Z>(string eventType, string delegateType, T t, X x, Y y, Z z)
+        private void ExecuteEvent<T, T1, T2, T3>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3)
         {
             if (allListener.ContainsKey(eventType))
 
@@ -439,12 +765,12 @@ namespace DltFramework
                 {
                     if (customDelegate.Method.GetParameters().Length == 4 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
-                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
-                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        ((CallBack<T, X, Y, Z>)customDelegate)(t, x, y, z);
+                        ((CallBack<T, T1, T2, T3>)customDelegate)(t, t1, t2, t3);
                         return;
                     }
                 }
@@ -455,7 +781,7 @@ namespace DltFramework
             }
         }
 
-        private void ExecuteEvent<T, X, Y, Z, W>(string eventType, string delegateType, T t, X x, Y y, Z z, W w)
+        private void ExecuteEvent<T, T1, T2, T3, T4>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -463,14 +789,553 @@ namespace DltFramework
                 {
                     if (customDelegate.Method.GetParameters().Length == 5 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
-                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
-                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() &&
-                        customDelegate.Method.GetParameters()[4].ParameterType == w.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        ((CallBack<T, X, Y, Z, W>)customDelegate)(t, x, y, z, w);
+                        ((CallBack<T, T1, T2, T3, T4>)customDelegate)(t, t1, t2, t3, t4);
                         return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 6 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5>)customDelegate)(t, t1, t2, t3, t4, t5);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 7 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6>)customDelegate)(t, t1, t2, t3, t4, t5, t6);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 8 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 9 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 10 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 11 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 12 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 13 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType
+                );
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 14 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType
+                );
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13,
+            T14 t14)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 15 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+            T13 t13, T14 t14, T15 t15)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 16 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+            T12 t12, T13 t13, T14 t14, T15 t15, T16 t16)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 17 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+            T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 18 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 19 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
+                        customDelegate.Method.GetParameters()[18].ParameterType == t18.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 20 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
+                        customDelegate.Method.GetParameters()[18].ParameterType == t18.GetType() &&
+                        customDelegate.Method.GetParameters()[19].ParameterType == t19.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+        }
+
+
+        private void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19, T20 t20)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 21 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
+                        customDelegate.Method.GetParameters()[18].ParameterType == t18.GetType() &&
+                        customDelegate.Method.GetParameters()[19].ParameterType == t19.GetType() &&
+                        customDelegate.Method.GetParameters()[20].ParameterType == t20.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20);
                     }
                 }
             }
@@ -527,7 +1392,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, X, R>(string eventType, string delegateType, T t, X x)
+        private R ExecuteReturnEvent<T, T1, R>(string eventType, string delegateType, T t, T1 t1)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -535,10 +1400,10 @@ namespace DltFramework
                 {
                     if (customDelegate.Method.GetParameters().Length == 2 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, X, R>)customDelegate)(t, x);
+                        return ((ReturnCallBack<T, T1, R>)customDelegate)(t, t1);
                     }
                 }
             }
@@ -550,7 +1415,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, X, Y, R>(string eventType, string delegateType, T t, X x, Y y)
+        private R ExecuteReturnEvent<T, T1, T2, R>(string eventType, string delegateType, T t, T1 t1, T2 t2)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -558,11 +1423,11 @@ namespace DltFramework
                 {
                     if (customDelegate.Method.GetParameters().Length == 3 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
-                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, X, Y, R>)customDelegate)(t, x, y);
+                        return ((ReturnCallBack<T, T1, T2, R>)customDelegate)(t, t1, t2);
                     }
                 }
             }
@@ -574,7 +1439,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, X, Y, Z, R>(string eventType, string delegateType, T t, X x, Y y, Z z)
+        private R ExecuteReturnEvent<T, T1, T2, T3, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -582,12 +1447,12 @@ namespace DltFramework
                 {
                     if (customDelegate.Method.GetParameters().Length == 4 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
-                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
-                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, X, Y, Z, R>)customDelegate)(t, x, y, z);
+                        return ((ReturnCallBack<T, T1, T2, T3, R>)customDelegate)(t, t1, t2, t3);
                     }
                 }
             }
@@ -599,7 +1464,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, X, Y, Z, W, R>(string eventType, string delegateType, T t, X x, Y y, Z z, W w)
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -607,13 +1472,575 @@ namespace DltFramework
                 {
                     if (customDelegate.Method.GetParameters().Length == 5 &&
                         customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
-                        customDelegate.Method.GetParameters()[1].ParameterType == x.GetType() &&
-                        customDelegate.Method.GetParameters()[2].ParameterType == y.GetType() &&
-                        customDelegate.Method.GetParameters()[3].ParameterType == z.GetType() &&
-                        customDelegate.Method.GetParameters()[4].ParameterType == w.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, X, Y, Z, W, R>)customDelegate)(t, x, y, z, w);
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, R>)customDelegate)(t, t1, t2, t3, t4);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 6 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, R>)customDelegate)(t, t1, t2, t3, t4, t5);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 7 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 8 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 9 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 10 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 11 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 12 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 13 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+            T13 t13)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 14 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+            T13 t13, T14 t14)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 15 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+            T12 t12, T13 t13, T14 t14, T15 t15)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 16 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+            T12 t12, T13 t13, T14 t14, T15 t15, T16 t16)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 17 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 18 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 19 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
+                        customDelegate.Method.GetParameters()[18].ParameterType == t18.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 20 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
+                        customDelegate.Method.GetParameters()[18].ParameterType == t18.GetType() &&
+                        customDelegate.Method.GetParameters()[19].ParameterType == t19.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18,
+                            t19);
+                    }
+                }
+            }
+            else
+            {
+                DebugFrameComponent.LogWarning("该事件没有被绑定过:" + eventType);
+            }
+
+            return default(R);
+        }
+
+        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19, T20 t20)
+        {
+            if (allListener.ContainsKey(eventType))
+            {
+                foreach (Delegate customDelegate in allListener[eventType])
+                {
+                    if (customDelegate.Method.GetParameters().Length == 21 &&
+                        customDelegate.Method.GetParameters()[0].ParameterType == t.GetType() &&
+                        customDelegate.Method.GetParameters()[1].ParameterType == t1.GetType() &&
+                        customDelegate.Method.GetParameters()[2].ParameterType == t2.GetType() &&
+                        customDelegate.Method.GetParameters()[3].ParameterType == t3.GetType() &&
+                        customDelegate.Method.GetParameters()[4].ParameterType == t4.GetType() &&
+                        customDelegate.Method.GetParameters()[5].ParameterType == t5.GetType() &&
+                        customDelegate.Method.GetParameters()[6].ParameterType == t6.GetType() &&
+                        customDelegate.Method.GetParameters()[7].ParameterType == t7.GetType() &&
+                        customDelegate.Method.GetParameters()[8].ParameterType == t8.GetType() &&
+                        customDelegate.Method.GetParameters()[9].ParameterType == t9.GetType() &&
+                        customDelegate.Method.GetParameters()[10].ParameterType == t10.GetType() &&
+                        customDelegate.Method.GetParameters()[11].ParameterType == t11.GetType() &&
+                        customDelegate.Method.GetParameters()[12].ParameterType == t12.GetType() &&
+                        customDelegate.Method.GetParameters()[13].ParameterType == t13.GetType() &&
+                        customDelegate.Method.GetParameters()[14].ParameterType == t14.GetType() &&
+                        customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
+                        customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
+                        customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
+                        customDelegate.Method.GetParameters()[18].ParameterType == t18.GetType() &&
+                        customDelegate.Method.GetParameters()[19].ParameterType == t19.GetType() &&
+                        customDelegate.Method.GetParameters()[20].ParameterType == t20.GetType() &&
+                        customDelegate.Method.Name == delegateType)
+                    {
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17,
+                            t18, t19, t20);
                     }
                 }
             }
@@ -709,6 +2136,66 @@ namespace DltFramework
                             {
                                 delegateType = typeof(ReturnCallBack<,,,,,>).MakeGenericType(parameterInfo);
                             }
+                            else if (parameterInfo.Length == 7)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 8)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 9)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 10)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 11)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 12)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 13)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 14)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 15)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 16)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 17)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 18)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 19)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 20)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
+                            else if (parameterInfo.Length == 21)
+                            {
+                                delegateType = typeof(ReturnCallBack<,,,,,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                            }
                         }
                         else
                         {
@@ -737,6 +2224,70 @@ namespace DltFramework
                                 else if (parameterInfo.Length == 5)
                                 {
                                     delegateType = typeof(CallBack<,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 6)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 7)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 8)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 9)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 10)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 11)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 12)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 13)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 14)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 15)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 16)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 17)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 18)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 19)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 20)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
+                                }
+                                else if (parameterInfo.Length == 21)
+                                {
+                                    delegateType = typeof(CallBack<,,,,,,,,,,,,,,,,,,,,>).MakeGenericType(parameterInfo);
                                 }
                             }
                         }

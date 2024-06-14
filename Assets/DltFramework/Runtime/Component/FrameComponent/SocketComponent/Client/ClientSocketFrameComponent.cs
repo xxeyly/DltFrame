@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using DltFramework;
+using Google.Protobuf;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -31,7 +32,7 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     private static Queue<RequestData> tcpRequestData = new Queue<RequestData>();
 
     //UDP
-    private static Queue<UdpRequestData> udpRequestData = new Queue<UdpRequestData>();
+    private static Queue<FrameDataGroup> udpRequestData = new Queue<FrameDataGroup>();
 
     public delegate void OnUpdate();
 
@@ -41,6 +42,7 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     {
         Instance = this;
         ReflectionRequestCode();
+        FrameLogic.Init();
         if (autoConnect)
         {
             await StartConnect();
@@ -104,8 +106,8 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     public async UniTask StartConnect()
     {
         //开启快照
-        Snapshot.StartSnapshot();
-        ClientFrameSync.ClientFrameSyncInit();
+        /*Snapshot.StartSnapshot();
+        ClientFrameSync.ClientFrameSyncInit();*/
         Debug.Log("开启连接");
         _clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         try
@@ -129,33 +131,60 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
     {
         IPEndPoint ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
         byte[] data = _udpClient.EndReceive(ar, ref ipEndPoint);
-        Message.UdpReadMessage(data, UdpExecuteReflection);
-
+        FrameDataGroupList frameDataGroupList = ProtobufTool.DeserializeFromByteArray<FrameDataGroupList>(data);
+        UdpExecuteReflection(frameDataGroupList);
         _udpClient.BeginReceive(UdpReceiveCallback, null);
     }
 
     //帧同步异步接收,不能在主线程中执行
-    private void UdpExecuteReflection(int frameIndex, string data)
+    private void UdpExecuteReflection(FrameDataGroupList frameDataGroupList)
     {
-        udpRequestData.Enqueue(new UdpRequestData(frameIndex, data));
-    }
-
-    //帧同步解析
-    public void UdpExecuteReflection(UdpRequestData requestData)
-    {
-        int frameIndex = requestData.frameIndex;
-        string data = requestData.data;
-        //服务器端会比客户端快一帧,这里减去1帧
-        if (frameIndex - ClientFrameSync.clientFrameIndex != 1)
+        //对接收的数据进行排查.判断是否符合接收规则
+        int serverFrameMinIndex = frameDataGroupList.FrameDataGroup[0].FrameIndex;
+        foreach (FrameDataGroup frameDataGroup in frameDataGroupList.FrameDataGroup)
         {
-            //发过来的帧不是客户端接收的下一帧,需要重新请求
-            // Debug.Log(FrameRecord.clientFrameIndex + "发过来的帧不是客户端接收的下一帧,需要重新请求");
+            if (frameDataGroup.FrameIndex < serverFrameMinIndex)
+            {
+                serverFrameMinIndex = frameDataGroup.FrameIndex;
+            }
+        }
+
+        //正确的下一帧
+        if (serverFrameMinIndex - ClientMapManager.GetClientMap(roomId).clientFrameIndex != 1)
+        {
             return;
         }
 
-        //客户端更新当前帧
-        ClientFrameSync.ExecuteReflection(frameIndex, data);
-        // Debug.Log("--------------------------------------------------");
+
+        // Debug.Log("客户端接收帧数量:" + frameDataGroupList.FrameDataGroup.Count);
+        foreach (FrameDataGroup frameDataGroup in frameDataGroupList.FrameDataGroup)
+        {
+            udpRequestData.Enqueue(frameDataGroup);
+        }
+    }
+
+
+    //帧同步解析
+    public void UdpExecuteReflection(FrameDataGroup frameDataGroup)
+    {
+        Debug.Log("客户端接收帧:" + frameDataGroup.FrameIndex);
+        ClientMap clientMap = ClientMapManager.GetClientMap(roomId);
+        //更新客户端帧
+        clientMap.clientFrameIndex = frameDataGroup.FrameIndex;
+        //回放模式,加入回放列表
+        if (RecordReplays.isReplay)
+        {
+            RecordReplays.AddFrameData(new List<FrameData>(frameDataGroup.FrameData));
+        }
+        else
+        {
+            //直接执行
+            //客户端更新当前帧
+            foreach (FrameData frameData in frameDataGroup.FrameData)
+            {
+                FrameLogic.ExecuteReflection(frameData.DataType, frameData.Data.ToByteArray());
+            }
+        }
     }
 
     #endregion
@@ -188,15 +217,15 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
 
         if (udpRequestData.Count > 0)
         {
-            UdpRequestData requestData = udpRequestData.Dequeue();
-            UdpExecuteReflection(requestData);
+            FrameDataGroup frameDataGroup = udpRequestData.Dequeue();
+            UdpExecuteReflection(frameDataGroup);
         }
 
         #endregion
 
         onUpdate?.Invoke();
 
-        ClientFrameSync.Update();
+        // ClientFrameSync.Update();
     }
 
 
@@ -238,18 +267,18 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
             return;
         }
 
-        try
+        int count = _clientSocket.EndReceive(ar);
+        if (count > 0)
         {
-            int count = _clientSocket.EndReceive(ar);
-            if (count > 0)
-            {
-                _msg.ReadMessage(count, AddToExecuteReflection);
-            }
+            _msg.ReadMessage(count, AddToExecuteReflection);
+        }
+        /*try
+        {
         }
         catch (Exception e)
         {
             Debug.Log(e.ToString());
-        }
+        }*/
 
         TcpReceive();
     }
@@ -299,10 +328,6 @@ public class ClientSocketFrameComponent : FrameComponent, IHeartbeat
         Send(requestCode, data.ToString());
     }
 
-    public void UdpSend(FrameRecordData frameRecordData, bool IsForecast = true)
-    {
-        ClientFrameSync.AddFrameRecordData(frameRecordData, IsForecast);
-    }
 
     #endregion
 

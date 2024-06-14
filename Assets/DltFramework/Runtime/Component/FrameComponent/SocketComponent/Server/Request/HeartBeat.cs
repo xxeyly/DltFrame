@@ -35,7 +35,7 @@ public class HeartBeat
     {
         while (true)
         {
-            Thread.Sleep(heartBeatInterval * 1000);
+            Thread.Sleep(heartBeatInterval * 60);
             // Console.WriteLine("服务器心跳");
             for (int i = 0; i < heartBeatDataList.Count; i++)
             {

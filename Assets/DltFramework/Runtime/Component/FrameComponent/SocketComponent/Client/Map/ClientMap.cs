@@ -1,4 +1,5 @@
 using System;
+using Google.Protobuf;
 using UnityEngine;
 
 public class ClientMap
@@ -27,9 +28,11 @@ public class ClientMap
     //客户端帧索引
     public int clientFrameIndex;
 
-    //帧间隔
-    //客户端帧间隔会比服务器满一半,为了错开帧,避免客户端和服务器同时发送帧数据
-    public int frameInterval = 60;
+
+    /// <summary>
+    /// 当前帧数据
+    /// </summary>
+    public FrameData nextFrameData = new FrameData();
 
     public void MapInit()
     {
@@ -51,7 +54,7 @@ public class ClientMap
         // Debug.Log("传输过来用了多少时间:" + transmissionInterval);
         //服务器传输时到下个帧的所需时间
         //加入服务器发送时帧是59_20,那么下个帧是60_00,那么下个帧时间是60-20=40
-        long serverTransmissionNextFrameTime = frameInterval - (frameInitData.CurrentTime - frameInitData.StartTime) % frameInterval;
+        long serverTransmissionNextFrameTime = ClientMapManager.frameInterval - (frameInitData.CurrentTime - frameInitData.StartTime) % ClientMapManager.frameInterval;
         // Debug.Log("服务器到下个帧时间:" + serverTransmissionNextFrameTime);
 
         //服务器到下一帧所需时间
@@ -69,8 +72,8 @@ public class ClientMap
             transmissionInterval -= serverTransmissionNextFrameTime;
 
             // Debug.Log("剩下传输时间:" + transmissionInterval);
-            serverNextFrameTime = frameInitData.CurrentTime + (transmissionInterval / frameInterval + 1) * frameInterval;
-            serverCurrentFrameIndex = frameInitData.FrameIndex += (int)(transmissionInterval / frameInterval);
+            serverNextFrameTime = frameInitData.CurrentTime + (transmissionInterval / ClientMapManager.frameInterval + 1) * ClientMapManager.frameInterval;
+            serverCurrentFrameIndex = frameInitData.FrameIndex += (int)(transmissionInterval / ClientMapManager.frameInterval);
             // Debug.Log("服务器到下个帧时间:" + serverNextFrameTime + "当前时间指针:" + serverCurrentFrameIndex);
         }
         else
@@ -112,7 +115,7 @@ public class ClientMap
                 serverFrameIndex += 1;
                 //单数 客户端向服务器发数据
                 clientFrameBool = true;
-                clientOldTime = currentTime + frameInterval / 2;
+                clientOldTime = currentTime + ClientMapManager.frameInterval / 2;
             }
         }
 
@@ -120,9 +123,9 @@ public class ClientMap
         if (serverFrameBool)
         {
             //时间偏差
-            if (currentTime - serverOldTime >= frameInterval)
+            if (currentTime - serverOldTime >= ClientMapManager.frameInterval)
             {
-                int timeOffset = (int)(currentTime - serverOldTime) - frameInterval;
+                int timeOffset = (int)(currentTime - serverOldTime) - ClientMapManager.frameInterval;
                 serverOldTime = currentTime;
                 //有时可能会多出来1-2,减去偏差,下次不用计算了
                 serverOldTime -= timeOffset;
@@ -130,7 +133,8 @@ public class ClientMap
                 //客户端向服务器发数据的时间
                 //时间取一半
                 clientFrameBool = true;
-                clientOldTime = currentTime + frameInterval / 2;
+                clientOldTime = currentTime + ClientMapManager.frameInterval / 2;
+                // Debug.Log("服务器当前帧:" + currentTime + ":" + serverFrameIndex);
                 // Debug.Log(currentTime + ":" + serverFrameIndex);
             }
         }
@@ -141,7 +145,22 @@ public class ClientMap
             if (currentTime >= clientOldTime)
             {
                 clientFrameBool = false;
-                //TODO 向服务器发送数据
+                if (RecordReplays.isReplay)
+                {
+                    nextFrameData.DataType = "Empty";
+                }
+                else
+                {
+                    nextFrameData.DataType = "PlayerMove";
+                }
+
+                //向服务器发送的是下一帧的准数据
+                //如当前是第5帧,服务器也是假设也是第5帧.那么应该把第6帧的准数据发送出去
+                nextFrameData.FrameIndex = clientFrameIndex + 1;
+                // Debug.Log("向服务器发送帧数据:" + nextFrameData.FrameIndex);
+                // Debug.Log("服务器当前帧:" + serverFrameIndex);
+                nextFrameData.ClientToken = ClientSocketFrameComponent.Instance.Token;
+                ClientSocketFrameComponent.Instance.UdpSend(ProtobufTool.SerializeToByteArray(nextFrameData));
             }
         }
     }

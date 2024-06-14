@@ -66,39 +66,8 @@ public class ServerFrameSync
                 {
                     frameSync(serverFrameIndex);
                 }
-
-                /*// Console.WriteLine(FrameRecord.serverFrameIndex + ":" + currentTime);
-                if (!FrameRecord.ContainsFrameIndex(serverFrameIndex))
-                {
-                    //没有任何客户端连接,服务器自创建
-                    RecordFrameSyncData(serverFrameIndex);
-                }
-
-                //发送帧到服务器端
-                foreach (ClientSocket clientSocket in ClientSocketManager.clientSocketList)
-                {
-                    if (clientSocket != null && clientSocket.udpClient != null && clientSocket.remoteIpEndPoint != null)
-                    {
-                        Console.WriteLine("客户端帧:" + clientSocket.FrameIndex + "服务器帧:" + serverFrameIndex);
-                        //+1 客户端有这么一帧了,不用再发了
-                        //-1 服务器这帧刚更新,是没有数据的,不用发
-                        for (int i = clientSocket.FrameIndex + 1; i < serverFrameIndex; i++)
-                        {
-                            Console.WriteLine("帧发送:" + i + ":" + JsonMapper.ToJson(FrameRecord.frameRecord[i - 1]));
-                            clientSocket.UdpSend(i, JsonMapper.ToJson(FrameRecord.frameRecord[i - 1]));
-                        }
-
-                        Console.WriteLine("---------------------------------------------------------");
-                    }
-                }*/
             }
         }
     }
 
-
-    //记录帧操作
-    public static void RecordFrameSyncData(int clientFrameIndex, FrameRecordData frameRecordData = null)
-    {
-        FrameRecord.AddFrameRecordData(clientFrameIndex, frameRecordData);
-    }
 }

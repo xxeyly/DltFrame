@@ -181,6 +181,11 @@ namespace HotFix
                 if (localCacheMd5 != hotFixAssetConfig.md5)
                 {
                     HotFixDebug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
+                    if (File.Exists(downFileCachePath))
+                    {
+                        File.Delete(downFileCachePath);
+                    }
+
                     HotFixDebug.Log("本地下载的Md5:" + localCacheMd5);
                     HotFixDebug.Log("服务器的Md5:" + hotFixAssetConfig.md5);
                     //重置上一次下载字节长度

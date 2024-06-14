@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using Aot;
+using Cysharp.Threading.Tasks;
 using HotFix;
 #if HybridCLR
 using HybridCLR.Editor.Commands;
@@ -134,7 +135,7 @@ namespace DltFramework
         [GUIColor(0, 1, 0)]
         [Button("打包", ButtonSizes.Large)]
         [LabelText("图集列表")]
-        public void OnBuild()
+        public async void OnBuild()
         {
             sceneRepeatAssets.Clear();
             OnSaveConfig();
@@ -259,8 +260,9 @@ namespace DltFramework
             #endregion
 
             OnLoadConfig();
-            OpenScene(this.currentOpenSceneName);
             Debug.Log("资源打包完毕");
+            await UniTask.Delay(1000);
+            OpenScene(this.currentOpenSceneName);
         }
 
         #endregion
@@ -973,7 +975,7 @@ namespace DltFramework
             {
                 if (DataFrameComponent.Path_GetPathFileNameDontContainFileType(allScenePath[i]) == sceneName)
                 {
-                    UnityEditor.SceneManagement.EditorSceneManager.OpenScene(allScenePath[i]);
+                    UnityEditor.SceneManagement.EditorSceneManager.OpenScene(allScenePath[i], UnityEditor.SceneManagement.OpenSceneMode.Single);
                 }
             }
         }

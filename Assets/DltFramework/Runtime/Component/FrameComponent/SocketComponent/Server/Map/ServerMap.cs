@@ -13,6 +13,11 @@ public class ServerMap
     /// </summary>
     public int mapFrameIndex = 0;
 
+    /// <summary>
+    /// 偏移帧
+    /// </summary>
+    public int offsetFrameIndex = 0;
+
     //帧记录开始时间
     public long startTime;
 
@@ -34,11 +39,12 @@ public class ServerMap
         if (!frameSyncInit)
         {
             frameSyncInit = true;
-            this.mapFrameIndex = 0;
+            offsetFrameIndex = frameIndex;
             startTime = ServerFrameSync.currentTime;
         }
 
-        mapFrameIndex += 1;
+        //发送帧数据到客户端
+        mapFrameIndex = frameIndex - offsetFrameIndex;
         // Console.WriteLine(ServerFrameSync.currentTime + ":" + mapFrameIndex);
         FrameDataGroup frameDataGroup = new FrameDataGroup();
         frameDataGroup.FrameIndex = mapFrameIndex;
@@ -48,9 +54,12 @@ public class ServerMap
             FrameData frameData = new FrameData();
             frameData.FrameIndex = mapFrameIndex;
             frameData.ClientToken = clientSocket.token;
+            frameData.DataType = "Empty";
             frameData.Data = ByteString.CopyFrom(new byte[] { });
             frameDataGroup.FrameData.Add(frameData);
         }
+
+        SendFrameData();
     }
 
     /// <summary>
@@ -80,12 +89,9 @@ public class ServerMap
     /// <summary>
     /// 记录帧数据
     /// </summary>
-    /// <param name="frameIndex"></param>
-    /// <param name="clientSocket"></param>
-    /// <param name="frameRecordData"></param>
-    public void AddFrameData(int frameIndex, ClientSocket clientSocket, FrameData frameRecordData)
+    public void AddFrameData(ClientSocket clientSocket, FrameData frameRecordData)
     {
-        FrameDataGroup frameDataGroup = GetFrameDataGroup(frameIndex);
+        FrameDataGroup frameDataGroup = GetFrameDataGroup(mapFrameIndex);
 
         if (frameRecordData != null)
         {
@@ -101,6 +107,8 @@ public class ServerMap
             //添加新的帧数据
             frameDataGroup.FrameData.Add(frameRecordData);
         }
+
+        clientSocket.FrameIndex = frameRecordData.FrameIndex;
     }
 
     /// <summary>
@@ -119,5 +127,38 @@ public class ServerMap
         }
 
         return null;
+    }
+
+    private void SendFrameData()
+    {
+        foreach (ClientSocket clientSocket in clientSockets)
+        {
+            if (!clientSocket.UdpIsReady())
+            {
+                return;
+            }
+
+            FrameDataGroupList frameDataGroupList = new FrameDataGroupList();
+            List<FrameDataGroup> tempAddFrameDataGroup = new List<FrameDataGroup>();
+            Console.WriteLine("客户端当前帧:" + clientSocket.FrameIndex);
+            Console.WriteLine("服务器当前帧:" + mapFrameIndex);
+            Console.Write("发送帧:[");
+            //客户端当前帧不发送
+            for (int i = clientSocket.FrameIndex; i < mapFrameIndex; i++)
+            {
+                tempAddFrameDataGroup.Add(frameDataGroups[i]);
+                Console.Write(i);
+                if (i != mapFrameIndex - 1)
+                {
+                    Console.Write(",");
+                }
+            }
+
+            Console.Write("]");
+            Console.WriteLine();
+            frameDataGroupList.FrameDataGroup.AddRange(tempAddFrameDataGroup);
+            // Console.WriteLine("发送帧数" + frameDataGroupList.FrameDataGroup.Count);
+            clientSocket.UdpSend(ProtobufTool.SerializeToByteArray(frameDataGroupList));
+        }
     }
 }

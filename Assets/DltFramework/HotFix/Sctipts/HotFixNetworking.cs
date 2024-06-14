@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 
 namespace HotFix
 {
-
     public class HotFixNetworking : MonoBehaviour
     {
         List<IHotFixNetworking> _aotNetworkings = new List<IHotFixNetworking>();

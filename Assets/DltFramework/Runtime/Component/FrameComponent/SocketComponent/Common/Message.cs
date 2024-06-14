@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Text;
+// using UnityEngine;
 
 public class Message
 {
@@ -21,22 +22,6 @@ public class Message
     public int RemainSize
     {
         get { return data.Length - storedSize; }
-    }
-
-    //Client
-    public static void UdpReadMessage(byte[] data, Action<int, string> processDataCallback)
-    {
-        int topData = BitConverter.ToInt32(data, 0);
-        string s = Encoding.UTF8.GetString(data, 4, data.Length - 4);
-        processDataCallback(topData, s);
-    }
-
-    //Server
-    public static void UdpReadMessage(byte[] data, IPEndPoint ipEndPoint, Action<int, string, IPEndPoint> processDataCallback)
-    {
-        int topData = BitConverter.ToInt32(data, 0);
-        string s = Encoding.UTF8.GetString(data, 4, data.Length - 4);
-        processDataCallback(topData, s, ipEndPoint);
     }
 
     /// <summary>
@@ -69,10 +54,15 @@ public class Message
             {
                 content[i] = data[i + 8];
             }
+
             processDataCallback(requestCode, content);
             Array.Copy(data, contentAmount, data, 0, contentAmount);
             storedSize -= contentAmount;
-           
+            // Debug.Log("剩余长度:" + storedSize);
+            for (int i = 0; i < data.Length; i++)
+            {
+                // Debug.Log(data[i]);
+            }
         }
     }
 
@@ -87,14 +77,20 @@ public class Message
         return PackData(requestCode, Encoding.UTF8.GetBytes(data));
     }
 
+    public byte[] PackData(int requestCode, int data)
+    {
+        return PackData(requestCode, BitConverter.GetBytes(data));
+    }
+
+
     public byte[] PackData(int requestCode, byte[] data)
     {
-        //请求码:长度4
+        //请求码:长度4个字节
         byte[] requestCodeBytes = BitConverter.GetBytes(requestCode);
         // Console.WriteLine("请求码:" + requestCodeBytes.Length);
         //字符串长度:长度根据内容
         // Console.WriteLine("数据长度:" + data.Length);
-        //数据总长度 4数据长度+4请求码+数据长度
+        //数据总长度 4字节长度+4个请求码字节长度+数据长度
         int contentAmount = 4 + 4 + data.Length;
         //长度字节
         byte[] dataAmountBytes = BitConverter.GetBytes(contentAmount);
@@ -102,17 +98,5 @@ public class Message
         //返回组装成功的数据
         byte[] sendData = dataAmountBytes.Concat(requestCodeBytes).ToArray().Concat(data).ToArray();
         return sendData;
-    }
-
-    public static byte[] UdpPackData(int frameIndex, string data)
-    {
-        //帧索引
-        byte[] requestCodeBytes = BitConverter.GetBytes(frameIndex);
-        // Debug.Log(requestCodeBytes.Length);
-        //字符串长度
-        byte[] dataBytes = Encoding.UTF8.GetBytes(data);
-        // Debug.Log(dataAmountBytes.Length);
-        //返回组装成功的数据
-        return requestCodeBytes.ToArray().Concat(dataBytes).ToArray();
     }
 }

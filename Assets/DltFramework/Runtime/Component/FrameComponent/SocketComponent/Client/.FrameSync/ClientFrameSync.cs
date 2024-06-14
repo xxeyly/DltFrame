@@ -23,7 +23,7 @@ public class ClientFrameSync
 
     //帧间隔
     //客户端帧间隔会比服务器满一半,为了错开帧,避免客户端和服务器同时发送帧数据
-    public static int frameInterval = 60;
+    public static int frameInterval = 1000;
 
     public static void ClientFrameSyncInit()
     {
@@ -89,12 +89,6 @@ public class ClientFrameSync
         isForecast = IsForecast;
     }
 
-    //发送Udp数据到服务器
-    public static void UdpStartSend(FrameRecordData frameRecordData)
-    {
-        byte[] bytes = Message.UdpPackData(clientFrameIndex, JsonUtil.ToJson(frameRecordData));
-        ClientSocketFrameComponent.Instance.UdpSend(bytes);
-    }
 
 
     //解析数据
@@ -275,7 +269,7 @@ public class ClientFrameSync
                         tempFrameRecordData.id = ClientSocketFrameComponent.Instance.Token;
                         //客户端发送的是本地已经存在的帧数据
                         //服务器第1帧发过来的是网络验证过后的1帧
-                        if (clientFrameIndex < serverFrameIndex - 1)
+                        /*if (clientFrameIndex < serverFrameIndex - 1)
                         {
                             sendEmptyFrameRecordData.id = ClientSocketFrameComponent.Instance.Token;
                             //只发送空数据
@@ -288,7 +282,7 @@ public class ClientFrameSync
                             // Debug.Log("服务器帧数" + FrameRecord.serverFrameIndex + "发送有效数据" + FrameRecord.clientFrameIndex + JsonUtil.ToJson(frameRecordData));
                             FrameRecord.ClientRecordFrameSyncData(tempFrameRecordData, isForecast);
                             UdpStartSend(tempFrameRecordData);
-                        }
+                        }*/
                     }
                 }
             }

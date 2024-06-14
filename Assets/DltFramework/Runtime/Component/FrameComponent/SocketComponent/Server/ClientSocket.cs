@@ -20,7 +20,7 @@ public class ClientSocket
 
     public IPEndPoint remoteIpEndPoint;
 
-    public int FrameIndex;
+    public int FrameIndex = -1;
 
     public ClientSocket()
     {
@@ -130,24 +130,24 @@ public class ClientSocket
         TcpSend(requestCode, data.ToString());
     }
 
-    public void UdpSend(int frameIndex, string data)
+    public bool UdpIsReady()
     {
-        byte[] bytes = Message.UdpPackData(frameIndex, data);
-
-
-        UdpSend(bytes);
+        return remoteIpEndPoint != null;
     }
 
     public void UdpSend(byte[] bytes)
     {
-        try
+        if (remoteIpEndPoint != null)
         {
-            udpClient.Send(bytes, bytes.Length, remoteIpEndPoint);
-            // Console.WriteLine("发送帧数据到:" + remoteIpEndPoint + "数据:" + Encoding.UTF8.GetString(bytes));
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
+            try
+            {
+                udpClient.Send(bytes, bytes.Length, remoteIpEndPoint);
+                // Console.WriteLine("发送帧数据到:" + remoteIpEndPoint + "数据:" + Encoding.UTF8.GetString(bytes));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 

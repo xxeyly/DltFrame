@@ -42,11 +42,13 @@ namespace Aot
 
         //继承该接口的所有类型
         private List<IHotFixViewAndHotFixCode> _hotFixViewAndHotFixCodes = new List<IHotFixViewAndHotFixCode>();
+        private List<IAotFilePathError> _aotFilePathErrors = new List<IAotFilePathError>();
 
         async void Start()
         {
             await UniTask.DelayFrame(5);
             _hotFixViewAndHotFixCodes = AotGlobal.GetAllObjectsInScene<IHotFixViewAndHotFixCode>();
+            _aotFilePathErrors = AotGlobal.GetAllObjectsInScene<IAotFilePathError>();
             await LocalIsUpdate();
         }
 
@@ -120,9 +122,10 @@ namespace Aot
             //HotFix路径
             AotDebug.Log("HotFix路径");
             await HotFixPathLocalLoad();
+            //文件地址检测
+            await HotFixPathCheck();
             //HotFixView服务器配置表检测
             AotDebug.Log("HotFixView服务器配置表检测");
-            AotDebug.Log(hotFixPath);
             await HotFixViewConfigCheck();
             //HotFixView本地检查
             AotDebug.Log("HotFixView本地检查");
@@ -205,6 +208,7 @@ namespace Aot
             }
         }
 
+
         async UniTask HotFixPathLocalLoad()
         {
             //本地下载路径
@@ -231,6 +235,42 @@ namespace Aot
             }
         }
 
+        async UniTask HotFixPathCheck()
+        {
+            _hotFixUnityWebRequest = UnityWebRequest.Get(hotFixPath);
+            try
+            {
+                await _hotFixUnityWebRequest.SendWebRequest();
+                if (_hotFixUnityWebRequest.responseCode != 200)
+                {
+                    foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                    {
+                        aotFilePathError.FilePathError(hotFixPath);
+                    }
+
+                    await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
+                    await HotFixPathCheck();
+                }
+                else
+                {
+                    foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                    {
+                        aotFilePathError.FilePathCorrect();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                {
+                    aotFilePathError.FilePathError(hotFixPath);
+                }
+
+                await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
+                await HotFixPathCheck();
+            }
+        }
+
 
         //HotFixView配置
         async UniTask HotFixViewConfigCheck()
@@ -244,8 +284,7 @@ namespace Aot
             }
             catch (Exception e)
             {
-                AotDebug.LogWarning(e);
-                // AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
+                AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
                 await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
                 await HotFixViewConfigCheck();
             }
@@ -472,7 +511,7 @@ namespace Aot
             // Editor下无需加载，直接查找获得HotFix程序集  
             Assembly hotFix = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "HotFixCode");
 #endif
-            Type type = hotFix.GetType("HotFix.HotFixInit");
+            Type type = hotFix.GetType("HotFixInit");
             type.GetMethod("Init")?.Invoke(null, null);
             AotDebug.Log("Aot加载完毕");
         }

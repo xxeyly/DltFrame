@@ -13,6 +13,9 @@ namespace DltFramework
         [LabelText("实体列表")] public List<GameObject> entityList;
     }
 
+    /// <summary>
+    /// 实体组件
+    /// </summary>
     public partial class EntityFrameComponent : FrameComponent
     {
         public static EntityFrameComponent Instance;
@@ -34,6 +37,10 @@ namespace DltFramework
             return tempInstantiate;
         }
 
+        /// <summary>
+        /// 实体实例化
+        /// </summary>
+        /// <param name="instantiate"></param>
         private void InstantiateInit(GameObject instantiate)
         {
             foreach (EntityItem entityItem in instantiate.transform.GetComponentsInChildren<EntityItem>())
@@ -163,7 +170,7 @@ namespace DltFramework
         /// <summary>
         /// 根据实体名称获得第一个实体
         /// </summary>
-        /// <param name="entityName"></param>
+        /// <param name="entityName">实体名称</param>
         /// <returns></returns>
         public EntityItem GetEntity(string entityName)
         {
@@ -181,8 +188,8 @@ namespace DltFramework
         /// <summary>
         /// 根据实体名称显示或隐藏
         /// </summary>
-        /// <param name="entityName"></param>
-        /// <param name="display"></param>
+        /// <param name="entityName">实体名称</param>
+        /// <param name="display">是否显示</param>
         public void DisplayEntity(bool display, string entityName)
         {
             foreach (EntityItem entityItem in sceneEntity)
@@ -200,6 +207,7 @@ namespace DltFramework
                 }
             }
         }
+        
 
         /// <summary>
         /// 根据实体名称显示或隐藏

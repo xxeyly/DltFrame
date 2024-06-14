@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Aot
 {
-    public class HotFixUpdatePanel : MonoBehaviour, IHotFixViewAndHotFixCode, IAotNetworking
+    public class HotFixUpdatePanel : MonoBehaviour, IHotFixViewAndHotFixCode, IAotNetworking, IAotFilePathError
     {
         [LabelText("背景")] public GameObject back;
         [LabelText("初始化面板")] public GameObject initPanel;
@@ -17,6 +17,8 @@ namespace Aot
         [LabelText("下载速度")] public Text downTextSpeed;
         [LabelText("总下载大小")] public Text totalDownload;
         [LabelText("网络状况")] public GameObject networkPanel;
+        [LabelText("文件路径错误")] public GameObject FilePathErrorPanel;
+        [LabelText("文件路径错误提示")] public Text FilePathErrorText;
 
         public void HotFixViewAndHotFixCodeLocalIsUpdate(bool localIsUpdate)
         {
@@ -48,6 +50,17 @@ namespace Aot
         public void NetworkingState(bool state)
         {
             networkPanel.SetActive(!state);
+        }
+
+        public void FilePathError(string error)
+        {
+            FilePathErrorPanel.SetActive(true);
+            FilePathErrorText.text = "访问地址错误:" + error;
+        }
+
+        public void FilePathCorrect()
+        {
+            FilePathErrorPanel.SetActive(false);
         }
     }
 }
