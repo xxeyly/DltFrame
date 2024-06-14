@@ -2,6 +2,9 @@
 using UnityEngine;
 namespace DltFramework
 {
+    /// <summary>
+    /// 框架基类
+    /// </summary>
     public abstract class FrameComponent : MonoBehaviour, IFrameComponent
     {
         //框架组件初始化

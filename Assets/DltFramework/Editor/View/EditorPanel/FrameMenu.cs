@@ -105,7 +105,7 @@ namespace DltFramework
             }
         }
 
-        [MenuItem("DltFrame/视图重新排序")]
+        // [MenuItem("DltFrame/视图重新排序")]
         public static void ViewSort()
         {
             List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();

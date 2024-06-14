@@ -27,6 +27,7 @@ namespace DltFramework
         public override void FrameInitComponent()
         {
             Instance = this;
+            
         }
 
         public override void FrameSceneInitComponent()

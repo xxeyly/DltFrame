@@ -1,8 +1,8 @@
 ﻿#if UNITY_EDITOR
 using System.Linq;
-using TMPro;
 
 #if UNITY_2019_1_OR_NEWER
+using TMPro;
 #endif
 using UnityEditor;
 using UnityEngine;
@@ -88,7 +88,7 @@ namespace DltFramework
                 ScrollRect scrollRect = uiObj.GetComponent<ScrollRect>();
                 VideoPlayer videoPlayer = uiObj.GetComponent<VideoPlayer>();
                 Slider slider = uiObj.GetComponent<Slider>();
-                ChildBaseWindow childBaseWindow = uiObj.transform.GetComponentInChildren<ChildBaseWindow>(true);
+                ChildBaseWindow childBaseWindow = uiObj.GetComponentInChildren<ChildBaseWindow>();
                 Image image = uiObj.GetComponent<Image>();
 
 
@@ -162,7 +162,7 @@ namespace DltFramework
                 else if (childBaseWindow != null)
                 {
                     bindUiType.type = UiType.ChildList;
-                    bindUiType.childType = childBaseWindow.GetType().ToString();
+                    bindUiType.childType = childBaseWindow;
                 }
                 else if (image != null)
                 {

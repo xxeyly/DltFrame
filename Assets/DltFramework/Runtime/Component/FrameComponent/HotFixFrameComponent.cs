@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Cysharp.Threading.Tasks;
-using HotFix;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -130,5 +129,19 @@ namespace DltFramework
         }
 
         #endregion
+
+        [Button("应用场景热更配置")]
+        public void ApplyScenePrefab()
+        {
+#if UNITY_EDITOR
+
+            List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
+            //应用热更配置并记录路径
+            for (int i = 0; i < hotFixAssetPathConfigs.Count; i++)
+            {
+                hotFixAssetPathConfigs[i].SetPathAndApplyPrefab();
+            }
+#endif
+        }
     }
 }

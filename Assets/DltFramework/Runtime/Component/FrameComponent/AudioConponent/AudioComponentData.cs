@@ -5,6 +5,9 @@ using UnityEngine;
 
 namespace DltFramework
 {
+    /// <summary>
+    /// 音频组件数据
+    /// </summary>
     public class AudioComponentData : ScriptableObject
     {
         [Searchable] [TableList(AlwaysExpanded = true)] [LabelText("音频内容")]

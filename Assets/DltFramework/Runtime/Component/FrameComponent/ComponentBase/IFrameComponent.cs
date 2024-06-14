@@ -1,5 +1,8 @@
 ﻿namespace DltFramework
 {
+    /// <summary>
+    /// 框架基类接口
+    /// </summary>
     public interface IFrameComponent
     {
         /// <summary>
