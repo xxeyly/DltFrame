@@ -162,7 +162,7 @@ namespace DltFramework
                 else if (childBaseWindow != null)
                 {
                     bindUiType.type = UiType.ChildList;
-                    bindUiType.childType = childBaseWindow;
+                    bindUiType.childType = childBaseWindow.ToString();
                 }
                 else if (image != null)
                 {
