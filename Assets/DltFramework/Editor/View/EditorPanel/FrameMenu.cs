@@ -59,12 +59,31 @@ namespace DltFramework
             GetWindow<FrameMenu>().Show();
         }
 
-        [MenuItem("DltFrame/监听生成 &l")]
+        [MenuItem("DltFrame/监听生成(手动) &l")]
         private static void OnListenerGenerate()
         {
             GenerateListenerComponent.GenerateListener();
             Debug.Log("监听生成结束!");
         }
+
+        [MenuItem("DltFrame/切换监听自动生成 &l")]
+        private static void OnListenerAutoGenerateOn()
+        {
+            //开启
+            AutoGenerateListenerConfig autoGenerateListenerConfig = AssetDatabase.LoadAssetAtPath<AutoGenerateListenerConfig>("Assets/Config/" + "AutoGenerateListenerConfig.asset");
+            autoGenerateListenerConfig.isAuto = !autoGenerateListenerConfig.isAuto;
+            EditorUtility.SetDirty(autoGenerateListenerConfig);
+            if (autoGenerateListenerConfig.isAuto)
+            {
+                Debug.Log("自动生成开启");
+            }
+            else
+            {
+                Debug.Log("自动生成关闭");
+            }
+
+        }
+
 
         [MenuItem("DltFrame/生成框架 &F")]
         public static void Generate()
