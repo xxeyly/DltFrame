@@ -10,39 +10,37 @@ public class HotFixAssetPathConfig : MonoBehaviour
     [LabelText("生成路径")] public string generateHierarchyPath;
     [LabelText("预制体路径")] public string prefabPath;
     [LabelText("Ab包路径")] public string assetBundlePath;
+    private string _hotFixPrefabsPath;
 #if UNITY_EDITOR
     [Button("生成路径并应用预制体", ButtonSizes.Medium)]
     [GUIColor(0, 1, 0)]
     public void SetPathAndApplyPrefab()
     {
+        string sceneName = SceneManager.GetActiveScene().name;
+        _hotFixPrefabsPath = "Assets/HotFixPrefabs/Scene/" + sceneName + "/" + GetHotFixAssetType();
+        if (!Directory.Exists(_hotFixPrefabsPath))
+        {
+            Directory.CreateDirectory(_hotFixPrefabsPath);
+        }
+
+        string assetBundleDirectory = "Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundle/" + sceneName + "/" + GetHotFixAssetType() + "/";
+        if (!Directory.Exists(assetBundleDirectory))
+        {
+            Directory.CreateDirectory(assetBundleDirectory);
+        }
+
+        AssetDatabase.Refresh();
         generateHierarchyPath = DataFrameComponent.Hierarchy_GetTransformHierarchy(transform, false);
-        // Debug.Log("生成路径:" + generateHierarchyPath);
         if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
         {
             prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
         }
-        else if (PrefabUtility.IsPrefabAssetMissing(gameObject))
-        {
-            prefabPath = DataFrameComponent.String_BuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType(), "/", gameObject.name, ".prefab");
-        }
         else
         {
-            prefabPath = DataFrameComponent.String_BuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType(), "/", gameObject.name, ".prefab");
+            prefabPath = _hotFixPrefabsPath + "/" + gameObject.name + ".prefab";
         }
 
-        // Debug.Log("Prefab路径:" + prefabPath);
-        string prefabPathDirectory = DataFrameComponent.String_BuilderString("Assets/HotFixPrefabs/Scene/", SceneManager.GetActiveScene().name, "/", GetHotFixAssetType());
-        // Debug.Log("预制体文件夹:" + prefabPathDirectory);
-        if (prefabPath == string.Empty)
-        {
-            if (!Directory.Exists(prefabPathDirectory))
-            {
-                Directory.CreateDirectory(prefabPathDirectory);
-                AssetDatabase.Refresh();
-            }
-        }
-
-        assetBundlePath = DataFrameComponent.String_BuilderString("HotFixRuntime/HotFixAssetBundle", DataFrameComponent.String_AllCharToLower(prefabPath.Replace("Assets/HotFixPrefabs/Scene", "").Replace(".prefab", "")));
+        assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/" + GetHotFixAssetType() + "/" + DataFrameComponent.String_AllCharToLower(gameObject.name);
         // Debug.Log("Ab包路径:" + assetBundlePath);
         ApplyPrefab();
     }

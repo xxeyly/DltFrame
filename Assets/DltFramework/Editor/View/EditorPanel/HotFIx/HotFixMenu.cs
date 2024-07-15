@@ -11,6 +11,7 @@ namespace DltFramework
     {
         private HotFixCollect _hotFixCollect = new HotFixCollect();
         private SceneHotFixConfig _sceneHotFixConfig = new SceneHotFixConfig();
+        public SceneAssetBundleRepeatAssetManager SceneAssetBundleRepeatAssetManager = new SceneAssetBundleRepeatAssetManager();
 
         protected override OdinMenuTree BuildMenuTree()
         {
@@ -18,9 +19,11 @@ namespace DltFramework
             CreateInitDirectory();
             _sceneHotFixConfig.OnInit();
             _sceneHotFixConfig.OnLoadConfig();
+            _hotFixCollect.OnInit();
             _hotFixCollect.OnLoadConfig();
             tree.Add("集合", _hotFixCollect);
             tree.Add("场景资源", _sceneHotFixConfig);
+            tree.Add("场景重复资源", SceneAssetBundleRepeatAssetManager);
 
             return tree;
         }

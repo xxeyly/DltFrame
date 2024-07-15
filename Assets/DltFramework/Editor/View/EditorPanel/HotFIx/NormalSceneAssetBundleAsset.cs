@@ -21,10 +21,5 @@ namespace DltFramework
         public Dictionary<string, List<string>> sceneRepeatMd5 = new Dictionary<string, List<string>>();
     }
 
-    [Serializable]
-    public class SceneAssetBundleRepeatAsset
-    {
-        [LabelText("ab包名称")] public string assetBundleName;
-        [LabelText("资源包含路径")] public List<string> assetBundleContainPath;
-    }
+   
 }

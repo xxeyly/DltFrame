@@ -22,7 +22,7 @@ public abstract class GenerateListenerComponent
 
         if (listenerComponentDataPath == null)
         {
-            DebugFrameComponent.LogWarning("ListenerComponentData脚本未创建 Create > DltFramework > C# ListenerFrameComponentData");
+            // DebugFrameComponent.LogWarning("ListenerComponentData脚本未创建 Create > DltFramework > C# ListenerFrameComponentData");
             return;
         }
 

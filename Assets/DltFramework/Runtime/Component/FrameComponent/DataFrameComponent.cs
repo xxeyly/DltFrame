@@ -118,6 +118,7 @@ namespace DltFramework
         public static void RemoveAllAssetBundleName()
         {
 #if UNITY_EDITOR
+            return;
 
             List<string> allAsstBundleName = new List<string>(AssetDatabase.GetAllAssetBundleNames());
 

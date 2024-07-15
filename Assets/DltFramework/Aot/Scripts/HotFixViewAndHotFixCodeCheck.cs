@@ -261,6 +261,7 @@ namespace Aot
             }
             catch (Exception e)
             {
+                Debug.Log(e);
                 foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
                 {
                     aotFilePathError.FilePathError(hotFixPath);
@@ -284,7 +285,7 @@ namespace Aot
             }
             catch (Exception e)
             {
-                AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
+                AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString())+e.ToString());
                 await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
                 await HotFixViewConfigCheck();
             }
