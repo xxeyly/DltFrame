@@ -259,9 +259,8 @@ namespace Aot
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.Log(e);
                 foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
                 {
                     aotFilePathError.FilePathError(hotFixPath);
@@ -283,9 +282,9 @@ namespace Aot
                 //读取远程配置表数据
                 hotFixViewHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(_hotFixUnityWebRequest.downloadHandler.text);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString())+e.ToString());
+                AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
                 await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
                 await HotFixViewConfigCheck();
             }
@@ -512,7 +511,7 @@ namespace Aot
             // Editor下无需加载，直接查找获得HotFix程序集  
             Assembly hotFix = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "HotFixCode");
 #endif
-            Type type = hotFix.GetType("HotFixInit");
+            Type type = hotFix.GetType("HotFix.HotFixInit");
             type.GetMethod("Init")?.Invoke(null, null);
             AotDebug.Log("Aot加载完毕");
         }

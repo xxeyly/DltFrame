@@ -24,6 +24,7 @@ namespace DltFramework
 
         public override void FrameSceneInitComponent()
         {
+            UnloadAssetBundle();
         }
 
         public override void FrameSceneEndComponent()
@@ -39,7 +40,7 @@ namespace DltFramework
         /// <summary>
         /// 初始化资源到临时位置
         /// </summary>
-        public async UniTask<string> InstantiateHotFixAssetBundle()
+        public async UniTask InstantiateHotFixAssetBundle()
         {
             //本地重复资源
             foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig)
@@ -48,7 +49,6 @@ namespace DltFramework
                     hotFixRuntimeAssetBundleConfig.assetBundleName);
                 if (File.Exists(localFontPath))
                 {
-                    Debug.Log(hotFixRuntimeAssetBundleConfig.assetBundleName);
                     //加载重复资源
                     AssetBundle repeatAssetBundle = await AssetBundle.LoadFromFileAsync(localFontPath);
                     currentSceneAllAssetBundle.Add(repeatAssetBundle);
@@ -64,23 +64,25 @@ namespace DltFramework
                 AssetBundle tempHotFixAssetBundle = await AssetBundle.LoadFromFileAsync(assetBundlePath + assetBundleName);
                 currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
                 GameObject hotFixObject = (GameObject)await tempHotFixAssetBundle.LoadAssetAsync<GameObject>(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
-                if (hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath == string.Empty)
+                /*if (hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath == string.Empty)
                 {
                     Instantiate(hotFixObject, null, false);
                 }
                 else
                 {
                     Instantiate(hotFixObject, GameObject.Find(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath).transform, false);
-                }
+                }*/
             }
+        }
 
+        public void UnloadAssetBundle()
+        {
             foreach (AssetBundle assetBundle in currentSceneAllAssetBundle)
             {
                 assetBundle.Unload(false);
             }
 
             currentSceneAllAssetBundle.Clear();
-            return string.Empty;
         }
 
 
@@ -117,16 +119,16 @@ namespace DltFramework
         /// 加载AssetBundle场景到系统中
         /// </summary>
         /// <param name="sceneName"></param>
-        public async UniTask<string> LoadAssetBundleSceneToSystem(string sceneName)
+        public async UniTask LoadAssetBundleSceneToSystem(string sceneName)
         {
             //如果没加载过当前场景
             if (!Application.CanStreamedLevelBeLoaded(sceneName))
             {
+                Debug.Log("加载场景:" + sceneName);
                 //加载场景
                 await AssetBundle.LoadFromFileAsync(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/HotFixRuntime/HotFixAssetBundle/", sceneName, "/scene/", sceneName));
+                await UniTask.WaitUntil(() => Application.CanStreamedLevelBeLoaded(sceneName));
             }
-
-            return string.Empty;
         }
 
         #endregion

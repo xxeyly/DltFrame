@@ -7,7 +7,10 @@ namespace DltFramework
     [Serializable]
     public class SceneAssetBundleRepeatAsset : SerializedScriptableObject
     {
-        [LabelText("ab包名称")] public string assetBundleName;
-        [LabelText("资源包含路径")] public List<string> assetBundleContainPath;
+        [HorizontalGroup("AssetBundle包名称")] [HideLabel]
+        public string assetBundleName;
+
+        [HorizontalGroup("资源包含路径")] [HideLabel]
+        public List<string> assetBundleContainPath;
     }
 }

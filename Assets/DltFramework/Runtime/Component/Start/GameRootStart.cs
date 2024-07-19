@@ -130,15 +130,8 @@ namespace DltFramework
         /// 加载场景初始化单例
         /// 加载顺序 框架组件-场景工具
         /// </summary>
-        private async void InitSceneStartSingletons(Scene scene)
+        private void InitSceneStartSingletons(Scene scene)
         {
-            //热更加载
-            if (hotFixLoad)
-            {
-                await HotFixFrameComponent.Instance.InstantiateHotFixAssetBundle();
-                DebugFrameComponent.Log("释放热更资源");
-            }
-
             DebugFrameComponent.Log(scene.name + "场景加载完毕");
             FrameComponentSceneInit();
             // Debug.Log(scene.name + "框架场景初始化");

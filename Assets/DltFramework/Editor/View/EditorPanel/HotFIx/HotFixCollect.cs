@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using Aot;
 using Cysharp.Threading.Tasks;
 using HotFix;
-using NUnit.Framework;
 #if HybridCLR
 using HybridCLR.Editor.Commands;
 #endif
 using Sirenix.OdinInspector;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -25,42 +24,53 @@ namespace DltFramework
     }
 
     [Serializable]
-    public class SceneRepeatAssets
+    public class SceneRepeatAsset
     {
         public string assetName;
         public List<string> repeatAssets = new List<string>();
+    }
+
+    [Serializable]
+    [LabelText("场景打开状态")]
+    public class SceneBuildState
+    {
+        [HideLabel] [HorizontalGroup("场景名称")] public string sceneName;
+
+        [HideLabel] [HorizontalGroup("打包状态")] public bool isBuild;
     }
 
     public class HotFixCollect : BaseEditor
     {
         #region 属性
 
-        [LabelText("打包压缩方式")] [LabelWidth(120)] [EnumPaging]
+        [LabelText("打包压缩方式")] [LabelWidth(120)] [EnumPaging] [OnValueChanged("OnSaveConfig")]
         public BuildAssetBundleOptions targetBuildAssetBundleOptions;
 
         [LabelText("平台")] private string platformName;
 
-        [LabelText("更新数据下载地址")] [LabelWidth(120)] [ShowInInspector]
+        [LabelText("更新数据下载地址")] [LabelWidth(120)] [ShowInInspector] [OnValueChanged("OnSaveConfig")]
         private string hotFixDownPath;
 
         [LabelText("平台下载地址")] [HideInInspector]
         public List<PlatformPath> hotFixDownPathData = new List<PlatformPath>();
 
-        [LabelText("本地是否开启更新")] public bool localIsUpdate;
+        [LabelText("本地是否开启更新")] [OnValueChanged("OnSaveConfig")]
+        public bool localIsUpdate;
 
-        [InfoBox("打包后会拷贝所有资源到当前路径下,并且还会复制一份以当前版本号的为名的备份文件夹")] [LabelText("资源外部拷贝路径")] [LabelWidth(120)] [FolderPath(AbsolutePath = true)] [ShowInInspector]
+        [OnValueChanged("OnSaveConfig")] [InfoBox("打包后会拷贝所有资源到当前路径下,并且还会复制一份以当前版本号的为名的备份文件夹")] [LabelText("资源外部拷贝路径")] [LabelWidth(120)] [FolderPath(AbsolutePath = true)] [ShowInInspector] [OnValueChanged("OnSaveConfig")]
         private string targetOutPath;
 
         [LabelText("平台拷贝地址")] [HideInInspector]
         public List<PlatformPath> targetOutPathData = new List<PlatformPath>();
 
-        [InfoBox("当勾选版本号自增,会默认勾选所有资源,并且资源版本号+1")] [LabelText("版本号自增")] [LabelWidth(120)]
+        [InfoBox("当勾选版本号自增,会默认勾选所有资源,并且资源版本号+1")] [LabelText("版本号自增")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
         public bool isUpdateVersion;
 
-        [InfoBox("版本号分3个等级,\n等级1是特大改动(需要手动更改),\n等级2每次需要重新出包时变动(需要手动更改),\n等级3是每次小更新时变动(勾选版本自增每次打包会自增1)")] [LabelText("当前资源版本号")] [LabelWidth(120)]
+        [InfoBox("版本号分3个等级,\n等级1是特大改动(需要手动更改),\n等级2每次需要重新出包时变动(需要手动更改),\n等级3是每次小更新时变动(勾选版本自增每次打包会自增1)")] [LabelText("当前资源版本号")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
         public Vector3 targetResourceVersion;
 
-        [LabelText("打包后移除AssetBundle信息")] public bool removeAssetBundleName;
+        [LabelText("打包后移除AssetBundle信息")] [OnValueChanged("OnSaveConfig")]
+        public bool removeAssetBundleName;
 
         #region 打包路径
 
@@ -186,44 +196,46 @@ namespace DltFramework
             AssetDatabase.Refresh();
 
             platformName = EditorUserBuildSettings.activeBuildTarget.ToString();
+
+            Debug.Log("初始化");
         }
 
         #region HotFixView
 
-        [ToggleGroup("buildHotFixView", "HotFixView")]
+        [ToggleGroup("buildHotFixView", "HotFixView")] [OnValueChanged("OnSaveConfig")]
         public bool buildHotFixView;
 
-        [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体")] [AssetSelector]
+        [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体")] [AssetSelector] [OnValueChanged("OnSaveConfig")]
         public GameObject HotFixViewPrefab;
 
-        [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体路径")] [HideInInspector]
+        [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体路径")] [HideInInspector] [OnValueChanged("OnSaveConfig")]
         public string HotFixViewPrePath;
 
         #endregion
 
         #region HotFixCode
 
-        [ToggleGroup("buildHotFixCode", "HotFixCode")]
+        [ToggleGroup("buildHotFixCode", "HotFixCode")] [OnValueChanged("OnSaveConfig")]
         public bool buildHotFixCode;
 
         #endregion
 
         #region 元数据
 
-        [ToggleGroup("buildMetaAssemblyParticipatePackaging", "MetaAssembly")]
+        [ToggleGroup("buildMetaAssemblyParticipatePackaging", "MetaAssembly")] [OnValueChanged("OnSaveConfig")]
         public bool buildMetaAssemblyParticipatePackaging;
 
-        [ToggleGroup("buildAssemblyParticipatePackaging", "Assembly")]
+        [ToggleGroup("buildAssemblyParticipatePackaging", "Assembly")] [OnValueChanged("OnSaveConfig")]
         public bool buildAssemblyParticipatePackaging;
 
         #endregion
 
         #region GameRootStart
 
-        [ToggleGroup("buildGameRootStart", "GameRootStart")]
+        [ToggleGroup("buildGameRootStart", "GameRootStart")] [OnValueChanged("OnSaveConfig")]
         public bool buildGameRootStart;
 
-        [ToggleGroup("buildGameRootStart")] [LabelText("GameRootStart预制体")] [AssetSelector]
+        [ToggleGroup("buildGameRootStart")] [LabelText("GameRootStart预制体")] [AssetSelector] [OnValueChanged("OnSaveConfig")]
         public GameObject GameRootStartPrefab;
 
         [ToggleGroup("buildGameRootStart")] [LabelText("GameRootStart预制体路径")] [Sirenix.OdinInspector.FilePath] [HideInInspector]
@@ -233,27 +245,27 @@ namespace DltFramework
 
         #region 场景打包
 
-        [ToggleGroup("BuildScene", "场景打包")] public bool BuildScene;
+        [ToggleGroup("SceneBuildSwitch", "场景打包")] [OnValueChanged("OnSaveConfig")] [SerializeField]
+        public bool SceneBuildSwitch;
 
-        [ToggleGroup("BuildScene")] [LabelText("拷贝场景配置")] [AssetList]
-        public List<CopySceneAssetBundleAsset> CopySceneAssetBundleAsset = new List<CopySceneAssetBundleAsset>();
-
-        [HideInInspector] [LabelText("CopySceneAssetBundleAsset路径")]
-        public List<string> CopySceneAssetBundleAssetPath = new List<string>();
-
-        [ToggleGroup("BuildScene")] [LabelText("正常场景配置")] [AssetList]
+        [ToggleGroup("SceneBuildSwitch")] [LabelText("正常场景配置")] [AssetList] [InlineEditor()] [OnValueChanged("OnSaveConfig")]
         public List<NormalSceneAssetBundleAsset> NormalSceneAssetBundleAssets = new List<NormalSceneAssetBundleAsset>();
+
+        [ToggleGroup("SceneBuildSwitch")] [LabelText("场景打开状态")]
+        private List<string> sceneOpenState = new List<string>();
+
+        [ToggleGroup("SceneBuildSwitch")] [LabelText("场景打包状态")] [TableList]
+        public List<SceneBuildState> SceneBuildStates = new List<SceneBuildState>();
 
         [HideInInspector] [LabelText("NormalSceneAssetBundleAsset")]
         public List<string> NormalSceneAssetBundleAssetsPath = new List<string>();
 
-        [LabelText("当前打开场景名称")] [HideInInspector]
-        public string currentOpenSceneName;
+        [ToggleGroup("SceneBuildSwitch")] [LabelText("当前打开场景名称")]
+        private string currentOpenSceneName;
 
-        [LabelText("重复利用资源")] private List<SceneRepeatAssets> sceneRepeatAssets = new List<SceneRepeatAssets>();
 
-        [LabelText("场景预制体关联文件")] public Dictionary<string, List<string>> scenePrefabAssetPath = new Dictionary<string, List<string>>();
-        [LabelText("所有场景资源路径")] private List<string> sceneAllBuildAssetPath = new List<string>();
+        [ToggleGroup("SceneBuild")] [LabelText("重复利用资源")] [Tooltip("每个场景可能都不一样")]
+        private List<SceneRepeatAsset> sceneRepeatAssets = new List<SceneRepeatAsset>();
 
         #endregion
 
@@ -264,10 +276,18 @@ namespace DltFramework
         [GUIColor(0, 1, 0)]
         [Button("打包", ButtonSizes.Large)]
         [LabelText("图集列表")]
-        public async UniTaskVoid OnBuild()
+        public async void StartBuild()
         {
+            await OnBuild();
+        }
+
+
+        private async UniTask OnBuild()
+        {
+            currentOpenSceneName = SceneManager.GetActiveScene().name;
             sceneRepeatAssets.Clear();
-            OnSaveConfig();
+            sceneOpenState.Clear();
+            SceneBuildStates.Clear();
 
             #region 全局打包
 
@@ -282,10 +302,7 @@ namespace DltFramework
 
             else
             {
-                if (removeAssetBundleName)
-                {
-                    DataFrameComponent.RemoveAllAssetBundleName();
-                }
+                DataFrameComponent.RemoveAllAssetBundleName();
 
                 if (buildHotFixView)
                 {
@@ -312,9 +329,32 @@ namespace DltFramework
                     GameRootStartBuild();
                 }
 
-                if (BuildScene)
+                if (SceneBuildSwitch)
                 {
-                    await NormalSceneBuild();
+                    for (int i = 0; i < NormalSceneAssetBundleAssets.Count; i++)
+                    {
+                        SceneBuildStates.Add(new SceneBuildState()
+                        {
+                            sceneName = NormalSceneAssetBundleAssets[i].name,
+                            isBuild = false
+                        });
+                    }
+
+                    //这里没有UniTask是因为发现,打包场景的AssetBundle的时候,会执行不下去
+                    for (int i = 0; i < NormalSceneAssetBundleAssets.Count; i++)
+                    {
+                        Debug.Log("打包场景:" + NormalSceneAssetBundleAssets[i].name);
+                        NormalSceneBuild(NormalSceneAssetBundleAssets[i]);
+                    }
+
+                    sceneOpenState.Clear();
+
+                    for (int i = 0; i < NormalSceneAssetBundleAssets.Count; i++)
+                    {
+                        await GenerateBuildConfig(NormalSceneAssetBundleAssets[i]);
+                    }
+
+                    Debug.Log("生成配置信息结束");
                 }
             }
 
@@ -337,56 +377,46 @@ namespace DltFramework
 
             FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFixRuntime/", "HotFixServerResourcesCount.json", JsonMapper.ToJson(hotFixServerResources));
 
-            if (File.Exists("Assets/UnStreamingAssets/HotFixRuntime/HotFixRuntime"))
-            {
-                File.Delete("Assets/UnStreamingAssets/HotFixRuntime/HotFixRuntime");
-            }
-
-            if (File.Exists("Assets/UnStreamingAssets/HotFixRuntime/HotFixRuntime.manifest"))
-            {
-                File.Delete("Assets/UnStreamingAssets/HotFixRuntime/HotFixRuntime.manifest");
-            }
-
             AssetDatabase.Refresh();
             if (Directory.Exists(targetOutPath))
             {
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixCode", targetOutPath + "/HotFix/HotFixCode");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixCodeConfig", targetOutPath + "/HotFix/HotFixCodeConfig");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixView", targetOutPath + "/HotFix/HotFixView");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixViewConfig", targetOutPath + "/HotFix/HotFixViewConfig");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/Metadata", targetOutPath + "/HotFix/Metadata");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/MetadataConfig", targetOutPath + "/HotFix/MetadataConfig");
+                FileOperationComponent.Copy(HotFixCodePath, targetOutPath + "/HotFix/HotFixCode");
+                FileOperationComponent.Copy(HotFixCodeConfigPath, targetOutPath + "/HotFix/HotFixCodeConfig");
+                FileOperationComponent.Copy(HotFixViewPath, targetOutPath + "/HotFix/HotFixView");
+                FileOperationComponent.Copy(HotFixViewConfigPath, targetOutPath + "/HotFix/HotFixViewConfig");
+                FileOperationComponent.Copy(MetadataPath, targetOutPath + "/HotFix/Metadata");
+                FileOperationComponent.Copy(MetadataConfigPath, targetOutPath + "/HotFix/MetadataConfig");
 
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/Assembly", targetOutPath + "/HotFixRuntime/Assembly");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/AssemblyConfig", targetOutPath + "/HotFixRuntime/AssemblyConfig");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundle", targetOutPath + "/HotFixRuntime/GameRootStartAssetBundle");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundleConfig", targetOutPath + "/HotFixRuntime/GameRootStartAssetBundleConfig");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundle", targetOutPath + "/HotFixRuntime/HotFixAssetBundle");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundleConfig", targetOutPath + "/HotFixRuntime/HotFixAssetBundleConfig");
+                FileOperationComponent.Copy(AssemblyPath, targetOutPath + "/HotFixRuntime/Assembly");
+                FileOperationComponent.Copy(AssemblyConfigPath, targetOutPath + "/HotFixRuntime/AssemblyConfig");
+                FileOperationComponent.Copy(GameRootStartAssetBundlePath, targetOutPath + "/HotFixRuntime/GameRootStartAssetBundle");
+                FileOperationComponent.Copy(GameRootStartAssetBundleConfigPath, targetOutPath + "/HotFixRuntime/GameRootStartAssetBundleConfig");
+                FileOperationComponent.Copy(HotFixAssetBundlePath, targetOutPath + "/HotFixRuntime/HotFixAssetBundle");
+                FileOperationComponent.Copy(HotFixAssetBundleConfigPath, targetOutPath + "/HotFixRuntime/HotFixAssetBundleConfig");
                 FileOperationComponent.CopyFile("Assets/UnStreamingAssets/HotFixRuntime/HotFixServerResourcesCount.json", targetOutPath + "/HotFixRuntime/HotFixServerResourcesCount.json");
                 //备份
                 string backupVersion = "/Backups_" + targetResourceVersion.x + "." + targetResourceVersion.y + "." + targetResourceVersion.z;
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixCode", targetOutPath + backupVersion + "/HotFix/HotFixCode");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixCodeConfig", targetOutPath + backupVersion + "/HotFix/HotFixCodeConfig");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixView", targetOutPath + backupVersion + "/HotFix/HotFixView");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/HotFixViewConfig", targetOutPath + backupVersion + "/HotFix/HotFixViewConfig");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/Metadata", targetOutPath + backupVersion + "/HotFix/Metadata");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFix/MetadataConfig", targetOutPath + backupVersion + "/HotFix/MetadataConfig");
+                FileOperationComponent.Copy(HotFixCodePath, targetOutPath + backupVersion + "/HotFix/HotFixCode");
+                FileOperationComponent.Copy(HotFixCodeConfigPath, targetOutPath + backupVersion + "/HotFix/HotFixCodeConfig");
+                FileOperationComponent.Copy(HotFixViewPath, targetOutPath + backupVersion + "/HotFix/HotFixView");
+                FileOperationComponent.Copy(HotFixViewConfigPath, targetOutPath + backupVersion + "/HotFix/HotFixViewConfig");
+                FileOperationComponent.Copy(MetadataPath, targetOutPath + backupVersion + "/HotFix/Metadata");
+                FileOperationComponent.Copy(MetadataConfigPath, targetOutPath + backupVersion + "/HotFix/MetadataConfig");
 
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/Assembly", targetOutPath + backupVersion + "/HotFixRuntime/Assembly");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/AssemblyConfig", targetOutPath + backupVersion + "/HotFixRuntime/AssemblyConfig");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundle", targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundle");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/GameRootStartAssetBundleConfig", targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundleConfig");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundle", targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundle");
-                FileOperationComponent.Copy("Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundleConfig", targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundleConfig");
+                FileOperationComponent.Copy(AssemblyPath, targetOutPath + backupVersion + "/HotFixRuntime/Assembly");
+                FileOperationComponent.Copy(AssemblyConfigPath, targetOutPath + backupVersion + "/HotFixRuntime/AssemblyConfig");
+                FileOperationComponent.Copy(GameRootStartAssetBundlePath, targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundle");
+                FileOperationComponent.Copy(GameRootStartAssetBundleConfigPath, targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundleConfig");
+                FileOperationComponent.Copy(HotFixAssetBundlePath, targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundle");
+                FileOperationComponent.Copy(HotFixAssetBundleConfigPath, targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundleConfig");
                 FileOperationComponent.CopyFile("Assets/UnStreamingAssets/HotFixRuntime/HotFixServerResourcesCount.json", targetOutPath + backupVersion + "/HotFixRuntime/HotFixServerResourcesCount.json");
             }
 
             #endregion
 
             OnLoadConfig();
+            sceneOpenState.Clear();
             Debug.Log("资源打包完毕");
-            await UniTask.Delay(1000);
             OpenScene(this.currentOpenSceneName);
         }
 
@@ -400,29 +430,26 @@ namespace DltFramework
             if (HotFixViewPrefab == null)
             {
                 Debug.Log("配置信息错误");
-                return;
             }
 
             AssetImporter hotFixViewImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(HotFixViewPrefab));
-            hotFixViewImporter.assetBundleName = "HotFixView/" + DataFrameComponent.String_AllCharToLower("HotFixView");
-            BuildPipeline.BuildAssetBundles(HotFixPath, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
+            hotFixViewImporter.assetBundleName = "HotFix/HotFixView/" + DataFrameComponent.String_AllCharToLower("HotFixView");
+            BuildPipeline.BuildAssetBundles(UnStreamingAssetsPath, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
+            AssetDatabase.Refresh();
             if (removeAssetBundleName)
             {
                 DataFrameComponent.RemoveAllAssetBundleName();
             }
 
             string filePath = HotFixViewPath + DataFrameComponent.String_AllCharToLower("HotFixView");
-            File.Delete(filePath + ".manifest");
             HotFixAssetConfig hotFixAssetConfig = new HotFixAssetConfig();
             hotFixAssetConfig.name = DataFrameComponent.String_AllCharToLower("HotFixView"); //ab包打包后自带转换成小写
             hotFixAssetConfig.md5 = FileOperationComponent.GetMD5HashFromFile(filePath);
             hotFixAssetConfig.size = FileOperationComponent.GetFileSize(filePath).ToString();
             hotFixAssetConfig.path = "HotFix/HotFixView/";
             FileOperationComponent.SaveTextToLoad(HotFixViewConfigPath + "HotFixViewConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
-            Debug.Log("HotFixView配置输出");
-
             AssetDatabase.Refresh();
-            OnLoadConfig();
+            Debug.Log("HotFixView打包完毕");
         }
 
         #endregion
@@ -445,8 +472,7 @@ namespace DltFramework
             hotFixAssetConfig.size = FileOperationComponent.GetFileSize(path).ToString();
             hotFixAssetConfig.path = "HotFix/HotFixCode/";
             FileOperationComponent.SaveTextToLoad(HotFixCodeConfigPath + "HotFixCodeConfig.json", JsonUtility.ToJson(hotFixAssetConfig));
-            Debug.Log("HotFixCode配置输出");
-            OnLoadConfig();
+            AssetDatabase.Refresh();
         }
 
         #endregion
@@ -473,6 +499,7 @@ namespace DltFramework
             }
 #endif
             List<string> buildPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType(MetadataPath, "bytes");
+            Debug.Log(buildPath.Count);
             List<HotFixRuntimeDownConfig> hotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             foreach (string path in buildPath)
             {
@@ -501,12 +528,11 @@ namespace DltFramework
             string assemblyDllPath = DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll";
             File.Copy(assemblyDllPath, AssemblyPath + "Assembly-CSharp.dll.bytes", true);
             HotFixRuntimeDownConfig hotFixAssemblyConfig = new HotFixRuntimeDownConfig();
-            hotFixAssemblyConfig.md5 = AssemblyPath + "Assembly-CSharp.dll.bytes";
+            hotFixAssemblyConfig.md5 = FileOperationComponent.GetMD5HashFromFile(AssemblyPath + "Assembly-CSharp.dll.bytes");
             hotFixAssemblyConfig.name = "Assembly-CSharp.dll.bytes";
             hotFixAssemblyConfig.size = FileOperationComponent.GetFileSize(AssemblyPath + "Assembly-CSharp.dll.bytes").ToString();
             hotFixAssemblyConfig.path = "HotFixRuntime/Assembly/";
             FileOperationComponent.SaveTextToLoad(AssemblyConfigPath, "AssemblyConfig.json", JsonMapper.ToJson(hotFixAssemblyConfig));
-            Debug.Log("移动完毕");
         }
 
         #endregion
@@ -518,16 +544,17 @@ namespace DltFramework
             if (GameRootStartPrefab == null)
             {
                 Debug.LogError("GameRootStartPrefab为空");
-                return;
             }
 
             AssetImporter gameRootStartImporter = AssetImporter.GetAtPath(GameRootStartPath);
-            gameRootStartImporter.assetBundleName = "GameRootStartAssetBundle/" + DataFrameComponent.String_AllCharToLower("GameRootStart");
-            BuildPipeline.BuildAssetBundles(HotFixRuntimePath, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
+            gameRootStartImporter.assetBundleName = "HotFixRuntime/GameRootStartAssetBundle/" + DataFrameComponent.String_AllCharToLower("GameRootStart");
+            BuildPipeline.BuildAssetBundles(UnStreamingAssetsPath, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
+
             if (removeAssetBundleName)
             {
                 DataFrameComponent.RemoveAllAssetBundleName();
             }
+
 
             string filePath = GameRootStartAssetBundlePath + DataFrameComponent.String_AllCharToLower("GameRootStart");
             File.Delete(filePath + ".manifest");
@@ -536,278 +563,224 @@ namespace DltFramework
             hotFixGameRootStartConfig.md5 = FileOperationComponent.GetMD5HashFromFile(filePath);
             hotFixGameRootStartConfig.size = FileOperationComponent.GetFileSize(filePath).ToString();
             hotFixGameRootStartConfig.path = "HotFixRuntime/GameRootStartAssetBundle/";
+
             FileOperationComponent.SaveTextToLoad(GameRootStartAssetBundleConfigPath, "GameRootStartConfig.json", JsonMapper.ToJson(hotFixGameRootStartConfig));
-            Debug.Log("GameRootStart配置输出");
-            AssetDatabase.Refresh();
-            OnLoadConfig();
+            Debug.Log("GameRootStart打包完毕");
         }
 
         #endregion
 
+        #region 场景打包
 
-        #region 普通场景打包
-
-        //普通场景打包
-        private async UniTask<string> NormalSceneBuild()
+        private void NormalSceneBuild(NormalSceneAssetBundleAsset normalSceneAssetBundleAsset)
         {
-            for (int i = 0; i < NormalSceneAssetBundleAssets.Count; i++)
-            {
-                //以此循环打包
-                if (removeAssetBundleName)
-                {
-                    DataFrameComponent.RemoveAllAssetBundleName();
-                }
+            Debug.Log(normalSceneAssetBundleAsset.name);
+            DataFrameComponent.RemoveAllAssetBundleName();
+            AssetDatabase.Refresh();
+            sceneRepeatAssets.Clear();
 
-                //打开对应的场景文件
-                OpenScene(NormalSceneAssetBundleAssets[i].name);
-                await UniTask.Delay(TimeSpan.FromSeconds(1));
-                await BundleSceneDataAndGenerateBuildConfig(NormalSceneAssetBundleAssets[i]);
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            // Debug.Log("保存场景:" + SceneManager.GetActiveScene().name);
+            //打开对应的场景文件
+            OpenScene(normalSceneAssetBundleAsset.name);
+            while (!sceneOpenState.Contains(normalSceneAssetBundleAsset.name))
+            {
             }
 
-            return "";
-        }
+            Debug.Log("打开场景:" + normalSceneAssetBundleAsset.name);
 
-        [BoxGroup("打包")]
-        [GUIColor(0, 1, 0)]
-        private async UniTask<string> BundleSceneDataAndGenerateBuildConfig(NormalSceneAssetBundleAsset normalSceneAssetBundleAsset)
-        {
-            scenePrefabAssetPath.Clear();
-            //视图重新排序并应用
-            FrameMenu.ViewSortSiblingIndex();
-            Debug.Log("视图重新排序并应用");
-            //场景中所有热更配置
+
+            #region 创建文件夹
+
+            string sceneAssetBundleDirectory = HotFixAssetBundlePath + normalSceneAssetBundleAsset.name + "/" + "Scene" + "/";
+            if (!Directory.Exists(sceneAssetBundleDirectory))
+            {
+                Directory.CreateDirectory(sceneAssetBundleDirectory);
+            }
+
+            string entityAssetBundleDirectory = HotFixAssetBundlePath + normalSceneAssetBundleAsset.name + "/" + "Entity" + "/";
+            if (!Directory.Exists(entityAssetBundleDirectory))
+            {
+                Directory.CreateDirectory(entityAssetBundleDirectory);
+            }
+
+            string repeatAssetBundleDirectory = HotFixAssetBundlePath + normalSceneAssetBundleAsset.name + "/" + "Repeat" + "/";
+            if (!Directory.Exists(repeatAssetBundleDirectory))
+            {
+                Directory.CreateDirectory(repeatAssetBundleDirectory);
+            }
+
+            string UIAssetBundleDirectory = HotFixAssetBundlePath + normalSceneAssetBundleAsset.name + "/" + "UI" + "/";
+            if (!Directory.Exists(UIAssetBundleDirectory))
+            {
+                Directory.CreateDirectory(UIAssetBundleDirectory);
+            }
+
+            string SceneComponentAssetBundleDirectory = HotFixAssetBundlePath + normalSceneAssetBundleAsset.name + "/" + "SceneComponent" + "/";
+            if (!Directory.Exists(SceneComponentAssetBundleDirectory))
+            {
+                Directory.CreateDirectory(SceneComponentAssetBundleDirectory);
+            }
+
+            string SceneComponentInitAssetBundleDirectory = HotFixAssetBundlePath + normalSceneAssetBundleAsset.name + "/" + "SceneComponentInit" + "/";
+            if (!Directory.Exists(SceneComponentInitAssetBundleDirectory))
+            {
+                Directory.CreateDirectory(SceneComponentInitAssetBundleDirectory);
+            }
+
+            #endregion
+
+            #region HotFixAssetPathConfig
+
             List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
-            normalSceneAssetBundleAsset.scenePrefabPaths.Clear();
             //应用热更配置并记录路径
             for (int i = 0; i < hotFixAssetPathConfigs.Count; i++)
             {
+                //应用预制体
                 hotFixAssetPathConfigs[i].SetPathAndApplyPrefab();
-                normalSceneAssetBundleAsset.scenePrefabPaths.Add(hotFixAssetPathConfigs[i].prefabPath);
+                //设置AssetBundle名称
+                AssetImporter assetImporter = AssetImporter.GetAtPath(hotFixAssetPathConfigs[i].prefabPath);
+                assetImporter.assetBundleName = hotFixAssetPathConfigs[i].assetBundlePath;
+                //预制体添加到重复场景资源
+                PrefabAddRepeatAsset(hotFixAssetPathConfigs[i].prefabPath, normalSceneAssetBundleAsset.sceneAssetBundleRepeatAssets);
             }
-
-            //移除当前场景中的HotFixAssetPathConfig
-            foreach (HotFixAssetPathConfig hotFixAssetSceneHierarchyPath in hotFixAssetPathConfigs)
-            {
-                GameObject.DestroyImmediate(hotFixAssetSceneHierarchyPath.gameObject);
-            }
-
-            Debug.Log("移除场景中所有热更组件");
-            await UniTask.Delay(TimeSpan.FromSeconds(1));
 
             //保存场景
-            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
-            Debug.Log("保存场景:" + SceneManager.GetActiveScene().name);
-            //删除manifest列表
-            List<string> deleteManifestPath = new List<string>();
-            Dictionary<string, List<string>> temp = new Dictionary<string, List<string>>();
-            //打包场景其他数据
-            foreach (string scenePrefabPath in normalSceneAssetBundleAsset.scenePrefabPaths)
-            {
-                if (removeAssetBundleName)
-                {
-                    DataFrameComponent.RemoveAllAssetBundleName();
-                }
+            EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            // await UniTask.DelayFrame(buildDelayFrame);
 
-                HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabPath);
-                /*AssetImporter assetImporter = AssetImporter.GetAtPath(scenePrefabPath);
-                assetImporter.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
-                scenePrefabAssetPath.Add(hotFixAssetPathConfig.assetBundlePath, GetAssetDependencies(scenePrefabPath));
-                deleteManifestPath.Add("Assets/UnStreamingAssets/" + assetImporter.assetBundleName + ".manifest");*/
-                // Debug.Log("打包:" + hotFixAssetPathConfig.prefabPath);
-                AssetBundleBuild assetBundleBuilds = new AssetBundleBuild();
-                assetBundleBuilds.assetBundleName = hotFixAssetPathConfig.assetBundlePath;
-                List<string> AssetDependencies = GetAssetDependencies(scenePrefabPath, ".cs");
+            #endregion
 
-                foreach (string assetDependency in AssetDependencies)
-                {
-                    foreach (SceneAssetBundleRepeatAsset sceneAssetBundleRepeatAsset in normalSceneAssetBundleAsset.sceneAssetBundleRepeatAssets)
-                    {
-                        if (!temp.ContainsKey(sceneAssetBundleRepeatAsset.assetBundleName))
-                        {
-                            temp.Add(sceneAssetBundleRepeatAsset.assetBundleName, new List<string>());
-                        }
-
-
-                        foreach (string s in sceneAssetBundleRepeatAsset.assetBundleContainPath)
-                        {
-                            if (assetDependency.Contains(s))
-                            {
-                                temp[sceneAssetBundleRepeatAsset.assetBundleName].Add(assetDependency);
-                            }
-                        }
-                    }
-                }
-
-                foreach (KeyValuePair<string, List<string>> pair in temp)
-                {
-                    foreach (string s in pair.Value)
-                    {
-                        if (AssetDependencies.Contains(s))
-                        {
-                            AssetDependencies.Remove(s);
-                        }
-                    }
-                }
-
-                foreach (string assetDependency in AssetDependencies)
-                {
-                    Debug.Log(scenePrefabPath + ":" + assetDependency);
-                }
-
-
-                assetBundleBuilds.assetNames = AssetDependencies.ToArray();
-                BuildPipeline.BuildAssetBundles("Assets/UnStreamingAssets", new[] { assetBundleBuilds }, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
-            }
-
-            foreach (KeyValuePair<string, List<string>> pair in temp)
-            {
-                AssetBundleBuild assetBundleBuilds = new AssetBundleBuild();
-                assetBundleBuilds.assetBundleName = "HotFixRuntime/HotFixAssetBundle/" + currentOpenSceneName + "/Repeat/" + pair.Key;
-                assetBundleBuilds.assetNames = pair.Value.ToArray();
-                foreach (string s in pair.Value)
-                {
-                    Debug.Log(pair.Key + ":" + s);
-                }
-
-                BuildPipeline.BuildAssetBundles("Assets/UnStreamingAssets", new[] { assetBundleBuilds }, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
-            }
 
             #region 场景
 
-            /*string sceneMd5 = FileOperationComponent.GetMD5HashFromFile(SceneManager.GetActiveScene().path);
-            string oldSceneMd5 = normalSceneAssetBundleAsset.sceneMd5;
-            string sceneAssetBundleName = "HotFixRuntime/HotFixAssetBundle/" + SceneManager.GetActiveScene().name + "/scene/" + SceneManager.GetActiveScene().name;
-            if (sceneMd5 != oldSceneMd5 || !File.Exists("Assets/UnStreamingAssets/" + sceneAssetBundleName))
-            {
-                Debug.Log(SceneManager.GetActiveScene().name + "重新打包");
-                //打包当前场景
-                AssetImporter sceneAssetImporter = AssetImporter.GetAtPath(SceneManager.GetActiveScene().path);
-                sceneAssetImporter.assetBundleName = sceneAssetBundleName;
-                deleteManifestPath.Add("Assets/UnStreamingAssets/" + sceneAssetBundleName + ".manifest");
-            }
-
-            //所有场景的资源
-            sceneAllBuildAssetPath = new List<string>(GetAssetDependencies(SceneManager.GetActiveScene().path));
-            for (int i = 0; i < sceneAllBuildAssetPath.Count; i++)
-            {
-                string repeatPath = GetRepeatPath(sceneAllBuildAssetPath[i], normalSceneAssetBundleAsset.sceneAssetBundleRepeatAssets);
-                if (repeatPath != string.Empty)
-                {
-                    AddRepeatAsset(repeatPath, sceneAllBuildAssetPath[i]);
-                }
-            }*/
+            string sceneAssetBundleName = "HotFixRuntime/HotFixAssetBundle/" + normalSceneAssetBundleAsset.name + "/Scene/" + normalSceneAssetBundleAsset.name;
+            //打包当前场景
+            AssetImporter sceneAssetImporter = AssetImporter.GetAtPath(SceneManager.GetActiveScene().path);
+            //场景设置AssetBundle
+            sceneAssetImporter.assetBundleName = sceneAssetBundleName;
+            //场景添加到重复场景资源
+            SceneAddRepeatAsset(SceneManager.GetActiveScene().path, normalSceneAssetBundleAsset.sceneAssetBundleRepeatAssets);
 
             #endregion
 
             #region 重复资源
 
             //打包重复资源
-
-            foreach (SceneRepeatAssets sceneRepeatAsset in sceneRepeatAssets)
+            foreach (SceneRepeatAsset sceneRepeatAsset in sceneRepeatAssets)
             {
-                //相同
-                bool isSame = true;
-                //没有包含当前重复资源
-                if (normalSceneAssetBundleAsset.sceneRepeatMd5.ContainsKey(sceneRepeatAsset.assetName))
-                {
-                    List<string> oldRepeatMd5List = normalSceneAssetBundleAsset.sceneRepeatMd5[sceneRepeatAsset.assetName];
-                    if (oldRepeatMd5List.Count == sceneRepeatAsset.repeatAssets.Count)
-                    {
-                        foreach (string repeatAsset in sceneRepeatAsset.repeatAssets)
-                        {
-                            if (!oldRepeatMd5List.Contains(FileOperationComponent.GetMD5HashFromFile(repeatAsset)))
-                            {
-                                isSame = false;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        isSame = false;
-                    }
-                }
-                else
-                {
-                    isSame = false;
-                }
-
-                //需要打包的资源包含了当前重复资源
-                foreach (KeyValuePair<string, List<string>> pair in scenePrefabAssetPath)
-                {
-                    foreach (string s in pair.Value)
-                    {
-                        if (sceneRepeatAsset.repeatAssets.Contains(s))
-                        {
-                            isSame = false;
-                        }
-                    }
-                }
-
                 //文件是否存在
-                string repeatAssetBundleName = "HotFixRuntime/HotFixAssetBundle/" + SceneManager.GetActiveScene().name + "/repeat/" + sceneRepeatAsset.assetName;
-                if (!File.Exists("Assets/UnStreamingAssets/" + repeatAssetBundleName))
-                {
-                    isSame = false;
-                }
-
-                //资源相同跳过打包
-                if (isSame)
-                {
-                    continue;
-                }
-
-                Debug.Log(sceneRepeatAsset.assetName + "重新打包");
+                string repeatAssetBundleName = "HotFixRuntime/HotFixAssetBundle/" + SceneManager.GetActiveScene().name + "/Repeat/" + sceneRepeatAsset.assetName;
+                Debug.Log("重复资源" + sceneRepeatAsset.assetName + "打包");
                 foreach (string path in sceneRepeatAsset.repeatAssets)
                 {
+                    //重复资源设置AssetBundle
                     AssetImporter assetImporter = AssetImporter.GetAtPath(path);
                     assetImporter.assetBundleName = repeatAssetBundleName;
-                    deleteManifestPath.Add("Assets/UnStreamingAssets/" + assetImporter.assetBundleName + ".manifest");
                 }
             }
 
             #endregion
 
+            BuildPipeline.BuildAssetBundles(UnStreamingAssetsPath, targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
             AssetDatabase.Refresh();
-            // BuildPipeline.BuildAssetBundles("Assets/UnStreamingAssets", targetBuildAssetBundleOptions, EditorUserBuildSettings.activeBuildTarget);
-            AssetDatabase.Refresh();
-            //删除manifest
-            foreach (string path in deleteManifestPath)
+            //设置打包状态
+            for (int i = 0; i < SceneBuildStates.Count; i++)
             {
-                if (File.Exists(path))
+                if (SceneBuildStates[i].sceneName == normalSceneAssetBundleAsset.name)
                 {
-                    File.Delete(path);
+                    SceneBuildStates[i].isBuild = true;
                 }
             }
 
+            Debug.Log(normalSceneAssetBundleAsset.name + "打包完毕");
 
             //生成场景配置表
-            GenerateBuildConfig(normalSceneAssetBundleAsset);
-            //显示场景物体
-            ShowSceneObject(normalSceneAssetBundleAsset.scenePrefabPaths);
             if (removeAssetBundleName)
             {
                 DataFrameComponent.RemoveAllAssetBundleName();
             }
-
-            return "";
         }
 
         [LabelText("预制体添加重复资源")]
         private void PrefabAddRepeatAsset(string prefabPath, List<SceneAssetBundleRepeatAsset> sceneAssetBundleRepeatAssets)
         {
             //AB包所有依赖
-            List<string> scenePrefabDependencies = new List<string>(GetAssetDependencies(prefabPath, ""));
+            List<string> prefabDependencies = new List<string>(GetAssetDependencies(prefabPath, ".cs"));
             //AB包所有依赖中的重复资源
-            foreach (string scenePrefabDependency in scenePrefabDependencies)
+            foreach (string PrefabDependency in prefabDependencies)
             {
-                //是否是重复利用资源
-                string repeatPath = GetRepeatPath(scenePrefabDependency, sceneAssetBundleRepeatAssets);
-                if (repeatPath != string.Empty)
+                //添加到重复资源
+                AddSceneRepeatAsset(PrefabDependency, sceneAssetBundleRepeatAssets);
+            }
+        }
+
+        [LabelText("场景添加到重复资源")]
+        private void SceneAddRepeatAsset(string prefabPath, List<SceneAssetBundleRepeatAsset> sceneAssetBundleRepeatAssets)
+        {
+            //AB包所有依赖
+            List<string> sceneDependencies = new List<string>(GetAssetDependencies(prefabPath, ".cs"));
+            //AB包所有依赖中的重复资源
+            foreach (string sceneDependency in sceneDependencies)
+            {
+                //添加到重复资源
+                AddSceneRepeatAsset(sceneDependency, sceneAssetBundleRepeatAssets);
+            }
+        }
+
+        //添加场景重复资源
+        private void AddSceneRepeatAsset(string abName, string path)
+        {
+            if (!SceneRepeatAssetPathIsContains(path))
+            {
+                SceneRepeatAsset sceneRepeatAsset = GetSceneRepeatAssetByAbName(abName);
+                AddPathToSceneRepeatAsset(sceneRepeatAsset, path);
+            }
+        }
+
+        //获得场景重复资源
+        private SceneRepeatAsset GetSceneRepeatAssetByAbName(string abName)
+        {
+            SceneRepeatAsset tempSceneRepeatAsset = null;
+            foreach (SceneRepeatAsset sceneRepeatAsset in sceneRepeatAssets)
+            {
+                if (sceneRepeatAsset.assetName == abName)
                 {
-                    //添加到重复资源列表
-                    AddRepeatAsset(repeatPath, scenePrefabDependency);
+                    tempSceneRepeatAsset = sceneRepeatAsset;
                 }
             }
+
+            if (tempSceneRepeatAsset == null)
+            {
+                tempSceneRepeatAsset = new SceneRepeatAsset();
+                tempSceneRepeatAsset.assetName = abName;
+                sceneRepeatAssets.Add(tempSceneRepeatAsset);
+            }
+
+            return tempSceneRepeatAsset;
+        }
+
+        //路径是否已经被包含
+        private bool SceneRepeatAssetPathIsContains(string path)
+        {
+            foreach (SceneRepeatAsset sceneRepeatAsset in sceneRepeatAssets)
+            {
+                foreach (string repeatAssetPath in sceneRepeatAsset.repeatAssets)
+                {
+                    if (repeatAssetPath == path)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        //添加到重复列表中
+        private void AddPathToSceneRepeatAsset(SceneRepeatAsset sceneRepeatAsset, string path)
+        {
+            sceneRepeatAsset.repeatAssets.Add(path);
         }
 
         #endregion
@@ -922,58 +895,8 @@ namespace DltFramework
 
         #region 重复资源
 
-        public bool IsRepeatAssetType(string assetName)
-        {
-            foreach (SceneRepeatAssets sceneRepeatAsset in sceneRepeatAssets)
-            {
-                if (sceneRepeatAsset.assetName == assetName)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public SceneRepeatAssets GetRepeatAsset(string assetName)
-        {
-            foreach (SceneRepeatAssets sceneRepeatAsset in sceneRepeatAssets)
-            {
-                if (sceneRepeatAsset.assetName == assetName)
-                {
-                    return sceneRepeatAsset;
-                }
-            }
-
-            return null;
-        }
-
-        public void AddRepeatAsset(string assetName, List<string> assetPath)
-        {
-            foreach (string path in assetPath)
-            {
-                AddRepeatAsset(assetName, path);
-            }
-        }
-
-        public void AddRepeatAsset(string assetName, string assetPath)
-        {
-            SceneRepeatAssets sceneRepeatAsset = GetRepeatAsset(assetName);
-            if (sceneRepeatAsset == null)
-            {
-                sceneRepeatAsset = new SceneRepeatAssets();
-                sceneRepeatAsset.assetName = assetName;
-                sceneRepeatAssets.Add(sceneRepeatAsset);
-            }
-
-            if (!sceneRepeatAsset.repeatAssets.Contains(assetPath))
-            {
-                sceneRepeatAsset.repeatAssets.Add(assetPath);
-            }
-        }
-
         [LabelText("是否是重复资源路径")]
-        private string GetRepeatPath(string path, List<SceneAssetBundleRepeatAsset> sceneAssetBundleRepeatAssets)
+        private void AddSceneRepeatAsset(string path, List<SceneAssetBundleRepeatAsset> sceneAssetBundleRepeatAssets)
         {
             foreach (SceneAssetBundleRepeatAsset sceneAssetBundleRepeatAsset in sceneAssetBundleRepeatAssets)
             {
@@ -981,12 +904,10 @@ namespace DltFramework
                 {
                     if (path.Contains(ContainPath))
                     {
-                        return sceneAssetBundleRepeatAsset.assetBundleName;
+                        AddSceneRepeatAsset(sceneAssetBundleRepeatAsset.assetBundleName, path);
                     }
                 }
             }
-
-            return string.Empty;
         }
 
         #endregion
@@ -1001,7 +922,7 @@ namespace DltFramework
                 return null;
             }
 
-            List<string> dependecies = new List<string>(UnityEditor.AssetDatabase.GetDependencies(assetPath));
+            List<string> dependecies = new List<string>(AssetDatabase.GetDependencies(assetPath));
             List<string> tempDependecies = new List<string>();
             for (int i = 0; i < dependecies.Count; i++)
             {
@@ -1016,6 +937,13 @@ namespace DltFramework
 
         #endregion
 
+        #region 延迟
+
+        private DateTime currentTime;
+        private DateTime timeAfterThreeSeconds;
+
+        #endregion
+
         #region 打开场景
 
         //打开场景
@@ -1026,163 +954,72 @@ namespace DltFramework
             {
                 if (DataFrameComponent.Path_GetPathFileNameDontContainFileType(allScenePath[i]) == sceneName)
                 {
-                    UnityEditor.SceneManagement.EditorSceneManager.OpenScene(allScenePath[i], UnityEditor.SceneManagement.OpenSceneMode.Single);
+                    EditorSceneManager.sceneOpened += EditorSceneOpened;
+                    EditorSceneManager.OpenScene(allScenePath[i], OpenSceneMode.Single);
                 }
             }
         }
 
-        #endregion
-
-        #region 显示场景资源
-
-        [LabelText("显示场景资源")]
-        private void ShowSceneObject(List<string> scenePrefabPaths)
+        private void EditorSceneOpened(Scene scene, OpenSceneMode mode)
         {
-            for (int i = 0; i < scenePrefabPaths.Count; i++)
+            if (!sceneOpenState.Contains(scene.name))
             {
-                //路径信息
-                HotFixAssetPathConfig hotFixAssetSceneHierarchyPath = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabPaths[i]);
-                Transform parent = null;
-                if (hotFixAssetSceneHierarchyPath.GetHierarchyGeneratePath() != string.Empty)
-                {
-                    if (GameObject.Find(hotFixAssetSceneHierarchyPath.GetHierarchyGeneratePath()))
-                    {
-                        parent = GameObject.Find(hotFixAssetSceneHierarchyPath.GetHierarchyGeneratePath()).transform;
-                    }
-                }
-
-                //实例化
-                string assetPath = UnityEditor.AssetDatabase.GetAssetPath(hotFixAssetSceneHierarchyPath.gameObject);
-                GameObject temp = (GameObject)UnityEditor.PrefabUtility.InstantiatePrefab(UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(assetPath), parent);
+                sceneOpenState.Add(scene.name);
             }
 
-            //UI层排序
-            ViewSort();
-            UnityEditor.SceneManagement.EditorSceneManager.SaveScene(SceneManager.GetActiveScene());
+            EditorSceneManager.sceneOpened -= EditorSceneOpened;
         }
 
         #endregion
 
-        #region 视图重新排序
+        #region 生成场景配置信息
 
-        private void ViewSort()
+        private async UniTask GenerateBuildConfig(NormalSceneAssetBundleAsset normalSceneAssetBundleAsset)
         {
-            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
-            List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
-
-            for (int i = 0; i < sceneAllBaseWindow.Count; i++)
-            {
-                foreach (BaseWindow baseWindow in sceneAllBaseWindow)
-                {
-                    if (baseWindow.GetSceneLayerIndex() == i)
-                    {
-                        sortBaseWindow.Add(baseWindow);
-                    }
-                }
-            }
-
-            //UI层排序
-            foreach (BaseWindow baseWindow in sortBaseWindow)
-            {
-                if (!baseWindow.GetComponent<ChildBaseWindow>())
-                {
-                    baseWindow.SetSetSiblingIndex();
-                }
-            }
-        }
-
-        #endregion
-
-        #region 生成配置信息
-
-        private void GenerateBuildConfig(CopySceneAssetBundleAsset copySceneAssetBundleAsset)
-        {
-            string sceneName = DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name);
-            HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = new HotFixRuntimeSceneAssetBundleConfig();
-            //场景AssetBundle
-            foreach (string scenePrefabPath in copySceneAssetBundleAsset.scenePrefabPaths)
-            {
-                HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabPath);
-                HotFixRuntimeAssetBundleConfig hot = new HotFixRuntimeAssetBundleConfig();
-                hot.assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name);
-                hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), "");
-                hot.assetBundleInstantiatePath = hotFixAssetPathConfig.GetHierarchyGeneratePath();
-                string adPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hot.assetBundlePath + hot.assetBundleName;
-                hot.assetBundleSize = FileOperationComponent.GetFileSize(adPath).ToString();
-                hot.md5 = FileOperationComponent.GetMD5HashFromFile(adPath);
-                hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hot);
-            }
-
-            string hotFixAssetBundleConfigPath = RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name) + ".json";
-            if (File.Exists(hotFixAssetBundleConfigPath))
-            {
-                File.Delete(hotFixAssetBundleConfigPath);
-            }
-
-            FileOperationComponent.SaveTextToLoad(hotFixAssetBundleConfigPath, JsonUtility.ToJson(hotFixRuntimeSceneAssetBundleConfig));
-            Debug.Log("打包 配置信息完成");
+            OpenScene(normalSceneAssetBundleAsset.name);
+            await UniTask.WaitUntil(() => sceneOpenState.Contains(normalSceneAssetBundleAsset.name));
+            await UniTask.Delay(TimeSpan.FromSeconds(1));
+            List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
+            GenerateBuildConfig(normalSceneAssetBundleAsset.name, hotFixAssetPathConfigs, normalSceneAssetBundleAsset.sceneAssetBundleRepeatAssets);
         }
 
         [LabelText("生成配置信息")]
-        private void GenerateBuildConfig(NormalSceneAssetBundleAsset normalSceneAssetBundleAsset)
+        private void GenerateBuildConfig(string sceneName, List<HotFixAssetPathConfig> hotFixAssetPathConfigs, List<SceneAssetBundleRepeatAsset> sceneAssetBundleRepeatAssets)
         {
-            string sceneName = DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name);
             HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfig = new HotFixRuntimeSceneAssetBundleConfig();
             //场景数据
-            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleName = sceneName;
-            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/";
+            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleName = DataFrameComponent.String_AllCharToLower(sceneName);
+            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Scene/";
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleSize =
-                FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName).ToString();
+                FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Scene/" + DataFrameComponent.String_AllCharToLower(sceneName)).ToString();
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.md5 =
-                FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/scene/" + sceneName);
-            hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleInstantiatePath = "";
-            //场景旧的Md5
-            normalSceneAssetBundleAsset.sceneMd5 = FileOperationComponent.GetMD5HashFromFile(SceneManager.GetActiveScene().path);
-
-            //场景重复资源Md5
-            normalSceneAssetBundleAsset.sceneRepeatMd5.Clear();
-            foreach (SceneRepeatAssets sceneRepeatAsset in sceneRepeatAssets)
-            {
-                normalSceneAssetBundleAsset.sceneRepeatMd5.Add(sceneRepeatAsset.assetName, new List<string>());
-                foreach (string repeatAsset in sceneRepeatAsset.repeatAssets)
-                {
-                    normalSceneAssetBundleAsset.sceneRepeatMd5[sceneRepeatAsset.assetName].Add(FileOperationComponent.GetMD5HashFromFile(repeatAsset));
-                }
-            }
+                FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Scene/" + DataFrameComponent.String_AllCharToLower(sceneName));
 
             //重复资源
-            foreach (SceneAssetBundleRepeatAsset sceneAssetBundleRepeatAsset in normalSceneAssetBundleAsset.sceneAssetBundleRepeatAssets)
+            foreach (SceneAssetBundleRepeatAsset sceneAssetBundleRepeatAsset in sceneAssetBundleRepeatAssets)
             {
                 HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig = new HotFixRuntimeAssetBundleConfig();
-                hotFixRuntimeAssetBundleConfig.assetBundleName = sceneAssetBundleRepeatAsset.assetBundleName;
-                hotFixRuntimeAssetBundleConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/repeat/";
+                hotFixRuntimeAssetBundleConfig.assetBundleName = DataFrameComponent.String_AllCharToLower(sceneAssetBundleRepeatAsset.assetBundleName);
+                hotFixRuntimeAssetBundleConfig.assetBundlePath = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Repeat/";
                 hotFixRuntimeAssetBundleConfig.assetBundleSize =
-                    FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/repeat/" + sceneAssetBundleRepeatAsset.assetBundleName).ToString();
+                    FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Repeat/" +
+                                                       DataFrameComponent.String_AllCharToLower(sceneAssetBundleRepeatAsset.assetBundleName)).ToString();
                 hotFixRuntimeAssetBundleConfig.md5 =
-                    FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/repeat/" + sceneAssetBundleRepeatAsset.assetBundleName);
-                hotFixRuntimeAssetBundleConfig.assetBundleInstantiatePath = "";
+                    FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Repeat/" +
+                                                              DataFrameComponent.String_AllCharToLower(sceneAssetBundleRepeatAsset.assetBundleName));
                 hotFixRuntimeSceneAssetBundleConfig.repeatSceneFixRuntimeAssetConfig.Add(hotFixRuntimeAssetBundleConfig);
             }
 
-            normalSceneAssetBundleAsset.scenePrefabMd5.Clear();
-            //场景AssetBundle旧的Md5
-            foreach (string scenePrefabPath in normalSceneAssetBundleAsset.scenePrefabPaths)
-            {
-                normalSceneAssetBundleAsset.scenePrefabMd5.Add(scenePrefabPath, FileOperationComponent.GetMD5HashFromFile(scenePrefabPath));
-            }
-
             //场景AssetBundle
-            foreach (string scenePrefabPath in normalSceneAssetBundleAsset.scenePrefabPaths)
+            foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetPathConfigs)
             {
-                HotFixAssetPathConfig hotFixAssetPathConfig = AssetDatabase.LoadAssetAtPath<HotFixAssetPathConfig>(scenePrefabPath);
-                HotFixRuntimeAssetBundleConfig hot = new HotFixRuntimeAssetBundleConfig();
-                hot.assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name);
-                hot.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), "");
-                hot.assetBundleInstantiatePath = hotFixAssetPathConfig.GetHierarchyGeneratePath();
-                string adPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hot.assetBundlePath + hot.assetBundleName;
-                hot.assetBundleSize = FileOperationComponent.GetFileSize(adPath).ToString();
-                hot.md5 = FileOperationComponent.GetMD5HashFromFile(adPath);
-                hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hot);
+                HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig = new HotFixRuntimeAssetBundleConfig();
+                hotFixRuntimeAssetBundleConfig.assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name);
+                hotFixRuntimeAssetBundleConfig.assetBundlePath = hotFixAssetPathConfig.assetBundlePath.Replace(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), "");
+                string adPath = RuntimeGlobal.GetDeviceStoragePath() + "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath + hotFixRuntimeAssetBundleConfig.assetBundleName;
+                hotFixRuntimeAssetBundleConfig.assetBundleSize = FileOperationComponent.GetFileSize(adPath).ToString();
+                hotFixRuntimeAssetBundleConfig.md5 = FileOperationComponent.GetMD5HashFromFile(adPath);
+                hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Add(hotFixRuntimeAssetBundleConfig);
             }
 
             string hotFixAssetBundleConfigPath = RuntimeGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + DataFrameComponent.String_AllCharToLower(SceneManager.GetActiveScene().name) + ".json";
@@ -1196,19 +1033,11 @@ namespace DltFramework
 
         #endregion
 
-        public override void OnDisable()
-        {
-        }
-
-        public override void OnCreateConfig()
-        {
-        }
+        #region 热更配置信息
 
         [LabelText("保存配置")]
         public override void OnSaveConfig()
         {
-            currentOpenSceneName = SceneManager.GetActiveScene().name;
-
             if (IsContainHotFixDownPathData())
             {
                 UpdateHotFixDownPathData(hotFixDownPath);
@@ -1230,12 +1059,6 @@ namespace DltFramework
 
             HotFixViewPrePath = AssetDatabase.GetAssetPath(HotFixViewPrefab);
             GameRootStartPath = AssetDatabase.GetAssetPath(GameRootStartPrefab);
-            CopySceneAssetBundleAssetPath.Clear();
-            foreach (CopySceneAssetBundleAsset copySceneAssetBundleAsset in CopySceneAssetBundleAsset)
-            {
-                CopySceneAssetBundleAssetPath.Add(AssetDatabase.GetAssetPath(copySceneAssetBundleAsset));
-            }
-
             NormalSceneAssetBundleAssetsPath.Clear();
             foreach (NormalSceneAssetBundleAsset normalSceneAssetBundleAsset in NormalSceneAssetBundleAssets)
             {
@@ -1253,46 +1076,54 @@ namespace DltFramework
                 return;
             }
 
-            HotFixCollect hotFixCollect = JsonUtil.FromJson<HotFixCollect>(FileOperationComponent.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
-            this.localIsUpdate = hotFixCollect.localIsUpdate;
-            this.hotFixDownPathData = hotFixCollect.hotFixDownPathData;
+            HotFixCollect hotFixCollectConfig = JsonUtil.FromJson<HotFixCollect>(FileOperationComponent.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
+            this.removeAssetBundleName = hotFixCollectConfig.removeAssetBundleName;
+            this.localIsUpdate = hotFixCollectConfig.localIsUpdate;
+            this.hotFixDownPathData = hotFixCollectConfig.hotFixDownPathData;
             if (IsContainHotFixDownPathData())
             {
                 this.hotFixDownPath = GetHotFixDownPathData();
             }
 
-            this.targetOutPathData = hotFixCollect.targetOutPathData;
-            this.targetResourceVersion = hotFixCollect.targetResourceVersion;
-            this.targetBuildAssetBundleOptions = hotFixCollect.targetBuildAssetBundleOptions;
+            this.targetOutPathData = hotFixCollectConfig.targetOutPathData;
+            this.targetResourceVersion = hotFixCollectConfig.targetResourceVersion;
+            this.targetBuildAssetBundleOptions = hotFixCollectConfig.targetBuildAssetBundleOptions;
             if (IsContainTargetOutPathData())
             {
                 this.targetOutPath = GetTargetOutPathData();
             }
 
-            this.targetResourceVersion = hotFixCollect.targetResourceVersion;
-            this.isUpdateVersion = hotFixCollect.isUpdateVersion;
-            this.buildHotFixView = hotFixCollect.buildHotFixView;
-            this.HotFixViewPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(hotFixCollect.HotFixViewPrePath);
-            this.HotFixViewPrePath = hotFixCollect.HotFixViewPrePath;
-            this.buildHotFixCode = hotFixCollect.buildHotFixCode;
-            this.buildAssemblyParticipatePackaging = hotFixCollect.buildAssemblyParticipatePackaging;
-            this.buildMetaAssemblyParticipatePackaging = hotFixCollect.buildMetaAssemblyParticipatePackaging;
-            this.buildGameRootStart = hotFixCollect.buildGameRootStart;
-            this.GameRootStartPath = hotFixCollect.GameRootStartPath;
-            this.GameRootStartPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(hotFixCollect.GameRootStartPath);
-            this.BuildScene = hotFixCollect.BuildScene;
-            this.currentOpenSceneName = hotFixCollect.currentOpenSceneName;
-            CopySceneAssetBundleAsset.Clear();
+            this.targetResourceVersion = hotFixCollectConfig.targetResourceVersion;
+            this.isUpdateVersion = hotFixCollectConfig.isUpdateVersion;
+            this.buildHotFixView = hotFixCollectConfig.buildHotFixView;
+            this.HotFixViewPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(hotFixCollectConfig.HotFixViewPrePath);
+            this.HotFixViewPrePath = hotFixCollectConfig.HotFixViewPrePath;
+            this.buildHotFixCode = hotFixCollectConfig.buildHotFixCode;
+            this.buildAssemblyParticipatePackaging = hotFixCollectConfig.buildAssemblyParticipatePackaging;
+            this.buildMetaAssemblyParticipatePackaging = hotFixCollectConfig.buildMetaAssemblyParticipatePackaging;
+            this.buildGameRootStart = hotFixCollectConfig.buildGameRootStart;
+            this.GameRootStartPath = hotFixCollectConfig.GameRootStartPath;
+            this.GameRootStartPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(hotFixCollectConfig.GameRootStartPath);
+            this.SceneBuildSwitch = hotFixCollectConfig.SceneBuildSwitch;
             NormalSceneAssetBundleAssets.Clear();
-            for (int i = 0; i < hotFixCollect.CopySceneAssetBundleAssetPath.Count; i++)
+            for (int i = 0; i < hotFixCollectConfig.NormalSceneAssetBundleAssetsPath.Count; i++)
             {
-                CopySceneAssetBundleAsset.Add(AssetDatabase.LoadAssetAtPath<CopySceneAssetBundleAsset>(hotFixCollect.CopySceneAssetBundleAssetPath[i]));
+                NormalSceneAssetBundleAssets.Add(AssetDatabase.LoadAssetAtPath<NormalSceneAssetBundleAsset>(hotFixCollectConfig.NormalSceneAssetBundleAssetsPath[i]));
             }
+        }
 
-            for (int i = 0; i < hotFixCollect.NormalSceneAssetBundleAssetsPath.Count; i++)
-            {
-                NormalSceneAssetBundleAssets.Add(AssetDatabase.LoadAssetAtPath<NormalSceneAssetBundleAsset>(hotFixCollect.NormalSceneAssetBundleAssetsPath[i]));
-            }
+        #endregion
+
+        public override void OnDisable()
+        {
+        }
+
+        public override void OnCreateConfig()
+        {
+        }
+
+        public void Update()
+        {
         }
     }
 }

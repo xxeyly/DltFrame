@@ -118,7 +118,6 @@ namespace DltFramework
         public static void RemoveAllAssetBundleName()
         {
 #if UNITY_EDITOR
-            return;
 
             List<string> allAsstBundleName = new List<string>(AssetDatabase.GetAllAssetBundleNames());
 
@@ -746,7 +745,7 @@ namespace DltFramework
                 {
                     foreach (string filePath in pair.Value)
                     {
-                        if (Path_GetPathDontContainFileName(filePath).Contains(String_RightSlashChangeLeftSlash(path)))
+                        if (String_RightSlashChangeLeftSlash(path).Contains(Path_GetPathDontContainFileName(filePath)))
                         {
                             allPath.Add(filePath);
                         }

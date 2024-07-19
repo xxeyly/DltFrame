@@ -10,7 +10,6 @@ using UnityEngine.Networking;
 
 namespace HotFix
 {
-
     public class HotFixRuntimeFileCheck : MonoBehaviour
     {
         [LabelText("本地开启更新")] public bool localIsUpdate;
@@ -316,8 +315,6 @@ namespace HotFix
                 //更新检测数量
                 //场景
                 localFileUpdateCheckAssetNumberMax += 1;
-                //字体
-                localFileUpdateCheckAssetNumberMax += 1;
                 //场景内资源
                 localFileUpdateCheckAssetNumberMax += hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Count;
                 //添加到场景AssetBundle配置表
@@ -348,7 +345,7 @@ namespace HotFix
             StartCoroutine(AssetBundleLocalCheck(hotFixAssetAssetBundleAssetConfigs));
             yield return new WaitUntil(() => isAssetBundleLocalCheck);
             HotFixDebug.Log("本地检测完毕");
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.1f);
             foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
             {
                 hotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheckOver();

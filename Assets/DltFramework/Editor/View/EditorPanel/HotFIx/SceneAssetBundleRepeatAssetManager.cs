@@ -8,14 +8,13 @@ namespace DltFramework
 {
     public class SceneAssetBundleRepeatAssetManager : BaseEditor
     {
-        [BoxGroup("创建内容")] [LabelText("ab包名称")]
+        [BoxGroup("创建内容")] [LabelText("AssetBundle包名称")]
         public string assetBundleName;
 
         [BoxGroup("创建内容")] [LabelText("资源包含路径")]
         public List<string> assetBundleContainPath;
 
-        [AssetList(AutoPopulate = true)] public List<SceneAssetBundleRepeatAsset> SceneAssetBundleRepeatAssets = new List<SceneAssetBundleRepeatAsset> { };
-
+        [BoxGroup("创建内容")]
         [Button("创建场景重复资源配置")]
         public void CreateSceneAssetBundleRepeatAsset()
         {
@@ -32,6 +31,10 @@ namespace DltFramework
             UnityEditor.AssetDatabase.SaveAssets();
             UnityEditor.AssetDatabase.Refresh();
         }
+
+        [InlineEditor()] [LabelText("场景重复资源列表")] [TableList]
+        public List<SceneAssetBundleRepeatAsset> SceneAssetBundleRepeatAssets = new List<SceneAssetBundleRepeatAsset> { };
+
 
         public override void OnDisable()
         {

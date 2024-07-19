@@ -16,15 +16,14 @@ namespace DltFramework
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
-            CreateInitDirectory();
             _sceneHotFixConfig.OnInit();
+            _sceneHotFixConfig.OnLoadConfig();
             _sceneHotFixConfig.OnLoadConfig();
             _hotFixCollect.OnInit();
             _hotFixCollect.OnLoadConfig();
-            tree.Add("集合", _hotFixCollect);
-            tree.Add("场景资源", _sceneHotFixConfig);
+            tree.Add("热更打包", _hotFixCollect);
+            tree.Add("场景配置", _sceneHotFixConfig);
             tree.Add("场景重复资源", SceneAssetBundleRepeatAssetManager);
-
             return tree;
         }
 
@@ -32,70 +31,12 @@ namespace DltFramework
         private void Update()
         {
             _sceneHotFixConfig.Update();
+            // _hotFixCollect.Update();
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            _hotFixCollect.OnSaveConfig();
-        }
-
-        private void CreateInitDirectory()
-        {
-            if (!Directory.Exists("StreamingAssets/HotFix/HotFixCode"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFix/HotFixCode");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFix/HotFixCodeConfig"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFix/HotFixCodeConfig");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFix/HotFixView"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFix/HotFixView");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFix/HotFixViewConfig"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFix/HotFixViewConfig");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFix/Metadata"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFix/Metadata");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFixRuntime/Assembly"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFixRuntime/Assembly");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFixRuntime/AssemblyConfig"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFixRuntime/AssemblyConfig");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFixRuntime/GameRootStartAssetBundle"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFixRuntime/GameRootStartAssetBundle");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFixRuntime/GameRootStartAssetBundleConfig"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFixRuntime/GameRootStartAssetBundleConfig");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFixRuntime/HotFixAssetBundle"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFixRuntime/HotFixAssetBundle");
-            }
-
-            if (!Directory.Exists("StreamingAssets/HotFixRuntime/HotFixAssetBundleConfig"))
-            {
-                Directory.CreateDirectory("StreamingAssets/HotFixRuntime/HotFixAssetBundleConfig");
-            }
         }
     }
 }

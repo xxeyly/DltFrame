@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 namespace DltFramework
 {
     /// <summary>
@@ -27,7 +28,6 @@ namespace DltFramework
         public override void FrameInitComponent()
         {
             Instance = this;
-            
         }
 
         public override void FrameSceneInitComponent()
@@ -78,9 +78,11 @@ namespace DltFramework
         {
             if (GameRootStart.Instance.hotFixLoad)
             {
-                //加载热更配置表
+                Debug.Log("加载热更配置表");
                 await HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
-                //加载场景AssetBundle
+                Debug.Log("加载AssetBundle");
+                await HotFixFrameComponent.Instance.InstantiateHotFixAssetBundle();
+                Debug.Log("加载场景AssetBundle");
                 await HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
             }
 

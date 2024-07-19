@@ -7,7 +7,6 @@ using DltFramework;
 
 public class HotFixAssetPathConfig : MonoBehaviour
 {
-    [LabelText("生成路径")] public string generateHierarchyPath;
     [LabelText("预制体路径")] public string prefabPath;
     [LabelText("Ab包路径")] public string assetBundlePath;
     private string _hotFixPrefabsPath;
@@ -23,14 +22,7 @@ public class HotFixAssetPathConfig : MonoBehaviour
             Directory.CreateDirectory(_hotFixPrefabsPath);
         }
 
-        string assetBundleDirectory = "Assets/UnStreamingAssets/HotFixRuntime/HotFixAssetBundle/" + sceneName + "/" + GetHotFixAssetType() + "/";
-        if (!Directory.Exists(assetBundleDirectory))
-        {
-            Directory.CreateDirectory(assetBundleDirectory);
-        }
-
         AssetDatabase.Refresh();
-        generateHierarchyPath = DataFrameComponent.Hierarchy_GetTransformHierarchy(transform, false);
         if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
         {
             prefabPath = PrefabUtility.GetPrefabAssetPathOfNearestInstanceRoot(gameObject);
@@ -103,7 +95,6 @@ public class HotFixAssetPathConfig : MonoBehaviour
         HotFixAssetPathConfig hotFixAssetPathConfig = prefabObj.GetComponent<HotFixAssetPathConfig>();
         if (hotFixAssetPathConfig != null)
         {
-            hotFixAssetPathConfig.generateHierarchyPath = generateHierarchyPath;
             hotFixAssetPathConfig.assetBundlePath = assetBundlePath;
             hotFixAssetPathConfig.prefabPath = prefabPath;
         }
@@ -112,19 +103,12 @@ public class HotFixAssetPathConfig : MonoBehaviour
         EditorUtility.SetDirty(prefabObj);
         prefabObj = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
         hotFixAssetPathConfig = prefabObj.GetComponent<HotFixAssetPathConfig>();
-        if (hotFixAssetPathConfig.generateHierarchyPath != generateHierarchyPath || hotFixAssetPathConfig.assetBundlePath != assetBundlePath || hotFixAssetPathConfig.prefabPath != prefabPath)
+        if (hotFixAssetPathConfig.assetBundlePath != assetBundlePath || hotFixAssetPathConfig.prefabPath != prefabPath)
         {
             AgainCheckPath();
         }
     }
 
-    /// <summary>
-    /// 生成路径
-    /// </summary>
-    /// <returns></returns>
-    public string GetHierarchyGeneratePath()
-    {
-        return generateHierarchyPath;
-    }
+   
 #endif
 }

@@ -103,6 +103,7 @@ namespace DltFramework
                 GameObject tempComponentObj = new GameObject(type.Name);
                 tempComponentObj.transform.SetParent(gameRootStart.transform);
                 tempComponentObj.AddComponent(type);
+                
                 // tempGameRootStart.frameComponent.Add(tempComponentObj.GetComponent<FrameComponent>());
             }
         }

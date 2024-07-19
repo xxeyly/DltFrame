@@ -23,7 +23,7 @@ namespace DltFramework
         [Button("HotFixCode配置输出")]
         public void HotFixCodeConfigOut()
         {
-            OnSaveConfig();
+
             CompileDllCommand.CompileDllActiveBuildTarget();
             string platformName = string.Empty;
             switch (EditorUserBuildSettings.activeBuildTarget)
@@ -69,7 +69,7 @@ namespace DltFramework
         [Button("HotFixView配置输出")]
         public void HotFixViewConfigOut()
         {
-            OnSaveConfig();
+
             if (HotFixView == null)
             {
                 Debug.Log("配置信息错误");
