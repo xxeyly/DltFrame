@@ -16,6 +16,9 @@ namespace DltFramework
         [LabelText("热修复包AssetBundle配置")] public HotFixRuntimeSceneAssetBundleConfig hotFixRuntimeSceneAssetBundleConfigs = new HotFixRuntimeSceneAssetBundleConfig();
         [LabelText("热更AssetBundle临时路径")] public Dictionary<string, List<GameObject>> hotFixAssetAssetBundleTempPath = new Dictionary<string, List<GameObject>>();
         [LabelText("场景所有AssetBundle")] public List<AssetBundle> currentSceneAllAssetBundle = new List<AssetBundle>();
+        [LabelText("热更加载接口")] private List<IHotFixAssetBundleLoadProgress> iHotFixAssetBundleLoadProgresses = new List<IHotFixAssetBundleLoadProgress>();
+        [LabelText("热更资源数量")] public float hotfixAssetBundleCount;
+        [LabelText("当前加载的热更数量")] public float currentLoadHotfixAssetBundleCount = 0;
 
         public override void FrameInitComponent()
         {
@@ -25,6 +28,7 @@ namespace DltFramework
         public override void FrameSceneInitComponent()
         {
             UnloadAssetBundle();
+            iHotFixAssetBundleLoadProgresses = DataFrameComponent.Hierarchy_GetAllObjectsInScene<IHotFixAssetBundleLoadProgress>();
         }
 
         public override void FrameSceneEndComponent()
@@ -42,18 +46,18 @@ namespace DltFramework
         /// </summary>
         public async UniTask InstantiateHotFixAssetBundle()
         {
+            //热更数量:重复资源+通用资源+场景
             //本地重复资源
-            foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig)
+            for (int i = 0; i < hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig.Count; i++)
             {
-                string localFontPath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath,
-                    hotFixRuntimeAssetBundleConfig.assetBundleName);
-                if (File.Exists(localFontPath))
-                {
-                    //加载重复资源
-                    AssetBundle repeatAssetBundle = await AssetBundle.LoadFromFileAsync(localFontPath);
-                    currentSceneAllAssetBundle.Add(repeatAssetBundle);
-                }
+                HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig = hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig[i];
+                string localRepeatPath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath, hotFixRuntimeAssetBundleConfig.assetBundleName);
+                AssetBundle repeatAssetBundle = await AssetBundle.LoadFromFileAsync(localRepeatPath);
+                currentSceneAllAssetBundle.Add(repeatAssetBundle);
+                currentLoadHotfixAssetBundleCount += 1;
+                UpdateLoadHotFixAssetBundleProgress();
             }
+
 
             //加载内容
             for (int i = 0; i < hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
@@ -62,16 +66,19 @@ namespace DltFramework
                 string assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
 
                 AssetBundle tempHotFixAssetBundle = await AssetBundle.LoadFromFileAsync(assetBundlePath + assetBundleName);
-                currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
                 GameObject hotFixObject = (GameObject)await tempHotFixAssetBundle.LoadAssetAsync<GameObject>(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
-                /*if (hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath == string.Empty)
-                {
-                    Instantiate(hotFixObject, null, false);
-                }
-                else
-                {
-                    Instantiate(hotFixObject, GameObject.Find(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleInstantiatePath).transform, false);
-                }*/
+                currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
+                currentLoadHotfixAssetBundleCount += 1;
+                UpdateLoadHotFixAssetBundleProgress();
+            }
+        }
+
+        private void UpdateLoadHotFixAssetBundleProgress()
+        {
+            foreach (IHotFixAssetBundleLoadProgress iHotFixAssetBundleLoadProgress in iHotFixAssetBundleLoadProgresses)
+            {
+                float progress = float.Parse((currentLoadHotfixAssetBundleCount / hotfixAssetBundleCount).ToString("F"));
+                iHotFixAssetBundleLoadProgress.AssetBundleLoadProgress(progress);
             }
         }
 
@@ -87,22 +94,6 @@ namespace DltFramework
 
 
         /// <summary>
-        /// 释放临时资源到指定位置
-        /// </summary>
-        public void ReleaseTempHotFixAssetBundle()
-        {
-            foreach (KeyValuePair<string, List<GameObject>> pair in hotFixAssetAssetBundleTempPath)
-            {
-                foreach (GameObject hotFixObj in pair.Value)
-                {
-                    hotFixObj.transform.SetParent(GameObject.Find(pair.Key).transform, false);
-                }
-            }
-
-            hotFixAssetAssetBundleTempPath.Clear();
-        }
-
-        /// <summary>
         /// 加载热更配置表
         /// </summary>
         /// <param name="sceneName"></param>
@@ -112,6 +103,8 @@ namespace DltFramework
             await request.SendWebRequest();
             string hotFixAssetConfig = request.downloadHandler.text;
             hotFixRuntimeSceneAssetBundleConfigs = JsonUtility.FromJson<HotFixRuntimeSceneAssetBundleConfig>(hotFixAssetConfig);
+            hotfixAssetBundleCount = hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig.Count + hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count + 1;
+            currentLoadHotfixAssetBundleCount = 0;
             return String.Empty;
         }
 
@@ -129,6 +122,9 @@ namespace DltFramework
                 await AssetBundle.LoadFromFileAsync(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/HotFixRuntime/HotFixAssetBundle/", sceneName, "/scene/", sceneName));
                 await UniTask.WaitUntil(() => Application.CanStreamedLevelBeLoaded(sceneName));
             }
+
+            currentLoadHotfixAssetBundleCount += 1;
+            UpdateLoadHotFixAssetBundleProgress();
         }
 
         #endregion

@@ -20,6 +20,7 @@ namespace HotFix
             LoadAssemblyCSharp();
             HotFixDebug.Log("开始加载游戏");
             LoadGameRootStart();
+            
         }
 
         //加载原数据
@@ -66,7 +67,7 @@ namespace HotFix
 #if UNITY_EDITOR
             gameRootStart = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefab/GameRootStart.prefab");
 #else
-        gameRootStart = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
+            gameRootStart = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/GameRootStartAssetBundle/gamerootstart").LoadAsset<GameObject>("GameRootStart");
 #endif
             Object.Instantiate(gameRootStart);
         }

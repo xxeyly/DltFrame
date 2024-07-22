@@ -41,13 +41,14 @@ namespace HotFix
                 GameObject hotFixView = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefab/HotFixView.prefab");
 
 #else
-        GameObject hotFixView = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView/hotfixview").LoadAsset<GameObject>("HotFixView");
+                GameObject hotFixView = AssetBundle.LoadFromFile(HotFixGlobal.GetDeviceStoragePath() + "/" + "HotFix/HotFixView/hotfixview").LoadAsset<GameObject>("HotFixView");
 #endif
                 Object.Instantiate(hotFixView);
                 HotFixDebug.Log("HotFixView加载完毕");
             }
             else
             {
+                
                 HotFixOver.Over();
             }
 

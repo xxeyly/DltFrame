@@ -84,6 +84,13 @@ namespace DltFramework
                 await HotFixFrameComponent.Instance.InstantiateHotFixAssetBundle();
                 Debug.Log("加载场景AssetBundle");
                 await HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
+                //等待显示UI
+                //第一个场景加载时,还未有加载进度功能,这里就取消等待
+                //这里延迟0.5秒是为了能够显示出UI
+                if (sceneName != GameRootStart.Instance.initJumpSceneName)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(0.5));
+                }
             }
 
             LoadSynchronizationScene(sceneName, loadSceneMode);
@@ -121,8 +128,12 @@ namespace DltFramework
             {
                 //加载热更配置表
                 await HotFixFrameComponent.Instance.LoadHotFixSceneConfig(sceneName);
+                Debug.Log("加载AssetBundle");
+                await HotFixFrameComponent.Instance.InstantiateHotFixAssetBundle();
                 //加载场景AssetBundle
                 await HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
+                //等待显示UI
+                await UniTask.Delay(TimeSpan.FromSeconds(1));
             }
 
             _tempSceneAsyncOperation = SceneManager.LoadSceneAsync(sceneName, loadSceneMode);

@@ -79,7 +79,7 @@ namespace DltFramework
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListenerEvent, GenerateBaseWindowData.startVariableBindEvent, GenerateBaseWindowData.endVariableBindEvent);
             _currentScriptsContent = CustomReplaceScriptContent(_currentScriptsContent);
             FileOperationComponent.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
-            ClearConsole();
+            // ClearConsole();
 #endif
         }
 
@@ -317,11 +317,14 @@ namespace DltFramework
             string insertEndMark = GenerateBaseWindowData.endUsing;
 
             string currentScript = GetOldScriptsContent();
+            Debug.Log(currentScript);
             //开始位置 
             int usingStartIndex =
                 currentScript.IndexOf(insertStartMark, StringComparison.Ordinal) + insertStartMark.Length;
+            Debug.Log(insertEndMark);
             //结束位置
             int usingEndIndex = currentScript.IndexOf(insertEndMark, StringComparison.Ordinal);
+            Debug.Log(usingEndIndex);
             //移除多余空格
             while (currentScript[usingEndIndex - 1] == ' ')
             {
