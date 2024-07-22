@@ -16,6 +16,7 @@ namespace DltFramework
         [ShowIf("isExistsNormalSceneAssetBundleAsset")] [HorizontalGroup("NormalSceneAssetBundleAsset")] [LabelText("正常场景配置")] [InlineEditor()] [OnValueChanged("OnNormalSceneAssetBundleAssetChanged")] [AssetList]
         public NormalSceneAssetBundleAsset NormalSceneAssetBundleAsset;
 
+        [HorizontalGroup("操作")]
         [ShowIf("@this.isExistsNormalSceneAssetBundleAsset")]
         [EnableIf("@this.NormalSceneAssetBundleAsset!=null")]
         [GUIColor(1, 0, 0)]
@@ -29,6 +30,21 @@ namespace DltFramework
                 UnityEditor.AssetDatabase.Refresh();
             }
         }
+
+        [HorizontalGroup("操作")]
+        [ShowIf("@this.isExistsNormalSceneAssetBundleAsset")]
+        [EnableIf("@this.NormalSceneAssetBundleAsset!=null")]
+        [GUIColor(0, 1, 0)]
+        [Button("保存", ButtonSizes.Medium)]
+        public void SaveNormalSceneAssetBundleAsset()
+        {
+            if (NormalSceneAssetBundleAsset != null)
+            {
+                UnityEditor.AssetDatabase.SaveAssets();
+                UnityEditor.AssetDatabase.Refresh();
+            }
+        }
+
 #pragma warning disable CS0414 // 字段已被赋值，但它的值从未被使用
         [LabelText("创建场景资源文件")] private bool isCreateNormalSceneAssetBundleAsset;
 #pragma warning restore CS0414 // 字段已被赋值，但它的值从未被使用

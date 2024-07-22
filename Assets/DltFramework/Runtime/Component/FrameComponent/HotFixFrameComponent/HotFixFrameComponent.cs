@@ -50,8 +50,8 @@ namespace DltFramework
             //本地重复资源
             for (int i = 0; i < hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig.Count; i++)
             {
-                HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig = hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig[i];
-                string localRepeatPath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath, hotFixRuntimeAssetBundleConfig.assetBundleName);
+                HotFixRuntimeAssetConfig hotFixRuntimeAssetConfig = hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig[i];
+                string localRepeatPath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/" + hotFixRuntimeAssetConfig.assetPath, hotFixRuntimeAssetConfig.assetName);
                 AssetBundle repeatAssetBundle = await AssetBundle.LoadFromFileAsync(localRepeatPath);
                 currentSceneAllAssetBundle.Add(repeatAssetBundle);
                 currentLoadHotfixAssetBundleCount += 1;
@@ -62,11 +62,11 @@ namespace DltFramework
             //加载内容
             for (int i = 0; i < hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
             {
-                string assetBundlePath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/", hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundlePath);
-                string assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
+                string assetBundlePath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/", hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetPath);
+                string assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetName);
 
                 AssetBundle tempHotFixAssetBundle = await AssetBundle.LoadFromFileAsync(assetBundlePath + assetBundleName);
-                GameObject hotFixObject = (GameObject)await tempHotFixAssetBundle.LoadAssetAsync<GameObject>(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetBundleName);
+                GameObject hotFixObject = (GameObject)await tempHotFixAssetBundle.LoadAssetAsync<GameObject>(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetName);
                 currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
                 currentLoadHotfixAssetBundleCount += 1;
                 UpdateLoadHotFixAssetBundleProgress();

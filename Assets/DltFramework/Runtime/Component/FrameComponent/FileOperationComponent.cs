@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace DltFramework
 {
@@ -268,6 +269,11 @@ namespace DltFramework
 
         public static void CopyFile(string sourcePath, string destinationPath)
         {
+            if (!Directory.Exists(DataFrameComponent.Path_GetPathDontContainFileName(destinationPath)))
+            {
+                Directory.CreateDirectory(DataFrameComponent.Path_GetPathDontContainFileName(destinationPath));
+            }
+
             File.Copy(sourcePath, destinationPath, true);
         }
     }

@@ -339,7 +339,7 @@ namespace HotFix
             //GameRootStart本地检测
             StartCoroutine(GameRootStartLocalCheck());
             yield return new WaitUntil(() => isGameRootStartLocalCheck);
-            List<HotFixRuntimeAssetBundleConfig> hotFixAssetAssetBundleAssetConfigs = HotFixAssetAssetBundleSceneConfigGroup();
+            List<HotFixRuntimeAssetConfig> hotFixAssetAssetBundleAssetConfigs = HotFixAssetAssetBundleSceneConfigGroup();
             //保存场景AssetBundle配置表缓存文件
             SaveSceneHotFixRuntimeAssetBundleConfigCacheFile();
             StartCoroutine(AssetBundleLocalCheck(hotFixAssetAssetBundleAssetConfigs));
@@ -485,28 +485,34 @@ namespace HotFix
         }
 
         //场景AssetBundle配置表
-        private List<HotFixRuntimeAssetBundleConfig> HotFixAssetAssetBundleSceneConfigGroup()
+        private List<HotFixRuntimeAssetConfig> HotFixAssetAssetBundleSceneConfigGroup()
         {
-            List<HotFixRuntimeAssetBundleConfig> hotFixAssetAssetBundleAssetConfigs = new List<HotFixRuntimeAssetBundleConfig>();
+            List<HotFixRuntimeAssetConfig> hotFixRuntimeAssetConfigs = new List<HotFixRuntimeAssetConfig>();
             //遍历所有场景配置表
             foreach (HotFixRuntimeSceneAssetBundleConfig hotFixAssetAssetBundleSceneConfig in hotFixRuntimeSceneAssetBundleConfigs)
             {
                 //添加场景
-                hotFixAssetAssetBundleAssetConfigs.Add(hotFixAssetAssetBundleSceneConfig.sceneHotFixRuntimeAssetBundleConfig);
+                hotFixRuntimeAssetConfigs.Add(hotFixAssetAssetBundleSceneConfig.sceneHotFixRuntimeAssetConfig);
                 //添加重复资源
-                foreach (HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig in hotFixAssetAssetBundleSceneConfig.repeatSceneFixRuntimeAssetConfig)
+                foreach (HotFixRuntimeAssetConfig hotFixRuntimeAssetBundleConfig in hotFixAssetAssetBundleSceneConfig.repeatSceneFixRuntimeAssetConfig)
                 {
-                    hotFixAssetAssetBundleAssetConfigs.Add(hotFixRuntimeAssetBundleConfig);
+                    hotFixRuntimeAssetConfigs.Add(hotFixRuntimeAssetBundleConfig);
                 }
 
                 //添加其他
                 for (int i = 0; i < hotFixAssetAssetBundleSceneConfig.assetBundleHotFixAssetAssetBundleAssetConfigs.Count; i++)
                 {
-                    hotFixAssetAssetBundleAssetConfigs.Add(hotFixAssetAssetBundleSceneConfig.assetBundleHotFixAssetAssetBundleAssetConfigs[i]);
+                    hotFixRuntimeAssetConfigs.Add(hotFixAssetAssetBundleSceneConfig.assetBundleHotFixAssetAssetBundleAssetConfigs[i]);
+                }
+
+                //额外数据
+                for (int i = 0; i < hotFixAssetAssetBundleSceneConfig.sceneExceptConfigs.Count; i++)
+                {
+                    hotFixRuntimeAssetConfigs.Add(hotFixAssetAssetBundleSceneConfig.sceneExceptConfigs[i]);
                 }
             }
 
-            return hotFixAssetAssetBundleAssetConfigs;
+            return hotFixRuntimeAssetConfigs;
         }
 
         //保存场景AssetBundle配置表缓存文件
@@ -515,7 +521,7 @@ namespace HotFix
             //遍历所有场景配置表
             foreach (HotFixRuntimeSceneAssetBundleConfig hotFixAssetAssetBundleSceneConfig in hotFixRuntimeSceneAssetBundleConfigs)
             {
-                string localPathCacheName = hotFixAssetAssetBundleSceneConfig.sceneHotFixRuntimeAssetBundleConfig.assetBundleName + ".json.Cache";
+                string localPathCacheName = hotFixAssetAssetBundleSceneConfig.sceneHotFixRuntimeAssetConfig.assetName + ".json.Cache";
                 HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig", localPathCacheName, JsonUtil.ToJson(hotFixAssetAssetBundleSceneConfig));
                 //添加到缓存列表中
                 hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/HotFixAssetBundleConfig/" + localPathCacheName);
@@ -523,7 +529,7 @@ namespace HotFix
         }
 
         //HotFixAssetBundle本地检测
-        IEnumerator AssetBundleLocalCheck(List<HotFixRuntimeAssetBundleConfig> hotFixAssetAssetBundleAssetConfigs)
+        IEnumerator AssetBundleLocalCheck(List<HotFixRuntimeAssetConfig> hotFixAssetAssetBundleAssetConfigs)
         {
             for (int i = 0; i < hotFixAssetAssetBundleAssetConfigs.Count; i++)
             {
@@ -536,21 +542,21 @@ namespace HotFix
         }
 
         //HotFixRuntimeAssetBundleConfig 本地检测
-        IEnumerator HotFixRuntimeAssetBundleConfigLocalCheck(HotFixRuntimeAssetBundleConfig hotFixRuntimeAssetBundleConfig)
+        IEnumerator HotFixRuntimeAssetBundleConfigLocalCheck(HotFixRuntimeAssetConfig hotFixRuntimeAssetConfig)
         {
-            string localFilePath = HotFixGlobal.GetDeviceStoragePath(true) + "/" + hotFixRuntimeAssetBundleConfig.assetBundlePath + hotFixRuntimeAssetBundleConfig.assetBundleName;
+            string localFilePath = HotFixGlobal.GetDeviceStoragePath(true) + "/" + hotFixRuntimeAssetConfig.assetPath + hotFixRuntimeAssetConfig.assetName;
             UnityWebRequest request = UnityWebRequest.Get(localFilePath);
             yield return request.SendWebRequest();
 
             //空文件,跳过,目前只有场景中的Font文件是空文件
-            if (hotFixRuntimeAssetBundleConfig.assetBundleName == "" && hotFixRuntimeAssetBundleConfig.assetBundlePath == "" && hotFixRuntimeAssetBundleConfig.md5 == "" && hotFixRuntimeAssetBundleConfig.assetBundleSize == "")
+            if (hotFixRuntimeAssetConfig.assetName == "" && hotFixRuntimeAssetConfig.assetPath == "" && hotFixRuntimeAssetConfig.assetMd5 == "" && hotFixRuntimeAssetConfig.assetSize == "")
             {
             }
             else
             {
                 HotFixRuntimeDownConfig hotFixRuntimeDownConfig = new HotFixRuntimeDownConfig()
                 {
-                    name = hotFixRuntimeAssetBundleConfig.assetBundleName, path = hotFixRuntimeAssetBundleConfig.assetBundlePath, md5 = hotFixRuntimeAssetBundleConfig.md5, size = hotFixRuntimeAssetBundleConfig.assetBundleSize,
+                    name = hotFixRuntimeAssetConfig.assetName, path = hotFixRuntimeAssetConfig.assetPath, md5 = hotFixRuntimeAssetConfig.assetMd5, size = hotFixRuntimeAssetConfig.assetSize,
                 };
                 if (request.responseCode != 200)
                 {
@@ -559,7 +565,7 @@ namespace HotFix
                 else
                 {
                     //本地Md5校验
-                    if (HotFixGlobal.GetMD5HashByte(request.downloadHandler.data) != hotFixRuntimeAssetBundleConfig.md5)
+                    if (HotFixGlobal.GetMD5HashByte(request.downloadHandler.data) != hotFixRuntimeAssetConfig.assetMd5)
                     {
                         needDownHotFixRuntimeDownConfig.Add(hotFixRuntimeDownConfig);
                     }
