@@ -44,7 +44,7 @@ namespace Aot
         {
             totalDownload.text = AotGlobal.FileSizeString(currentDownValue) + "/" + AotGlobal.FileSizeString(totalDownValue);
             downSliderProgress.value = (float)(currentDownValue / totalDownValue);
-            downTextProgress.text = (currentDownValue / totalDownValue * 100).ToString("0") + "/100";
+            downTextProgress.text = (currentDownValue / totalDownValue * 100).ToString("0") + "%";
         }
 
         public void NetworkingState(bool state)

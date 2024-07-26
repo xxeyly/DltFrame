@@ -86,10 +86,10 @@ namespace DltFramework
                 await HotFixFrameComponent.Instance.LoadAssetBundleSceneToSystem(sceneName);
                 //等待显示UI
                 //第一个场景加载时,还未有加载进度功能,这里就取消等待
-                //这里延迟0.5秒是为了能够显示出UI
+                //这里延迟是为了能够显示出UI
                 if (sceneName != GameRootStart.Instance.initJumpSceneName)
                 {
-                    await UniTask.Delay(TimeSpan.FromSeconds(0.5));
+                    await UniTask.Delay(TimeSpan.FromSeconds(0.02));
                 }
             }
 

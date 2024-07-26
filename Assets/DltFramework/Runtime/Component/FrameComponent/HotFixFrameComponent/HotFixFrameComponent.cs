@@ -56,6 +56,7 @@ namespace DltFramework
                 currentSceneAllAssetBundle.Add(repeatAssetBundle);
                 currentLoadHotfixAssetBundleCount += 1;
                 UpdateLoadHotFixAssetBundleProgress();
+                // Debug.Log("加载:" + hotFixRuntimeSceneAssetBundleConfigs.repeatSceneFixRuntimeAssetConfig[i].assetName + ":" + currentLoadHotfixAssetBundleCount);
             }
 
 
@@ -70,6 +71,7 @@ namespace DltFramework
                 currentSceneAllAssetBundle.Add(tempHotFixAssetBundle);
                 currentLoadHotfixAssetBundleCount += 1;
                 UpdateLoadHotFixAssetBundleProgress();
+                // Debug.Log("加载:" + hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixAssetAssetBundleAssetConfigs[i].assetName + ":" + currentLoadHotfixAssetBundleCount);
             }
         }
 
@@ -120,7 +122,7 @@ namespace DltFramework
                 Debug.Log("加载场景:" + sceneName);
                 //加载场景
                 await AssetBundle.LoadFromFileAsync(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/HotFixRuntime/HotFixAssetBundle/", sceneName, "/scene/", sceneName));
-                await UniTask.WaitUntil(() => Application.CanStreamedLevelBeLoaded(sceneName));
+                // await UniTask.WaitUntil(() => Application.CanStreamedLevelBeLoaded(sceneName));
             }
 
             currentLoadHotfixAssetBundleCount += 1;

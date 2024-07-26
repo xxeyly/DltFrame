@@ -32,9 +32,6 @@ namespace DltFramework
         [HorizontalGroup("标签")] [BoxGroup("标签/属性")] [LabelText("视图类型")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)] [Tooltip("静态模式不会影响全局视图全局操作,单独指定事件会被影响")]
         protected ViewShowType viewShowType = ViewShowType.Activity;
 
-        [BoxGroup("标签/属性")] [LabelText("UI层级")] [LabelWidth(100)] [Tooltip("ViewFrame勾选层级排序会根据索引进行排序")]
-        public int sceneLayerIndex;
-
         [BoxGroup("标签/属性")] [LabelText("初始化")] [LabelWidth(50)] [Tooltip("该属性影响是否一开始执行Init操作")]
         public bool viewInit;
 
@@ -95,15 +92,6 @@ namespace DltFramework
             }
         }
 
-        public void SetSetSiblingIndex()
-        {
-            transform.SetSiblingIndex(sceneLayerIndex);
-        }
-
-        public int GetSceneLayerIndex()
-        {
-            return sceneLayerIndex;
-        }
 
         public abstract void Init();
 

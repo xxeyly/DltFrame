@@ -81,6 +81,16 @@ namespace DltFramework
             {
                 GUI.Box(selectionRect, "场景打包配置文件", ProjectIconStyle);
             }
+
+            if (string.Equals(mainFolder, "Assets/HotFixPrefabs"))
+            {
+                GUI.Box(selectionRect, "热更预制体", ProjectIconStyle);
+            }
+
+            if (string.Equals(mainFolder, "Assets/UnStreamingAssets"))
+            {
+                GUI.Box(selectionRect, "热更AssetBundle", ProjectIconStyle);
+            }
         }
     }
 }

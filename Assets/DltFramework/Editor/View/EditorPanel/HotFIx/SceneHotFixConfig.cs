@@ -103,32 +103,6 @@ namespace DltFramework
             }
         }
 
-        private void ViewSort()
-        {
-            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
-            List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
-
-            for (int i = 0; i < sceneAllBaseWindow.Count; i++)
-            {
-                foreach (BaseWindow baseWindow in sceneAllBaseWindow)
-                {
-                    if (baseWindow.GetSceneLayerIndex() == i)
-                    {
-                        sortBaseWindow.Add(baseWindow);
-                    }
-                }
-            }
-
-            //UI层排序
-            foreach (BaseWindow baseWindow in sortBaseWindow)
-            {
-                if (!baseWindow.GetComponent<ChildBaseWindow>())
-                {
-                    baseWindow.SetSetSiblingIndex();
-                }
-            }
-        }
-
         public override void OnDisable()
         {
         }

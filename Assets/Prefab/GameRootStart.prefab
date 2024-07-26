@@ -27,6 +27,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3483677541234638959}
   - {fileID: 3483677540660789416}
@@ -52,18 +53,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91cc2d731e256434c8ab4b342f5bce43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   frameComponent: []
   initJump: 1
-  initJumpSceneName: Init
+  initJumpSceneName: FistSceneHotFixAssetBundleLoad
   loadScene:
     m_Handle: 0
   unScene:
@@ -102,6 +94,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 8
@@ -118,50 +111,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7e6c063730c4fe5ab983f3a91ca79f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: hotFixAssetAssetBundleTempPath
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[UnityEngine.GameObject,
-        UnityEngine.CoreModule]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
   hotFixRuntimeSceneAssetBundleConfigs:
-    sceneHotFixRuntimeAssetBundleConfig:
-      assetBundleName: 
-      assetBundlePath: 
-      assetBundleInstantiatePath: 
-      md5: 
-      assetBundleSize: 
-    sceneFontFixRuntimeAssetConfig:
-      assetBundleName: 
-      assetBundlePath: 
-      assetBundleInstantiatePath: 
-      md5: 
-      assetBundleSize: 
+    sceneHotFixRuntimeAssetConfig:
+      assetName: 
+      assetPath: 
+      assetMd5: 
+      assetSize: 
+    repeatSceneFixRuntimeAssetConfig: []
     assetBundleHotFixAssetAssetBundleAssetConfigs: []
+    sceneExceptConfigs: []
   currentSceneAllAssetBundle: []
+  hotfixAssetBundleCount: 0
+  currentLoadHotfixAssetBundleCount: 0
 --- !u!1 &3483677540660789417
 GameObject:
   m_ObjectHideFlags: 0
@@ -189,6 +150,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 1
@@ -205,15 +167,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aecb3a67eb2390440b71fde2ebf431f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   audioState: 0
   mouseState: 0
 --- !u!1 &3483677541166042466
@@ -243,6 +196,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 5
@@ -259,15 +213,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1cba8ddc807641a3b23a7d5236b2ac61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   notReachable: 0
 --- !u!1 &3483677541234638952
 GameObject:
@@ -296,6 +241,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 0
@@ -312,18 +258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01e42b4dbac8ad44cb05c4989a805bf0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: asyncLoadSceneProgress
-      Entry: 6
-      Data: 
 --- !u!1 &3483677541262727751
 GameObject:
   m_ObjectHideFlags: 0
@@ -351,6 +285,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 3
@@ -367,35 +302,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9cac0b6c5eace0b4887f77a19335f85f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: allListener
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Collections.Generic.List`1[[System.Delegate,
-        mscorlib]], mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
 --- !u!1 &3483677541424901982
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,6 +329,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 4
@@ -439,15 +346,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f3569d13b497bd4bb23ee9f6531e9d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   audioData: {fileID: 0}
 --- !u!1 &3483677541506029195
 GameObject:
@@ -476,6 +374,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 7
@@ -492,35 +391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dde8f440eda55574cb927ba68d05fd48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: cancellationTokenSources
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Threading.CancellationTokenSource,
-        mscorlib]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.GenericEqualityComparer`1[[System.String,
-        mscorlib]], mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
 --- !u!1 &3483677541949372047
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,6 +418,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 2
@@ -564,16 +435,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65307d17dd9155c44b2fa86178a8ab30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes: []
   sceneEntity: []
+  sceneRepeatEntityList: []
 --- !u!1 &3483677542327140620
 GameObject:
   m_ObjectHideFlags: 0
@@ -601,6 +464,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3483677540346912899}
   m_RootOrder: 6
@@ -617,33 +481,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab937d89e69d42e49882b4a2ed9ffcdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serializationData:
-    SerializedFormat: 2
-    SerializedBytes: 
-    ReferencedUnityObjects: []
-    SerializedBytesString: 
-    Prefab: {fileID: 0}
-    PrefabModificationsReferencedUnityObjects: []
-    PrefabModifications: []
-    SerializationNodes:
-    - Name: activeViewDlc
-      Entry: 7
-      Data: 0|System.Collections.Generic.Dictionary`2[[System.Type, mscorlib],[XFramework.BaseWindow,
-        Assembly-CSharp]], mscorlib
-    - Name: comparer
-      Entry: 7
-      Data: 1|System.Collections.Generic.ObjectEqualityComparer`1[[System.Type, mscorlib]],
-        mscorlib
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 12
-      Data: 0
-    - Name: 
-      Entry: 13
-      Data: 
-    - Name: 
-      Entry: 8
-      Data: 
   isResetSetSiblingIndex: 0

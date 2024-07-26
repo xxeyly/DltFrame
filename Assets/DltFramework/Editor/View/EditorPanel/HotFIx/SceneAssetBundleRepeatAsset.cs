@@ -11,6 +11,6 @@ namespace DltFramework
         public string assetBundleName;
 
         [HorizontalGroup("资源包含路径")] [HideLabel]
-        public List<string> assetBundleContainPath;
+        public List<string> assetBundleContainPath = new List<string>();
     }
 }

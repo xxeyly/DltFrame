@@ -186,7 +186,7 @@ namespace HotFix
             StartCoroutine(StartDownSceneAssetBundleConfig());
             yield return new WaitUntil(() => isSceneAssetBundleOver);
             HotFixDebug.Log("配置表下载完毕----------");
-            yield return new WaitForSeconds(0.5f);
+            // yield return new WaitForSeconds(0.02f);
             foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
             {
                 hotFixRuntimeFileCheck.HotFixRuntimeTableDownOver();
@@ -345,7 +345,7 @@ namespace HotFix
             StartCoroutine(AssetBundleLocalCheck(hotFixAssetAssetBundleAssetConfigs));
             yield return new WaitUntil(() => isAssetBundleLocalCheck);
             HotFixDebug.Log("本地检测完毕");
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.02f);
             foreach (IHotFixRuntimeFileCheck hotFixRuntimeFileCheck in _hotFixRuntimeFileCheckList)
             {
                 hotFixRuntimeFileCheck.HotFixRuntimeLocalFileCheckOver();

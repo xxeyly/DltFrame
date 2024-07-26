@@ -108,50 +108,6 @@ namespace DltFramework
             }
         }
 
-        [MenuItem("DltFrame/视图重新排序索引")]
-        public static void ViewSortSiblingIndex()
-        {
-            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
-            foreach (BaseWindow baseWindow in sceneAllBaseWindow)
-            {
-                if (!baseWindow.GetComponent<ChildBaseWindow>())
-                {
-                    baseWindow.sceneLayerIndex = baseWindow.transform.GetSiblingIndex();
-                    if (baseWindow.GetComponent<HotFixAssetPathConfig>() != null)
-                    {
-                        baseWindow.GetComponent<HotFixAssetPathConfig>().SetPathAndApplyPrefab();
-                    }
-                }
-            }
-        }
-
-        // [MenuItem("DltFrame/视图重新排序")]
-        public static void ViewSort()
-        {
-            List<BaseWindow> sceneAllBaseWindow = DataFrameComponent.Hierarchy_GetAllObjectsInScene<BaseWindow>();
-            List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
-
-            for (int i = 0; i < sceneAllBaseWindow.Count; i++)
-            {
-                foreach (BaseWindow baseWindow in sceneAllBaseWindow)
-                {
-                    if (baseWindow.GetSceneLayerIndex() == i)
-                    {
-                        sortBaseWindow.Add(baseWindow);
-                    }
-                }
-            }
-
-            //UI层排序
-            foreach (BaseWindow baseWindow in sortBaseWindow)
-            {
-                if (!baseWindow.GetComponent<ChildBaseWindow>())
-                {
-                    baseWindow.SetSetSiblingIndex();
-                }
-            }
-        }
-
 #if !HybridCLR
         [MenuItem("DltFrame/开启热更功能")]
         public static void OpenHotFix()

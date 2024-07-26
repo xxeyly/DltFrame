@@ -63,14 +63,12 @@ namespace DltFramework
         [LabelText("平台拷贝地址")] [HideInInspector]
         public List<PlatformPath> targetOutPathData = new List<PlatformPath>();
 
-        [InfoBox("当勾选版本号自增,会默认勾选所有资源,并且资源版本号+1")] [LabelText("版本号自增")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("版本号")] [InfoBox("当勾选版本号自增,会默认勾选所有资源,并且资源版本号+1")] [LabelText("版本号自增")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
         public bool isUpdateVersion;
 
-        [InfoBox("版本号分3个等级,\n等级1是特大改动(需要手动更改),\n等级2每次需要重新出包时变动(需要手动更改),\n等级3是每次小更新时变动(勾选版本自增每次打包会自增1)")] [LabelText("当前资源版本号")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("版本号")] [InfoBox("版本号分3个等级,\n等级1是特大改动(需要手动更改),\n等级2每次需要重新出包时变动(需要手动更改),\n等级3是每次小更新时变动(勾选版本自增每次打包会自增1)")] [LabelText("当前资源版本号")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
         public Vector3 targetResourceVersion;
 
-        [LabelText("打包后移除AssetBundle信息")] [OnValueChanged("OnSaveConfig")]
-        public bool removeAssetBundleName;
 
         #region 打包路径
 
@@ -197,8 +195,10 @@ namespace DltFramework
 
             platformName = EditorUserBuildSettings.activeBuildTarget.ToString();
 
-            Debug.Log("初始化");
+            // Debug.Log("初始化");
         }
+
+        #region 热更元素
 
         #region HotFixView
 
@@ -243,9 +243,9 @@ namespace DltFramework
 
         #endregion
 
-        #region 场景打包
+        #region SceneBuild
 
-        [ToggleGroup("SceneBuildSwitch", "场景打包")] [OnValueChanged("OnSaveConfig")] [SerializeField]
+        [ToggleGroup("SceneBuildSwitch", "Scene")] [OnValueChanged("OnSaveConfig")] [SerializeField]
         public bool SceneBuildSwitch;
 
         [ToggleGroup("SceneBuildSwitch")] [LabelText("正常场景配置")] [AssetList] [InlineEditor()] [OnValueChanged("OnSaveConfig")]
@@ -273,6 +273,11 @@ namespace DltFramework
         private List<SceneRepeatAsset> sceneRepeatAssets = new List<SceneRepeatAsset>();
 
         #endregion
+
+        #endregion
+
+        [ToggleGroup("removeAssetBundleName", "打包后移除AssetBundle信息")] [OnValueChanged("OnSaveConfig")]
+        public bool removeAssetBundleName;
 
         #endregion
 
@@ -1152,6 +1157,7 @@ namespace DltFramework
             {
                 NormalSceneAssetBundleAssets.Add(AssetDatabase.LoadAssetAtPath<NormalSceneAssetBundleAsset>(hotFixCollectConfig.NormalSceneAssetBundleAssetsPath[i]));
             }
+
             NormalSceneAssetBundleAssetConfig.Clear();
             for (int i = 0; i < hotFixCollectConfig.NormalSceneAssetBundleAssetConfigsPath.Count; i++)
             {

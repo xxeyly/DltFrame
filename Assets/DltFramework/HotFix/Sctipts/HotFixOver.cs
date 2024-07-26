@@ -42,9 +42,9 @@ namespace HotFix
 
             foreach (string metadata in metadataHotFixRuntimeDownConfigTableList)
             {
-                byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + metadata}");
+                byte[] dllBytes =  File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + metadata}");
 #if HybridCLR
-                LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
+                LoadImageErrorCode err =  HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
                 HotFixDebug.Log($"LoadMetadataForAOTAssembly:{metadata}. ret:{err}");
 #endif
             }

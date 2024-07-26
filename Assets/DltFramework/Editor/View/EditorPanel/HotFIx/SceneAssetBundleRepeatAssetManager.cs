@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
@@ -26,13 +27,18 @@ namespace DltFramework
 
             SceneAssetBundleRepeatAsset sceneAssetBundleRepeatAsset = ScriptableObject.CreateInstance<SceneAssetBundleRepeatAsset>();
             sceneAssetBundleRepeatAsset.assetBundleName = assetBundleName;
-            sceneAssetBundleRepeatAsset.assetBundleContainPath = assetBundleContainPath;
+            for (int i = 0; i < assetBundleContainPath.Count; i++)
+            {
+                sceneAssetBundleRepeatAsset.assetBundleContainPath.Add(assetBundleContainPath[i]);
+            }
             UnityEditor.AssetDatabase.CreateAsset(sceneAssetBundleRepeatAsset, "Assets/Config/SceneAssetBundleRepeatAsset/" + assetBundleName + ".asset");
             UnityEditor.AssetDatabase.SaveAssets();
             UnityEditor.AssetDatabase.Refresh();
+            assetBundleName = String.Empty;
+            assetBundleContainPath.Clear();
         }
 
-        [InlineEditor()] [LabelText("场景重复资源列表")] [TableList]
+        [InlineEditor()] [LabelText("场景重复资源列表")]
         public List<SceneAssetBundleRepeatAsset> SceneAssetBundleRepeatAssets = new List<SceneAssetBundleRepeatAsset> { };
 
 

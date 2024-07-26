@@ -37,12 +37,6 @@ namespace DltFramework
                     window.ViewStartInit();
                 }
             }
-
-            //UI层排序
-            if (isResetSetSiblingIndex)
-            {
-                ResetSetSiblingIndex();
-            }
         }
 
         public override void FrameSceneEndComponent()
@@ -60,33 +54,6 @@ namespace DltFramework
             if (activeViewDlc.ContainsKey(viewType))
             {
                 activeViewDlc.Remove(viewType);
-            }
-        }
-
-        [Button("重置层级关系")]
-        public void ResetSetSiblingIndex()
-        {
-            //视图排序
-            List<BaseWindow> sortBaseWindow = new List<BaseWindow>();
-
-            for (int i = 0; i < activeViewDlc.Count; i++)
-            {
-                foreach (BaseWindow baseWindow in activeViewDlc.Values)
-                {
-                    if (baseWindow.GetSceneLayerIndex() == i)
-                    {
-                        sortBaseWindow.Add(baseWindow);
-                    }
-                }
-            }
-
-            //UI层排序
-            foreach (BaseWindow baseWindow in sortBaseWindow)
-            {
-                if (!baseWindow.GetComponent<ChildBaseWindow>())
-                {
-                    baseWindow.SetSetSiblingIndex();
-                }
             }
         }
 

@@ -33,7 +33,6 @@ public class AutoListenerGenerate
                 autoGenerateListenerConfig = AssetDatabase.LoadAssetAtPath<AutoGenerateListenerConfig>("Assets/Config/" + "AutoGenerateListenerConfig.asset");
                 autoGenerateListenerConfig.isAuto = true;
                 EditorUtility.SetDirty(autoGenerateListenerConfig);
-                Debug.Log("自动生成开启");
 
             }
 

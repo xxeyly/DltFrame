@@ -296,7 +296,6 @@ namespace DltFramework
 
             for (int i = 0; i < path.Length; i++)
             {
-                Debug.Log(UnityEditor.AssetDatabase.GUIDToAssetPath(path[i]));
                 if (UnityEditor.AssetDatabase.GUIDToAssetPath(path[i]).Contains("Assets") &&
                     Path.GetFileName(UnityEditor.AssetDatabase.GUIDToAssetPath(path[i])) == (scriptName + ".cs"))
                 {
@@ -317,14 +316,11 @@ namespace DltFramework
             string insertEndMark = GenerateBaseWindowData.endUsing;
 
             string currentScript = GetOldScriptsContent();
-            Debug.Log(currentScript);
             //开始位置 
             int usingStartIndex =
                 currentScript.IndexOf(insertStartMark, StringComparison.Ordinal) + insertStartMark.Length;
-            Debug.Log(insertEndMark);
             //结束位置
             int usingEndIndex = currentScript.IndexOf(insertEndMark, StringComparison.Ordinal);
-            Debug.Log(usingEndIndex);
             //移除多余空格
             while (currentScript[usingEndIndex - 1] == ' ')
             {

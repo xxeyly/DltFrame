@@ -14,6 +14,7 @@ namespace HotFix
         public Slider localFileCheckSlider;
         public Text localFileCheckText;
         public GameObject downPanel;
+        public GameObject load;
         [LabelText("下载进度条")] public Slider downSliderProgress;
         [LabelText("下载进度")] public Text downTextProgress;
         [LabelText("下载速度")] public Text downTextSpeed;
@@ -34,12 +35,13 @@ namespace HotFix
         public void HotFixRuntimeLocalFileCheck(int currentCount, int maxCount)
         {
             localFileCheckSlider.value = (float)currentCount / maxCount;
-            localFileCheckText.text = (int)(localFileCheckSlider.value * 100) + "/100";
+            localFileCheckText.text = (int)(localFileCheckSlider.value * 100) + "%";
         }
 
         public void HotFixRuntimeLocalFileCheckOver()
         {
             localFileCheckPanel.SetActive(false);
+            load.SetActive(true);
         }
 
         public void HotFixRuntimeDownStart()
@@ -56,7 +58,7 @@ namespace HotFix
         {
             totalDownload.text = HotFixGlobal.FileSizeString(current) + "/" + HotFixGlobal.FileSizeString(total);
             downSliderProgress.value = (float)(current / total);
-            downTextProgress.text = (current / total * 100).ToString("0") + "/100";
+            downTextProgress.text = (current / total * 100).ToString("0") + "%";
         }
 
         public void HotFixRuntimeDownOver()

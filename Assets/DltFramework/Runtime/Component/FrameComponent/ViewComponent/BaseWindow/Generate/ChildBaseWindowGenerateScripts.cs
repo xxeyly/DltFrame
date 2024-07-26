@@ -10,7 +10,6 @@ namespace DltFramework
             Type scriptType = GetComponent<ChildBaseWindow>().GetType();
             string[] scriptNameSplit = scriptType.ToString().Split(new char[] {'.'});
             string scriptName = scriptNameSplit[scriptNameSplit.Length - 1];
-            Debug.Log(scriptName);
             string scriptPath = GetPath(scriptName);
             return scriptPath;
         }
