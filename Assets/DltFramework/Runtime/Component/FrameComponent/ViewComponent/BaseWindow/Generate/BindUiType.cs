@@ -93,13 +93,13 @@ namespace DltFramework
 
         private IEnumerable<string> GetListOfChildBaseWindow()
         {
-            List<ChildBaseWindow> all = new List<ChildBaseWindow>(DataFrameComponent.List_GetInheritAllSubclass<ChildBaseWindow>());
             List<string> selfObj = new List<string>();
-            foreach (Object obj in all)
+            List<Type> all = DataFrameComponent.List_GetSubclasses(typeof(ChildBaseWindow));
+            foreach (Type childType in all)
             {
-                if (obj.GetType() != typeof(ChildBaseWindowTemplate) && obj.GetType() != typeof(ChildUiBaseWindow))
+                if (childType != typeof(ChildBaseWindowTemplate) && childType != typeof(ChildUiBaseWindow))
                 {
-                    selfObj.Add(obj.GetType().ToString());
+                    selfObj.Add(childType.ToString());
                 }
             }
 

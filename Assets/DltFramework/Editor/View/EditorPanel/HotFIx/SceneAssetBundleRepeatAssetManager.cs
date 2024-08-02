@@ -31,6 +31,7 @@ namespace DltFramework
             {
                 sceneAssetBundleRepeatAsset.assetBundleContainPath.Add(assetBundleContainPath[i]);
             }
+
             UnityEditor.AssetDatabase.CreateAsset(sceneAssetBundleRepeatAsset, "Assets/Config/SceneAssetBundleRepeatAsset/" + assetBundleName + ".asset");
             UnityEditor.AssetDatabase.SaveAssets();
             UnityEditor.AssetDatabase.Refresh();
@@ -38,7 +39,7 @@ namespace DltFramework
             assetBundleContainPath.Clear();
         }
 
-        [InlineEditor()] [LabelText("场景重复资源列表")]
+        [InlineEditor()] [LabelText("场景重复资源列表")] [AssetList]
         public List<SceneAssetBundleRepeatAsset> SceneAssetBundleRepeatAssets = new List<SceneAssetBundleRepeatAsset> { };
 
 

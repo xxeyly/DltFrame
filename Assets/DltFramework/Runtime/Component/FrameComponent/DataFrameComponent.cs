@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -576,9 +577,11 @@ namespace DltFramework
             return mergeList;
         }
 
+
         [LabelText("获得继承类的所有子类")]
         public static List<T> List_GetInheritAllSubclass<T>() where T : class
         {
+            List<T> subclasses = new List<T>();
             // var types = Assembly.GetCallingAssembly().GetTypes();
             var types = typeof(T).Assembly.GetTypes();
             var cType = typeof(T);
@@ -612,6 +615,23 @@ namespace DltFramework
             }
 
             return cList;
+        }
+        [LabelText("获得继承类的所有子类")]
+        public static List<Type> List_GetSubclasses(Type baseType)
+        {
+            List<Type> subclasses = new List<Type>();
+
+            Type[] types = baseType.Assembly.GetTypes();
+
+            foreach (Type type in types)
+            {
+                if (type.IsSubclassOf(baseType))
+                {
+                    subclasses.Add(type);
+                }
+            }
+
+            return subclasses;
         }
 
         [LabelText("集合删除重复项")]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
@@ -149,20 +150,18 @@ namespace DltFramework
         /// </summary>
         /// <param name="animationType"></param>
         /// <param name="eventAction"></param>
-        public string PlayAnim(string animationType, UnityAction eventAction)
+        public async UniTask PlayAnim(string animationType, UnityAction eventAction)
         {
             if (ContainsParameter(animationType))
             {
                 PlayAnim(animationType);
                 _playAnimTimeTask = animationType;
-                return UniTaskFrameComponent.Instance.AddTask(animationType, GetPlayAnimLength(animationType), 1, null, null, eventAction);
+                await UniTaskFrameComponent.Instance.AddTask(animationType, GetPlayAnimLength(animationType), 1, null, null, eventAction);
             }
             else
             {
                 DebugFrameComponent.Log("不包含当前动画:" + animationType);
             }
-
-            return String.Empty;
         }
 
 

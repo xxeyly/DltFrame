@@ -63,12 +63,14 @@ namespace DltFramework
         [LabelText("平台拷贝地址")] [HideInInspector]
         public List<PlatformPath> targetOutPathData = new List<PlatformPath>();
 
-        [BoxGroup("版本号")] [InfoBox("当勾选版本号自增,会默认勾选所有资源,并且资源版本号+1")] [LabelText("版本号自增")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
+        [FoldoutGroup("版本号")] [InfoBox("当勾选版本号自增,会默认勾选所有资源,并且资源版本号+1")] [LabelText("版本号自增")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
         public bool isUpdateVersion;
 
-        [BoxGroup("版本号")] [InfoBox("版本号分3个等级,\n等级1是特大改动(需要手动更改),\n等级2每次需要重新出包时变动(需要手动更改),\n等级3是每次小更新时变动(勾选版本自增每次打包会自增1)")] [LabelText("当前资源版本号")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
+        [FoldoutGroup("版本号")] [InfoBox("版本号分3个等级,\n等级1是特大改动(需要手动更改),\n等级2每次需要重新出包时变动(需要手动更改),\n等级3是每次小更新时变动(勾选版本自增每次打包会自增1)")] [LabelText("当前资源版本号")] [LabelWidth(120)] [OnValueChanged("OnSaveConfig")]
         public Vector3 targetResourceVersion;
 
+        [BoxGroup("AssetBundle信息")] [LabelText("打包后移除AssetBundle数据")] [OnValueChanged("OnSaveConfig")]
+        public bool removeAssetBundleName;
 
         #region 打包路径
 
@@ -202,62 +204,62 @@ namespace DltFramework
 
         #region HotFixView
 
-        [ToggleGroup("buildHotFixView", "HotFixView")] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("HotFixView")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
         public bool buildHotFixView;
 
-        [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体")] [AssetSelector] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("HotFixView")] [LabelText("HotFixView预制体")] [AssetSelector] [OnValueChanged("OnSaveConfig")] [EnableIf("buildHotFixView")]
         public GameObject HotFixViewPrefab;
 
-        [ToggleGroup("buildHotFixView")] [LabelText("HotFixView预制体路径")] [HideInInspector] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("buildHotFixView")] [LabelText("HotFixView预制体路径")] [HideInInspector] [OnValueChanged("OnSaveConfig")]
         public string HotFixViewPrePath;
 
         #endregion
 
         #region HotFixCode
 
-        [ToggleGroup("buildHotFixCode", "HotFixCode")] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("HotFixCode")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
         public bool buildHotFixCode;
 
         #endregion
 
         #region 元数据
 
-        [ToggleGroup("buildMetaAssemblyParticipatePackaging", "MetaAssembly")] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("MetaAssembly")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
         public bool buildMetaAssemblyParticipatePackaging;
 
-        [ToggleGroup("buildAssemblyParticipatePackaging", "Assembly")] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("Assembly")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
         public bool buildAssemblyParticipatePackaging;
 
         #endregion
 
         #region GameRootStart
 
-        [ToggleGroup("buildGameRootStart", "GameRootStart")] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("GameRootStart")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
         public bool buildGameRootStart;
 
-        [ToggleGroup("buildGameRootStart")] [LabelText("GameRootStart预制体")] [AssetSelector] [OnValueChanged("OnSaveConfig")]
+        [BoxGroup("GameRootStart")] [LabelText("GameRootStart预制体")] [AssetSelector] [OnValueChanged("OnSaveConfig")] [EnableIf("buildGameRootStart")]
         public GameObject GameRootStartPrefab;
 
-        [ToggleGroup("buildGameRootStart")] [LabelText("GameRootStart预制体路径")] [Sirenix.OdinInspector.FilePath] [HideInInspector]
+        [BoxGroup("GameRootStart")] [LabelText("GameRootStart预制体路径")] [Sirenix.OdinInspector.FilePath] [HideInInspector]
         public string GameRootStartPath;
 
         #endregion
 
         #region SceneBuild
 
-        [ToggleGroup("SceneBuildSwitch", "Scene")] [OnValueChanged("OnSaveConfig")] [SerializeField]
-        public bool SceneBuildSwitch;
+        [FoldoutGroup("Scene")] [LabelText("打包")] [OnValueChanged("OnSaveConfig", true)] [SerializeField]
+        public bool Scene;
 
-        [ToggleGroup("SceneBuildSwitch")] [LabelText("正常场景配置")] [AssetList] [InlineEditor()] [OnValueChanged("OnSaveConfig")]
+        [FoldoutGroup("Scene")] [LabelText("正常场景配置")] [AssetList] [InlineEditor()] [OnValueChanged("OnSaveConfig")] [EnableIf("Scene")]
         public List<NormalSceneAssetBundleAsset> NormalSceneAssetBundleAssets = new List<NormalSceneAssetBundleAsset>();
 
-        [ToggleGroup("SceneBuildSwitch")] [LabelText("正常场景生成表")] [AssetList] [InlineEditor()] [OnValueChanged("OnSaveConfig")]
+        [FoldoutGroup("Scene")] [LabelText("正常场景生成表")] [AssetList] [InlineEditor()] [OnValueChanged("OnSaveConfig")] [EnableIf("Scene")]
         public List<NormalSceneAssetBundleAsset> NormalSceneAssetBundleAssetConfig = new List<NormalSceneAssetBundleAsset>();
 
-        [ToggleGroup("SceneBuildSwitch")] [LabelText("场景打开状态")]
+        [FoldoutGroup("Scene")] [LabelText("场景打开状态")]
         private List<string> sceneOpenState = new List<string>();
 
-        [ToggleGroup("SceneBuildSwitch")] [LabelText("场景打包状态")] [TableList]
+        [FoldoutGroup("Scene")] [LabelText("场景打包状态")] [TableList]
         public List<SceneBuildState> SceneBuildStates = new List<SceneBuildState>();
 
         [HideInInspector] [LabelText("NormalSceneAssetBundleAsset")]
@@ -269,15 +271,12 @@ namespace DltFramework
         [ToggleGroup("SceneBuildSwitch")] [LabelText("当前打开场景名称")]
         private string currentOpenSceneName;
 
-        [ToggleGroup("SceneBuild")] [LabelText("重复利用资源")] [Tooltip("每个场景可能都不一样")]
+        [LabelText("重复利用资源")] [Tooltip("每个场景可能都不一样")]
         private List<SceneRepeatAsset> sceneRepeatAssets = new List<SceneRepeatAsset>();
 
         #endregion
 
         #endregion
-
-        [ToggleGroup("removeAssetBundleName", "打包后移除AssetBundle信息")] [OnValueChanged("OnSaveConfig")]
-        public bool removeAssetBundleName;
 
         #endregion
 
@@ -339,7 +338,7 @@ namespace DltFramework
                     GameRootStartBuild();
                 }
 
-                if (SceneBuildSwitch)
+                if (Scene)
                 {
                     for (int i = 0; i < NormalSceneAssetBundleAssets.Count; i++)
                     {
@@ -1151,7 +1150,7 @@ namespace DltFramework
             this.buildGameRootStart = hotFixCollectConfig.buildGameRootStart;
             this.GameRootStartPath = hotFixCollectConfig.GameRootStartPath;
             this.GameRootStartPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(hotFixCollectConfig.GameRootStartPath);
-            this.SceneBuildSwitch = hotFixCollectConfig.SceneBuildSwitch;
+            this.Scene = hotFixCollectConfig.Scene;
             NormalSceneAssetBundleAssets.Clear();
             for (int i = 0; i < hotFixCollectConfig.NormalSceneAssetBundleAssetsPath.Count; i++)
             {

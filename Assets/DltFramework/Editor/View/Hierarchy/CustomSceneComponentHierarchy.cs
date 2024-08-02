@@ -51,6 +51,19 @@ namespace DltFramework
                     sceneComponent.HotFixAssetPathConfigIsExist = sceneComponent.GetComponent<HotFixAssetPathConfig>() != null;
 
                     #endregion
+                    
+                    #region 警告
+
+                    if (sceneComponent.GetType().Name != obj.name)
+                    {
+                        if (GUI.Button(GlobalHierarchy.SetRect(selectionrect, -22, 18), "R", GlobalHierarchy.LabelGUIStyle()))
+                        {
+                            obj.name = sceneComponent.GetType().Name;
+                        }
+                    }
+
+                    #endregion
+
                 }
             }
         }

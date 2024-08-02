@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using UnityEngine.Events;
 
 namespace DltFramework
@@ -16,10 +17,9 @@ namespace DltFramework
         /// <param name="delay"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        protected string AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
+        protected async UniTask AddTimeTask(UnityAction callback, string taskName, float delay, int count = 1)
         {
-            UniTaskFrameComponent.Instance.AddTask(taskName, delay, count, null, null, callback);
-            return taskName;
+            await UniTaskFrameComponent.Instance.AddTask(taskName, delay, count, null, null, callback);
         }
 
         /// <summary>
@@ -30,10 +30,9 @@ namespace DltFramework
         /// <param name="delay"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        protected string AddSwitchTask(List<UnityAction> callbackList, string taskName, float delay, int count = 1)
+        protected async UniTask AddSwitchTask(List<UnityAction> callbackList, string taskName, float delay, int count = 1)
         {
-            UniTaskFrameComponent.Instance.AddTask(taskName, delay, count, null, null, callbackList.ToArray());
-            return taskName;
+            await UniTaskFrameComponent.Instance.AddTask(taskName, delay, count, null, null, callbackList.ToArray());
         }
 
         /// <summary>

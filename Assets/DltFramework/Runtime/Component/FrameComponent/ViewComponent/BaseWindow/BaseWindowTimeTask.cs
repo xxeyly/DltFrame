@@ -1,4 +1,5 @@
-﻿using UnityEngine.Events;
+﻿using Cysharp.Threading.Tasks;
+using UnityEngine.Events;
 
 namespace DltFramework
 {
@@ -8,9 +9,9 @@ namespace DltFramework
         /// 增加计时任务
         /// </summary>
         /// <returns></returns>
-        protected string AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
+        protected async UniTask AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
         {
-            return UniTaskFrameComponent.Instance.AddTask(taskName, delay, taskCount, initAction, endAction, action);
+            await UniTaskFrameComponent.Instance.AddTask(taskName, delay, taskCount, initAction, endAction, action);
         }
 
         /// <summary>

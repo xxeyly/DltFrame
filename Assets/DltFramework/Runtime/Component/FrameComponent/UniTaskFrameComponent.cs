@@ -54,20 +54,19 @@ public class UniTaskFrameComponent : FrameComponent
     }
 
     [LabelText("添加任务")]
-    public string AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
+    public async UniTask AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
     {
         if (IsContainCurrentTask(taskName))
         {
             Debug.LogError(taskName + "已存在");
-            return String.Empty;
+            return;
         }
 
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         cancellationTokenSources.Add(taskName, cancellationTokenSource);
 #pragma warning disable 4014
-        ExecuteTask(taskName, cancellationTokenSource.Token, delay, taskCount, initAction, endAction, action);
+        await ExecuteTask(taskName, cancellationTokenSource.Token, delay, taskCount, initAction, endAction, action);
 #pragma warning restore 4014
-        return taskName;
     }
 
 
