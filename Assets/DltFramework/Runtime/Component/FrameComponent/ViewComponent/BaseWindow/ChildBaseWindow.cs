@@ -8,7 +8,7 @@ namespace DltFramework
     /// </summary>
     public abstract class ChildBaseWindow : BaseWindow
     {
-        [LabelText("索引")] public int itemIndex;
+        [BoxGroup] [LabelText("索引")] public int itemIndex;
 
         public override void ViewStartInit()
         {
@@ -50,7 +50,5 @@ namespace DltFramework
         {
             this.itemIndex = itemIndexValue;
         }
-
-       
     }
 }

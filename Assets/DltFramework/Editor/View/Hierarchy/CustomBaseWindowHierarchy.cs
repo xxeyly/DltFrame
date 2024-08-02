@@ -65,7 +65,7 @@ namespace DltFramework
                     rectCheck.width = 18;
                     GameObject window = obj.transform.Find("Window").gameObject;
 
-                    window.SetActive(GUI.Toggle(GlobalHierarchy.SetRect(selectionrect, -22, 18), window.activeSelf, string.Empty));
+                    window.SetActive(GUI.Toggle(GlobalHierarchy.SetRect(selectionrect, -23, 18), window.activeSelf, string.Empty));
                     if (window.GetComponent<CanvasGroup>())
                     {
                         window.GetComponent<CanvasGroup>().alpha = window.activeSelf ? 1 : 0;
@@ -84,8 +84,26 @@ namespace DltFramework
                     #region 热更
 
                     tempBaseWindow.HotFixAssetPathConfigIsExist = tempBaseWindow.GetComponent<HotFixAssetPathConfig>() != null;
+                    
+                    if (tempBaseWindow.HotFixAssetPathConfigIsExist)
+                    {
+                        GUI.Label(GlobalHierarchy.SetRect(selectionrect, -35, 18), "H", GlobalHierarchy.LabelGUIStyle());
+                    }
 
                     #endregion
+                    
+                    #region 警告
+
+                    if (tempBaseWindow.GetType().Name != obj.name)
+                    {
+                        if (GUI.Button(GlobalHierarchy.SetRect(selectionrect, -45, 18), "R", GlobalHierarchy.LabelGUIStyle()))
+                        {
+                            obj.name = tempBaseWindow.GetType().Name;
+                        }
+                    }
+
+                    #endregion
+
                 }
             }
         }

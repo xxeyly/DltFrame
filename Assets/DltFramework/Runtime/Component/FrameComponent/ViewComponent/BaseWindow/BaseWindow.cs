@@ -28,35 +28,18 @@ namespace DltFramework
     {
         protected GameObject window;
         protected CanvasGroup canvasGroup;
+        [LabelText("是否是ChildBaseWindow")] private bool isChildBaseWindow;
 
-        [HorizontalGroup("标签")] [BoxGroup("标签/属性")] [LabelText("视图类型")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)] [Tooltip("静态模式不会影响全局视图全局操作,单独指定事件会被影响")]
+        [HorizontalGroup("标签")] [BoxGroup("标签/属性")] [LabelText("视图类型")] [HideIf("isChildBaseWindow")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)] [Tooltip("静态模式不会影响全局视图全局操作,单独指定事件会被影响")]
         protected ViewShowType viewShowType = ViewShowType.Activity;
 
-        [BoxGroup("标签/属性")] [LabelText("初始化")] [LabelWidth(50)] [Tooltip("该属性影响是否一开始执行Init操作")]
+        [BoxGroup("标签/属性")] [LabelText("初始化")] [LabelWidth(50)] [HideIf("isChildBaseWindow")] [Tooltip("该属性影响是否一开始执行Init操作")]
         public bool viewInit;
-
-        [BoxGroup("调试")] [ToggleLeft] [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("日志输出")]
-        public bool isLog;
-
-        [BoxGroup("调试")] [TableList(AlwaysExpanded = true, DrawScrollView = false)] [Searchable] [SerializeField] [LabelText("计时任务列表")]
-        protected List<TimeTaskInfo> timeTaskInfoList = new List<TimeTaskInfo>();
 
         public Type viewType;
 
-        [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("视图名称")] [LabelWidth(50)]
+        [BoxGroup("标签/命名")] [HideIf("isChildBaseWindow")] [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("视图名称")] [LabelWidth(50)]
         public string viewName;
-
-        [BoxGroup("标签/命名")] [GUIColor(0.3f, 0.8f, 0.8f)] [LabelText("类名称")] [LabelWidth(50)]
-        public string typeName;
-
-        [BoxGroup("标签/命名")]
-        [Button("重命名", ButtonSizes.Medium)]
-        [GUIColor(0, 1, 0)]
-        public void GameNameSet()
-        {
-            gameObject.name = viewType.Name;
-            typeName = viewType.Name;
-        }
 
         protected BaseWindow()
         {
@@ -64,6 +47,7 @@ namespace DltFramework
             viewType = InitViewType();
             // ReSharper disable once VirtualMemberCallInConstructor
             InitViewShowType();
+            isChildBaseWindow = viewType.IsSubclassOf(typeof(ChildBaseWindow));
         }
 
         /// <summary>
