@@ -94,7 +94,9 @@ namespace HotFix
 
         IEnumerator LocalIsUpdate()
         {
+            Debug.Log("本地更新检测");
             StartCoroutine(LocalIsUpdateLoad());
+            Debug.Log("本");
             yield return new WaitUntil(() => localIsUpdateLoad);
             if (localIsUpdate)
             {
@@ -138,6 +140,7 @@ namespace HotFix
             string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt";
             UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
             yield return hotFixPathLoadLocalFile.SendWebRequest();
+            Debug.Log(hotFixPathLoadLocalFile.responseCode);
             if (hotFixPathLoadLocalFile.responseCode == 200)
             {
                 hotFixPath = hotFixPathLoadLocalFile.downloadHandler.text;
@@ -159,6 +162,8 @@ namespace HotFix
         //开始下载配置表
         IEnumerator StartDownAssetConfig()
         {
+            Debug.Log("本2");
+
             StartCoroutine(HotFixPathLocalLoad());
             yield return new WaitUntil(() => hotFixPathLocalLoad);
             HotFixDebug.Log("配置表开始下载----------");
@@ -304,6 +309,7 @@ namespace HotFix
             yield return request.SendWebRequest();
             if (request.responseCode != 200)
             {
+                Debug.Log(request.responseCode + ":" + request.url);
                 //请求错误,等待一定时间后再次请求
                 yield return new WaitForSeconds(againDownWaitTime);
                 StartCoroutine(DownSceneAssetBundleConfig(sceneName));

@@ -123,7 +123,7 @@ namespace Aot
             AotDebug.Log("HotFix路径");
             await HotFixPathLocalLoad();
             //文件地址检测
-            await HotFixPathCheck();
+            // await HotFixPathCheck();
             //HotFixView服务器配置表检测
             AotDebug.Log("HotFixView服务器配置表检测");
             await HotFixViewConfigCheck();
@@ -462,40 +462,32 @@ namespace Aot
             _hotFixFileStream = null;
             //检测下载完后的文件的Md5
             string localCacheMd5 = AotGlobal.GetMD5HashFromFile(downFileCachePath);
-            if (_hotFixUnityWebRequest.responseCode != 200 && _hotFixUnityWebRequest.responseCode != 206)
+
+            if (localCacheMd5 != hotFixAssetConfig.md5)
             {
-                //下载出错,发起下次下载请求
+                AotDebug.LogError(AotGlobal.StringBuilderString("Md5不匹配,删除文件重新下载:", _hotFixUnityWebRequest.url));
+                AotDebug.LogWarning(AotGlobal.StringBuilderString("本地下载的Md5:", localCacheMd5));
+                AotDebug.LogWarning(AotGlobal.StringBuilderString("服务器的Md5:" + hotFixAssetConfig.md5));
+                //旧大小清空
+                oldDownByteLength = 0;
+                //清除已经下载的大小
+                currentDownloadValue -= AotGlobal.GetFileSize(downFileCachePath);
+                //关闭下载流
+                _hotFixUnityWebRequest = null;
+                //删除文件
+                if (File.Exists(downFileCachePath))
+                {
+                    File.Delete(downFileCachePath);
+                }
+
+                //再次发起下载请求
                 await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
                 await HotFixAssetConfigLocalCacheCheck(hotFixAssetConfig);
             }
             else
             {
-                if (localCacheMd5 != hotFixAssetConfig.md5)
-                {
-                    AotDebug.LogError(AotGlobal.StringBuilderString("Md5不匹配,删除文件重新下载:", _hotFixUnityWebRequest.url));
-                    AotDebug.LogWarning(AotGlobal.StringBuilderString("本地下载的Md5:", localCacheMd5));
-                    AotDebug.LogWarning(AotGlobal.StringBuilderString("服务器的Md5:" + hotFixAssetConfig.md5));
-                    //旧大小清空
-                    oldDownByteLength = 0;
-                    //清除已经下载的大小
-                    currentDownloadValue -= AotGlobal.GetFileSize(downFileCachePath);
-                    //关闭下载流
-                    _hotFixUnityWebRequest = null;
-                    //删除文件
-                    if (File.Exists(downFileCachePath))
-                    {
-                        File.Delete(downFileCachePath);
-                    }
-
-                    //再次发起下载请求
-                    await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
-                    await HotFixAssetConfigLocalCacheCheck(hotFixAssetConfig);
-                }
-                else
-                {
-                    _hotFixUnityWebRequest = null;
-                    replaceCacheFile.Add(downFileCachePath);
-                }
+                _hotFixUnityWebRequest = null;
+                replaceCacheFile.Add(downFileCachePath);
             }
         }
 
@@ -503,6 +495,7 @@ namespace Aot
         //加载DltFrameworkHotFix数据
         private void LoadHotFixCode()
         {
+            AotDebug.Log("Aot加载完毕");
             AotNetworking.networkStatusDetection = false;
             // Editor环境下，HotUpdate.dll.bytes已经被自动加载，不需要加载，重复加载反而会出问题。  
 #if !UNITY_EDITOR
@@ -513,7 +506,6 @@ namespace Aot
 #endif
             Type type = hotFix.GetType("HotFix.HotFixInit");
             type.GetMethod("Init")?.Invoke(null, null);
-            AotDebug.Log("Aot加载完毕");
         }
 
         private void Update()

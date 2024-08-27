@@ -14,7 +14,7 @@ namespace DltFramework
         public List<AudioInfo> audioInfos = new List<AudioInfo>();
 
         [Serializable]
-        public struct AudioInfo
+        public class AudioInfo
         {
             [HideLabel] [HorizontalGroup("名称")] public string audioName;
             [HideLabel] [HorizontalGroup("片段")] public AudioClip audioClip;

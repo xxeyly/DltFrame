@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -78,7 +79,14 @@ public class HotFixAssetPathConfig : MonoBehaviour
         else
         {
             // PrefabUtility.UnpackPrefabInstance(gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
+            try
+            {
+                PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(gameObject.name);
+            }
             // PrefabUtility.ApplyPrefabInstance(gameObject, InteractionMode.AutomatedAction);
         }
 
@@ -109,6 +117,6 @@ public class HotFixAssetPathConfig : MonoBehaviour
         }
     }
 
-   
+
 #endif
 }

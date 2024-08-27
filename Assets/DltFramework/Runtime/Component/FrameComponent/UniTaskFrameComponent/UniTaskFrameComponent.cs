@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using DltFramework;
 
-public class UniTaskFrameComponent : FrameComponent
+public partial class UniTaskFrameComponent : FrameComponent
 {
     public static UniTaskFrameComponent Instance;
     [LabelText("事件列表")] public Dictionary<string, CancellationTokenSource> cancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
@@ -113,6 +113,8 @@ public class UniTaskFrameComponent : FrameComponent
             cancellationTokenSources[taskName].Dispose();
             cancellationTokenSources.Remove(taskName);
         }
+
+        RemoveTaskProcessTaskName(taskName);
     }
 
 

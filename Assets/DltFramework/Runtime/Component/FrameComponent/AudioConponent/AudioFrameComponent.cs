@@ -19,6 +19,15 @@ namespace DltFramework
         [Searchable] [TableList(AlwaysExpanded = true)] [InlineEditor()] [Required("选择音频配置文件")] [LabelText("音频数据")]
         public AudioComponentData audioData;
 
+        [Button("修改音频名字")]
+        public void ChangeAudioName()
+        {
+            foreach (AudioComponentData.AudioInfo audioInfo in audioData.audioInfos)
+            {
+                audioInfo.audioName = audioInfo.audioClip.name;
+            }
+        }
+
         private Dictionary<string, AudioClip> _audioDlc = new Dictionary<string, AudioClip>();
 
         public override void FrameInitComponent()
@@ -114,6 +123,20 @@ namespace DltFramework
             _tipAndDialogAudioSource.Play();
         }
 
+        public void PlayTipAndDialogAudio(string audioName)
+        {
+            if (_audioDlc.ContainsKey(audioName))
+            {
+                _tipAndDialogAudioSource.volume = 1;
+                _tipAndDialogAudioSource.clip = _audioDlc[audioName];
+                _tipAndDialogAudioSource.Play();
+            }
+            else
+            {
+                Debug.LogWarning(audioName + "音效不存在");
+            }
+        }
+
         /// <summary>
         /// 停止音效
         /// </summary>
@@ -183,6 +206,12 @@ namespace DltFramework
             RuntimeDataFrameComponent.Instance.audioState = false;
         }
 
+        public void StopBackgroundAudio()
+        {
+            _backgroundAudioSource.clip = null;
+            _backgroundAudioSource.Stop();
+        }
+
         /// <summary>
         /// 开始背景音乐播放
         /// </summary>
@@ -198,6 +227,13 @@ namespace DltFramework
             {
                 // Debug.LogError("没有指定背景音乐");
             }
+        }
+
+        public void PlayBackgroundAudio(string audioName)
+        {
+            _backgroundAudioSource.clip = _audioDlc[audioName];
+            _backgroundAudioSource.Play();
+            RuntimeDataFrameComponent.Instance.audioState = true;
         }
     }
 }

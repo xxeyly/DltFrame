@@ -9,6 +9,7 @@ namespace Aot
 {
     public class HotFixUpdatePanel : MonoBehaviour, IHotFixViewAndHotFixCode, IAotNetworking, IAotFilePathError
     {
+        public Canvas canvas;
         [LabelText("背景")] public GameObject back;
         [LabelText("初始化面板")] public GameObject initPanel;
         [LabelText("下载面板")] public GameObject downPanel;
@@ -19,6 +20,11 @@ namespace Aot
         [LabelText("网络状况")] public GameObject networkPanel;
         [LabelText("文件路径错误")] public GameObject FilePathErrorPanel;
         [LabelText("文件路径错误提示")] public Text FilePathErrorText;
+
+        private void Start()
+        {
+            
+        }
 
         public void HotFixViewAndHotFixCodeLocalIsUpdate(bool localIsUpdate)
         {

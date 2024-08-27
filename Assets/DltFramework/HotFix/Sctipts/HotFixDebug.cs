@@ -4,7 +4,7 @@ namespace HotFix
 {
     public class HotFixDebug
     {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+#if UNITY_EDITOR 
         /// <summary>
         ///   <para>Logs a message to the Unity Console.</para>
         /// </summary>

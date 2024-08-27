@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -102,8 +104,6 @@ namespace DltFramework
             //处理场景加载时需要卸载的逻辑
             DebugFrameComponent.Log("卸载的场景" + SceneManager.GetActiveScene().name);
             GameRootStart.Instance.OldSceneDestroy(SceneManager.GetActiveScene().name);
-
-            // Debug.Log("加载的场景" + sceneName);
             SceneManager.LoadScene(sceneName, loadSceneMode);
         }
 

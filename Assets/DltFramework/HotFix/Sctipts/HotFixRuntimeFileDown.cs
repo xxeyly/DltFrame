@@ -136,12 +136,14 @@ namespace HotFix
                     }
 
                     //使用断点续传下载
+                    Debug.Log("使用断点续传下载:" + downFileCachePath);
                     _hotFixUnityWebRequest.SetRequestHeader("Range", "bytes=" + HotFixGlobal.GetFileSize(downFileCachePath) + "-");
                     StartCoroutine(DownHotFixRuntimeDownConfig(downFileCachePath, hotFixAssetConfig));
                 }
             }
             else
             {
+                Debug.Log("未存在缓存文件,直接下载:" + downFileCachePath);
                 //下载请求
                 _hotFixUnityWebRequest = UnityWebRequest.Get(downFileUrl);
                 StartCoroutine(DownHotFixRuntimeDownConfig(downFileCachePath, hotFixAssetConfig));
@@ -170,47 +172,39 @@ namespace HotFix
 
             //检测下载完后的文件的Md5
             string localCacheMd5 = HotFixGlobal.GetMD5HashFromFile(downFileCachePath);
-            if (_hotFixUnityWebRequest.responseCode != 200 && _hotFixUnityWebRequest.responseCode != 206)
+            
+            if (localCacheMd5 != hotFixAssetConfig.md5)
             {
-                //下载出错,发起下次下载请求
+                HotFixDebug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
+                if (File.Exists(downFileCachePath))
+                {
+                    File.Delete(downFileCachePath);
+                }
+
+                HotFixDebug.Log("本地下载的Md5:" + localCacheMd5);
+                HotFixDebug.Log("服务器的Md5:" + hotFixAssetConfig.md5);
+                //重置上一次下载字节长度
+                oldDownByteLength = 0;
+                //清除已经下载的大小
+                currentDownloadValue -= HotFixGlobal.GetFileSize(downFileCachePath);
+                //关闭下载流
+                _hotFixUnityWebRequest = null;
+                //删除文件
+                if (File.Exists(downFileCachePath))
+                {
+                    File.Delete(downFileCachePath);
+                }
+
+                //再次发起下载请求
                 yield return new WaitForSeconds(0.2f);
                 StartCoroutine(HotFixRuntimeDownConfigLocalCacheCheck(hotFixAssetConfig));
             }
             else
             {
-                if (localCacheMd5 != hotFixAssetConfig.md5)
-                {
-                    HotFixDebug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
-                    if (File.Exists(downFileCachePath))
-                    {
-                        File.Delete(downFileCachePath);
-                    }
-
-                    HotFixDebug.Log("本地下载的Md5:" + localCacheMd5);
-                    HotFixDebug.Log("服务器的Md5:" + hotFixAssetConfig.md5);
-                    //重置上一次下载字节长度
-                    oldDownByteLength = 0;
-                    //清除已经下载的大小
-                    currentDownloadValue -= HotFixGlobal.GetFileSize(downFileCachePath);
-                    //关闭下载流
-                    _hotFixUnityWebRequest = null;
-                    //删除文件
-                    if (File.Exists(downFileCachePath))
-                    {
-                        File.Delete(downFileCachePath);
-                    }
-
-                    //再次发起下载请求
-                    yield return new WaitForSeconds(0.2f);
-                    StartCoroutine(HotFixRuntimeDownConfigLocalCacheCheck(hotFixAssetConfig));
-                }
-                else
-                {
-                    HotFixDebug.Log("下载完毕:" + hotFixAssetConfig.name);
-                    _hotFixUnityWebRequest = null;
-                    hotFixRuntimeDownConfigOver = true;
-                    replaceCacheFile.Add(downFileCachePath);
-                }
+                HotFixDebug.Log("下载完毕:" + hotFixAssetConfig.name);
+                _hotFixUnityWebRequest = null;
+                hotFixRuntimeDownConfigOver = true;
+                replaceCacheFile.Add(downFileCachePath);
             }
         }
 

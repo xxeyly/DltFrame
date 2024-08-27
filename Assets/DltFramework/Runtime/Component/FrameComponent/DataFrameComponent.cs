@@ -616,6 +616,7 @@ namespace DltFramework
 
             return cList;
         }
+
         [LabelText("获得继承类的所有子类")]
         public static List<Type> List_GetSubclasses(Type baseType)
         {
@@ -864,6 +865,86 @@ namespace DltFramework
             }
 
             return path;
+        }
+
+        #endregion
+
+        #region 时间
+
+        /// <summary>
+        /// 秒数转换时间
+        /// </summary>
+        /// <param name="duration"></param>
+        /// <returns></returns>
+        public static List<int> TimeConversion(int duration)
+        {
+            List<int> _timeList = new List<int>();
+            if (duration <= 0)
+            {
+                return new List<int>() { 0, 0, 0, 0 };
+            }
+
+            if (duration <= 9)
+            {
+                _timeList.Add(0);
+                _timeList.Add(0);
+                _timeList.Add(0);
+                _timeList.Add(duration);
+            }
+            else if (duration >= 10 && duration <= 59)
+            {
+                int tenSecond = duration / 10;
+                int second = duration - tenSecond * 10;
+                _timeList.Add(0);
+                _timeList.Add(0);
+                _timeList.Add(tenSecond);
+                _timeList.Add(second);
+            }
+            else if (duration >= 60 && duration <= 599)
+            {
+                int minute = duration / 60;
+                int tenSecond = (duration - minute * 60) / 10;
+                int second = duration - (tenSecond * 10 + minute * 60);
+                _timeList.Add(0);
+                _timeList.Add(minute);
+                _timeList.Add(tenSecond);
+                _timeList.Add(second);
+            }
+            else if (duration >= 600 && duration <= 3599)
+            {
+                int tenMinute = duration / 600;
+                int minute = (duration - tenMinute * 600) / 60;
+                int tenSecond = (duration - tenMinute * 600 - minute * 60) / 10;
+                int second = duration - tenMinute * 600 - tenSecond * 10 - minute * 60;
+                _timeList.Add(tenMinute);
+                _timeList.Add(minute);
+                _timeList.Add(tenSecond);
+                _timeList.Add(second);
+            }
+
+            return _timeList;
+        }
+
+        /// <summary>
+        /// 秒数转换时间
+        /// </summary>
+        /// <param name="duration"></param>
+        /// <returns></returns>
+        public static string TimeConversionToString(int duration)
+        {
+            List<int> _timeList = TimeConversion(duration);
+            return _timeList[0].ToString() + _timeList[1].ToString() + ":" + _timeList[2].ToString() + _timeList[3].ToString();
+        }
+
+
+        /// <summary>
+        /// 时间转换秒数
+        /// </summary>
+        /// <param name="time"></param>
+        /// <returns></returns>
+        public static int TimeConversion(List<int> time)
+        {
+            return time[0] * 600 + time[1] * 60 + time[2] * 10 + time[3];
         }
 
         #endregion

@@ -17,7 +17,7 @@ namespace DltFramework
         /// <summary>
         /// 删除计时任务
         /// </summary>
-        protected void DeleteTimeTask(string taskName)
+        protected void RemoveTask(string taskName)
         {
             UniTaskFrameComponent.Instance.RemoveTask(taskName);
         }
