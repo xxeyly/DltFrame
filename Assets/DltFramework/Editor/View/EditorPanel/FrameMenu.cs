@@ -66,7 +66,7 @@ namespace DltFramework
             Debug.Log("监听生成结束!");
         }
 
-        [MenuItem("DltFrame/切换监听自动生成 &l")]
+        [MenuItem("DltFrame/切换监听[自动|手动]生成")]
         private static void OnListenerAutoGenerateOn()
         {
             //开启
@@ -75,13 +75,14 @@ namespace DltFramework
             EditorUtility.SetDirty(autoGenerateListenerConfig);
             if (autoGenerateListenerConfig.isAuto)
             {
-                Debug.Log("自动生成开启");
+                Debug.Log("切换到自动生成");
             }
             else
             {
-                Debug.Log("自动生成关闭");
+                Debug.Log("切换到手动生成");
             }
-
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
 
@@ -103,7 +104,7 @@ namespace DltFramework
                 GameObject tempComponentObj = new GameObject(type.Name);
                 tempComponentObj.transform.SetParent(gameRootStart.transform);
                 tempComponentObj.AddComponent(type);
-                
+
                 // tempGameRootStart.frameComponent.Add(tempComponentObj.GetComponent<FrameComponent>());
             }
         }

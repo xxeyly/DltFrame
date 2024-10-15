@@ -59,12 +59,14 @@ MonoBehaviour:
     path: 
     size: 
     md5: 
+    version: 
   isAssemblyDownOver: 0
   gameRootStartHotFixRuntimeDownConfig:
     name: 
     path: 
     size: 
     md5: 
+    version: 
   isGameRootStartDownOver: 0
   hotFixRuntimeAssetBundleSceneConfigTable: []
   isSceneConfigOver: 0
@@ -498,8 +500,40 @@ Transform:
   - {fileID: 275698319928198799}
   - {fileID: 1098540576732957479}
   - {fileID: 7562123377916770179}
+  - {fileID: 4303428069037400391}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7603084003594213065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4303428069037400391}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4303428069037400391
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7603084003594213065}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -201.8989, y: 549.63184, z: -22.492884}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1668966182783710823}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7692791167114591630
 GameObject:

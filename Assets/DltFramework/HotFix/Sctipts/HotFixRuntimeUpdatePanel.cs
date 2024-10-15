@@ -23,20 +23,6 @@ namespace HotFix
         public GameObject networkPanel;
 
 
-        private void Start()
-        {
-            //获得当前运行的平台
-            if (Application.platform == RuntimePlatform.WSAPlayerX64 || Application.platform == RuntimePlatform.WSAPlayerX86 || Application.platform == RuntimePlatform.WSAPlayerARM)
-            {
-                canvas.renderMode = RenderMode.WorldSpace;
-                canvas.transform.position = new Vector3(0, 0, 3f);
-                canvas.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
-            }
-            else
-            {
-            }
-        }
-
         public void HotFixRuntimeTableDownStart()
         {
             initPanel.SetActive(true);

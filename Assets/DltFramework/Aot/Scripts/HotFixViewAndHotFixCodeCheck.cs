@@ -116,7 +116,8 @@ namespace Aot
             if (!File.Exists(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixDownPath.txt"))
             {
                 await CopyStreamingAssetsPathToPersistentDataPath(
-                    AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/HotFixDownPath.txt"), AotGlobal.StringBuilderString(Application.persistentDataPath, "/HotFix/"), "HotFixDownPath.txt");
+                    AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/HotFixDownPath.txt"),
+                    AotGlobal.StringBuilderString(Application.persistentDataPath, "/HotFix/"), "HotFixDownPath.txt");
             }
 
             //HotFix路径
@@ -217,8 +218,14 @@ namespace Aot
             try
             {
                 await _hotFixUnityWebRequest.SendWebRequest();
+
                 if (_hotFixUnityWebRequest.responseCode == 200)
                 {
+                    foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                    {
+                        aotFilePathError.FilePathCorrect();
+                    }
+
                     hotFixPath = _hotFixUnityWebRequest.downloadHandler.text;
                     //如果结尾不是/,添加/
                     if (hotFixPath[hotFixPath.Length - 1] != '/')
@@ -230,6 +237,12 @@ namespace Aot
             catch (Exception e)
             {
                 AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
+
+                foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                {
+                    aotFilePathError.FilePathError(_hotFixUnityWebRequest.url);
+                }
+
                 await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
                 await HotFixPathLocalLoad();
             }
@@ -279,11 +292,19 @@ namespace Aot
             try
             {
                 await _hotFixUnityWebRequest.SendWebRequest();
+                foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                {
+                    aotFilePathError.FilePathCorrect();
+                }
                 //读取远程配置表数据
                 hotFixViewHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(_hotFixUnityWebRequest.downloadHandler.text);
             }
             catch (Exception)
             {
+                foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                {
+                    aotFilePathError.FilePathError(_hotFixUnityWebRequest.url);
+                }
                 AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
                 await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
                 await HotFixViewConfigCheck();
@@ -340,11 +361,19 @@ namespace Aot
             try
             {
                 await _hotFixUnityWebRequest.SendWebRequest();
+                foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                {
+                    aotFilePathError.FilePathCorrect();
+                }
                 //读取配置表
                 hotFixCodeHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(_hotFixUnityWebRequest.downloadHandler.text);
             }
             catch (Exception e)
             {
+                foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
+                {
+                    aotFilePathError.FilePathError(_hotFixUnityWebRequest.url);
+                }
                 AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, _hotFixUnityWebRequest.responseCode.ToString()));
                 await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
                 await HotFixCodeConfigCheck();

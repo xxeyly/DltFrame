@@ -13,5 +13,6 @@ namespace Aot
         [LabelText("Md5")] public string md5;
         [LabelText("大小")] public string size;
         [LabelText("路径")] public string path;
+        [LabelText("版本")] public string version = "1.0.0";
     }
 }

@@ -1,13 +1,15 @@
 using System;
+using Sirenix.OdinInspector;
 
 namespace HotFix
 {
     [Serializable]
     public class HotFixRuntimeDownConfig
-    {
-        public string name;
-        public string path;
-        public string size;
-        public string md5;
+    { 
+        [LabelText("Asset名称")]  public string name;
+        [LabelText("Asset路径")] public string path;
+        [LabelText("Asset大小")]  public string size;
+        [LabelText("Asset大小")]   public string md5;
+        [LabelText("Asset版本")]   public string version;
     }
 }

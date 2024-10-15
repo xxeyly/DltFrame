@@ -983,12 +983,14 @@ MonoBehaviour:
     md5: 
     size: 
     path: 
+    version: 1.0.0
   hotFixViewIsNeedDown: 0
   hotFixCodeHotFixAssetConfig:
     name: 
     md5: 
     size: 
     path: 
+    version: 1.0.0
   hotFixCodeIsNeedDown: 0
   currentCheckTime: 0
   checkTime: 1

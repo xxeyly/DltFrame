@@ -15,8 +15,6 @@ namespace DltFramework
         [LabelText("视图类型与视图窗口的键值对")] 
         public Dictionary<Type, BaseWindow> activeViewDlc = new Dictionary<Type, BaseWindow>();
 
-        [LabelText("层级排序")] [SerializeField] private bool isResetSetSiblingIndex = true;
-
         public override void FrameInitComponent()
         {
             Instance = this;
