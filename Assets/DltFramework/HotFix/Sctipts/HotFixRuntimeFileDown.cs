@@ -36,7 +36,17 @@ namespace HotFix
         {
             foreach (string cachePath in replaceCacheFile)
             {
-                string replacePath = cachePath.Replace(".Cache", "");
+                string[] pathSplit = cachePath.Split(".");
+                string replacePath = string.Empty;
+                if (pathSplit[pathSplit.Length - 2] == "json")
+                {
+                    replacePath = cachePath.Replace("." + pathSplit[pathSplit.Length - 1], "");
+                }
+                else
+                {
+                    replacePath = cachePath.Replace("." + pathSplit[pathSplit.Length - 2] + "." + pathSplit[pathSplit.Length - 1], "");
+                }
+
                 if (File.Exists(replacePath))
                 {
                     File.Delete(replacePath);
@@ -81,7 +91,7 @@ namespace HotFix
             {
                 hotFixRuntimeDownConfigOver = false;
                 HotFixDebug.Log("下载:" + needDownHotFixRuntimeDownConfig[i].name);
-                StartCoroutine(HotFixRuntimeDownConfigLocalCacheCheck(needDownHotFixRuntimeDownConfig[i]));
+                StartCoroutine(HotFixRuntimeDownConfigLocalCacheContrast(needDownHotFixRuntimeDownConfig[i]));
                 yield return new WaitUntil(() => hotFixRuntimeDownConfigOver);
             }
 
@@ -97,7 +107,7 @@ namespace HotFix
         }
 
         //HotFixRuntimeDownConfig下载逻辑
-        IEnumerator HotFixRuntimeDownConfigLocalCacheCheck(HotFixRuntimeDownConfig hotFixAssetConfig)
+        IEnumerator HotFixRuntimeDownConfigLocalCacheContrast(HotFixRuntimeDownConfig hotFixAssetConfig)
         {
             //下载路径
             string downFileUrl = hotFixPath + hotFixAssetConfig.path + hotFixAssetConfig.name;
@@ -110,7 +120,7 @@ namespace HotFix
             }
 
             //下载文件缓存路径
-            string downFileCachePath = localPathDirectory + hotFixAssetConfig.name + ".Cache";
+            string downFileCachePath = localPathDirectory + hotFixAssetConfig.name + "." + hotFixAssetConfig.version + ".Cache";
             //检测本地是否存在缓存文件
             if (File.Exists(downFileCachePath))
             {
@@ -172,7 +182,7 @@ namespace HotFix
 
             //检测下载完后的文件的Md5
             string localCacheMd5 = HotFixGlobal.GetMD5HashFromFile(downFileCachePath);
-            
+
             if (localCacheMd5 != hotFixAssetConfig.md5)
             {
                 HotFixDebug.LogError("Md5不匹配,删除文件重新下载:" + _hotFixUnityWebRequest.url);
@@ -197,7 +207,7 @@ namespace HotFix
 
                 //再次发起下载请求
                 yield return new WaitForSeconds(0.2f);
-                StartCoroutine(HotFixRuntimeDownConfigLocalCacheCheck(hotFixAssetConfig));
+                StartCoroutine(HotFixRuntimeDownConfigLocalCacheContrast(hotFixAssetConfig));
             }
             else
             {

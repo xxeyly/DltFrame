@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace HotFix
 {
-    public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileCheck, IHotFixRuntimeFileDown, IHotFixNetworking
+    public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileContrast, IHotFixRuntimeFileDown, IHotFixNetworking,IHotFixFileError
     {
         public Canvas canvas;
         public GameObject initPanel;
@@ -34,13 +34,13 @@ namespace HotFix
             localFileCheckPanel.SetActive(true);
         }
 
-        public void HotFixRuntimeLocalFileCheck(int currentCount, int maxCount)
+        public void HotFixRuntimeLocalFileContrast(int currentCount, int maxCount)
         {
             localFileCheckSlider.value = (float)currentCount / maxCount;
             localFileCheckText.text = (int)(localFileCheckSlider.value * 100) + "%";
         }
 
-        public void HotFixRuntimeLocalFileCheckOver()
+        public void HotFixRuntimeLocalFileContrastOver()
         {
             localFileCheckPanel.SetActive(false);
             load.SetActive(true);
@@ -72,6 +72,11 @@ namespace HotFix
         {
             Debug.Log("网络状态：" + state);
             networkPanel.SetActive(!state);
+        }
+
+        public void HotFixFileError(string state)
+        {
+            
         }
     }
 }

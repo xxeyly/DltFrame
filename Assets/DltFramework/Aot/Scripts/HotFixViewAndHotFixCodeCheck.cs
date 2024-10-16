@@ -127,18 +127,18 @@ namespace Aot
             // await HotFixPathCheck();
             //HotFixView服务器配置表检测
             AotDebug.Log("HotFixView服务器配置表检测");
-            await HotFixViewConfigCheck();
+            await RemoteHotFixViewConfigDownLoad();
             //HotFixView本地检查
             AotDebug.Log("HotFixView本地检查");
-            await HotFixViewLocalCheck();
+            await HotFixViewLocalContrast();
             //HotFixCode服务器配置表检测
             AotDebug.Log("HotFixCode服务器配置表检测");
 
-            await HotFixCodeConfigCheck();
+            await HotFixCodeConfigContrast();
             //HotFixCode本地检查
             AotDebug.Log("HotFixCode本地检查");
 
-            await HotFixCodeLocalCheck();
+            await HotFixCodeLocalContrast();
             //更新总的下载量
 
             foreach (IHotFixViewAndHotFixCode hotFixViewAndHotFixCode in _hotFixViewAndHotFixCodes)
@@ -286,7 +286,7 @@ namespace Aot
 
 
         //HotFixView配置
-        async UniTask HotFixViewConfigCheck()
+        async UniTask RemoteHotFixViewConfigDownLoad()
         {
             _hotFixUnityWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixViewConfig/HotFixViewConfig.json"));
             try
@@ -307,12 +307,12 @@ namespace Aot
                 }
                 AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
                 await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
-                await HotFixViewConfigCheck();
+                await RemoteHotFixViewConfigDownLoad();
             }
         }
 
         //HotFixView本地检测
-        async UniTask HotFixViewLocalCheck()
+        async UniTask HotFixViewLocalContrast()
         {
             //检查文件
             hotFixViewIsNeedDown = false;
@@ -355,7 +355,7 @@ namespace Aot
         }
 
         //HotFixCode配置
-        async UniTask HotFixCodeConfigCheck()
+        async UniTask HotFixCodeConfigContrast()
         {
             _hotFixUnityWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixCodeConfig/HotFixCodeConfig.json"));
             try
@@ -376,12 +376,12 @@ namespace Aot
                 }
                 AotDebug.LogWarning(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, _hotFixUnityWebRequest.responseCode.ToString()));
                 await UniTask.Delay(TimeSpan.FromSeconds(timeOut));
-                await HotFixCodeConfigCheck();
+                await HotFixCodeConfigContrast();
             }
         }
 
         //HotFixCode本地检测
-        async UniTask HotFixCodeLocalCheck()
+        async UniTask HotFixCodeLocalContrast()
         {
             //检查文件
             hotFixCodeIsNeedDown = false;

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
 
@@ -246,6 +248,54 @@ namespace HotFix
             }
 
             return objectsInScene;
+        }
+
+        [LabelText("首字母大写")]
+        public static string String_FirstCharToUpper(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            return String_BuilderString(input.First().ToString().ToUpper(), input.Substring(1));
+        }
+
+        [LabelText("首字母小写")]
+        public static string String_FirstCharToLower(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            return String_BuilderString(input.First().ToString().ToLower() + input.Substring(1));
+        }
+
+        [LabelText("所有转换为小写")]
+        public static string String_AllCharToLower(string input)
+        {
+            if (String.IsNullOrEmpty(input))
+                return input;
+            string str = "";
+            foreach (char c in input)
+            {
+                str = String_BuilderString(str, c.ToString().ToLower());
+            }
+
+            return str;
+        }
+
+        [LabelText("StringBuilder字符串拼接")]
+        public static string String_BuilderString(params string[] strList)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (string str in strList)
+            {
+                sb.Append(str);
+            }
+
+            return sb.ToString();
         }
     }
 }
