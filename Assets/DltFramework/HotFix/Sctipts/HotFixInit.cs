@@ -24,7 +24,7 @@ namespace HotFix
         private static void SceneLoadOverCallBack(Scene arg0, LoadSceneMode arg1)
         {
             bool localIsUpdate = false;
-            string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "LocalIsUpdate.txt";
+            string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/Config/" + "LocalIsUpdate.txt";
 
             if (!File.Exists(hotFixDownPath))
             {
@@ -32,7 +32,7 @@ namespace HotFix
             }
             else
             {
-                localIsUpdate = bool.Parse(HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix", "LocalIsUpdate.txt"));
+                localIsUpdate = bool.Parse(HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath(true) + "/Config", "LocalIsUpdate.txt"));
             }
 
             if (localIsUpdate)

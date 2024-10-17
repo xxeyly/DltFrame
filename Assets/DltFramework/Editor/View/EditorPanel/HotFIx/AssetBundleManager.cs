@@ -160,17 +160,17 @@ public class AssetBundleManager : BaseEditor
         //元数据
         if (MetaAssemblyParticipatePackaging)
         {
-            if (!Directory.Exists("Assets/StreamingAssets/HotFix/Metadata"))
+            if (!Directory.Exists("Assets/StreamingAssets/HotFixRuntime/Metadata"))
             {
-                Directory.CreateDirectory("Assets/StreamingAssets/HotFix/Metadata");
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFixRuntime/Metadata");
 #if UNITY_EDITOR
                 AssetDatabase.Refresh();
 #endif
             }
 
-            if (!Directory.Exists("Assets/StreamingAssets/HotFix/MetadataConfig"))
+            if (!Directory.Exists("Assets/StreamingAssets/HotFixRuntime/MetadataConfig"))
             {
-                Directory.CreateDirectory("Assets/StreamingAssets/HotFix/MetadataConfig");
+                Directory.CreateDirectory("Assets/StreamingAssets/HotFixRuntime/MetadataConfig");
 #if UNITY_EDITOR
                 AssetDatabase.Refresh();
 #endif
@@ -197,10 +197,10 @@ public class AssetBundleManager : BaseEditor
                 }
 
                 File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/AssembliesPostIl2CppStrip/" + platformName + "/" + metadataName,
-                    Application.streamingAssetsPath + "/HotFix/Metadata/" + metadataName + ".bytes", true);
+                    Application.streamingAssetsPath + "/HotFixRuntime/Metadata/" + metadataName + ".bytes", true);
             }
 
-            List<string> buildPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets/StreamingAssets/HotFix/Metadata", "bytes");
+            List<string> buildPath = DataFrameComponent.Path_GetGetSpecifyPathInAllType("Assets/StreamingAssets/HotFixRuntime/Metadata", "bytes");
             List<HotFixRuntimeDownConfig> hotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             foreach (string path in buildPath)
             {
@@ -214,7 +214,7 @@ public class AssetBundleManager : BaseEditor
             }
 
 
-            FileOperationComponent.SaveTextToLoad(Application.streamingAssetsPath + "/HotFix/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
+            FileOperationComponent.SaveTextToLoad(Application.streamingAssetsPath + "/HotFixRuntime/MetadataConfig", "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
         }
 
         OnLoadConfig();

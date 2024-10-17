@@ -67,6 +67,22 @@ namespace Aot
             return textData;
         }
 
+        public static void SaveTextToLoad(string path, string fileName, string information)
+        {
+            if (Directory.Exists(path))
+            {
+            }
+            else
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            File.WriteAllText(path + "/" + fileName, information, new System.Text.UTF8Encoding(false));
+#if UNITY_EDITOR
+            UnityEditor.AssetDatabase.Refresh();
+#endif
+        }
+
         public static void SaveTextToLoad(string path, string information)
         {
             FileStream aFile = new FileStream(path, FileMode.Create);

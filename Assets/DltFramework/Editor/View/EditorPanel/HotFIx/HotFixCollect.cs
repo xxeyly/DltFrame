@@ -58,6 +58,9 @@ namespace DltFramework
         [LabelText("本地是否开启更新")] [OnValueChanged("OnSaveConfig")]
         public bool localIsUpdate;
 
+        [LabelText("仅资源版本对比")] [OnValueChanged("OnSaveConfig")]
+        public bool onlyResourcesVersionContrast;
+
         [OnValueChanged("OnSaveConfig")] [InfoBox("打包后会拷贝所有资源到当前路径下,并且还会复制一份以当前版本号的为名的备份文件夹")] [LabelText("资源外部拷贝路径")] [LabelWidth(120)] [FolderPath(AbsolutePath = true)] [ShowInInspector] [OnValueChanged("OnSaveConfig")]
         private string targetOutPath;
 
@@ -135,23 +138,23 @@ namespace DltFramework
                 Directory.CreateDirectory(HotFixViewConfigPath);
             }
 
-            MetadataPath = HotFixPath + "Metadata/";
-            if (!Directory.Exists(MetadataPath))
-            {
-                Directory.CreateDirectory(MetadataPath);
-            }
-
-            MetadataConfigPath = HotFixPath + "MetadataConfig/";
-            if (!Directory.Exists(MetadataConfigPath))
-            {
-                Directory.CreateDirectory(MetadataConfigPath);
-            }
-
             #endregion
 
             #region HotFixRuntime Directory
 
             HotFixRuntimePath = UnStreamingAssetsPath + "HotFixRuntime/";
+            MetadataPath = HotFixRuntimePath + "Metadata/";
+            if (!Directory.Exists(MetadataPath))
+            {
+                Directory.CreateDirectory(MetadataPath);
+            }
+
+            MetadataConfigPath = HotFixRuntimePath + "MetadataConfig/";
+            if (!Directory.Exists(MetadataConfigPath))
+            {
+                Directory.CreateDirectory(MetadataConfigPath);
+            }
+
             if (!Directory.Exists(HotFixRuntimePath))
             {
                 Directory.CreateDirectory(HotFixRuntimePath);
@@ -368,10 +371,12 @@ namespace DltFramework
 
             //这里保存两份是因为,一份是在StreamingAssets下,一份是在UnStreamingAssets下,这样可以保证在打包时,引用StreamingAssets路径下的
             //编辑器模式下,引用UnStreamingAssets路径下的,打包后StreamingAssets路径下只有HotFixDownPath.txt和localIsUpdate.txt两个文件
-            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "HotFixDownPath.txt", hotFixDownPath);
-            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "HotFixDownPath.txt", hotFixDownPath);
-            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/HotFix/", "localIsUpdate.txt", localIsUpdate.ToString());
-            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/HotFix/", "localIsUpdate.txt", localIsUpdate.ToString());
+            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/Config/", "HotFixDownPath.txt", hotFixDownPath);
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/Config/", "HotFixDownPath.txt", hotFixDownPath);
+            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/Config/", "localIsUpdate.txt", localIsUpdate.ToString());
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/Config/", "localIsUpdate.txt", localIsUpdate.ToString());
+            FileOperationComponent.SaveTextToLoad("Assets/StreamingAssets/Config/", "OnlyResourcesVersionContrast.txt", onlyResourcesVersionContrast.ToString());
+            FileOperationComponent.SaveTextToLoad("Assets/UnStreamingAssets/Config/", "OnlyResourcesVersionContrast.txt", onlyResourcesVersionContrast.ToString());
 
             List<string> hotFixServerResources = new List<string>();
             foreach (NormalSceneAssetBundleAsset normalSceneAssetBundleAsset in NormalSceneAssetBundleAssetConfig)
@@ -388,9 +393,8 @@ namespace DltFramework
                 FileOperationComponent.Copy(HotFixCodeConfigPath, targetOutPath + "/HotFix/HotFixCodeConfig");
                 FileOperationComponent.Copy(HotFixViewPath, targetOutPath + "/HotFix/HotFixView");
                 FileOperationComponent.Copy(HotFixViewConfigPath, targetOutPath + "/HotFix/HotFixViewConfig");
-                FileOperationComponent.Copy(MetadataPath, targetOutPath + "/HotFix/Metadata");
-                FileOperationComponent.Copy(MetadataConfigPath, targetOutPath + "/HotFix/MetadataConfig");
-
+                FileOperationComponent.Copy(MetadataPath, targetOutPath + "/HotFixRuntime/Metadata");
+                FileOperationComponent.Copy(MetadataConfigPath, targetOutPath + "/HotFixRuntime/MetadataConfig");
                 FileOperationComponent.Copy(AssemblyPath, targetOutPath + "/HotFixRuntime/Assembly");
                 FileOperationComponent.Copy(AssemblyConfigPath, targetOutPath + "/HotFixRuntime/AssemblyConfig");
                 FileOperationComponent.Copy(GameRootStartAssetBundlePath, targetOutPath + "/HotFixRuntime/GameRootStartAssetBundle");
@@ -414,8 +418,8 @@ namespace DltFramework
                 FileOperationComponent.Copy(HotFixCodeConfigPath, targetOutPath + backupVersion + "/HotFix/HotFixCodeConfig");
                 FileOperationComponent.Copy(HotFixViewPath, targetOutPath + backupVersion + "/HotFix/HotFixView");
                 FileOperationComponent.Copy(HotFixViewConfigPath, targetOutPath + backupVersion + "/HotFix/HotFixViewConfig");
-                FileOperationComponent.Copy(MetadataPath, targetOutPath + backupVersion + "/HotFix/Metadata");
-                FileOperationComponent.Copy(MetadataConfigPath, targetOutPath + backupVersion + "/HotFix/MetadataConfig");
+                FileOperationComponent.Copy(MetadataPath, targetOutPath + backupVersion + "/HotFixRuntime/Metadata");
+                FileOperationComponent.Copy(MetadataConfigPath, targetOutPath + backupVersion + "/HotFixRuntime/MetadataConfig");
 
                 FileOperationComponent.Copy(AssemblyPath, targetOutPath + backupVersion + "/HotFixRuntime/Assembly");
                 FileOperationComponent.Copy(AssemblyConfigPath, targetOutPath + backupVersion + "/HotFixRuntime/AssemblyConfig");
@@ -572,7 +576,7 @@ namespace DltFramework
 
                 hotFixMetaAssemblyConfig.name = metadataName + ".bytes";
                 hotFixMetaAssemblyConfig.md5 = FileOperationComponent.GetMD5HashFromFile(MetadataPath + metadataName + ".bytes");
-                hotFixMetaAssemblyConfig.path = "HotFix/Metadata/";
+                hotFixMetaAssemblyConfig.path = "HotFixRuntime/Metadata/";
                 hotFixMetaAssemblyConfig.size = FileOperationComponent.GetFileSize(MetadataPath + metadataName + ".bytes").ToString();
 
                 HotFixRuntimeDownConfig contrastHotFixRuntimeDownConfig = FindHotFixRuntimeDownConfigByName(hotFixMetaAssemblyConfig.name, oldHotFixMetaAssemblyConfigs);
@@ -1289,6 +1293,7 @@ namespace DltFramework
             HotFixCollect hotFixCollectConfig = JsonUtil.FromJson<HotFixCollect>(FileOperationComponent.GetTextToLoad(RuntimeGlobal.assetRootPath, "HotFixCollect.json"));
             removeAssetBundleName = hotFixCollectConfig.removeAssetBundleName;
             localIsUpdate = hotFixCollectConfig.localIsUpdate;
+            onlyResourcesVersionContrast = hotFixCollectConfig.onlyResourcesVersionContrast;
             hotFixDownPathData = hotFixCollectConfig.hotFixDownPathData;
             if (IsContainHotFixDownPathData())
             {

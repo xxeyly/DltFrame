@@ -26,13 +26,13 @@ namespace HotFix
         //加载原数据
         private static void LoadMetadataForAOTAssemblies()
         {
-            if (!Directory.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/"))
+            if (!Directory.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Metadata/"))
             {
-                Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/Metadata/");
+                Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Metadata/");
             }
 
             List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable =
-                JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig", "MetadataConfig.json"));
+                JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/MetadataConfig", "MetadataConfig.json"));
 
             List<string> metadataHotFixRuntimeDownConfigTableList = new List<string>();
             foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in metadataHotFixRuntimeDownConfigTable)
@@ -42,7 +42,7 @@ namespace HotFix
 
             foreach (string metadata in metadataHotFixRuntimeDownConfigTableList)
             {
-                byte[] dllBytes =  File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFix/Metadata/" + metadata}");
+                byte[] dllBytes =  File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFixRuntime/Metadata/" + metadata}");
 #if HybridCLR
                 LoadImageErrorCode err =  HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
                 HotFixDebug.Log($"LoadMetadataForAOTAssembly:{metadata}. ret:{err}");

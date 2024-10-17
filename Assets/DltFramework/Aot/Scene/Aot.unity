@@ -978,19 +978,31 @@ MonoBehaviour:
   hotFixPath: 
   totalDownloadValue: 0
   currentDownloadValue: 0
-  hotFixViewHotFixAssetConfig:
+  localHotFixViewHotFixAssetConfig:
     name: 
     md5: 
     size: 
     path: 
-    version: 1
+    version: 0
+  remoteHotFixViewHotFixAssetConfig:
+    name: 
+    md5: 
+    size: 
+    path: 
+    version: 0
   hotFixViewIsNeedDown: 0
-  hotFixCodeHotFixAssetConfig:
+  localHotFixCodeHotFixAssetConfig:
     name: 
     md5: 
     size: 
     path: 
-    version: 1
+    version: 0
+  remoteHotFixCodeHotFixAssetConfig:
+    name: 
+    md5: 
+    size: 
+    path: 
+    version: 0
   hotFixCodeIsNeedDown: 0
   currentCheckTime: 0
   checkTime: 1

@@ -142,7 +142,7 @@ namespace HotFix
         IEnumerator LocalIsUpdateLoad()
         {
             //本地下载路径
-            string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "LocalIsUpdate.txt";
+            string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/Config/" + "LocalIsUpdate.txt";
             UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
             yield return hotFixPathLoadLocalFile.SendWebRequest();
             if (hotFixPathLoadLocalFile.responseCode == 200)
@@ -166,7 +166,7 @@ namespace HotFix
         IEnumerator OnlyResourcesVersionContrast()
         {
             //本地下载路径
-            string allResourcesContrastPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "OnlyResourcesVersionContrast.txt";
+            string allResourcesContrastPath = HotFixGlobal.GetDeviceStoragePath(true) + "/Config/" + "OnlyResourcesVersionContrast.txt";
             UnityWebRequest allResourcesContrastFile = UnityWebRequest.Get(allResourcesContrastPath);
             yield return allResourcesContrastFile.SendWebRequest();
             if (allResourcesContrastFile.responseCode == 200)
@@ -178,7 +178,7 @@ namespace HotFix
                 HotFixDebug.Log("本地下载路径不存在:" + allResourcesContrastPath);
                 //如果仅资源对比不存在,设置为True
                 onlyResourcesVersionContrast = true;
-                HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix", "OnlyResourcesVersionContrast.txt", "True");
+                HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/Config", "OnlyResourcesVersionContrast.txt", "True");
             }
 
             OnlyResourcesVersionContrastLoad = true;
@@ -191,7 +191,7 @@ namespace HotFix
         IEnumerator HotFixPathLocalLoad()
         {
             //本地下载路径
-            string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/" + "HotFixDownPath.txt";
+            string hotFixDownPath = HotFixGlobal.GetDeviceStoragePath(true) + "/Config/" + "HotFixDownPath.txt";
             UnityWebRequest hotFixPathLoadLocalFile = UnityWebRequest.Get(hotFixDownPath);
             yield return hotFixPathLoadLocalFile.SendWebRequest();
             if (hotFixPathLoadLocalFile.responseCode == 200)
@@ -256,7 +256,7 @@ namespace HotFix
         //下载远程元数据配置表
         IEnumerator DownMetadataConfig()
         {
-            UnityWebRequest request = UnityWebRequest.Get(hotFixPath + "HotFix/MetadataConfig/" + "MetadataConfig.json");
+            UnityWebRequest request = UnityWebRequest.Get(hotFixPath + "HotFixRuntime/MetadataConfig/" + "MetadataConfig.json");
             yield return request.SendWebRequest();
             if (request.responseCode != 200)
             {
@@ -512,7 +512,7 @@ namespace HotFix
         /// <returns></returns>
         IEnumerator MetadataConfigLocalLoad()
         {
-            string metadataConfigLocalPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFix/MetadataConfig/" + "MetadataConfig.json";
+            string metadataConfigLocalPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFixRuntime/MetadataConfig/" + "MetadataConfig.json";
             UnityWebRequest metadataConfigLocalFile = UnityWebRequest.Get(metadataConfigLocalPath);
             yield return metadataConfigLocalFile.SendWebRequest();
             if (metadataConfigLocalFile.responseCode == 200)
@@ -547,10 +547,10 @@ namespace HotFix
         /// </summary>
         private void SaveMetadataConfigCacheFile()
         {
-            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig", "MetadataConfig.json" + ".Cache", JsonUtil.ToJson(remoteMetadataHotFixRuntimeDownConfigTable));
+            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/MetadataConfig", "MetadataConfig.json" + ".Cache", JsonUtil.ToJson(remoteMetadataHotFixRuntimeDownConfigTable));
 
             //添加到缓存列表中
-            hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFix/MetadataConfig/" + "MetadataConfig.json" + ".Cache");
+            hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/MetadataConfig/" + "MetadataConfig.json" + ".Cache");
         }
 
         #endregion
