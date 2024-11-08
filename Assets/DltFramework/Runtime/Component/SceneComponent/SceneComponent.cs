@@ -2,10 +2,11 @@
 
 namespace DltFramework
 {
-    public abstract partial class SceneComponent : MonoBehaviour, ISceneComponent
+    public abstract partial class SceneComponent : ExtendMonoBehaviour, ISceneComponent
     {
         public abstract void StartComponent();
         public abstract void EndComponent();
+        public string viewName;
 
         public void AddToSceneComponent()
         {

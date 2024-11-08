@@ -50,6 +50,11 @@ namespace DltFramework
             {
                 text = text.Replace("SceneComponentInitTemplate", className);
             }
+            
+            if (resourceFile == RuntimeGlobal.EntityItemTemplatePath)
+            {
+                text = text.Replace("EntityItemTemplate", className);
+            }
 
             if (resourceFile == RuntimeGlobal.AnimatorControllerParameterDataTemplatePath)
             {

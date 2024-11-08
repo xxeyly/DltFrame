@@ -12,7 +12,7 @@ namespace DltFramework
         /// <summary>
         /// 缩进
         /// </summary>
-        /// <param name="number"></param>
+        /// <param name="number">缩进数量</param>
         /// <returns></returns>
         public static string Indents(int number)
         {
@@ -28,10 +28,10 @@ namespace DltFramework
         /// <summary>
         /// 替换内容
         /// </summary>
-        /// <param name="scriptsContent"></param>
-        /// <param name="insertContent"></param>
-        /// <param name="insertStartMark"></param>
-        /// <param name="insertEndMark"></param>
+        /// <param name="scriptsContent">原脚本内容</param>
+        /// <param name="insertContent">要插入的内容</param>
+        /// <param name="insertStartMark">插入开始标记</param>
+        /// <param name="insertEndMark">插入结束标记</param>
         /// <returns></returns>
         public static string ReplaceScriptContent(string scriptsContent, string insertContent, string insertStartMark, string insertEndMark)
         {
@@ -76,10 +76,10 @@ namespace DltFramework
         /// <summary>
         /// 替换内容
         /// </summary>
-        /// <param name="scriptsContent"></param>
-        /// <param name="insertContent"></param>
-        /// <param name="insertStartMark"></param>
-        /// <param name="insertEndMark"></param>
+        /// <param name="scriptsContent">原脚本内容</param>
+        /// <param name="insertContent">要插入的内容</param>
+        /// <param name="insertStartMark">插入开始标记</param>
+        /// <param name="insertEndMark">插入结束标记</param>
         /// <returns></returns>
         public static string ReplaceScriptContent(string scriptsContent, List<string> insertContent, string insertStartMark, string insertEndMark)
         {
@@ -95,7 +95,7 @@ namespace DltFramework
         /// <summary>
         /// 获得旧的脚本内容
         /// </summary>
-        /// <param name="scriptsName"></param>
+        /// <param name="scriptsName">脚本名称</param>
         /// <returns></returns>
         public static string GetOldScriptsContent(string scriptsName)
         {
@@ -108,7 +108,7 @@ namespace DltFramework
         /// <summary>
         /// 获得脚本路径
         /// </summary>
-        /// <param name="scriptName"></param>
+        /// <param name="scriptName">脚本名称</param>
         /// <returns></returns>
         public static string GetPath(string scriptName)
         {

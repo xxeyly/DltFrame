@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace DltFramework
 {
@@ -20,7 +21,7 @@ namespace DltFramework
             string listenerComponentDataPath = GenerateGeneral.GetPath("ListenerComponentData");
             if (listenerComponentDataPath == null)
             {
-                DebugFrameComponent.LogWarning("ListenerComponentData脚本未创建");
+                Debug.LogWarning("ListenerComponentData脚本未创建");
                 return;
             }
 
@@ -219,14 +220,14 @@ namespace DltFramework
 
             #endregion
 
-            DebugFrameComponent.Log("代码生成完毕");
+            Debug.Log("代码生成完毕");
         }
 
         /// <summary>
         /// 生成方法
         /// </summary>
-        /// <param name="method"></param>
-        /// <param name="returnMethod"></param>
+        /// <param name="method">方法</param>
+        /// <param name="returnMethod">返回值方法</param>
         /// <returns></returns>
         private string GenerationMethod(Dictionary<string, Dictionary<string, List<List<string>>>> method,
             Dictionary<string, Dictionary<string, List<List<string>>>> returnMethod)
@@ -409,7 +410,8 @@ namespace DltFramework
             //生成类
             foreach (KeyValuePair<string, List<string>> pair in classMethodGroup)
             {
-                generateClassContent += GenerateGeneral.Indents(8) + "[HideInInspector] public " + pair.Key + " " + DataFrameComponent.String_FirstCharToLower(pair.Key) + " = new " + pair.Key + "()" + ";" +
+                generateClassContent += GenerateGeneral.Indents(8) + "[HideInInspector] public " + pair.Key + " " + DataFrameComponent.String_FirstCharToLower(pair.Key) + " = new " + pair.Key + "()" +
+                                        ";" +
                                         GenerateGeneral.LineFeed;
             }
 
@@ -433,7 +435,7 @@ namespace DltFramework
         /// <summary>
         /// 属性分割
         /// </summary>
-        /// <param name="paramete"></param>
+        /// <param name="paramete">属性</param>
         /// <returns></returns>
         private List<string> ParameterSplit(string paramete)
         {

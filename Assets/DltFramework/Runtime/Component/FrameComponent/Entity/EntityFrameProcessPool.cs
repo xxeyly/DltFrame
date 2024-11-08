@@ -8,7 +8,10 @@ namespace DltFramework
     {
         public Dictionary<string, Dictionary<EntityItem, bool>> entityProcess = new Dictionary<string, Dictionary<EntityItem, bool>>();
 
-        //释放流程池
+        /// <summary>
+        /// 释放流程池
+        /// </summary>
+        /// <param name="processName">池名</param>
         public void EntityReleaseProcess(string processName)
         {
             if (!entityProcess.ContainsKey(processName))
@@ -35,9 +38,9 @@ namespace DltFramework
         /// <summary>
         /// 添加到流程池
         /// </summary>
-        /// <param name="processName"></param>
-        /// <param name="entityItem"></param>
-        /// <param name="display"></param>
+        /// <param name="processName">池名</param>
+        /// <param name="entityItem">实体</param>
+        /// <param name="display">显示</param>
         private void AddEntityToProcessPool(string processName, EntityItem entityItem, bool display)
         {
             if (!entityProcess[processName].ContainsKey(entityItem))
@@ -58,7 +61,12 @@ namespace DltFramework
                 }
             }
         }
-
+        /// <summary>
+        /// 显示实体
+        /// </summary>
+        /// <param name="processName">池名</param>
+        /// <param name="display">显示/隐藏 </param>
+        /// <param name="entityName">实体名</param>
         public void DisplayEntity(string processName, bool display,params string[] entityName)
         {
             if (!entityProcess.ContainsKey(processName))

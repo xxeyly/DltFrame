@@ -24,7 +24,7 @@ namespace DltFramework
     /// <summary>
     /// 视图基类
     /// </summary>
-    public abstract partial class BaseWindow : MonoBehaviour
+    public abstract partial class BaseWindow : ExtendMonoBehaviour
     {
         protected GameObject window;
         protected CanvasGroup canvasGroup;
@@ -140,6 +140,15 @@ namespace DltFramework
         public bool GetDisplay()
         {
             return window.activeSelf;
+        }
+
+        public virtual void OnViewDestroy()
+        {
+        }
+
+        public virtual void OnViewHide()
+        {
+            
         }
     }
 }

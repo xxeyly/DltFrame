@@ -19,6 +19,23 @@ namespace DltFramework
         [Searchable] [TableList(AlwaysExpanded = true)] [InlineEditor()] [Required("选择音频配置文件")] [LabelText("音频数据")]
         public AudioComponentData audioData;
 
+        [LabelText("背景音乐名称")] [ShowIf("@audioData !=null")] [ValueDropdown("GetAudioNameListOfAudioComponentData")]
+        public string backgroundAudioName;
+
+        private IEnumerable<string> GetAudioNameListOfAudioComponentData()
+        {
+            List<string> selfObj = new List<string>();
+            if (audioData != null)
+            {
+                foreach (AudioComponentData.AudioInfo audioInfo in audioData.audioInfos)
+                {
+                    selfObj.Add(audioInfo.audioName);
+                }
+            }
+
+            return selfObj;
+        }
+
         [Button("修改音频名字")]
         public void ChangeAudioName()
         {
@@ -78,8 +95,10 @@ namespace DltFramework
         {
         }
 
-
-        [InfoBox("播放音效")]
+        /// <summary>
+        /// 播放音效
+        /// </summary>
+        /// <param name="audioName">音频名称</param>
         public void PlayEffectAudio(string audioName)
         {
             if (_audioDlc.ContainsKey(audioName))
@@ -94,6 +113,11 @@ namespace DltFramework
             }
         }
 
+        /// <summary>
+        /// 获取音效长度
+        /// </summary>
+        /// <param name="audioName">音频名称</param>
+        /// <returns></returns>
         public float GetEffectAudioLength(string audioName)
         {
             if (_audioDlc.ContainsKey(audioName))
@@ -110,12 +134,17 @@ namespace DltFramework
         /// <summary>
         /// 播放音效
         /// </summary>
+        /// <param name="audioClip">音频Clip </param>
         public void PlayEffectAudio(AudioClip audioClip)
         {
             _effectAudioSource.clip = audioClip;
             _effectAudioSource.Play();
         }
 
+        /// <summary>
+        /// 播放提示音
+        /// </summary>
+        /// <param name="audioClip">音频Clip </param>
         public void PlayTipAndDialogAudio(AudioClip audioClip)
         {
             _tipAndDialogAudioSource.Stop();
@@ -123,6 +152,10 @@ namespace DltFramework
             _tipAndDialogAudioSource.Play();
         }
 
+        /// <summary>
+        /// 播放提示音
+        /// </summary>
+        /// <param name="audioName">音频名称</param>
         public void PlayTipAndDialogAudio(string audioName)
         {
             if (_audioDlc.ContainsKey(audioName))
@@ -146,6 +179,10 @@ namespace DltFramework
             _effectAudioSource.clip = null;
         }
 
+        /// <summary>
+        /// 设置音效音量
+        /// </summary>
+        /// <param name="volume"></param>
         public void SetEffectVolume(float volume)
         {
             _effectAudioSource.volume = volume;
@@ -217,9 +254,9 @@ namespace DltFramework
         /// </summary>
         public void PlayBackgroundAudio()
         {
-            if (_audioDlc.ContainsKey("背景音乐") && _audioDlc["背景音乐"] != null)
+            if (_audioDlc.ContainsKey(backgroundAudioName) && _audioDlc[backgroundAudioName] != null)
             {
-                _backgroundAudioSource.clip = _audioDlc["背景音乐"];
+                _backgroundAudioSource.clip = _audioDlc[backgroundAudioName];
                 _backgroundAudioSource.Play();
                 RuntimeDataFrameComponent.Instance.audioState = true;
             }
@@ -229,6 +266,10 @@ namespace DltFramework
             }
         }
 
+        /// <summary>
+        /// 播放背景音乐
+        /// </summary>
+        /// <param name="audioName">音频名称</param>
         public void PlayBackgroundAudio(string audioName)
         {
             _backgroundAudioSource.clip = _audioDlc[audioName];

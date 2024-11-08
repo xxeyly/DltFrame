@@ -5,6 +5,7 @@ using System.Text;
 using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using DltFramework;
+using UnityEngine;
 
 public abstract class GenerateListenerComponent
 {
@@ -13,6 +14,9 @@ public abstract class GenerateListenerComponent
     private static Assembly _assembly;
     public static string listenerComponentDataPath = "";
 
+    /// <summary>
+    /// 生成监听
+    /// </summary>
     public static void GenerateListener()
     {
         if (listenerComponentDataPath == string.Empty)
@@ -61,6 +65,7 @@ public abstract class GenerateListenerComponent
         string oldContent = GenerateGeneral.GetOldScriptsContent("ListenerComponentData");
 
         string generateClassContent = String.Empty;
+        /*
         foreach (GenerateClassData generateClassData in _generateClassDataList)
         {
             generateClassContent = DataFrameComponent.String_BuilderString(
@@ -68,12 +73,14 @@ public abstract class GenerateListenerComponent
                 DataFrameComponent.String_FirstCharToLower(generateClassData.className), " = new ", generateClassData.className, "();",
                 GenerateGeneral.LineFeed);
         }
+        */
 
         foreach (GenerateClassData generateClassData in _generateClassDataList)
         {
             //类
-            generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(8), "public class ", generateClassData.className, GenerateGeneral.LineFeed);
-            generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(8), "{", GenerateGeneral.LineFeed);
+            generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(4), "public static class ", "G_", generateClassData.className,
+                GenerateGeneral.LineFeed);
+            generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(4), "{", GenerateGeneral.LineFeed);
 
             foreach (GenerateMethodData generateMethodData in generateClassData.generateMethodData)
             {
@@ -81,7 +88,8 @@ public abstract class GenerateListenerComponent
 
                 for (int i = 0; i < generateMethodData.parameterType.Count; i++)
                 {
-                    parameterTypeContent = DataFrameComponent.String_BuilderString(parameterTypeContent, CommonTypeConversion(generateMethodData.parameterType[i]), GenerateGeneral.Indents(1), "arg", i.ToString());
+                    parameterTypeContent = DataFrameComponent.String_BuilderString(parameterTypeContent, CommonTypeConversion(generateMethodData.parameterType[i]), GenerateGeneral.Indents(1), "arg",
+                        i.ToString());
                     if (i < generateMethodData.parameterType.Count - 1)
                     {
                         parameterTypeContent = DataFrameComponent.String_BuilderString(parameterTypeContent, ",");
@@ -89,21 +97,22 @@ public abstract class GenerateListenerComponent
                 }
 
                 generateClassContent = DataFrameComponent.String_BuilderString(
-                    generateClassContent, GenerateGeneral.Indents(12), "public", GenerateGeneral.Indents(1), CommonTypeConversion(generateMethodData.returnType),
+                    generateClassContent, GenerateGeneral.Indents(8), "public static", GenerateGeneral.Indents(1), CommonTypeConversion(generateMethodData.returnType),
                     GenerateGeneral.Indents(1), generateMethodData.methodName, "(", parameterTypeContent, ")", GenerateGeneral.LineFeed);
-                generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(12), "{", GenerateGeneral.LineFeed);
+                generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(8), "{", GenerateGeneral.LineFeed);
                 string inputParameterTypeContent = String.Empty;
 
                 string executeEventContent = string.Empty;
                 if (generateMethodData.returnType == typeof(void))
                 {
-                    executeEventContent = "Instance.ExecuteEvent";
+                    executeEventContent = "ListenerFrameComponent.Instance.ExecuteEvent";
                 }
                 else
                 {
                     if (generateMethodData.parameterType.Count == 0)
                     {
-                        executeEventContent = DataFrameComponent.String_BuilderString(executeEventContent, "return Instance.ExecuteReturnEvent", "<", CommonTypeConversion(generateMethodData.returnType), ">");
+                        executeEventContent = DataFrameComponent.String_BuilderString(executeEventContent, "return ListenerFrameComponent.Instance.ExecuteReturnEvent", "<",
+                            CommonTypeConversion(generateMethodData.returnType), ">");
                     }
                     else
                     {
@@ -113,14 +122,15 @@ public abstract class GenerateListenerComponent
                             returnParameterTypeContent = DataFrameComponent.String_BuilderString(returnParameterTypeContent, CommonTypeConversion(generateMethodData.parameterType[i]), ",");
                         }
 
-                        executeEventContent = DataFrameComponent.String_BuilderString(executeEventContent, "return Instance.ExecuteReturnEvent<", returnParameterTypeContent, CommonTypeConversion(generateMethodData.returnType), ">");
+                        executeEventContent = DataFrameComponent.String_BuilderString(executeEventContent, "return ListenerFrameComponent.Instance.ExecuteReturnEvent<", returnParameterTypeContent,
+                            CommonTypeConversion(generateMethodData.returnType), ">");
                     }
                 }
 
                 if (generateMethodData.parameterType.Count == 0)
                 {
                     generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent,
-                        GenerateGeneral.Indents(16), executeEventContent, "(\"", generateClassData.className, "\"", ",", "\"", generateMethodData.methodName, "\"", ");", GenerateGeneral.LineFeed);
+                        GenerateGeneral.Indents(12), executeEventContent, "(\"", generateClassData.className, "\"", ",", "\"", generateMethodData.methodName, "\"", ");", GenerateGeneral.LineFeed);
                 }
                 else
                 {
@@ -134,28 +144,33 @@ public abstract class GenerateListenerComponent
                     }
 
                     generateClassContent = DataFrameComponent.String_BuilderString(
-                        generateClassContent, GenerateGeneral.Indents(16), executeEventContent, "(\"", generateClassData.className, "\"", ",", "\"",
+                        generateClassContent, GenerateGeneral.Indents(12), executeEventContent, "(\"", generateClassData.className, "\"", ",", "\"",
                         generateMethodData.methodName, "\"", ",", inputParameterTypeContent, ");",
                         GenerateGeneral.LineFeed);
                 }
 
-                generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(12), "}", GenerateGeneral.LineFeed);
+                generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(8), "}", GenerateGeneral.LineFeed);
             }
 
-            generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(8), "}", GenerateGeneral.LineFeed);
+            generateClassContent = DataFrameComponent.String_BuilderString(generateClassContent, GenerateGeneral.Indents(4), "}", GenerateGeneral.LineFeed);
         }
 
         string newCon = ReplaceScriptContent(oldContent, generateClassContent, "//监听生成开始", "//监听生成结束");
         if (newCon != oldContent)
         {
             FileOperationComponent.SaveTextToLoad(GenerateGeneral.GetPath("ListenerComponentData"), newCon);
-            DebugFrameComponent.Log("监听生成成功");
+            Debug.Log("监听生成成功");
         }
     }
 
     /// <summary>
     /// 替换内容
     /// </summary>
+    /// <param name="scriptsContent">脚本内容</param>
+    /// <param name="insertContent">插入内容</param>
+    /// <param name="insertStartMark">插入开始标记</param>
+    /// <param name="insertEndMark">插入结束标记</param>
+    /// <returns></returns>
     private static string ReplaceScriptContent(string scriptsContent, string insertContent, string insertStartMark, string insertEndMark)
     {
         if (scriptsContent.Contains(insertStartMark) && scriptsContent.Contains(insertEndMark))
@@ -194,7 +209,11 @@ public abstract class GenerateListenerComponent
         }
     }
 
-    [LabelText("Type转换")]
+    /// <summary>
+    /// 类型转换
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns></returns>
     private static string CommonTypeConversion(Type type)
     {
         if (type.Name == nameof(Boolean))

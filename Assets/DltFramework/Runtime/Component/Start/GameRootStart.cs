@@ -68,19 +68,19 @@ namespace DltFramework
             DontDestroyOnLoad(this.gameObject);
             dontDestroyOnLoad = true;
             Instance = GetComponent<GameRootStart>();
-            DebugFrameComponent.Log("框架初始化");
+            Debug.Log("框架初始化");
             frameComponent = DataFrameComponent.Hierarchy_GetAllObjectsInScene<FrameComponent>("DontDestroyOnLoad");
             for (int i = 0; i < frameComponent.Count; i++)
             {
                 frameComponent[i].FrameInitComponent();
             }
 
-            DebugFrameComponent.Log("框架初始化完毕");
+            Debug.Log("框架初始化完毕");
             //框架组件开启
             dontDestroyFrameSceneComponents = DataFrameComponent.Hierarchy_GetAllObjectsInScene<SceneComponent>("DontDestroyOnLoad");
             if (dontDestroyFrameSceneComponents.Count > 0)
             {
-                DebugFrameComponent.Log("不摧毁的SceneComponent加载完毕");
+                Debug.Log("不摧毁的SceneComponent加载完毕");
 
                 for (int i = 0; i < dontDestroyFrameSceneComponents.Count; i++)
                 {
@@ -96,12 +96,12 @@ namespace DltFramework
                     frameSceneInitStartSingletons[i].InitComponent();
                 }
 
-                DebugFrameComponent.Log("不摧毁的SceneComponentInit加载完毕");
+                Debug.Log("不摧毁的SceneComponentInit加载完毕");
             }
 
             if (initJump)
             {
-                DebugFrameComponent.Log("初始场景跳转");
+                Debug.Log("初始场景跳转");
                 SceneLoadFrameComponent.Instance.SceneLoad(initJumpSceneName);
                 DestroyImmediate(GetComponent<AudioListener>());
             }
@@ -132,7 +132,7 @@ namespace DltFramework
         /// </summary>
         private void InitSceneStartSingletons(Scene scene)
         {
-            DebugFrameComponent.Log(scene.name + "场景加载完毕");
+            Debug.Log(scene.name + "场景加载完毕");
             FrameComponentSceneInit();
             // Debug.Log(scene.name + "框架场景初始化");
             SceneComponentStart(scene);

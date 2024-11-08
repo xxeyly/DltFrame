@@ -94,7 +94,7 @@ namespace DltFramework
 
         public void Init(string entityName)
         {
-            centerTarget = GetEntity<Transform>(entityName);
+            // centerTarget = GetEntity<Transform>(entityName);
             Init();
         }
 

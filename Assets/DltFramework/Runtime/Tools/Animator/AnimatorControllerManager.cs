@@ -106,7 +106,7 @@ namespace DltFramework
                 }
                 catch (Exception e)
                 {
-                    DebugFrameComponent.Log(e + ":" + controllerBase.name);
+                   Debug.Log(e + ":" + controllerBase.name);
                 }
             }
         }

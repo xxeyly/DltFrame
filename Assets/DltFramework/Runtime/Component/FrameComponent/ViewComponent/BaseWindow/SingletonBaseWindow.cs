@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DltFramework
 {
     public abstract class SingletonBaseWindow<T> : BaseWindow where T : MonoBehaviour
     {
         private static T _instance;
+        
+        [Obsolete("Obsolete")]
         
         public static T Instance
         {

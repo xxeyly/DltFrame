@@ -21,6 +21,7 @@ namespace HotFix
             {
                 case RuntimePlatform.WindowsEditor:
                     path = Application.dataPath + "/UnStreamingAssets";
+                     
                     break;
                 case RuntimePlatform.WindowsPlayer:
                     path = Application.streamingAssetsPath;
@@ -222,6 +223,7 @@ namespace HotFix
 
             return specifiedType;
         }
+        
 
         /// <summary>
         /// 获得场景中所有物体
@@ -296,6 +298,47 @@ namespace HotFix
             }
 
             return sb.ToString();
+        }
+
+        [LabelText("获得指定类型文件路径")]
+        public static List<string> Path_GetSpecifyTypeOnlyInAssets(string fileExtension)
+        {
+            if (Path_GetAllObjectsOnlyInAssets().ContainsKey(fileExtension))
+            {
+                return Path_GetAllObjectsOnlyInAssets()[fileExtension];
+            }
+
+            return new List<string>();
+        }
+
+        [LabelText("获得所有文件的路径(.meta文件除外)")]
+        public static Dictionary<string, List<string>> Path_GetAllObjectsOnlyInAssets()
+        {
+            string[] files = Directory.GetFiles(GetDeviceStoragePath());
+            Dictionary<string, List<string>> assetsTypePathDic = new Dictionary<string, List<string>>();
+            List<FileInfo> fileInfos = new List<FileInfo>();
+            for (int i = 0; i < files.Length; i++)
+            {
+                fileInfos.Add(new FileInfo(files[i]));
+            }
+
+            for (int i = 0; i < fileInfos.Count; i++)
+            {
+                //后缀名
+                string extension = fileInfos[i].Extension.Replace(".", "");
+                //绝对路径
+                string absolutePath = fileInfos[i].FullName;
+                if (!assetsTypePathDic.ContainsKey(extension))
+                {
+                    assetsTypePathDic.Add(extension, new List<string>() { absolutePath });
+                }
+                else
+                {
+                    assetsTypePathDic[extension].Add(absolutePath);
+                }
+            }
+
+            return assetsTypePathDic;
         }
     }
 }

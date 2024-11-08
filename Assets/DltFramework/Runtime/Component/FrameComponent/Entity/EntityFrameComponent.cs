@@ -22,16 +22,28 @@ namespace DltFramework
         [Searchable] [LabelText("场景所有实体")] public List<EntityItem> sceneEntity;
         [LabelText("场景中重复名实体")] public List<SceneRepeatEntity> sceneRepeatEntityList;
 
-        public GameObject Instantiate(GameObject instantiate)
+        /// <summary>
+        /// 实体实例化
+        /// </summary>
+        /// <param name="instantiateObj">实例化对象</param>
+        /// <returns></returns>
+        public GameObject Instantiate(GameObject instantiateObj)
         {
-            GameObject tempInstantiate = GameObject.Instantiate(instantiate);
+            GameObject tempInstantiate = GameObject.Instantiate(instantiateObj);
             InstantiateInit(tempInstantiate);
             return tempInstantiate;
         }
 
-        public GameObject Instantiate(GameObject instantiate, Transform parent, bool world)
+        /// <summary>
+        /// 实体实例化
+        /// </summary>
+        /// <param name="instantiateObj">实例化对象</param>
+        /// <param name="parent">父物体</param>
+        /// <param name="world">是否在世界坐标系下</param>
+        /// <returns></returns>
+        public GameObject Instantiate(GameObject instantiateObj, Transform parent, bool world)
         {
-            GameObject tempInstantiate = GameObject.Instantiate(instantiate, parent, world);
+            GameObject tempInstantiate = GameObject.Instantiate(instantiateObj, parent, world);
             InstantiateInit(tempInstantiate);
 
             return tempInstantiate;
@@ -40,15 +52,15 @@ namespace DltFramework
         /// <summary>
         /// 实体实例化
         /// </summary>
-        /// <param name="instantiate"></param>
-        private void InstantiateInit(GameObject instantiate)
+        /// <param name="instantiateObj">实例化对象</param>
+        private void InstantiateInit(GameObject instantiateObj)
         {
-            foreach (EntityItem entityItem in instantiate.transform.GetComponentsInChildren<EntityItem>())
+            foreach (EntityItem entityItem in instantiateObj.transform.GetComponentsInChildren<EntityItem>())
             {
                 entityItem.AddToEntityList();
             }
 
-            foreach (AnimatorControllerBase animatorControllerBase in instantiate.transform.GetComponentsInChildren<AnimatorControllerBase>())
+            foreach (AnimatorControllerBase animatorControllerBase in instantiateObj.transform.GetComponentsInChildren<AnimatorControllerBase>())
             {
                 animatorControllerBase.AddToAnimatorControllerList();
             }
@@ -59,6 +71,9 @@ namespace DltFramework
             Instance = GetComponent<EntityFrameComponent>();
         }
 
+        /// <summary>
+        /// 场景初始化
+        /// </summary>
         public override void FrameSceneInitComponent()
         {
             EntityInit();
@@ -152,7 +167,7 @@ namespace DltFramework
         /// 根据名称返回第一个Entity类型
         /// </summary>
         /// <param name="entityName"></param>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="T">类型</typeparam>
         /// <returns></returns>
         public T GetEntity<T>(string entityName)
         {
@@ -207,13 +222,13 @@ namespace DltFramework
                 }
             }
         }
-        
+
 
         /// <summary>
         /// 根据实体名称显示或隐藏
         /// </summary>
-        /// <param name="entityNames"></param>
-        /// <param name="display"></param>
+        /// <param name="entityNames">实体名称数组</param>
+        /// <param name="display">是否显示</param>
         public void DisplayEntity(bool display, params string[] entityNames)
         {
             foreach (string entityName in entityNames)
@@ -240,7 +255,7 @@ namespace DltFramework
         /// <summary>
         /// 获得实体的状态
         /// </summary>
-        /// <param name="entityName"></param>
+        /// <param name="entityName">实体名称</param>
         /// <returns></returns>
         public bool GetEntityState(string entityName)
         {
@@ -258,7 +273,7 @@ namespace DltFramework
         /// <summary>
         /// 移除实体
         /// </summary>
-        /// <param name="entityName"></param>
+        /// <param name="entityName">实体名称</param>
         public void RemoveEntity(string entityName)
         {
             for (int i = 0; i < sceneEntity.Count; i++)

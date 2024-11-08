@@ -91,6 +91,7 @@ namespace HotFix
             {
                 hotFixRuntimeDownConfigOver = false;
                 HotFixDebug.Log("下载:" + needDownHotFixRuntimeDownConfig[i].name);
+                HotFixDebug.Log("下载:" + needDownHotFixRuntimeDownConfig[i].md5);
                 StartCoroutine(HotFixRuntimeDownConfigLocalCacheContrast(needDownHotFixRuntimeDownConfig[i]));
                 yield return new WaitUntil(() => hotFixRuntimeDownConfigOver);
             }
@@ -182,6 +183,8 @@ namespace HotFix
 
             //检测下载完后的文件的Md5
             string localCacheMd5 = HotFixGlobal.GetMD5HashFromFile(downFileCachePath);
+            Debug.Log("本地下载的Md5:" + localCacheMd5);
+            Debug.Log("远程的Md5:" + hotFixAssetConfig.md5);
 
             if (localCacheMd5 != hotFixAssetConfig.md5)
             {

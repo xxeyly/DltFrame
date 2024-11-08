@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace DltFramework
 {
@@ -6,10 +7,11 @@ namespace DltFramework
     /// 通用单例模式
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+    public class Singleton<T> : ExtendMonoBehaviour where T : MonoBehaviour
     {
         private static T _instance;
 
+        [Obsolete("Obsolete")]
         public static T Instance
         {
             get

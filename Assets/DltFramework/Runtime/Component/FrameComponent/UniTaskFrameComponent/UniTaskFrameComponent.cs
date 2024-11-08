@@ -27,6 +27,9 @@ public partial class UniTaskFrameComponent : FrameComponent
         RemoveAllTask();
     }
 
+    /// <summary>
+    /// 移除所有任务
+    /// </summary>
     private void RemoveAllTask()
     {
         List<string> keys = new List<string>(cancellationTokenSources.Keys);
@@ -36,24 +39,39 @@ public partial class UniTaskFrameComponent : FrameComponent
         }
     }
 
-    [LabelText("添加任务")]
-    public string AddSceneTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
+    /// <summary>
+    /// 移除任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
+    /// <param name="delay">延迟</param>
+    /// <param name="taskCount">任务数量</param>
+    /// <param name="initAction">初始化</param>
+    /// <param name="endAction">结束</param>
+    /// <param name="action">任务内容</param>
+    /// <returns></returns>
+    public async UniTask AddSceneTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
     {
         if (IsSceneContainCurrentTask(taskName))
         {
             Debug.LogError(taskName + "已存在");
-            return String.Empty;
         }
 
         CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         sceneLoadCancellationTokenSources.Add(taskName, cancellationTokenSource);
 #pragma warning disable 4014
-        ExecuteSceneTask(taskName, cancellationTokenSource.Token, delay, taskCount, initAction, endAction, action);
+        await ExecuteSceneTask(taskName, cancellationTokenSource.Token, delay, taskCount, initAction, endAction, action);
 #pragma warning restore 4014
-        return taskName;
     }
 
-    [LabelText("添加任务")]
+    /// <summary>
+    /// 添加任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
+    /// <param name="delay">延迟</param>
+    /// <param name="taskCount">任务数量</param>
+    /// <param name="initAction">初始化</param>
+    /// <param name="endAction">结束</param>
+    /// <param name="action">任务内容</param>
     public async UniTask AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
     {
         if (IsContainCurrentTask(taskName))
@@ -69,9 +87,19 @@ public partial class UniTaskFrameComponent : FrameComponent
 #pragma warning restore 4014
     }
 
-
-    [LabelText("执行任务")]
-    private async UniTask<string> ExecuteSceneTask(string taskName, CancellationToken cancellationToken, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
+    /// <summary>
+    /// 移除任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
+    /// <param name="cancellationToken">取消标记</param>
+    /// <param name="delay">延迟</param>
+    /// <param name="taskCount">任务数量</param>
+    /// <param name="initAction">初始化</param>
+    /// <param name="endAction">结束</param>
+    /// <param name="action">任务内容</param>
+    /// <returns></returns>
+    private async UniTask<string> ExecuteSceneTask(string taskName, CancellationToken cancellationToken, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null,
+        params UnityAction[] action)
     {
         cancellationToken.ThrowIfCancellationRequested();
         initAction?.Invoke();
@@ -104,7 +132,10 @@ public partial class UniTaskFrameComponent : FrameComponent
         return taskName;
     }
 
-    [LabelText("移除任务")]
+    /// <summary>
+    /// 移除任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
     public void RemoveTask(string taskName)
     {
         if (IsContainCurrentTask(taskName))
@@ -117,8 +148,10 @@ public partial class UniTaskFrameComponent : FrameComponent
         RemoveTaskProcessTaskName(taskName);
     }
 
-
-    [LabelText("移除任务")]
+    /// <summary>
+    /// 移除任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
     public void RemoveSceneTask(string taskName)
     {
         if (IsContainCurrentTask(taskName))
@@ -134,8 +167,19 @@ public partial class UniTaskFrameComponent : FrameComponent
         Instance = null;
     }
 
-    [LabelText("执行任务")]
-    private async UniTask<string> ExecuteTask(string taskName, CancellationToken cancellationToken, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action)
+    /// <summary>
+    /// 执行任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
+    /// <param name="cancellationToken">取消标记</param>
+    /// <param name="delay">延迟</param>
+    /// <param name="taskCount">任务数量</param>
+    /// <param name="initAction">初始化</param>
+    /// <param name="endAction">结束</param>
+    /// <param name="action">任务内容</param>
+    /// <returns></returns>
+    private async UniTask<string> ExecuteTask(string taskName, CancellationToken cancellationToken, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null,
+        params UnityAction[] action)
     {
         cancellationToken.ThrowIfCancellationRequested();
         initAction?.Invoke();
@@ -168,14 +212,21 @@ public partial class UniTaskFrameComponent : FrameComponent
         return taskName;
     }
 
-
-    [LabelText("包含当前任务")]
+    /// <summary>
+    /// 判断是否包含当前任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
+    /// <returns></returns>
     private bool IsContainCurrentTask(string taskName)
     {
         return cancellationTokenSources.ContainsKey(taskName);
     }
 
-    [LabelText("包含当前任务")]
+    /// <summary>
+    /// 判断是否包含当前任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
+    /// <returns></returns>
     private bool IsSceneContainCurrentTask(string taskName)
     {
         return cancellationTokenSources.ContainsKey(taskName);

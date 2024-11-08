@@ -133,7 +133,7 @@ namespace DltFramework
             }
             else
             {
-                DebugFrameComponent.LogError("文件不存在:" + path + "/" + fileName);
+                Debug.LogError("文件不存在:" + path + "/" + fileName);
             }
 
             _file = new FileStream(DataFrameComponent.String_BuilderString(path, "/", fileName), FileMode.Open);
@@ -155,7 +155,7 @@ namespace DltFramework
             }
             else
             {
-                DebugFrameComponent.LogError("文件不存在:" + path);
+                Debug.LogError("文件不存在:" + path);
             }
 
             _file = new FileStream(path, FileMode.Open);
@@ -263,7 +263,7 @@ namespace DltFramework
             }
             else
             {
-                DebugFrameComponent.Log(sourceDirName + "不存在");
+                Debug.Log(sourceDirName + "不存在");
             }
         }
 

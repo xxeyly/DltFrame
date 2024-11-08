@@ -67,10 +67,22 @@ namespace DltFramework
 
             ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponentInit.cs", null, RuntimeGlobal.SceneComponentInitTemplatePath);
         }
+        
+        [MenuItem("Assets/Create/DltFramework/C# EntityItem", false, 75)]
+        public static void OnCreateEntityItemTemplate()
+        {
+            string path = GetSelectedPath();
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewEntityItem.cs", null, RuntimeGlobal.EntityItemTemplatePath);
+        }
 
 
-        [MenuItem("Assets/Create/DltFramework/C# AnimatorControllerParameterData", false, 76)]
-        public static void OnCreateAnimatorControllerParameterDataTemplate()
+        // [MenuItem("Assets/Create/DltFramework/C# AnimatorControllerParameterData", false, 76)]
+        public static void OnCreateAnimatorControllbaerParameterDataTemplate()
         {
             string path = GetSelectedPath();
             if (string.IsNullOrEmpty(path))

@@ -13,6 +13,7 @@ namespace HotFix
     {
         public static void Over()
         {
+            DeleteCacheFile();
             HotFixNetworking.networkStatusDetection = false;
             HotFixDebug.Log("开始加载原数据");
             LoadMetadataForAOTAssemblies();
@@ -20,31 +21,46 @@ namespace HotFix
             LoadAssemblyCSharp();
             HotFixDebug.Log("开始加载游戏");
             LoadGameRootStart();
-            
         }
 
-        //加载原数据
+        /// <summary>
+        /// 删除缓存文件
+        /// </summary>
+        private static void DeleteCacheFile()
+        {
+            Debug.Log("删除缓存文件");
+            List<string> cacheFilePath = HotFixGlobal.Path_GetSpecifyTypeOnlyInAssets("Cache");
+            for (int i = 0; i < cacheFilePath.Count; i++)
+            {
+                File.Delete(cacheFilePath[i]);
+            }
+        }
+
+        /// <summary>
+        /// 加载元数据
+        /// </summary>
         private static void LoadMetadataForAOTAssemblies()
         {
+            //如果元文件夹不存在,创建
             if (!Directory.Exists(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Metadata/"))
             {
                 Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Metadata/");
             }
-
+            //获得元数据配置表
             List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable =
                 JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/MetadataConfig", "MetadataConfig.json"));
-
+            //元数据列表管理
             List<string> metadataHotFixRuntimeDownConfigTableList = new List<string>();
             foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in metadataHotFixRuntimeDownConfigTable)
             {
                 metadataHotFixRuntimeDownConfigTableList.Add(hotFixRuntimeDownConfig.name);
             }
-
+            //加载元数据
             foreach (string metadata in metadataHotFixRuntimeDownConfigTableList)
             {
-                byte[] dllBytes =  File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFixRuntime/Metadata/" + metadata}");
+                byte[] dllBytes = File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/{"HotFixRuntime/Metadata/" + metadata}");
 #if HybridCLR
-                LoadImageErrorCode err =  HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
+                LoadImageErrorCode err = HybridCLR.RuntimeApi.LoadMetadataForAOTAssembly(dllBytes, HomologousImageMode.SuperSet);
                 HotFixDebug.Log($"LoadMetadataForAOTAssembly:{metadata}. ret:{err}");
 #endif
             }

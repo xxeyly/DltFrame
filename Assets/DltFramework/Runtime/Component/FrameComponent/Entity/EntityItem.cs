@@ -9,7 +9,7 @@ namespace DltFramework
     /// 实体
     /// </summary>
     [Serializable]
-    public partial class EntityItem : MonoBehaviour
+    public partial class EntityItem : ExtendMonoBehaviour
     {
         [LabelText("实体名称")] public string entityName;
         [LabelText("描述名称")] public string descriptionName;
@@ -26,6 +26,9 @@ namespace DltFramework
             entityName = gameObject.name;
         }
 
+        /// <summary>
+        /// 添加到实体列表
+        /// </summary>
         public void AddToEntityList()
         {
             if (EntityFrameComponent.Instance == null)
@@ -43,11 +46,14 @@ namespace DltFramework
             }
         }
 
+        /// <summary>
+        /// 显示
+        /// </summary>
         public void Show()
         {
             if (isLog)
             {
-                Log(entityName + ":" + "显示");
+                Debug.Log(entityName + ":" + "显示");
             }
 
             if (!gameObject.activeSelf)
@@ -56,79 +62,20 @@ namespace DltFramework
             }
         }
 
+        /// <summary>
+        /// 隐藏
+        /// </summary>
         public void Hide()
         {
             if (isLog)
             {
-                Log(entityName + ":" + "隐藏");
+                Debug.Log(entityName + ":" + "隐藏");
             }
 
             if (gameObject.activeSelf)
             {
                 gameObject.SetActive(false);
             }
-        }
-
-        /// <summary>
-        /// 实体全部隐藏
-        /// </summary>
-        protected void EntityAllHide()
-        {
-            EntityFrameComponent.Instance.EntityAllHide();
-        }
-
-        /// <summary>
-        /// 实体全部显示
-        /// </summary>
-        protected void EntityAllShow()
-        {
-            EntityFrameComponent.Instance.EntityAllShow();
-        }
-
-        /// <summary>
-        /// 根据名称返回第一个Entity类型
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        protected T GetEntity<T>(string entity)
-        {
-            return EntityFrameComponent.Instance.GetEntity<T>(entity);
-        }
-
-        public EntityItem GetEntity(string entity)
-        {
-            return EntityFrameComponent.Instance.GetEntity(entity);
-        }
-
-        /// <summary>
-        /// 根据实体名称显示或隐藏
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="display"></param>
-        protected void DisplayEntity(bool display, string entity)
-        {
-            EntityFrameComponent.Instance.DisplayEntity(display, entity);
-        }
-
-        /// <summary>
-        /// 根据实体名称显示或隐藏
-        /// </summary>
-        /// <param name="entityNames"></param>
-        /// <param name="display"></param>
-        protected void DisplayEntity(bool display, params string[] entityNames)
-        {
-            EntityFrameComponent.Instance.DisplayEntity(display, entityNames);
-        }
-
-        /// <summary>
-        /// 获得实体的状态
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        protected bool GetEntityState(string entity)
-        {
-            return EntityFrameComponent.Instance.GetEntityState(entity);
         }
     }
 }

@@ -6,6 +6,8 @@ namespace DltFramework
     [InitializeOnLoad]
     public class CustomEntityItemHierarchy
     {
+#if UNITY_EDITOR
+
         static CustomEntityItemHierarchy()
         {
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyShow;
@@ -71,4 +73,5 @@ namespace DltFramework
             }
         }
     }
+#endif
 }

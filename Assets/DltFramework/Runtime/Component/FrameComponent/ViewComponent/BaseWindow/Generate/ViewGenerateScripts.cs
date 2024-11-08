@@ -203,10 +203,10 @@ namespace DltFramework
         /// <summary>
         /// 替换内容
         /// </summary>
-        /// <param name="scriptsContent"></param>
-        /// <param name="insertContent"></param>
-        /// <param name="insertStartMark"></param>
-        /// <param name="insertEndMark"></param>
+        /// <param name="scriptsContent">脚本内容</param>
+        /// <param name="insertContent">要插入的内容</param>
+        /// <param name="insertStartMark">开始标记</param>
+        /// <param name="insertEndMark">结束标记</param>
         /// <returns></returns>
         protected string ReplaceScriptContent(string scriptsContent, List<string> insertContent,
             string insertStartMark, string insertEndMark)
@@ -274,7 +274,7 @@ namespace DltFramework
         /// <summary>
         /// 添加Using引用
         /// </summary>
-        /// <param name="usingContent"></param>
+        /// <param name="usingContent">Using内容</param>
         protected void AddUsing(string usingContent)
         {
             //using列表不包含,并且旧代码不包含
@@ -287,7 +287,7 @@ namespace DltFramework
         /// <summary>
         /// 获得脚本路径
         /// </summary>
-        /// <param name="scriptName"></param>
+        /// <param name="scriptName">脚本名称</param>
         /// <returns></returns>
         protected static string GetPath(string scriptName)
         {
@@ -812,8 +812,8 @@ namespace DltFramework
         /// <summary>
         /// 查找方法关键Key
         /// </summary>
-        /// <param name="actionName"></param>
-        /// <param name="scriptsContent"></param>
+        /// <param name="actionName">事件名称</param>
+        /// <param name="scriptsContent">脚本内容</param>
         /// <returns></returns>
         private string FindActionNameKey(string actionName, string scriptsContent)
         {
@@ -843,8 +843,8 @@ namespace DltFramework
         /// <summary>
         /// 查找方法的内容
         /// </summary>
-        /// <param name="startMark"></param>
-        /// <param name="scriptContent"></param>
+        /// <param name="startMark">开始标记</param>
+        /// <param name="scriptContent">脚本内容</param>
         /// <returns></returns>
         private string FindActionContent(string startMark, string scriptContent)
         {
@@ -893,7 +893,7 @@ namespace DltFramework
         /// <summary>
         /// 查找旧的函数内容
         /// </summary>
-        /// <param name="actionName"></param>
+        /// <param name="actionName">事件名称</param>
         /// <returns></returns>
         private string FindOldActionContent(string actionName)
         {

@@ -76,6 +76,8 @@ namespace DltFramework
 
         [LabelText("SceneLoadComponentInit模板地址")]
         public static string SceneComponentInitTemplatePath = DataFrameComponent.String_BuilderString(DltFrameworkPath, "Model/Template/SceneComponentInitTemplate.cs");
+        [LabelText("EntityItem模板地址")]
+        public static string EntityItemTemplatePath = DataFrameComponent.String_BuilderString(DltFrameworkPath, "Model/Template/EntityItemTemplate.cs");
 
         [LabelText("AnimatorControllerParameterData模板地址")]
         public static string AnimatorControllerParameterDataTemplatePath = DataFrameComponent.String_BuilderString(DltFrameworkPath, "Model/Template/AnimatorControllerParameterDataTemplate.cs");

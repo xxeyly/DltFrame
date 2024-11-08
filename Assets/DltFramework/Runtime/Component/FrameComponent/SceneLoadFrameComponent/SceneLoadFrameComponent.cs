@@ -45,7 +45,11 @@ namespace DltFramework
         {
         }
 
-        [LabelText("获得异步加载进度")]
+        /// <summary>
+        /// 获得异步加载进度
+        /// </summary>
+        /// <param name="sceneName">场景名称</param>
+        /// <returns></returns>
         public float GetAsyncSceneProgress(string sceneName)
         {
             if (_tempSceneAsyncOperation.isDone)
@@ -74,8 +78,8 @@ namespace DltFramework
         /// <summary>
         /// 同步加载场景
         /// </summary>
-        /// <param name="sceneName"></param>
-        /// <param name="loadSceneMode"></param>
+        /// <param name="sceneName">场景名称</param>
+        /// <param name="loadSceneMode">加载模式</param>
         public async void SceneLoad(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (GameRootStart.Instance.hotFixLoad)
@@ -98,11 +102,15 @@ namespace DltFramework
             LoadSynchronizationScene(sceneName, loadSceneMode);
         }
 
-        [LabelText("同步加载逻辑")]
+        /// <summary>
+        /// 同步加载场景逻辑
+        /// </summary>
+        /// <param name="sceneName">场景名称</param>
+        /// <param name="loadSceneMode">加载模式</param>
         private void LoadSynchronizationScene(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             //处理场景加载时需要卸载的逻辑
-            DebugFrameComponent.Log("卸载的场景" + SceneManager.GetActiveScene().name);
+            Debug.Log("卸载的场景" + SceneManager.GetActiveScene().name);
             GameRootStart.Instance.OldSceneDestroy(SceneManager.GetActiveScene().name);
             SceneManager.LoadScene(sceneName, loadSceneMode);
         }
@@ -114,14 +122,18 @@ namespace DltFramework
         /// <summary>
         /// 异步加载场景
         /// </summary>
-        /// <param name="sceneName"></param>
-        /// <param name="loadSceneMode"></param>
+        /// <param name="sceneName">场景名称</param>
+        /// <param name="loadSceneMode">加载模式</param>
         public void SceneAsyncLoad(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             LoadAsyncScene(sceneName, loadSceneMode);
         }
 
-        [LabelText("异步加载逻辑")]
+        /// <summary>
+        /// 异步加载场景逻辑
+        /// </summary>
+        /// <param name="sceneName">场景名称</param>
+        /// <param name="loadSceneMode">加载模式</param>
         private async void LoadAsyncScene(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (GameRootStart.Instance.hotFixLoad)
@@ -144,8 +156,8 @@ namespace DltFramework
         /// <summary>
         /// 卸载场景
         /// </summary>
-        /// <param name="unSceneName"></param>
-        /// <param name="action"></param>
+        /// <param name="unSceneName">场景名称</param>
+        /// <param name="action">卸载完成后执行的回调函数</param>
         public void UnScene(string unSceneName, Action action = null)
         {
             GameRootStart.Instance.unScene = SceneManager.GetSceneByName(unSceneName);
@@ -154,7 +166,12 @@ namespace DltFramework
             StartCoroutine(OnUnScene(unSceneName, action));
         }
 
-        [LabelText("卸载逻辑")]
+        /// <summary>
+        /// 卸载场景逻辑
+        /// </summary>
+        /// <param name="unSceneName">场景名称</param>
+        /// <param name="action">卸载完成后执行的回调函数</param>
+        /// <returns></returns>
         IEnumerator OnUnScene(string unSceneName, Action action = null)
         {
             AsyncOperation unSceneAsyncOperation = SceneManager.UnloadSceneAsync(unSceneName);
@@ -162,7 +179,9 @@ namespace DltFramework
             action?.Invoke();
         }
 
-        [LabelText("场景加载完毕")]
+        /// <summary>
+        /// 异步加载场景完毕
+        /// </summary>
         public void AsyncSceneIsDone()
         {
             _tempSceneAsyncOperation.allowSceneActivation = true;

@@ -1,4 +1,5 @@
 ﻿#if UNITY_EDITOR
+using System;
 using System.Linq;
 
 #if UNITY_2019_1_OR_NEWER
@@ -16,6 +17,7 @@ namespace DltFramework
     public static class WindowBaseEditor
     {
         [MenuItem("GameObject/Create Empty WindowView", false, 0)]
+        [Obsolete("Obsolete")]
         public static void OnCreateEmptyWindowView()
         {
             Canvas[] allCanvas = Object.FindObjectsOfType<Canvas>();
@@ -88,7 +90,7 @@ namespace DltFramework
                 ScrollRect scrollRect = uiObj.GetComponent<ScrollRect>();
                 VideoPlayer videoPlayer = uiObj.GetComponent<VideoPlayer>();
                 Slider slider = uiObj.GetComponent<Slider>();
-                ChildBaseWindow childBaseWindow = uiObj.GetComponentInChildren<ChildBaseWindow>();
+                ChildBaseWindow childBaseWindow = uiObj.GetComponentInChildren<ChildBaseWindow>(); 
                 Image image = uiObj.GetComponent<Image>();
 
 

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Aot;
 using Cysharp.Threading.Tasks;
 using HotFix;
@@ -61,7 +60,13 @@ namespace DltFramework
         [LabelText("仅资源版本对比")] [OnValueChanged("OnSaveConfig")]
         public bool onlyResourcesVersionContrast;
 
-        [OnValueChanged("OnSaveConfig")] [InfoBox("打包后会拷贝所有资源到当前路径下,并且还会复制一份以当前版本号的为名的备份文件夹")] [LabelText("资源外部拷贝路径")] [LabelWidth(120)] [FolderPath(AbsolutePath = true)] [ShowInInspector] [OnValueChanged("OnSaveConfig")]
+        [OnValueChanged("OnSaveConfig")]
+        [InfoBox("打包后会拷贝所有资源到当前路径下,并且还会复制一份以当前版本号的为名的备份文件夹")]
+        [LabelText("资源外部拷贝路径")]
+        [LabelWidth(120)]
+        [FolderPath(AbsolutePath = true)]
+        [ShowInInspector]
+        [OnValueChanged("OnSaveConfig")]
         private string targetOutPath;
 
         [LabelText("平台拷贝地址")] [HideInInspector]
@@ -296,7 +301,7 @@ namespace DltFramework
         }
 
 
-        private async UniTask OnBuild()
+        private UniTask OnBuild()
         {
             currentOpenSceneName = SceneManager.GetActiveScene().name;
             sceneRepeatAssets.Clear();
@@ -306,7 +311,8 @@ namespace DltFramework
             //增加版本号
             DataFrameComponent.RemoveAllAssetBundleName();
 
-            if ((buildHotFixView && HotFixViewPrefab != null) || buildHotFixCode || buildAssemblyParticipatePackaging || buildMetaAssemblyParticipatePackaging || buildGameRootStart || (Scene && NormalSceneAssetBundleAssets.Count > 0))
+            if ((buildHotFixView && HotFixViewPrefab != null) || buildHotFixCode || buildAssemblyParticipatePackaging || buildMetaAssemblyParticipatePackaging || buildGameRootStart ||
+                (Scene && NormalSceneAssetBundleAssets.Count > 0))
             {
                 revisionVersion += 1;
                 OnSaveConfig();
@@ -427,7 +433,8 @@ namespace DltFramework
                 FileOperationComponent.Copy(GameRootStartAssetBundleConfigPath, targetOutPath + backupVersion + "/HotFixRuntime/GameRootStartAssetBundleConfig");
                 FileOperationComponent.Copy(HotFixAssetBundlePath, targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundle");
                 FileOperationComponent.Copy(HotFixAssetBundleConfigPath, targetOutPath + backupVersion + "/HotFixRuntime/HotFixAssetBundleConfig");
-                FileOperationComponent.CopyFile("Assets/UnStreamingAssets/HotFixRuntime/HotFixServerResourcesCount.json", targetOutPath + backupVersion + "/HotFixRuntime/HotFixServerResourcesCount.json");
+                FileOperationComponent.CopyFile("Assets/UnStreamingAssets/HotFixRuntime/HotFixServerResourcesCount.json",
+                    targetOutPath + backupVersion + "/HotFixRuntime/HotFixServerResourcesCount.json");
 
                 //额外数据
                 foreach (NormalSceneAssetBundleAsset normalSceneAssetBundleAsset in NormalSceneAssetBundleAssets)
@@ -445,6 +452,7 @@ namespace DltFramework
             sceneOpenState.Clear();
             Debug.Log("资源打包完毕");
             OpenScene(this.currentOpenSceneName);
+            return UniTask.CompletedTask;
         }
 
         #region 打包HotFixView
@@ -1089,7 +1097,8 @@ namespace DltFramework
         }
 
         [LabelText("生成配置信息")]
-        private void GenerateBuildConfig(string sceneName, List<HotFixAssetPathConfig> hotFixAssetPathConfigs, List<SceneAssetBundleRepeatAsset> sceneAssetBundleRepeatAssets, List<string> sceneExceptionAsset)
+        private void GenerateBuildConfig(string sceneName, List<HotFixAssetPathConfig> hotFixAssetPathConfigs, List<SceneAssetBundleRepeatAsset> sceneAssetBundleRepeatAssets,
+            List<string> sceneExceptionAsset)
         {
             //场景配置表路径
 
@@ -1134,14 +1143,17 @@ namespace DltFramework
             //场景数据
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeDownConfig.name = DataFrameComponent.String_AllCharToLower(sceneName);
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeDownConfig.path = "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Scene/";
-            string sceneAssetSize = FileOperationComponent.GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Scene/" + DataFrameComponent.String_AllCharToLower(sceneName))
+            string sceneAssetSize = FileOperationComponent
+                .GetFileSize(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Scene/" + DataFrameComponent.String_AllCharToLower(sceneName))
                 .ToString();
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeDownConfig.size = sceneAssetSize;
-            string sceneAssetMd5 = FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Scene/" + DataFrameComponent.String_AllCharToLower(sceneName));
+            string sceneAssetMd5 = FileOperationComponent.GetMD5HashFromFile(RuntimeGlobal.GetDeviceStoragePath() + "/" + "HotFixRuntime/HotFixAssetBundle/" + sceneName + "/Scene/" +
+                                                                             DataFrameComponent.String_AllCharToLower(sceneName));
             hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeDownConfig.md5 = sceneAssetMd5;
             string scenePath = UnStreamingAssetsPath + hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeDownConfig.path + sceneName;
 
-            HotFixRuntimeDownConfig oldSceneHotFixRuntimeDownConfig = FindHotFixRuntimeDownConfigByName(hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeDownConfig.name, oldSceneHotFixRuntimeDownConfigs);
+            HotFixRuntimeDownConfig oldSceneHotFixRuntimeDownConfig =
+                FindHotFixRuntimeDownConfigByName(hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeDownConfig.name, oldSceneHotFixRuntimeDownConfigs);
             if (oldSceneHotFixRuntimeDownConfig.md5 != sceneAssetMd5)
             {
                 oldSceneHotFixRuntimeDownConfig.version += 1;
@@ -1184,7 +1196,8 @@ namespace DltFramework
             foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetPathConfigs)
             {
                 //旧的数据
-                HotFixRuntimeDownConfig oldHotFixRuntimeDownConfig = FindHotFixRuntimeDownConfigByName(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), oldSceneHotFixRuntimeDownConfigs);
+                HotFixRuntimeDownConfig oldHotFixRuntimeDownConfig =
+                    FindHotFixRuntimeDownConfigByName(DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name), oldSceneHotFixRuntimeDownConfigs);
 
                 HotFixRuntimeDownConfig hotFixRuntimeDownConfig = new HotFixRuntimeDownConfig();
                 hotFixRuntimeDownConfig.name = DataFrameComponent.String_AllCharToLower(hotFixAssetPathConfig.name);
@@ -1207,7 +1220,8 @@ namespace DltFramework
             //额外数据
             foreach (string sceneExceptionAssetPath in sceneExceptionAsset)
             {
-                HotFixRuntimeDownConfig oldHotFixRuntimeDownConfig = FindHotFixRuntimeDownConfigByName(DataFrameComponent.Path_GetPathFileName(sceneExceptionAssetPath), oldSceneHotFixRuntimeDownConfigs);
+                HotFixRuntimeDownConfig oldHotFixRuntimeDownConfig =
+                    FindHotFixRuntimeDownConfigByName(DataFrameComponent.Path_GetPathFileName(sceneExceptionAssetPath), oldSceneHotFixRuntimeDownConfigs);
                 HotFixRuntimeDownConfig hotFixRuntimeSceneExceptConfig = new HotFixRuntimeDownConfig();
                 hotFixRuntimeSceneExceptConfig.name = DataFrameComponent.Path_GetPathFileName(sceneExceptionAssetPath);
                 string assetPath = DataFrameComponent.Path_GetPathDontContainFileName(sceneExceptionAssetPath.Replace("Assets/UnStreamingAssets/", ""));

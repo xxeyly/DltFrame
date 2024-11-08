@@ -18,6 +18,7 @@ namespace DltFramework
         }
 
         //添加宏定义
+        [Obsolete("Obsolete")]
         private static void AddMacro(string macroName)
         {
             BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
@@ -36,6 +37,7 @@ namespace DltFramework
         }
 
         //删除宏定义
+        [Obsolete("Obsolete")]
         private static void RemoveMacro(string macroName)
         {
             BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
@@ -119,6 +121,7 @@ namespace DltFramework
 
 #if HybridCLR
         [MenuItem("DltFrame/关闭热更功能")]
+        [Obsolete("Obsolete")]
         public static void CloseHotFix()
         {
             RemoveMacro("HybridCLR");
@@ -167,7 +170,7 @@ namespace DltFramework
             tree.Add("导出框架", gameRootEditor);
             tree.Add("音频配置", _audioComponentEditor);
             tree.Add("资源统一化", resourceUnification);
-            tree.Add("动画工具", animTools);
+            // tree.Add("动画工具", animTools);
             tree.Add("框架组件", _frameImportComponent);
             return tree;
         }
