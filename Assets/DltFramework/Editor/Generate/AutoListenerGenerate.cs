@@ -23,6 +23,12 @@ public class AutoListenerGenerate
 
         if (Convert.ToInt64(st1.TotalSeconds) - oldTime >= 1)
         {
+            if (!Directory.Exists("Assets/Config/"))
+            {
+                Directory.CreateDirectory("Assets/Config/");
+                AssetDatabase.Refresh();
+            }
+
             if (!File.Exists("Assets/Config/" + "AutoGenerateListenerConfig.asset"))
             {
                 AssetDatabase.CreateAsset(ScriptableObject.CreateInstance<AutoGenerateListenerConfig>(), "Assets/Config/" + "AutoGenerateListenerConfig.asset");
@@ -33,7 +39,6 @@ public class AutoListenerGenerate
                 autoGenerateListenerConfig = AssetDatabase.LoadAssetAtPath<AutoGenerateListenerConfig>("Assets/Config/" + "AutoGenerateListenerConfig.asset");
                 autoGenerateListenerConfig.isAuto = true;
                 EditorUtility.SetDirty(autoGenerateListenerConfig);
-
             }
 
 

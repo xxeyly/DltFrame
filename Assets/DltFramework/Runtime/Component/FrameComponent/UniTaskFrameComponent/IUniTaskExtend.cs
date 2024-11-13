@@ -18,7 +18,7 @@ namespace DltFramework
         /// <param name="endAction">结束</param>
         /// <param name="action">任务内容</param>
         /// <returns></returns>
-        UniTask AddSceneTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action);
+        UniTask U_AddSceneTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action);
 
         /// <summary>
         /// 添加任务
@@ -29,19 +29,19 @@ namespace DltFramework
         /// <param name="initAction">初始化</param>
         /// <param name="endAction">结束</param>
         /// <param name="action">任务内容</param>
-        UniTask AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action);
+        UniTask U_AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action);
 
 
         /// <summary>
         /// 移除任务
         /// </summary>
         /// <param name="taskName">任务名称</param>
-        public void RemoveTask(string taskName);
+        public void U_RemoveTask(string taskName);
 
         /// <summary>
         /// 移除任务
         /// </summary>
         /// <param name="taskName">任务名称</param>
-        public void RemoveSceneTask(string taskName);
+        public void U_RemoveSceneTask(string taskName);
     }
 }
