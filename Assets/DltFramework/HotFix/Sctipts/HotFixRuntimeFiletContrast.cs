@@ -662,7 +662,7 @@ namespace HotFix
         /// </summary>
         private void SaveGameRootStartConfigCacheFile()
         {
-            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json" + ".Cache", JsonUtil.ToJson(remoteAssemblyHotFixRuntimeDownConfig));
+            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json" + ".Cache", JsonUtil.ToJson(remoteGameRootStartHotFixRuntimeDownConfig));
             //添加到缓存列表中
             hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig/" + "GameRootStartConfig.json" + ".Cache");
         }

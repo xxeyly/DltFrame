@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace DltFramework
 {
@@ -119,7 +120,7 @@ namespace DltFramework
         /// <summary>
         /// 隐藏视图
         /// </summary>
-        protected void HideThisView()
+        protected void V_HideThisView()
         {
             ViewFrameComponent.Instance.HideView(viewType);
         }
@@ -127,7 +128,7 @@ namespace DltFramework
         /// <summary>
         /// 显示视图
         /// </summary>
-        protected void ShowView()
+        protected void V_ShowThisView()
         {
             ViewFrameComponent.Instance.ShowView(viewType);
         }

@@ -1,12 +1,16 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
+
 namespace DltFramework
 {
     /// <summary>
     /// 框架基类
     /// </summary>
-    public abstract class FrameComponent : MonoBehaviour, IFrameComponent
+    public abstract class FrameComponent : SerializedMonoBehaviour, IFrameComponent
     {
+        [LabelText("初始化索引ID")] public int frameInitIndex;
+
+        public abstract void SetFrameInitIndex();
         //框架组件初始化
         public abstract void FrameInitComponent();
 

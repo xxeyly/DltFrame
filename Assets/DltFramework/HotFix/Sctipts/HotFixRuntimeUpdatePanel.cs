@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace HotFix
 {
-    public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileContrast, IHotFixRuntimeFileDown, IHotFixNetworking,IHotFixFileError
+    public class HotFixRuntimeUpdatePanel : MonoBehaviour, IHotFixRuntimeFileContrast, IHotFixRuntimeFileDown, IHotFixNetworking, IHotFixFileError
     {
         public Canvas canvas;
         public GameObject initPanel;
@@ -22,6 +22,22 @@ namespace HotFix
         [LabelText("总下载大小")] public Text totalDownload;
         public GameObject networkPanel;
 
+
+        private void Start()
+        {
+            canvas.renderMode = RenderMode.WorldSpace;
+            //获得当前运行的平台
+            if (Application.platform == RuntimePlatform.WSAPlayerX64 || Application.platform == RuntimePlatform.WSAPlayerX86 || Application.platform == RuntimePlatform.WSAPlayerARM)
+            {
+                canvas.transform.position = new Vector3(0, 0, 3f);
+                canvas.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+            }
+            else
+            {
+                canvas.transform.position = new Vector3(0, 0, 0.93f);
+                canvas.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
+            }
+        }
 
         public void HotFixRuntimeTableDownStart()
         {
@@ -76,7 +92,6 @@ namespace HotFix
 
         public void HotFixFileError(string state)
         {
-            
         }
     }
 }

@@ -64,15 +64,17 @@ namespace Aot
             if (!File.Exists(AotGlobal.StringBuilderString(AotGlobal.GetDeviceStoragePath(), "/Config/localIsUpdate.txt")))
             {
                 Debug.Log("本地未找到,拷贝文件");
-                await CopyStreamingAssetsPathToPersistentDataPath(AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/Config/localIsUpdate.txt"), Application.persistentDataPath + "/HotFix/", "localIsUpdate.txt");
+                await CopyStreamingAssetsPathToPersistentDataPath(AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/Config/localIsUpdate.txt"),
+                    Application.persistentDataPath + "/Config/", "localIsUpdate.txt");
             }
 
             //本地更新文件读取
+            Debug.Log("本地更新文件读取");
             await LocalIsUpdateLoad();
-            // AotDebug.Log("检测本地更新是否完毕");
+            Debug.Log("检测本地更新是否完毕");
             if (localIsUpdate)
             {
-                // AotDebug.Log("开启更新");
+                Debug.Log("开启更新");
                 foreach (IHotFixViewAndHotFixCode hotFixViewAndHotFixCode in _hotFixViewAndHotFixCodes)
                 {
                     hotFixViewAndHotFixCode.HotFixViewAndHotFixCodeLocalIsUpdate(true);
@@ -83,7 +85,7 @@ namespace Aot
             }
             else
             {
-                AotDebug.Log("关闭更新");
+                Debug.Log("关闭更新");
                 foreach (IHotFixViewAndHotFixCode hotFixViewAndHotFixCode in _hotFixViewAndHotFixCodes)
                 {
                     hotFixViewAndHotFixCode.HotFixViewAndHotFixCodeLocalIsUpdate(false);
@@ -121,32 +123,41 @@ namespace Aot
             //未在本地找到拷贝HotFixDownPath.txt
             if (!File.Exists(AotGlobal.GetDeviceStoragePath() + "/Config/HotFixDownPath.txt"))
             {
+                Debug.Log("未找到HotFixDownPath.txt,拷贝文件");
                 await CopyStreamingAssetsPathToPersistentDataPath(
-                    AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/HotFix/HotFixDownPath.txt"),
+                    AotGlobal.StringBuilderString(Application.streamingAssetsPath, "/Config/HotFixDownPath.txt"),
                     AotGlobal.StringBuilderString(Application.persistentDataPath, "/Config/"), "HotFixDownPath.txt");
             }
 
             //HotFix路径
-            AotDebug.Log("本地HotFixPathDownPath路径读取");
+            Debug.Log("本地HotFixPathDownPath路径读取");
             await LocalHotFixPathDownPathLoad();
 
             //-------------------------------------------
             //HotFixView本地配置表读取
+            Debug.Log("本地HotFixViewConfig读取");
             LocalHotFixViewConfigLoad();
             //HotFixView远端配置表读取
+            Debug.Log("远端HotFixViewConfig读取");
             await RemoteHotFixViewConfigDownLoad();
             //HotFixView本地对比
+            Debug.Log("HotFixView本地对比");
             HotFixViewLocalContrast();
             //hotFixView缓存配置表保存
+            Debug.Log("HotFixView缓存配置表保存");
             SaveHotFixViewConfigCacheFile();
             //-------------------------------------------
             //HotFixCode本地配置表读取
+            Debug.Log("本地HotFixCodeConfig读取");
             LocalHotFixCodeConfigLoad();
             //HotFixCode远端配置表读取
+            Debug.Log("远端HotFixCodeConfig读取");
             await RemoteHotFixCodeConfigDownLoad();
             //HotFixCode本地对比
+            Debug.Log("HotFixCode本地对比");
             HotFixCodeLocalContrast();
             //hotFixView缓存配置表保存
+            Debug.Log("HotFixCode缓存配置表保存");
             SaveHotFixCodeConfigCacheFile();
             //-------------------------------------------
 
@@ -204,6 +215,7 @@ namespace Aot
 
             try
             {
+                Debug.Log("LocalIsUpdate读取成功");
                 await _hotFixUnityWebRequest.SendWebRequest();
                 if (_hotFixUnityWebRequest.responseCode == 200)
                 {
@@ -212,7 +224,7 @@ namespace Aot
             }
             catch (Exception e)
             {
-                AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
+                Debug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
                 await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
                 localIsUpdate = true;
             }
@@ -232,6 +244,7 @@ namespace Aot
 
                 if (_hotFixUnityWebRequest.responseCode == 200)
                 {
+                    Debug.Log("HotFixDownPath读取成功");
                     foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
                     {
                         aotFilePathError.FilePathCorrect();
@@ -247,7 +260,7 @@ namespace Aot
             }
             catch (Exception e)
             {
-                AotDebug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
+                Debug.Log(AotGlobal.StringBuilderString("访问错误:", e.ToString(), _hotFixUnityWebRequest.url, ":", _hotFixUnityWebRequest.responseCode.ToString()));
 
                 foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
                 {
@@ -306,7 +319,8 @@ namespace Aot
             localHotFixViewHotFixAssetConfig = new HotFixAssetConfig();
             if (File.Exists(hotfixViewConfigPath))
             {
-                localHotFixViewHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(AotGlobal.GetTextToLoad(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixViewConfig/", "HotFixViewConfig.json"));
+                localHotFixViewHotFixAssetConfig =
+                    JsonUtility.FromJson<HotFixAssetConfig>(AotGlobal.GetTextToLoad(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixViewConfig/", "HotFixViewConfig.json"));
             }
         }
 
@@ -316,7 +330,7 @@ namespace Aot
         async UniTask RemoteHotFixViewConfigDownLoad()
         {
             _hotFixUnityWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixViewConfig/HotFixViewConfig.json"));
-
+            Debug.Log(_hotFixUnityWebRequest.url);
             await _hotFixUnityWebRequest.SendWebRequest();
             if (_hotFixUnityWebRequest.responseCode == 200)
             {
@@ -387,7 +401,8 @@ namespace Aot
             localHotFixCodeHotFixAssetConfig = new HotFixAssetConfig();
             if (File.Exists(hotFixCodeConfigPath))
             {
-                localHotFixCodeHotFixAssetConfig = JsonUtility.FromJson<HotFixAssetConfig>(AotGlobal.GetTextToLoad(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCodeConfig", "HotFixCodeConfig.json"));
+                localHotFixCodeHotFixAssetConfig =
+                    JsonUtility.FromJson<HotFixAssetConfig>(AotGlobal.GetTextToLoad(AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCodeConfig", "HotFixCodeConfig.json"));
             }
         }
 

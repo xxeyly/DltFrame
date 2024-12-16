@@ -4,7 +4,6 @@ using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
-using DltFramework;
 
 namespace DltFramework
 {
@@ -13,9 +12,7 @@ namespace DltFramework
     /// </summary>
     public class AnimatorControllerManager : SceneComponent
     {
-        public static AnimatorControllerManager Instance;
         [LabelText("当前播放动画名称")] public string currentPlayAnim;
-        [LabelText("动画是否切换")] public bool eventChange;
 
         [LabelText("所有动画控制器")] [SerializeField] [Searchable]
         public List<AnimatorControllerBase> allAnimController = new List<AnimatorControllerBase>();
@@ -27,7 +24,6 @@ namespace DltFramework
 
         public override void StartComponent()
         {
-            Instance = GetComponent<AnimatorControllerManager>();
             allAnimController = DataFrameComponent.Hierarchy_GetAllObjectsInScene<AnimatorControllerBase>();
             foreach (AnimatorControllerBase animatorControllerBase in allAnimController)
             {
@@ -40,7 +36,8 @@ namespace DltFramework
         }
 
         [LabelText("添加动画控制器")]
-        public void AddAnimatorController(AnimatorControllerBase animatorControllerBase)
+        [AddListenerEvent]
+        private void AddAnimatorController(AnimatorControllerBase animatorControllerBase)
         {
             if (!allAnimController.Contains(animatorControllerBase))
             {
@@ -48,52 +45,34 @@ namespace DltFramework
             }
         }
 
-
         /// <summary>
         /// 播放动画
         /// </summary>
-        /// <param name="animType"></param>
-        public void PlayAnim(string animType)
+        /// <param name="animName"></param>
+        /// <param name="playProgress">播放进度</param>
+        [AddListenerEvent]
+        private async UniTask PlayAnim(string animName, float playProgress, float animSpeed = 1)
         {
-            currentPlayAnim = animType;
-            eventChange = true;
+            currentPlayAnim = animName;
             foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
                 if (controllerBase.gameObject.activeInHierarchy)
                 {
-                    controllerBase.PlayAnim(animType);
+                    controllerBase.PlayAnim(animName, playProgress, animSpeed);
                 }
             }
+
+            await U_AddTask(animName, GetPlayAnimFirstLength(animName));
         }
 
         /// <summary>
         /// 播放动画
         /// </summary>
-        /// <param name="animType"></param>
-        /// <param name="playProgress">播放进度</param>
-        public void PlayAnim(string animType, float playProgress)
-        {
-            currentPlayAnim = animType;
-            eventChange = true;
-
-            foreach (AnimatorControllerBase controllerBase in allAnimController)
-            {
-                if (controllerBase.enabled)
-                {
-                    controllerBase.PlayAnim(animType, playProgress);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 播放动画
-        /// </summary>
-        /// <param name="animType"></param>
+        /// <param name="animName"></param>
         /// <param name="animSpeedProgress"></param>
-        public void PlayAnim(string animType, AnimSpeedProgress animSpeedProgress)
+        public void PlayAnim(string animName, AnimSpeedProgress animSpeedProgress)
         {
-            currentPlayAnim = animType;
-            eventChange = true;
+            currentPlayAnim = animName;
 
             foreach (AnimatorControllerBase controllerBase in allAnimController)
             {
@@ -101,34 +80,16 @@ namespace DltFramework
                 {
                     if (controllerBase.gameObject.activeInHierarchy)
                     {
-                        controllerBase.PlayAnim(animType, animSpeedProgress);
+                        controllerBase.PlayAnim(animName, animSpeedProgress);
                     }
                 }
                 catch (Exception e)
                 {
-                   Debug.Log(e + ":" + controllerBase.name);
+                    Debug.Log(e + ":" + controllerBase.name);
                 }
             }
         }
 
-        /// <summary>
-        /// 播放动画
-        /// </summary>
-        /// <param name="animType"></param>
-        /// <param name="animAction"></param>
-        public async UniTask<string> PlayAnim(string animType, UnityAction animAction)
-        {
-            currentPlayAnim = animType;
-            eventChange = false;
-            foreach (AnimatorControllerBase controllerBase in allAnimController)
-            {
-                controllerBase.PlayAnim(animType);
-            }
-
-            await UniTask.WaitUntil(GetAnimControllerPlayerOver);
-            animAction?.Invoke();
-            return _animatorTimeTask;
-        }
 
         private bool GetAnimControllerPlayerOver()
         {
@@ -143,28 +104,13 @@ namespace DltFramework
             return true;
         }
 
-        public void StopAnimAction()
-        {
-            foreach (AnimatorControllerBase controllerBase in allAnimController)
-            {
-                controllerBase.StopAnim();
-            }
-        }
-
-        public void StopAllAnimAction()
-        {
-            foreach (AnimatorControllerBase controllerBase in allAnimController)
-            {
-                controllerBase.StopAnimTaskTime();
-            }
-        }
 
         /// <summary>
         /// 获得动画时长
         /// </summary>
         /// <param name="animType"></param>
         /// <returns></returns>
-        public float GetPlayAnimFirstLength(string animType)
+        private float GetPlayAnimFirstLength(string animType)
         {
             // float animLength = 0;
             AnimatorControllerBase fistController = GetPlayAnimFirstController(animType);

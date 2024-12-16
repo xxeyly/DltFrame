@@ -46,25 +46,33 @@ namespace DltFramework
 
         public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12);
 
-        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13);
+        public delegate void
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13);
 
-        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14);
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+            T13 t13, T14 t14);
 
-        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15);
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+            T12 t12, T13 t13, T14 t14, T15 t15);
 
-        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15,
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+            T12 t12, T13 t13, T14 t14, T15 t15,
             T16 t16);
 
-        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15,
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11, T12 t12, T13 t13, T14 t14, T15 t15,
             T16 t16, T17 t17);
 
-        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11, T12 t12, T13 t13, T14 t14,
             T15 t15, T16 t16, T17 t17, T18 t18);
 
-        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
             T15 t15, T16 t16, T17 t17, T18 t18, T19 t19);
 
-        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13,
+        public delegate void CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12, T13 t13,
             T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19, T20 t20);
 
 
@@ -96,29 +104,43 @@ namespace DltFramework
 
         public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12);
 
-        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13);
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+            T13 t13);
 
-        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14);
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+            T12 t12, T13 t13, T14 t14);
 
-        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15);
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+            T12 t12, T13 t13, T14 t14, T15 t15);
 
-        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15,
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11, T12 t12, T13 t13, T14 t14, T15 t15,
             T16 t16);
 
-        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11, T12 t12, T13 t13, T14 t14,
             T15 t15, T16 t16, T17 t17);
 
-        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12, T13 t13, T14 t14,
             T15 t15, T16 t16, T17 t17, T18 t18);
 
-        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13,
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12, T13 t13,
             T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19);
 
-        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+        public delegate R ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>(T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8,
+            T9 t9, T10 t10, T11 t11, T12 t12,
             T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19, T20 t20);
 
 
         [LabelText("所有触发事件")] public Dictionary<string, List<Delegate>> allListener = new Dictionary<string, List<Delegate>>();
+
+
+        public override void SetFrameInitIndex()
+        {
+            frameInitIndex = 0;
+        }
 
         public override void FrameInitComponent()
         {
@@ -269,22 +291,26 @@ namespace DltFramework
             AddDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> callBack)
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callBack)
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> callBack)
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> callBack)
+        public void AddListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
@@ -414,22 +440,26 @@ namespace DltFramework
             AddDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R> callBack)
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(string eventType,
+            ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R> callBack)
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(string eventType,
+            ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R> callBack)
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(string eventType,
+            ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(string eventType, ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R> callBack)
+        public void AddReturnListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(string eventType,
+            ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R> callBack)
         {
             AddDelegateToListenerEvent(eventType, callBack);
         }
@@ -577,22 +607,26 @@ namespace DltFramework
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> callBack)
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callBack)
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> callBack)
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
 
-        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType, CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> callBack)
+        public void RemoveListenerEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType,
+            CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17> callBack)
         {
             RemoveDelegateToListenerEvent(eventType, callBack);
         }
@@ -978,7 +1012,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11)
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+            T11 t11)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1010,7 +1045,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12)
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1044,7 +1080,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13)
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12, T13 t13)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1079,7 +1116,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12, T13 t13,
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8,
+            T9 t9, T10 t10, T11 t11, T12 t12, T13 t13,
             T14 t14)
         {
             if (allListener.ContainsKey(eventType))
@@ -1114,7 +1152,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7,
+            T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
             T13 t13, T14 t14, T15 t15)
         {
             if (allListener.ContainsKey(eventType))
@@ -1150,7 +1189,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7,
+            T8 t8, T9 t9, T10 t10, T11 t11,
             T12 t12, T13 t13, T14 t14, T15 t15, T16 t16)
         {
             if (allListener.ContainsKey(eventType))
@@ -1187,7 +1227,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6,
+            T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
             T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17)
         {
             if (allListener.ContainsKey(eventType))
@@ -1215,7 +1256,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17);
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15,
+                            t16, t17);
                     }
                 }
             }
@@ -1225,7 +1267,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5,
+            T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
             T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18)
         {
             if (allListener.ContainsKey(eventType))
@@ -1254,7 +1297,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[18].ParameterType == t18.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18);
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14,
+                            t15, t16, t17, t18);
                     }
                 }
             }
@@ -1264,7 +1308,8 @@ namespace DltFramework
             }
         }
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5,
+            T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
             T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19)
         {
             if (allListener.ContainsKey(eventType))
@@ -1294,7 +1339,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[19].ParameterType == t19.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19);
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13,
+                            t14, t15, t16, t17, t18, t19);
                     }
                 }
             }
@@ -1305,7 +1351,8 @@ namespace DltFramework
         }
 
 
-        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+        public void ExecuteEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4,
+            T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
             T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19, T20 t20)
         {
             if (allListener.ContainsKey(eventType))
@@ -1336,7 +1383,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[20].ParameterType == t20.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19, t20);
+                        ((CallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12,
+                            t13, t14, t15, t16, t17, t18, t19, t20);
                     }
                 }
             }
@@ -1350,7 +1398,7 @@ namespace DltFramework
 
         #region 执行有返回值监听
 
-        private R ExecuteReturnEvent<R>(string eventType, string delegateType)
+        public R ExecuteReturnEvent<R>(string eventType, string delegateType)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1371,7 +1419,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, R>(string eventType, string delegateType, T t)
+        public R ExecuteReturnEvent<T, R>(string eventType, string delegateType, T t)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1393,7 +1441,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, R>(string eventType, string delegateType, T t, T1 t1)
+        public R ExecuteReturnEvent<T, T1, R>(string eventType, string delegateType, T t, T1 t1)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1416,7 +1464,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, R>(string eventType, string delegateType, T t, T1 t1, T2 t2)
+        public R ExecuteReturnEvent<T, T1, T2, R>(string eventType, string delegateType, T t, T1 t1, T2 t2)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1440,7 +1488,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3)
+        public R ExecuteReturnEvent<T, T1, T2, T3, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1465,7 +1513,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1491,7 +1539,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1518,7 +1566,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1546,7 +1594,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1575,7 +1623,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1605,7 +1653,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1636,7 +1684,7 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1668,7 +1716,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1701,7 +1750,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12)
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+            T10 t10, T11 t11, T12 t12)
         {
             if (allListener.ContainsKey(eventType))
             {
@@ -1735,7 +1785,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8,
+            T9 t9, T10 t10, T11 t11, T12 t12,
             T13 t13)
         {
             if (allListener.ContainsKey(eventType))
@@ -1771,7 +1822,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7,
+            T8 t8, T9 t9, T10 t10, T11 t11, T12 t12,
             T13 t13, T14 t14)
         {
             if (allListener.ContainsKey(eventType))
@@ -1808,7 +1860,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7,
+            T8 t8, T9 t9, T10 t10, T11 t11,
             T12 t12, T13 t13, T14 t14, T15 t15)
         {
             if (allListener.ContainsKey(eventType))
@@ -1834,7 +1887,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[15].ParameterType == t15.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15);
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14,
+                            t15);
                     }
                 }
             }
@@ -1846,7 +1900,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6,
+            T7 t7, T8 t8, T9 t9, T10 t10, T11 t11,
             T12 t12, T13 t13, T14 t14, T15 t15, T16 t16)
         {
             if (allListener.ContainsKey(eventType))
@@ -1873,7 +1928,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[16].ParameterType == t16.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16);
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13,
+                            t14, t15, t16);
                     }
                 }
             }
@@ -1885,7 +1941,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5,
+            T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
             T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17)
         {
             if (allListener.ContainsKey(eventType))
@@ -1913,7 +1970,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[17].ParameterType == t17.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17);
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12,
+                            t13, t14, t15, t16, t17);
                     }
                 }
             }
@@ -1925,7 +1983,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4,
+            T5 t5, T6 t6, T7 t7, T8 t8, T9 t9, T10 t10,
             T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18)
         {
             if (allListener.ContainsKey(eventType))
@@ -1954,7 +2013,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[18].ParameterType == t18.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18);
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11,
+                            t12, t13, t14, t15, t16, t17, t18);
                     }
                 }
             }
@@ -1966,7 +2026,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4,
+            T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
             T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19)
         {
             if (allListener.ContainsKey(eventType))
@@ -1996,7 +2057,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[19].ParameterType == t19.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17, t18,
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10,
+                            t11, t12, t13, t14, t15, t16, t17, t18,
                             t19);
                     }
                 }
@@ -2009,7 +2071,8 @@ namespace DltFramework
             return default(R);
         }
 
-        private R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3, T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
+        public R ExecuteReturnEvent<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>(string eventType, string delegateType, T t, T1 t1, T2 t2, T3 t3,
+            T4 t4, T5 t5, T6 t6, T7 t7, T8 t8, T9 t9,
             T10 t10, T11 t11, T12 t12, T13 t13, T14 t14, T15 t15, T16 t16, T17 t17, T18 t18, T19 t19, T20 t20)
         {
             if (allListener.ContainsKey(eventType))
@@ -2040,7 +2103,8 @@ namespace DltFramework
                         customDelegate.Method.GetParameters()[20].ParameterType == t20.GetType() &&
                         customDelegate.Method.Name == delegateType)
                     {
-                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9, t10, t11, t12, t13, t14, t15, t16, t17,
+                        return ((ReturnCallBack<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, R>)customDelegate)(t, t1, t2, t3, t4, t5, t6, t7, t8, t9,
+                            t10, t11, t12, t13, t14, t15, t16, t17,
                             t18, t19, t20);
                     }
                 }

@@ -31,6 +31,21 @@ namespace DltFramework
         /// <param name="action">任务内容</param>
         UniTask U_AddTask(string taskName, float delay, int taskCount, UnityAction initAction = null, UnityAction endAction = null, params UnityAction[] action);
 
+        /// <summary>
+        /// 添加任务
+        /// </summary>
+        /// <param name="taskName">任务名称</param>
+        /// <param name="delay">延迟</param>
+        UniTask U_AddTask(string taskName, float delay);
+
+
+        /// <summary>
+        /// 添加任务
+        /// </summary>
+        /// <param name="taskName">任务名称</param>
+        /// <param name="delay">延迟</param>
+        /// <param name="action">任务内容</param>
+        UniTask U_AddTask(string taskName, float delay, UnityAction action);
 
         /// <summary>
         /// 移除任务

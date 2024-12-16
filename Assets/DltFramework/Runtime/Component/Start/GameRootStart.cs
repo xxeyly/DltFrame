@@ -41,7 +41,7 @@ namespace DltFramework
         [LabelText("框架加载日志")] [BoxGroup] public bool frameLoadLog;
 
 
-        private void OnEnable()
+        private async void OnEnable()
         {
             //场景中只有一个GameRootStart
             if (DataFrameComponent.Hierarchy_GetAllObjectsInScene<GameRootStart>().Count == 1)
@@ -70,6 +70,29 @@ namespace DltFramework
             Instance = GetComponent<GameRootStart>();
             Debug.Log("框架初始化");
             frameComponent = DataFrameComponent.Hierarchy_GetAllObjectsInScene<FrameComponent>("DontDestroyOnLoad");
+
+            for (int i = 0; i < frameComponent.Count; i++)
+            {
+                frameComponent[i].SetFrameInitIndex();
+            }
+
+            //frameComponent冒泡排序
+            //定义总和值
+            for (int i = 0; i < frameComponent.Count - 1; i++)
+                //需要比较的次数，即减去i本身
+            {
+                for (int j = 0; j < frameComponent.Count - 1 - i; j++)
+                    //比较的次数，即减去第一个i本身以及比较过的次数i
+                {
+                    if (frameComponent[j].frameInitIndex > frameComponent[j + 1].frameInitIndex)
+                    {
+                        (frameComponent[j], frameComponent[j + 1]) = (frameComponent[j + 1], frameComponent[j]);
+                        //交换元素位置
+                    }
+                }
+            }
+
+
             for (int i = 0; i < frameComponent.Count; i++)
             {
                 frameComponent[i].FrameInitComponent();
@@ -102,7 +125,7 @@ namespace DltFramework
             if (initJump)
             {
                 Debug.Log("初始场景跳转");
-                SceneLoadFrameComponent.Instance.SceneLoad(initJumpSceneName);
+                await SceneLoadFrameComponent.Instance.SceneLoad(initJumpSceneName);
                 DestroyImmediate(GetComponent<AudioListener>());
             }
 

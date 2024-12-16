@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace DltFramework
 {
-    public partial class ExtendMonoBehaviour : MonoBehaviour, IEntityExtend, IViewExtend, IAudioExtend, IUniTaskExtend, ISceneLoadExtend, IHttpExtend
+    public partial class ExtendMonoBehaviour : SerializedMonoBehaviour, IEntityExtend, IViewExtend, IAudioExtend, IUniTaskExtend, ISceneLoadExtend, IHttpExtend
     {
         #region 实体
 
@@ -218,6 +219,16 @@ namespace DltFramework
             return UniTaskFrameComponent.Instance.AddTask(taskName, delay, taskCount, initAction, endAction, action);
         }
 
+        public UniTask U_AddTask(string taskName, float delay)
+        {
+            return UniTaskFrameComponent.Instance.AddTask(taskName, delay);
+        }
+
+        public UniTask U_AddTask(string taskName, float delay, UnityAction action)
+        {
+            return UniTaskFrameComponent.Instance.AddTask(taskName, delay, action);
+        }
+
         public void U_RemoveTask(string taskName)
         {
             UniTaskFrameComponent.Instance.RemoveTask(taskName);
@@ -234,12 +245,12 @@ namespace DltFramework
 
         public async void S_SceneLoad(string sceneName, LoadSceneMode loadSceneMode)
         {
-            await SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
+            await SceneLoadFrameComponent.Instance.SceneLoad(sceneName, loadSceneMode);
         }
 
         public async void S_SceneAsyncLoad(string sceneName, LoadSceneMode loadSceneMode)
         {
-            await SceneManager.LoadSceneAsync(sceneName, loadSceneMode);
+            await SceneLoadFrameComponent.Instance.SceneLoad(sceneName, loadSceneMode);
         }
 
         public void S_SceneEsc()

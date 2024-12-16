@@ -17,7 +17,13 @@ namespace DltFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewBaseWindow.cs", null, RuntimeGlobal.BaseWindowTemplatePath);
+            OnCreateBaseWindowTemplate(path, "NewBaseWindow");
+        }
+
+        public static void OnCreateBaseWindowTemplate(string path, string className)
+        {
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/" + className + ".cs", null,
+                RuntimeGlobal.BaseWindowTemplatePath);
         }
 
         [MenuItem("Assets/Create/DltFramework/C# ChildBaseWindow", false, 71)]
@@ -29,7 +35,8 @@ namespace DltFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewChildBaseWindow.cs", null, RuntimeGlobal.ChildBaseWindowTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewChildBaseWindow.cs", null,
+                RuntimeGlobal.ChildBaseWindowTemplatePath);
         }
 
         [MenuItem("Assets/Create/DltFramework/C# ListenerFrameComponentData", false, 73)]
@@ -41,7 +48,8 @@ namespace DltFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/ListenerComponentData.cs", null, RuntimeGlobal.ListenerComponentDataTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/ListenerComponentData.cs", null,
+                RuntimeGlobal.ListenerComponentDataTemplatePath);
         }
 
         [MenuItem("Assets/Create/DltFramework/C# SceneComponent", false, 74)]
@@ -53,7 +61,8 @@ namespace DltFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponent.cs", null, RuntimeGlobal.SceneComponentTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponent.cs", null,
+                RuntimeGlobal.SceneComponentTemplatePath);
         }
 
         [MenuItem("Assets/Create/DltFramework/C# SceneComponentInit", false, 75)]
@@ -65,9 +74,10 @@ namespace DltFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponentInit.cs", null, RuntimeGlobal.SceneComponentInitTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewSceneComponentInit.cs", null,
+                RuntimeGlobal.SceneComponentInitTemplatePath);
         }
-        
+
         [MenuItem("Assets/Create/DltFramework/C# EntityItem", false, 75)]
         public static void OnCreateEntityItemTemplate()
         {
@@ -77,7 +87,8 @@ namespace DltFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewEntityItem.cs", null, RuntimeGlobal.EntityItemTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/NewEntityItem.cs", null,
+                RuntimeGlobal.EntityItemTemplatePath);
         }
 
 
@@ -90,7 +101,8 @@ namespace DltFramework
                 return;
             }
 
-            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/AnimatorControllerParameterData.cs", null, RuntimeGlobal.AnimatorControllerParameterDataTemplatePath);
+            ProjectWindowUtil.StartNameEditingIfProjectWindowExists(0, ScriptableObject.CreateInstance<TemplateContentReplace>(), path + "/AnimatorControllerParameterData.cs", null,
+                RuntimeGlobal.AnimatorControllerParameterDataTemplatePath);
         }
 
         /// <summary>

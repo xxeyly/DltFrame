@@ -1,12 +1,14 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 
 namespace DltFramework
 {
+    [Tooltip("DltFramework Runtime")]
     public abstract partial class SceneComponent : ExtendMonoBehaviour, ISceneComponent
     {
         public abstract void StartComponent();
         public abstract void EndComponent();
-        public string viewName;
+        [LabelText("视图名称")] public string viewName;
 
         public void AddToSceneComponent()
         {

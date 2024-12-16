@@ -15,6 +15,12 @@ namespace DltFramework
         [LabelText("视图类型与视图窗口的键值对")] 
         public Dictionary<Type, BaseWindow> activeViewDlc = new Dictionary<Type, BaseWindow>();
 
+
+        public override void SetFrameInitIndex()
+        {
+            frameInitIndex = 1;
+        }
+
         public override void FrameInitComponent()
         {
             Instance = this;

@@ -47,6 +47,10 @@ namespace HotFix
                     replacePath = cachePath.Replace("." + pathSplit[pathSplit.Length - 2] + "." + pathSplit[pathSplit.Length - 1], "");
                 }
 
+
+                Debug.Log("缓存地址:" + cachePath);
+                Debug.Log("替换地址:" + replacePath);
+
                 if (File.Exists(replacePath))
                 {
                     File.Delete(replacePath);
@@ -98,7 +102,6 @@ namespace HotFix
 
             HotFixDebug.Log("所有文件下载完毕");
             ReplaceCacheFile();
-            yield return new WaitForSeconds(1f);
             foreach (IHotFixRuntimeFileDown hotFixRuntimeFileDown in _hotFixRuntimeFileDowns)
             {
                 hotFixRuntimeFileDown.HotFixRuntimeDownOver();
@@ -127,13 +130,14 @@ namespace HotFix
             {
                 //本地缓存文件的Md5
                 string localCacheMd5 = HotFixGlobal.GetMD5HashFromFile(downFileCachePath);
-                HotFixDebug.Log("存在缓存文件:" + downFileCachePath + ":" + localCacheMd5);
+                HotFixDebug.Log("存在缓存文件:" + downFileCachePath + "本地:" + localCacheMd5 + "远程:" + hotFixAssetConfig.md5);
                 //当前下载量加上已经下载的缓存量
                 currentDownloadValue += HotFixGlobal.GetFileSize(downFileCachePath);
                 //缓存文件的Md5和服务器的Md5相同,表示已经下载完毕
                 if (localCacheMd5 == hotFixAssetConfig.md5)
                 {
                     hotFixRuntimeDownConfigOver = true;
+                    Debug.Log("添加到缓存列表:" + downFileCachePath);
                     replaceCacheFile.Add(downFileCachePath);
                 }
                 else
@@ -217,6 +221,7 @@ namespace HotFix
                 HotFixDebug.Log("下载完毕:" + hotFixAssetConfig.name);
                 _hotFixUnityWebRequest = null;
                 hotFixRuntimeDownConfigOver = true;
+                Debug.Log("添加到缓存列表:" + downFileCachePath);
                 replaceCacheFile.Add(downFileCachePath);
             }
         }

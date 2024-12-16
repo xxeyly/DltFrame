@@ -38,11 +38,11 @@ public class HotFixAssetPathConfig : MonoBehaviour
         // Debug.Log("Ab包路径:" + assetBundlePath);
         ApplyPrefab();
     }
+
     /// <summary>
     /// 获取热更资源类型
     /// </summary>
     /// <returns></returns>
-
     private string GetHotFixAssetType()
     {
         string hotFixAssetType;
@@ -69,6 +69,7 @@ public class HotFixAssetPathConfig : MonoBehaviour
 
         return hotFixAssetType;
     }
+
     /// <summary>
     /// 应用预制体
     /// </summary>
@@ -81,18 +82,26 @@ public class HotFixAssetPathConfig : MonoBehaviour
                 PrefabUtility.UnpackPrefabInstance(gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
             }
 
-            PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
+            try
+            {
+                PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
+            }
+            catch (Exception e)
+            {
+                Debug.Log(gameObject.name + e);
+            }
         }
         else
         {
             PrefabUtility.SaveAsPrefabAssetAndConnect(gameObject, prefabPath, InteractionMode.AutomatedAction);
         }
-
+#if UNITY_2021_1_OR_NEWER
         var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(gameObject);
         if (prefabStage != null)
         {
             UnityEditor.SceneManagement.EditorSceneManager.MarkSceneDirty(prefabStage.scene);
         }
+#endif
 
         AgainCheckPath();
         AssetDatabase.SaveAssets();

@@ -68,6 +68,8 @@ namespace DltFramework
             window.transform.localScale = Vector3.one;
             background.transform.localPosition = Vector3.zero;
             background.transform.localScale = Vector3.one;
+
+            windowView.AddComponent<WindowBaseCreateTool>();
         }
 
         [MenuItem("GameObject/生成 /@(Alt+V) 绑定UI类型  &v", false, 0)]

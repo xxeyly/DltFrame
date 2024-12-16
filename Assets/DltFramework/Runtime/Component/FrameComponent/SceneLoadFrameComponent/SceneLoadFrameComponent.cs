@@ -27,6 +27,12 @@ namespace DltFramework
         private AsyncOperation _tempSceneAsyncOperation;
 
 
+        public override void SetFrameInitIndex()
+        {
+            frameInitIndex = 0;
+
+        }
+
         public override void FrameInitComponent()
         {
             Instance = this;
@@ -80,7 +86,7 @@ namespace DltFramework
         /// </summary>
         /// <param name="sceneName">场景名称</param>
         /// <param name="loadSceneMode">加载模式</param>
-        public async void SceneLoad(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
+        public async UniTask SceneLoad(string sceneName, LoadSceneMode loadSceneMode = LoadSceneMode.Single)
         {
             if (GameRootStart.Instance.hotFixLoad)
             {

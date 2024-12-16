@@ -20,80 +20,13 @@ namespace DltFramework
     /// <summary>
     /// 动画控制器基类
     /// </summary>
-    public abstract class AnimatorControllerBase : MonoBehaviour
+    public abstract class AnimatorControllerBase : EntityItem
     {
-        [BoxGroup("初始化")] [SerializeField] [LabelText("视图是否初始化")]
-        public bool isInit = false;
-
-        private Animator _animator;
-        [LabelText("动画属性")] [SerializeField] private List<string> animatorControllerParameterName;
-        [SerializeField] private List<AnimatorControllerParameter> _allParameter = new List<AnimatorControllerParameter>();
-        [LabelText("动画初始化")] public bool isLoadParameter;
-
-
-        public void AddToAnimatorControllerList()
-        {
-            if (AnimatorControllerManager.Instance != null)
-            {
-                if (!AnimatorControllerManager.Instance.allAnimController.Contains(this))
-                {
-                    AnimatorControllerManager.Instance.allAnimController.Add(this);
-                    if (!isInit)
-                    {
-                        Init();
-                    }
-                }
-            }
-        }
+        [LabelText("动画控制器")] private Animator _animator;
 
         public void Init()
         {
             _animator = GetComponent<Animator>();
-            animatorControllerParameterName = new List<string>();
-            if (gameObject.activeInHierarchy)
-            {
-                _allParameter = new List<AnimatorControllerParameter>(_animator.parameters);
-                foreach (AnimatorControllerParameter animatorControllerParameter in _allParameter)
-                {
-                    animatorControllerParameterName.Add(animatorControllerParameter.name);
-                }
-
-                isLoadParameter = true;
-            }
-
-            isInit = true;
-        }
-
-        private bool ContainsParameter(string parameterName)
-        {
-            if (!gameObject.activeInHierarchy)
-            {
-                return false;
-            }
-
-            if (!isLoadParameter)
-            {
-                _allParameter = new List<AnimatorControllerParameter>(_animator.parameters);
-                foreach (AnimatorControllerParameter animatorControllerParameter in _allParameter)
-                {
-                    animatorControllerParameterName.Add(animatorControllerParameter.name);
-                }
-
-                isLoadParameter = true;
-            }
-
-            if (isLoadParameter)
-            {
-                foreach (AnimatorControllerParameter animatorControllerParameter in _allParameter)
-                {
-                    if (animatorControllerParameter.name == parameterName)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
 
         /// <summary>
@@ -112,69 +45,42 @@ namespace DltFramework
             _animator.speed = 1;
         }
 
-
-        public void PlayAnim(string animationType, float animValue)
-        {
-            if (ContainsParameter(animationType))
-            {
-                _animator.speed = 0;
-                if (animValue >= 1f)
-                {
-                    animValue = 1f;
-                }
-
-                _animator.Play(animationType, 0, animValue);
-            }
-        }
-
-        public void PlayAnim(string animationType, AnimSpeedProgress animSpeedProgress)
-        {
-            if (ContainsParameter(animationType))
-            {
-                _animator.speed = 0;
-                if (animSpeedProgress == AnimSpeedProgress.End)
-                {
-                    _animator.Play(animationType, 0, 1f);
-                }
-                else if (animSpeedProgress == AnimSpeedProgress.Start)
-                {
-                    _animator.Play(animationType, 0, normalizedTime: 0f);
-                }
-            }
-        }
-
-        private string _playAnimTimeTask;
-
         /// <summary>
-        /// 播放动画+事件
+        /// 播放动画
         /// </summary>
-        /// <param name="animationType"></param>
-        /// <param name="eventAction"></param>
-        public async UniTask PlayAnim(string animationType, UnityAction eventAction)
+        /// <param name="animName">动画名称</param>
+        /// <param name="animProgress">动画进度</param>
+        /// <param name="animSpeed">动画速度</param>
+        public async UniTask PlayAnim(string animName, float animProgress, float animSpeed = 1)
         {
-            if (ContainsParameter(animationType))
+            _animator.speed = animSpeed;
+            animProgress = Math.Clamp(animProgress, 0.01f, 1);
+            _animator.Play(animName, 0, animProgress);
+            //动画总时长*剩余动画进度/动画速度
+            if (animSpeed == 0)
             {
-                PlayAnim(animationType);
-                _playAnimTimeTask = animationType;
-                await UniTaskFrameComponent.Instance.AddTask(animationType, GetPlayAnimLength(animationType), 1, null, null, eventAction);
+                await U_AddTask(animName, 0);
             }
             else
             {
-               Debug.Log("不包含当前动画:" + animationType);
+                await U_AddTask(animName, GetPlayAnimLength(animName) * (1 - animProgress) / animSpeed);
             }
         }
-
 
         /// <summary>
         /// 播放动画
         /// </summary>
-        /// <param name="animationType"></param>
-        public void PlayAnim(string animationType)
+        /// <param name="animName">动画名称</param>
+        /// <param name="animSpeedProgress">动画进度</param>
+        public async UniTask PlayAnim(string animName, AnimSpeedProgress animSpeedProgress)
         {
-            if (ContainsParameter(animationType))
+            if (animSpeedProgress == AnimSpeedProgress.Start)
             {
-                _animator.speed = 1;
-                _animator.SetTrigger(animationType);
+                await PlayAnim(animName, 0, 0);
+            }
+            else if (animSpeedProgress == AnimSpeedProgress.End)
+            {
+                await PlayAnim(animName, 1, 0);
             }
         }
 
@@ -184,17 +90,9 @@ namespace DltFramework
         /// <returns></returns>
         public bool GetAnimClipPlayOver()
         {
-            return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.90f && _animator.gameObject.activeSelf &&
-                   !AnimatorControllerManager.Instance.eventChange;
+            return _animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.90f && _animator.gameObject.activeSelf;
         }
 
-        /// <summary>
-        /// 停止播放动画
-        /// </summary>
-        public void StopAnim()
-        {
-            _animator.speed = 0;
-        }
 
         /// <summary>
         /// 获得动画时长
@@ -215,6 +113,10 @@ namespace DltFramework
             return -1;
         }
 
+        /// <summary>
+        /// 获得动画播放速度
+        /// </summary>
+        /// <returns></returns>
         public float GetPlayAnimPlaySpeed()
         {
             return _animator.GetCurrentAnimatorStateInfo(0).speed;
@@ -241,8 +143,6 @@ namespace DltFramework
 
         public void StopAnimTaskTime()
         {
-            StopAnim();
-            UniTaskFrameComponent.Instance.RemoveTask(_playAnimTimeTask);
         }
     }
 }

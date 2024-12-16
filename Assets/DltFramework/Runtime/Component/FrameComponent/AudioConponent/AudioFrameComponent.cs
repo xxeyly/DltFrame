@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -46,6 +47,11 @@ namespace DltFramework
         }
 
         private Dictionary<string, AudioClip> _audioDlc = new Dictionary<string, AudioClip>();
+
+        public override void SetFrameInitIndex()
+        {
+            frameInitIndex = 0;
+        }
 
         public override void FrameInitComponent()
         {
@@ -99,8 +105,9 @@ namespace DltFramework
         /// 播放音效
         /// </summary>
         /// <param name="audioName">音频名称</param>
-        public void PlayEffectAudio(string audioName)
+        public async void PlayEffectAudio(string audioName)
         {
+            await UniTask.NextFrame();
             if (_audioDlc.ContainsKey(audioName))
             {
                 _effectAudioSource.volume = 1;

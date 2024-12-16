@@ -68,6 +68,11 @@ namespace DltFramework
             return false;
         }
 
+        public override void SetFrameInitIndex()
+        {
+            frameInitIndex = 0;
+        }
+
         public override void FrameInitComponent()
         {
             instance = this;

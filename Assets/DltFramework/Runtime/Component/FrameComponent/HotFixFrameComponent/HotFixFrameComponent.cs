@@ -20,6 +20,12 @@ namespace DltFramework
         [LabelText("热更资源数量")] public float hotfixAssetBundleCount;
         [LabelText("当前加载的热更数量")] public float currentLoadHotfixAssetBundleCount = 0;
 
+
+        public override void SetFrameInitIndex()
+        {
+            frameInitIndex = 0;
+        }
+
         public override void FrameInitComponent()
         {
             Instance = this;
@@ -63,7 +69,8 @@ namespace DltFramework
             //加载内容
             for (int i = 0; i < hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixRuntimeDownConfigs.Count; i++)
             {
-                string assetBundlePath = DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/", hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixRuntimeDownConfigs[i].path);
+                string assetBundlePath =
+                    DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/", hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixRuntimeDownConfigs[i].path);
                 string assetBundleName = DataFrameComponent.String_AllCharToLower(hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixRuntimeDownConfigs[i].name);
 
                 AssetBundle tempHotFixAssetBundle = await AssetBundle.LoadFromFileAsync(assetBundlePath + assetBundleName);
@@ -101,11 +108,13 @@ namespace DltFramework
         /// <param name="sceneName"></param>
         public async UniTask<string> LoadHotFixSceneConfig(string sceneName)
         {
-            UnityWebRequest request = UnityWebRequest.Get(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(true), "/HotFixRuntime/HotFixAssetBundleConfig/", sceneName, ".json"));
+            UnityWebRequest request =
+                UnityWebRequest.Get(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(true), "/HotFixRuntime/HotFixAssetBundleConfig/", sceneName, ".json"));
             await request.SendWebRequest();
             string hotFixAssetConfig = request.downloadHandler.text;
             hotFixRuntimeSceneAssetBundleConfigs = JsonUtility.FromJson<HotFixRuntimeSceneAssetBundleConfig>(hotFixAssetConfig);
-            hotfixAssetBundleCount = hotFixRuntimeSceneAssetBundleConfigs.repeatSceneHotFixRuntimeDownConfigs.Count + hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixRuntimeDownConfigs.Count + 1;
+            hotfixAssetBundleCount = hotFixRuntimeSceneAssetBundleConfigs.repeatSceneHotFixRuntimeDownConfigs.Count + hotFixRuntimeSceneAssetBundleConfigs.assetBundleHotFixRuntimeDownConfigs.Count +
+                                     1;
             currentLoadHotfixAssetBundleCount = 0;
             return String.Empty;
         }
@@ -121,7 +130,8 @@ namespace DltFramework
             {
                 Debug.Log("加载场景:" + sceneName);
                 //加载场景
-                await AssetBundle.LoadFromFileAsync(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/HotFixRuntime/HotFixAssetBundle/", sceneName, "/scene/", sceneName));
+                await AssetBundle.LoadFromFileAsync(DataFrameComponent.String_BuilderString(RuntimeGlobal.GetDeviceStoragePath(), "/HotFixRuntime/HotFixAssetBundle/", sceneName, "/scene/",
+                    sceneName));
                 // await UniTask.WaitUntil(() => Application.CanStreamedLevelBeLoaded(sceneName));
             }
 

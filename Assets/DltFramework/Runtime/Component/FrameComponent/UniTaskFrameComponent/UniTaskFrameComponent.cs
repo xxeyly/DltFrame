@@ -13,6 +13,12 @@ public partial class UniTaskFrameComponent : FrameComponent
     [LabelText("事件列表")] public Dictionary<string, CancellationTokenSource> cancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
     [LabelText("场景事件列表")] public Dictionary<string, CancellationTokenSource> sceneLoadCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
 
+
+    public override void SetFrameInitIndex()
+    {
+        frameInitIndex = 0;
+    }
+
     public override void FrameInitComponent()
     {
         Instance = this;
@@ -85,6 +91,27 @@ public partial class UniTaskFrameComponent : FrameComponent
 #pragma warning disable 4014
         await ExecuteTask(taskName, cancellationTokenSource.Token, delay, taskCount, initAction, endAction, action);
 #pragma warning restore 4014
+    }
+
+    /// <summary>
+    /// 添加任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
+    /// <param name="delay">延迟</param>
+    public async UniTask AddTask(string taskName, float delay)
+    {
+        await AddTask(taskName, delay, 1, null, null, () => { });
+    }
+
+    /// <summary>
+    /// 添加任务
+    /// </summary>
+    /// <param name="taskName">任务名称</param>
+    /// <param name="delay">延迟</param>
+    /// <param name="action">任务内容</param>
+    public async UniTask AddTask(string taskName, float delay, UnityAction action)
+    {
+        await AddTask(taskName, delay, 1, null, null, action);
     }
 
     /// <summary>

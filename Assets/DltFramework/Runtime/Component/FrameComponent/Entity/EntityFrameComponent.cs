@@ -21,7 +21,6 @@ namespace DltFramework
         public static EntityFrameComponent Instance;
         [Searchable] [LabelText("场景所有实体")] public List<EntityItem> sceneEntity;
         [LabelText("场景中重复名实体")] public List<SceneRepeatEntity> sceneRepeatEntityList;
-
         /// <summary>
         /// 实体实例化
         /// </summary>
@@ -59,11 +58,13 @@ namespace DltFramework
             {
                 entityItem.AddToEntityList();
             }
+           
+        }
 
-            foreach (AnimatorControllerBase animatorControllerBase in instantiateObj.transform.GetComponentsInChildren<AnimatorControllerBase>())
-            {
-                animatorControllerBase.AddToAnimatorControllerList();
-            }
+        public override void SetFrameInitIndex()
+        {
+            frameInitIndex = 0;
+
         }
 
         public override void FrameInitComponent()
