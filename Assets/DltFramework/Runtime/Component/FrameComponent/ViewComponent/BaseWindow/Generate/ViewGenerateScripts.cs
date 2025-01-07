@@ -492,13 +492,11 @@ namespace DltFramework
                     }
 
 
-                    foreach (Object expansionObj in bindUiType.expansionType)
+                    foreach (string expansionObj in bindUiType.expansionType)
                     {
-                        List<string> expansionObjSplit = new List<string>(expansionObj.GetType().ToString().Split('.'));
-                        string expansion = expansionObjSplit[expansionObjSplit.Count - 1];
                         allUiVariableName.Add(
-                            Indents(4) + "private " + expansion + " _" +
-                            DataFrameComponent.String_FirstCharToLower(child.name) + expansion + Semicolon
+                            Indents(4) + "private " + expansionObj + " _" +
+                            DataFrameComponent.String_FirstCharToLower(child.name) + expansionObj + Semicolon
                         );
                     }
                 }
@@ -526,12 +524,10 @@ namespace DltFramework
                     }
 
 
-                    foreach (Object expansionObj in bindUiType.expansionType)
+                    foreach (string expansionObj in bindUiType.expansionType)
                     {
-                        List<string> expansionObjSplit = new List<string>(expansionObj.GetType().ToString().Split('.'));
-                        string expansion = expansionObjSplit[expansionObjSplit.Count - 1];
                         allUiVariableBind.Add(
-                            Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) + expansion + ",\"" +
+                            Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) + expansionObj + ",\"" +
                             GetUiComponentPath(child, "") + "\");");
                     }
                 }

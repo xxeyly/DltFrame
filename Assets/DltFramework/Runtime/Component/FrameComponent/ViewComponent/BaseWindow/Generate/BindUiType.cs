@@ -63,6 +63,7 @@ namespace DltFramework
 
     public class BindUiType : MonoBehaviour
     {
+        [LabelText("描述名称")] public string descriptionName;
         [LabelText("UI组件类型")] public UiType type;
 
         [LabelText("子级类型")] [ShowIf("@type ==UiType.ChildList")] [ValueDropdown("GetListOfChildBaseWindow")]
@@ -71,20 +72,19 @@ namespace DltFramework
         [ShowIf("@type == UiType.Button")] [LabelText("UI触发事件类型")]
         public UIEventTriggerType eventTriggerType;
 
-        [LabelText("描述名称")] public string descriptionName;
 
-        [LabelText("扩展类型")] [ValueDropdown("GetListOfMonoBehaviours")]
-        public List<Object> expansionType = new List<Object>();
+        [LabelText("UI组件扩展类型")] [ValueDropdown("GetListOfMonoBehaviours")]
+        public List<string> expansionType = new List<string>();
 
-        private IEnumerable<Object> GetListOfMonoBehaviours()
+        private IEnumerable<string> GetListOfMonoBehaviours()
         {
             List<Object> all = new List<Object>(transform.GetComponents<Component>());
-            List<Object> selfObj = new List<Object>();
+            List<string> selfObj = new List<string>();
             foreach (Object obj in all)
             {
-                if (obj.GetType() != typeof(BindUiType) && !expansionType.Contains(obj))
+                if (obj.GetType() != typeof(BindUiType) && !expansionType.Contains(obj.GetType().Name) && obj.GetType().Name != type.ToString())
                 {
-                    selfObj.Add(obj);
+                    selfObj.Add(obj.GetType().Name);
                 }
             }
 

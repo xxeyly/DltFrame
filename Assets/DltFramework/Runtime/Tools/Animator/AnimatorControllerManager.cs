@@ -58,7 +58,9 @@ namespace DltFramework
             {
                 if (controllerBase.gameObject.activeInHierarchy)
                 {
+#pragma warning disable CS4014 // 由于此调用不会等待，因此在调用完成前将继续执行当前方法
                     controllerBase.PlayAnim(animName, playProgress, animSpeed);
+#pragma warning restore CS4014 // 由于此调用不会等待，因此在调用完成前将继续执行当前方法
                 }
             }
 
@@ -80,7 +82,9 @@ namespace DltFramework
                 {
                     if (controllerBase.gameObject.activeInHierarchy)
                     {
+#pragma warning disable CS4014 // 由于此调用不会等待，因此在调用完成前将继续执行当前方法
                         controllerBase.PlayAnim(animName, animSpeedProgress);
+#pragma warning restore CS4014 // 由于此调用不会等待，因此在调用完成前将继续执行当前方法
                     }
                 }
                 catch (Exception e)
