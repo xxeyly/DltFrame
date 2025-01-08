@@ -33,10 +33,7 @@ namespace DltFramework
 
                     if (childBaseWindow.GetType().Name != obj.name)
                     {
-                        if (GUI.Button(GlobalHierarchy.SetRect(selectionrect, -45, 18), "R", GlobalHierarchy.LabelGUIStyle()))
-                        {
-                            obj.name = childBaseWindow.GetType().Name;
-                        }
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 1, "R", () => { obj.name = childBaseWindow.GetType().Name; });
                     }
 
                     #endregion

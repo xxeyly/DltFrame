@@ -25,13 +25,26 @@ namespace DltFramework
                 {
                     #region 静态
 
-                    GUI.Label(GlobalHierarchy.SetRect(selectionrect, -7, 18), "U", GlobalHierarchy.LabelGUIStyle());
+                    GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 1, "U", () => { });
 
                     #endregion
+
+                    string objName = obj.name;
+
+                    if (objName.Length == 0 || objName.Contains(" ") ||
+                        objName[0] == '0' || objName[0] == '1' || objName[0] == '2' || objName[0] == '3' || objName[0] == '4' ||
+                        objName[0] == '5' || objName[0] == '6' || objName[0] == '7' || objName[0] == '8' || objName[0] == '9' ||
+                        objName[0] == '!' || objName[0] == '@' || objName[0] == '#' || objName[0] == '$' || objName[0] == '%' ||
+                        objName[0] == '^' || objName[0] == '&' || objName[0] == '*' || objName[0] == '(' || objName[0] == ')' ||
+                        objName[0] == '-' || objName[0] == '_' || objName[0] == '+' || objName[0] == '=' || objName[0] == '[' ||
+                        objName[0] == ']' || objName[0] == '{' || objName[0] == '}' || objName[0] == '|' || objName[0] == '\\' ||
+                        objName[0] == ':' || objName[0] == ';' || objName[0] == '\'' || objName[0] == '"' || objName[0] == ',' ||
+                        objName[0] == '.' || objName[0] == '/' || objName[0] == '?' || objName[0] == '<' || objName[0] == '>')
+                    {
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 0, "!", () => { });
+                    }
                 }
             }
         }
-
-    
     }
 }

@@ -26,34 +26,19 @@ namespace DltFramework
                 Text text = obj.GetComponent<Text>();
                 if (text != null)
                 {
-                    if (text.font == null)
+                    if (text.font == null || text.font.name == "Arial")
                     {
-                        GUI.Label(GlobalHierarchy.SetRect(selectionrect, -14, 18), "!", GlobalHierarchy.LabelGUIStyle());
-                    }
-                    else
-                    {
-                        if (text.font.name == "Arial")
+                        if (obj.GetComponent<BindUiType>())
                         {
-                            GUI.Label(GlobalHierarchy.SetRect(selectionrect, -14, 18), "!", GlobalHierarchy.LabelGUIStyle());
+                            GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 0, "!", () => { });
+                        }
+                        else
+                        {
+                            GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 1, "!", () => { });
                         }
                     }
                 }
-
-                TextMeshProUGUI textMeshProUgui = obj.GetComponent<TextMeshProUGUI>();
-                if (textMeshProUgui != null)
-                {
-                    if (textMeshProUgui.font == null)
-                    {
-                        GUI.Label(GlobalHierarchy.SetRect(selectionrect, -14, 18), "!", GlobalHierarchy.LabelGUIStyle());
-                    }
-                    else
-                    {
-                        if (textMeshProUgui.font.name == "Arial")
-                        {
-                            GUI.Label(GlobalHierarchy.SetRect(selectionrect, -14, 18), "!", GlobalHierarchy.LabelGUIStyle());
-                        }
-                    }
-                }
+                
             }
         }
     }

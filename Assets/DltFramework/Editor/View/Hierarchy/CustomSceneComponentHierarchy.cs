@@ -46,24 +46,35 @@ namespace DltFramework
 
                     #endregion
 
+                    int offsetIndex = 1;
+
+                    #region 场景
+
+                    GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "S", () => { });
+
+                    offsetIndex -= 1;
+
+                    #endregion
+
                     #region 热更
 
                     sceneComponent.HotFixAssetPathConfigIsExist = sceneComponent.GetComponent<HotFixAssetPathConfig>() != null;
-
-                    #endregion
-                    
-                    #region 警告
-
-                    if (sceneComponent.GetType().Name != obj.name)
+                    if (sceneComponent.HotFixAssetPathConfigIsExist)
                     {
-                        if (GUI.Button(GlobalHierarchy.SetRect(selectionrect, -22, 18), "R", GlobalHierarchy.LabelGUIStyle()))
-                        {
-                            obj.name = sceneComponent.GetType().Name;
-                        }
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "H", () => { });
+                        offsetIndex -= 1;
                     }
 
                     #endregion
 
+                    #region 警告
+
+                    if (sceneComponent.GetType().Name != obj.name)
+                    {
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "R", () => { obj.name = sceneComponent.GetType().Name; });
+                    }
+
+                    #endregion
                 }
             }
         }

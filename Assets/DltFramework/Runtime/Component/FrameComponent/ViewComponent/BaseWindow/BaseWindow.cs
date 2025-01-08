@@ -32,7 +32,7 @@ namespace DltFramework
         [LabelText("是否是ChildBaseWindow")] private bool isChildBaseWindow;
 
         [HorizontalGroup("标签")] [BoxGroup("标签/属性")] [LabelText("视图类型")] [HideIf("isChildBaseWindow")] [SerializeField] [EnumToggleButtons] [LabelWidth(50)] [Tooltip("静态模式不会影响全局视图全局操作,单独指定事件会被影响")]
-        protected ViewShowType viewShowType = ViewShowType.Activity;
+        public ViewShowType viewShowType = ViewShowType.Activity;
 
         [BoxGroup("标签/属性")] [LabelText("初始化")] [LabelWidth(50)] [HideIf("isChildBaseWindow")] [Tooltip("该属性影响是否一开始执行Init操作")]
         public bool viewInit;
