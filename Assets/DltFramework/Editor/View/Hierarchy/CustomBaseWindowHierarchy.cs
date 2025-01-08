@@ -50,23 +50,6 @@ namespace DltFramework
                     }
 
                     #endregion
-
-                    #region 静态
-
-                    if (tempBaseWindow.GetViewShowType() == ViewShowType.Static)
-                    {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "BaseWindowLockIcon", () => { tempBaseWindow.viewShowType = ViewShowType.Activity; });
-                    }
-                    else
-                    {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "BaseWindowUnlockIcon", () => { tempBaseWindow.viewShowType = ViewShowType.Static; });
-                    }
-
-                    offsetIndex -= 1;
-
-                    #endregion
-
-
                     #region 开关
 
                     GameObject window = obj.transform.Find("Window").gameObject;
@@ -99,6 +82,20 @@ namespace DltFramework
                     SceneVisibilityManager.instance.DisablePicking(obj, false);
                     SceneVisibilityManager.instance.DisablePicking(window, false);
 #endif
+
+                    #endregion
+                    #region 静态
+
+                    if (tempBaseWindow.GetViewShowType() == ViewShowType.Static)
+                    {
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "BaseWindowLockIcon", () => { tempBaseWindow.viewShowType = ViewShowType.Activity; });
+                    }
+                    else
+                    {
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "BaseWindowUnlockIcon", () => { tempBaseWindow.viewShowType = ViewShowType.Static; });
+                    }
+
+                    offsetIndex -= 1;
 
                     #endregion
 
