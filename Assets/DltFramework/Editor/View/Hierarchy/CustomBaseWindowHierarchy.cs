@@ -16,7 +16,7 @@ namespace DltFramework
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyShow;
         }
 
-        private static void HierarchyShow(int instanceid, Rect selectionrect)
+        private static void HierarchyShow(int instanceid, Rect selectionRect)
         {
             if (Application.platform != RuntimePlatform.WindowsEditor)
             {
@@ -39,23 +39,31 @@ namespace DltFramework
                         Rect viewNameRect;
                         if (GlobalHierarchy.HierarchyContentFollow)
                         {
-                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataFrameComponent.Hierarchy_CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
+                            viewNameRect = new Rect(selectionRect.position + new Vector2(18 + GUI.skin.label.CalcSize(new(obj.name)).x, 0), selectionRect.size);
                         }
                         else
                         {
-                            viewNameRect = GlobalHierarchy.SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
+                            viewNameRect = GlobalHierarchy.SetRect(selectionRect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
                         }
 
-                        GUI.Label(viewNameRect, viewName, GlobalHierarchy.LabelGUIStyle());
+                        if (selectionRect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.Label(viewNameRect, viewName, GlobalHierarchy.LabelGUIStyle(GlobalHierarchy.BaseWindowHierarchyHoverColor));
+                        }
+                        else
+                        {
+                            GUI.Label(viewNameRect, viewName, GlobalHierarchy.LabelGUIStyle(GlobalHierarchy.BaseWindowHierarchyOutColor));
+                        }
                     }
 
                     #endregion
+
                     #region 开关
 
                     GameObject window = obj.transform.Find("Window").gameObject;
                     if (window.activeSelf)
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "BaseWindowOnIcon", () =>
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "BaseWindowOnIcon", () =>
                         {
                             window.SetActive(!window.activeSelf);
                             if (window.GetComponent<CanvasGroup>())
@@ -66,7 +74,7 @@ namespace DltFramework
                     }
                     else
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "BaseWindowOffIcon", () =>
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "BaseWindowOffIcon", () =>
                         {
                             window.SetActive(!window.activeSelf);
                             if (window.GetComponent<CanvasGroup>())
@@ -84,15 +92,16 @@ namespace DltFramework
 #endif
 
                     #endregion
+
                     #region 静态
 
                     if (tempBaseWindow.GetViewShowType() == ViewShowType.Static)
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "BaseWindowLockIcon", () => { tempBaseWindow.viewShowType = ViewShowType.Activity; });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "BaseWindowLockIcon", () => { tempBaseWindow.viewShowType = ViewShowType.Activity; });
                     }
                     else
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "BaseWindowUnlockIcon", () => { tempBaseWindow.viewShowType = ViewShowType.Static; });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "BaseWindowUnlockIcon", () => { tempBaseWindow.viewShowType = ViewShowType.Static; });
                     }
 
                     offsetIndex -= 1;
@@ -105,7 +114,7 @@ namespace DltFramework
 
                     if (tempBaseWindow.HotFixAssetPathConfigIsExist)
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "H", () => { });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "H", () => { });
                         offsetIndex -= 1;
                     }
 
@@ -115,7 +124,7 @@ namespace DltFramework
 
                     if (tempBaseWindow.GetType().Name != obj.name)
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "R", () => { obj.name = tempBaseWindow.GetType().Name; });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "R", () => { obj.name = tempBaseWindow.GetType().Name; });
                     }
 
                     #endregion

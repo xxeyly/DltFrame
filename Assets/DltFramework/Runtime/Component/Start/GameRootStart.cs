@@ -71,11 +71,6 @@ namespace DltFramework
             Debug.Log("框架初始化");
             frameComponent = DataFrameComponent.Hierarchy_GetAllObjectsInScene<FrameComponent>("DontDestroyOnLoad");
 
-            for (int i = 0; i < frameComponent.Count; i++)
-            {
-                frameComponent[i].SetFrameInitIndex();
-            }
-
             //frameComponent冒泡排序
             //定义总和值
             for (int i = 0; i < frameComponent.Count - 1; i++)

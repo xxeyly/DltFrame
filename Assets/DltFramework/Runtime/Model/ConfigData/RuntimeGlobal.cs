@@ -23,11 +23,11 @@ namespace DltFramework
             typeof(AudioFrameComponent),
             typeof(HttpFrameComponent),
             // typeof(MouseFrameComponent),
-            typeof(ViewFrameComponent),
             typeof(UniTaskFrameComponent),
 #if HybridCLR
             typeof(HotFixFrameComponent),
 #endif
+            typeof(ViewFrameComponent),
         };
 
         //获得设备存储路径

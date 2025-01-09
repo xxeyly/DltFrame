@@ -21,10 +21,6 @@ namespace DltFramework
         [LabelText("当前加载的热更数量")] public float currentLoadHotfixAssetBundleCount = 0;
 
 
-        public override void SetFrameInitIndex()
-        {
-            frameInitIndex = 0;
-        }
 
         public override void FrameInitComponent()
         {

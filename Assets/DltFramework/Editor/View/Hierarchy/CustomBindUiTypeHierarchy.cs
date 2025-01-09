@@ -11,7 +11,7 @@ namespace DltFramework
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyShow;
         }
 
-        private static void HierarchyShow(int instanceid, Rect selectionrect)
+        private static void HierarchyShow(int instanceid, Rect selectionRect)
         {
             if (Application.platform != RuntimePlatform.WindowsEditor)
             {
@@ -32,14 +32,22 @@ namespace DltFramework
                         Rect viewNameRect;
                         if (GlobalHierarchy.HierarchyContentFollow)
                         {
-                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 * 1 + DataFrameComponent.Hierarchy_CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
+                            viewNameRect = new Rect(selectionRect.position + new Vector2(18 + GUI.skin.label.CalcSize(new(obj.name)).x, 0), selectionRect.size);
                         }
                         else
                         {
-                            viewNameRect = GlobalHierarchy.SetRect(selectionrect, -40 - ((descriptionName.Length - 1) * 12f), descriptionName.Length * 15);
+                            viewNameRect = GlobalHierarchy.SetRect(selectionRect, -40 - ((descriptionName.Length - 1) * 12f), descriptionName.Length * 15);
                         }
 
-                        GUI.Label(viewNameRect, descriptionName, GlobalHierarchy.LabelGUIStyle(Color.yellow));
+
+                        if (selectionRect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.Label(viewNameRect, descriptionName, GlobalHierarchy.LabelGUIStyle(GlobalHierarchy.BindUiTypeHierarchyHoverColor));
+                        }
+                        else
+                        {
+                            GUI.Label(viewNameRect, descriptionName, GlobalHierarchy.LabelGUIStyle(GlobalHierarchy.BindUiTypeHierarchyOutColor));
+                        }
                     }
 
                     #endregion

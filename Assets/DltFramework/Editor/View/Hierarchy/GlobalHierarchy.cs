@@ -12,21 +12,26 @@ namespace DltFramework
         private const int layoutBaseOffset = 15;
         private const int buttonsWidth = 24;
 
+        public static Color BaseWindowHierarchyHoverColor = Color.white;
+        public static Color BindUiTypeHierarchyHoverColor = Color.white;
+        public static Color EntityItemHierarchyHoverColor = Color.white;
+        public static Color SceneComponentHierarchyHoverColor = Color.white;
+        public static Color SceneComponentInitHierarchyHoverColor = Color.white;
+        
+        public static Color BaseWindowHierarchyOutColor = Color.gray;
+        public static Color BindUiTypeHierarchyOutColor = Color.gray;
+        public static Color EntityItemHierarchyOutColor = Color.gray;
+        public static Color SceneComponentHierarchyOutColor = Color.gray;
+        public static Color SceneComponentInitHierarchyOutColor = Color.gray;
+        
+
         public static GUIStyle LabelGUIStyle(Color color)
         {
             GUIStyle guiStyle = new GUIStyle();
             guiStyle.normal.textColor = color;
             guiStyle.fontSize = 12;
             guiStyle.fontStyle = FontStyle.Italic;
-            return guiStyle;
-        }
-
-        public static GUIStyle LabelGUIStyle()
-        {
-            GUIStyle guiStyle = new GUIStyle();
-            guiStyle.normal.textColor = Color.cyan;
-            guiStyle.fontSize = 12;
-            guiStyle.fontStyle = FontStyle.Italic;
+            
             return guiStyle;
         }
 

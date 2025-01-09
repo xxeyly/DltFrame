@@ -54,10 +54,6 @@ namespace DltFramework
         private GameObject _mouseEnterUi;
         [LabelText("鼠标按下")] public bool mouseDown;
 
-        public override void SetFrameInitIndex()
-        {
-            frameInitIndex = 0;
-        }
 
         public override void FrameInitComponent()
         {
@@ -70,7 +66,6 @@ namespace DltFramework
 
         public override void FrameSceneEndComponent()
         {
-            
         }
 
 
@@ -423,6 +418,5 @@ namespace DltFramework
         }
 
         private int _drag3DObjectInUIPanelTimeTask;
-      
     }
 }

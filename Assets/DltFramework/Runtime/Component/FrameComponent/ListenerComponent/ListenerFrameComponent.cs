@@ -137,10 +137,6 @@ namespace DltFramework
         [LabelText("所有触发事件")] public Dictionary<string, List<Delegate>> allListener = new Dictionary<string, List<Delegate>>();
 
 
-        public override void SetFrameInitIndex()
-        {
-            frameInitIndex = 0;
-        }
 
         public override void FrameInitComponent()
         {

@@ -83,6 +83,7 @@ namespace DltFramework
             {
                 Debug.Log("切换到手动生成");
             }
+
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
@@ -101,13 +102,12 @@ namespace DltFramework
             GameRootStart tempGameRootStart = gameRootStart.AddComponent<GameRootStart>();
             //添加框架组件
             Undo.RegisterCreatedObjectUndo(gameRootStart, "UndoCreate");
-            foreach (Type type in RuntimeGlobal.frameComponentType)
+            for (int i = 0; i < RuntimeGlobal.frameComponentType.Count; i++)
             {
-                GameObject tempComponentObj = new GameObject(type.Name);
+                GameObject tempComponentObj = new GameObject(RuntimeGlobal.frameComponentType[i].Name);
                 tempComponentObj.transform.SetParent(gameRootStart.transform);
-                tempComponentObj.AddComponent(type);
-
-                // tempGameRootStart.frameComponent.Add(tempComponentObj.GetComponent<FrameComponent>());
+                FrameComponent tempComponent = (FrameComponent)tempComponentObj.AddComponent(RuntimeGlobal.frameComponentType[i]);
+                tempComponent.frameInitIndex = i;
             }
         }
 

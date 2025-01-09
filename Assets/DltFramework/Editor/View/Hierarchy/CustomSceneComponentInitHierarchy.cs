@@ -12,7 +12,7 @@ namespace DltFramework
             EditorApplication.hierarchyWindowItemOnGUI += HierarchyShow;
         }
 
-        private static void HierarchyShow(int instanceid, Rect selectionrect)
+        private static void HierarchyShow(int instanceid, Rect selectionRect)
         {
             if (Application.platform != RuntimePlatform.WindowsEditor)
             {
@@ -27,6 +27,7 @@ namespace DltFramework
                     SceneComponentInit sceneComponent = obj.GetComponent<SceneComponentInit>();
 
                     #region 描述
+
                     int offsetIndex = 1;
 
                     if (!string.IsNullOrEmpty(sceneComponent.viewName))
@@ -35,20 +36,28 @@ namespace DltFramework
                         Rect viewNameRect;
                         if (GlobalHierarchy.HierarchyContentFollow)
                         {
-                            viewNameRect = new Rect(selectionrect.position + new Vector2(18 + DataFrameComponent.Hierarchy_CalculationHierarchyContentLength(obj.name), 0), selectionrect.size);
+                            viewNameRect = new Rect(selectionRect.position + new Vector2(18 + GUI.skin.label.CalcSize(new(obj.name)).x, 0), selectionRect.size);
                         }
                         else
                         {
-                            viewNameRect = GlobalHierarchy.SetRect(selectionrect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
+                            viewNameRect = GlobalHierarchy.SetRect(selectionRect, -40 - ((viewName.Length - 1) * 12f), viewName.Length * 15);
                         }
 
-                        GUI.Label(viewNameRect, viewName, GlobalHierarchy.LabelGUIStyle());
+                        if (selectionRect.Contains(Event.current.mousePosition))
+                        {
+                            GUI.Label(viewNameRect, viewName, GlobalHierarchy.LabelGUIStyle(GlobalHierarchy.SceneComponentInitHierarchyHoverColor));
+                        }
+                        else
+                        {
+                            GUI.Label(viewNameRect, viewName, GlobalHierarchy.LabelGUIStyle(GlobalHierarchy.SceneComponentInitHierarchyOutColor));
+                        }
                     }
 
                     #endregion
+
                     #region 场景
 
-                    GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "S", () => { });
+                    GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "S", () => { });
 
                     offsetIndex -= 1;
 
@@ -59,7 +68,18 @@ namespace DltFramework
                     sceneComponent.HotFixAssetPathConfigIsExist = sceneComponent.GetComponent<HotFixAssetPathConfig>() != null;
                     if (sceneComponent.HotFixAssetPathConfigIsExist)
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, offsetIndex, "H", () => { });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "H", () => { });
+                        offsetIndex -= 1;
+                    }
+
+                    #endregion
+
+                    #region 警告
+
+                    if (sceneComponent.GetType().Name != obj.name)
+                    {
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "R", () => { obj.name = sceneComponent.GetType().Name; });
+                        offsetIndex -= 1;
                     }
 
                     #endregion

@@ -14,11 +14,6 @@ public partial class UniTaskFrameComponent : FrameComponent
     [LabelText("场景事件列表")] public Dictionary<string, CancellationTokenSource> sceneLoadCancellationTokenSources = new Dictionary<string, CancellationTokenSource>();
 
 
-    public override void SetFrameInitIndex()
-    {
-        frameInitIndex = 0;
-    }
-
     public override void FrameInitComponent()
     {
         Instance = this;

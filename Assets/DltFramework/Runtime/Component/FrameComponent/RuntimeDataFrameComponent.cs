@@ -12,12 +12,6 @@ namespace DltFramework
         [LabelText("音乐开关")] public bool audioState;
         [LabelText("鼠标状态")] public bool mouseState;
 
-
-        public override void SetFrameInitIndex()
-        {
-            frameInitIndex = 0;
-        }
-
         public override void FrameInitComponent()
         {
             Instance = this;

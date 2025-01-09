@@ -48,10 +48,6 @@ namespace DltFramework
 
         private Dictionary<string, AudioClip> _audioDlc = new Dictionary<string, AudioClip>();
 
-        public override void SetFrameInitIndex()
-        {
-            frameInitIndex = 0;
-        }
 
         public override void FrameInitComponent()
         {
