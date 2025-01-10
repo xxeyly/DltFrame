@@ -41,7 +41,7 @@ namespace DltFramework
                         objName[0] == ':' || objName[0] == ';' || objName[0] == '\'' || objName[0] == '"' || objName[0] == ',' ||
                         objName[0] == '.' || objName[0] == '/' || objName[0] == '?' || objName[0] == '<' || objName[0] == '>')
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 0, "!", () => { });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 0, "R!Error", () => { });
                     }
                 }
             }

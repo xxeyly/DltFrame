@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DltFramework
 {
@@ -116,15 +117,32 @@ namespace DltFramework
                     {
                         GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "H", () => { });
                         offsetIndex -= 1;
+
+                        List<HotFixAssetPathConfig> childHotFixAssetPathConfigs = new List<HotFixAssetPathConfig>(obj.GetComponentsInChildren<HotFixAssetPathConfig>());
+                        if (childHotFixAssetPathConfigs.Count > 1)
+                        {
+                            GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "H!Error", () =>
+                            {
+                                for (int i = 0; i < childHotFixAssetPathConfigs.Count; i++)
+                                {
+                                    if (childHotFixAssetPathConfigs[i] != obj.GetComponent<HotFixAssetPathConfig>())
+                                    {
+                                        Object.DestroyImmediate(childHotFixAssetPathConfigs[i]);
+                                    }
+                                }
+                            });
+                            offsetIndex -= 1;
+                        }
                     }
 
                     #endregion
+
 
                     #region 警告
 
                     if (tempBaseWindow.GetType().Name != obj.name)
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "R", () => { obj.name = tempBaseWindow.GetType().Name; });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "R!", () => { obj.name = tempBaseWindow.GetType().Name; });
                     }
 
                     #endregion

@@ -33,7 +33,7 @@ namespace DltFramework
 
                     if (childBaseWindow.GetType().Name != obj.name)
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 1, "R", () => { obj.name = childBaseWindow.GetType().Name; });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionrect, 1, "R!", () => { obj.name = childBaseWindow.GetType().Name; });
                     }
 
                     #endregion

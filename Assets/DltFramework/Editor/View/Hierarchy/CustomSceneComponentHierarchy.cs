@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -70,6 +71,21 @@ namespace DltFramework
                     {
                         GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "H", () => { });
                         offsetIndex -= 1;
+                        List<HotFixAssetPathConfig> childHotFixAssetPathConfigs = new List<HotFixAssetPathConfig>(obj.GetComponentsInChildren<HotFixAssetPathConfig>());
+                        if (childHotFixAssetPathConfigs.Count > 1)
+                        {
+                            GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "H!Error", () =>
+                            {
+                                for (int i = 0; i < childHotFixAssetPathConfigs.Count; i++)
+                                {
+                                    if (childHotFixAssetPathConfigs[i] != obj.GetComponent<HotFixAssetPathConfig>())
+                                    {
+                                        Object.DestroyImmediate(childHotFixAssetPathConfigs[i]);
+                                    }
+                                }
+                            });
+                            offsetIndex -= 1;
+                        }
                     }
 
                     #endregion
@@ -78,7 +94,7 @@ namespace DltFramework
 
                     if (sceneComponent.GetType().Name != obj.name)
                     {
-                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "R", () => { obj.name = sceneComponent.GetType().Name; });
+                        GlobalHierarchy.DrawHierarchyButtons(obj, selectionRect, offsetIndex, "R!", () => { obj.name = sceneComponent.GetType().Name; });
                     }
 
                     #endregion

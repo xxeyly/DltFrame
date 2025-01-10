@@ -6,7 +6,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DltFramework;
 
-
 public class HotFixAssetPathConfig : MonoBehaviour
 {
     [LabelText("预制体路径")] public string prefabPath;
