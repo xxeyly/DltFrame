@@ -1,6 +1,7 @@
 ﻿#if UNITY_EDITOR
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -38,7 +39,14 @@ namespace DltFramework
 
         public override void OnLoadConfig()
         {
-            ExportValue = File.ReadAllLines(Application.dataPath + "/DltFramework/README.md")[0].Replace("当前版本", "");
+            List<string> readme = new List<string>(File.ReadAllLines(Application.dataPath + "/DltFramework/README.md"));
+            for (int i = 0; i < readme.Count; i++)
+            {
+                if (readme[i].Contains("当前版本: "))
+                {
+                    ExportValue = readme[i].Replace("当前版本: ", "").Replace(" ", "");
+                }
+            }
         }
 
         public override void OnInit()
