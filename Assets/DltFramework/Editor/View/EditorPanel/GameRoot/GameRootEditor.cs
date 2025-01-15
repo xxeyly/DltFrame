@@ -39,7 +39,7 @@ namespace DltFramework
 
         public override void OnLoadConfig()
         {
-            List<string> readme = new List<string>(File.ReadAllLines(Application.dataPath + "/DltFramework/README.md"));
+            List<string> readme = new List<string>(File.ReadAllLines(Application.dataPath + "/../README.md"));
             for (int i = 0; i < readme.Count; i++)
             {
                 if (readme[i].Contains("当前版本: "))
