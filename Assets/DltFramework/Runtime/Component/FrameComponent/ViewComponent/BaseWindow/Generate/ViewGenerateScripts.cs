@@ -75,8 +75,10 @@ namespace DltFramework
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableUsing, GenerateBaseWindowData.startUsing, GenerateBaseWindowData.endUsing);
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableName, GenerateBaseWindowData.startUiVariable, GenerateBaseWindowData.endUiVariable);
             _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBind, GenerateBaseWindowData.startVariableBindPath, GenerateBaseWindowData.endVariableBindPath);
-            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListener, GenerateBaseWindowData.startVariableBindListener, GenerateBaseWindowData.endVariableBindListener);
-            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListenerEvent, GenerateBaseWindowData.startVariableBindEvent, GenerateBaseWindowData.endVariableBindEvent);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListener, GenerateBaseWindowData.startVariableBindListener,
+                GenerateBaseWindowData.endVariableBindListener);
+            _currentScriptsContent = ReplaceScriptContent(_currentScriptsContent, allUiVariableBindListenerEvent, GenerateBaseWindowData.startVariableBindEvent,
+                GenerateBaseWindowData.endVariableBindEvent);
             _currentScriptsContent = CustomReplaceScriptContent(_currentScriptsContent);
             FileOperationComponent.SaveTextToLoad(GetScriptsPath(), _currentScriptsContent);
             // ClearConsole();
@@ -356,151 +358,179 @@ namespace DltFramework
                 BindUiType bindUiType = child.GetComponent<BindUiType>();
                 if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
                 {
-                    switch (bindUiType.type)
+                    if (DataFrameComponent.String_IsScriptsStandard(child.name))
                     {
-                        case UiType.GameObject:
-
-                            allUiVariableName.Add(Indents(4) + "private GameObject _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon);
-                            AddUsing("using UnityEngine;");
-                            break;
-                        case UiType.Button:
-
-                            allUiVariableName.Add(
-                                Indents(4) + "private Button _" + DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.Image:
-                            allUiVariableName.Add(Indents(4) + "private Image _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.Text:
-                            allUiVariableName.Add(Indents(4) + "private Text _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon);
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.Toggle:
-                            allUiVariableName.Add(
-                                Indents(4) + "private Toggle _" + DataFrameComponent.String_FirstCharToLower(child.name) +
-                                Semicolon);
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.RawImage:
-                            allUiVariableName.Add(Indents(4) + "private RawImage _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.Scrollbar:
-                            allUiVariableName.Add(Indents(4) + "private Scrollbar _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.ScrollRect:
-                            allUiVariableName.Add(Indents(4) + "private ScrollRect _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.InputField:
-
-                            allUiVariableName.Add(Indents(4) + "private InputField _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.Dropdown:
-                            allUiVariableName.Add(Indents(4) + "private Dropdown _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.Slider:
-                            allUiVariableName.Add(Indents(4) + "private Slider _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.VideoPlayer:
-                            allUiVariableName.Add(Indents(4) + "private VideoPlayer _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using UnityEngine.UI;");
-                            break;
-                        case UiType.TextMeshProUGUI:
-                            allUiVariableName.Add(Indents(4) + "private TextMeshProUGUI _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using TMPro;");
-                            break;
-                        case UiType.TMP_Dropdown:
-                            allUiVariableName.Add(Indents(4) + "private TMP_Dropdown _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using TMPro;");
-                            break;
-                        case UiType.TMP_InputField:
-                            allUiVariableName.Add(Indents(4) + "private TMP_InputField _" +
-                                                  DataFrameComponent.String_FirstCharToLower(child.name) +
-                                                  Semicolon
-                            );
-                            AddUsing("using TMPro;");
-                            break;
-
-                        case UiType.ChildList:
-
-                            string childTypeName;
-
-                            if (bindUiType.childType != null)
-                            {
-                                if (bindUiType.childType == "ChildUiBaseWindow")
-                                {
-                                    childTypeName = child.GetComponentInChildren<ChildUiBaseWindow>().uiType.ToString();
-                                    AddUsing("using System.Collections.Generic;");
-                                }
-                                else
-                                {
-                                    childTypeName = bindUiType.childType;
-                                    AddUsing("using System.Collections.Generic;");
-                                }
-
-                                childTypeName = childTypeName.Split('.')[childTypeName.Split('.').Length - 1];
-
-                                allUiVariableName.Add(Indents(4) + "private List<" + childTypeName + "> _" +
-                                                      DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon);
-                            }
-
-                            break;
-
-                        case UiType.Null:
+                        switch (bindUiType.type)
                         {
-                            break;
+                            case UiType.GameObject:
+
+                                allUiVariableName.Add(Indents(4) + "private GameObject _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon);
+                                AddUsing("using UnityEngine;");
+                                break;
+                            case UiType.Button:
+
+                                allUiVariableName.Add(
+                                    Indents(4) + "private Button _" + DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.Image:
+                                allUiVariableName.Add(Indents(4) + "private Image _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.Text:
+                                allUiVariableName.Add(Indents(4) + "private Text _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon);
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.Toggle:
+                                allUiVariableName.Add(
+                                    Indents(4) + "private Toggle _" + DataFrameComponent.String_FirstCharToLower(child.name) +
+                                    Semicolon);
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.RawImage:
+                                allUiVariableName.Add(Indents(4) + "private RawImage _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.Scrollbar:
+                                allUiVariableName.Add(Indents(4) + "private Scrollbar _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.ScrollRect:
+                                allUiVariableName.Add(Indents(4) + "private ScrollRect _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.InputField:
+
+                                allUiVariableName.Add(Indents(4) + "private InputField _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.Dropdown:
+                                allUiVariableName.Add(Indents(4) + "private Dropdown _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.Slider:
+                                allUiVariableName.Add(Indents(4) + "private Slider _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.VideoPlayer:
+                                allUiVariableName.Add(Indents(4) + "private VideoPlayer _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using UnityEngine.UI;");
+                                break;
+                            case UiType.TextMeshProUGUI:
+                                allUiVariableName.Add(Indents(4) + "private TextMeshProUGUI _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using TMPro;");
+                                break;
+                            case UiType.TMP_Dropdown:
+                                allUiVariableName.Add(Indents(4) + "private TMP_Dropdown _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using TMPro;");
+                                break;
+                            case UiType.TMP_InputField:
+                                allUiVariableName.Add(Indents(4) + "private TMP_InputField _" +
+                                                      DataFrameComponent.String_FirstCharToLower(child.name) +
+                                                      Semicolon
+                                );
+                                AddUsing("using TMPro;");
+                                break;
+
+                            case UiType.ChildList:
+
+                                string childTypeName;
+
+                                if (bindUiType.childType != null)
+                                {
+                                    if (bindUiType.childType == "ChildUiBaseWindow")
+                                    {
+                                        childTypeName = child.GetComponentInChildren<ChildUiBaseWindow>().uiType.ToString();
+                                        AddUsing("using System.Collections.Generic;");
+                                    }
+                                    else
+                                    {
+                                        childTypeName = bindUiType.childType;
+                                        AddUsing("using System.Collections.Generic;");
+                                    }
+
+                                    childTypeName = childTypeName.Split('.')[childTypeName.Split('.').Length - 1];
+
+                                    allUiVariableName.Add(Indents(4) + "private List<" + childTypeName + "> _" +
+                                                          DataFrameComponent.String_FirstCharToLower(child.name) + Semicolon);
+                                }
+
+                                break;
+
+                            case UiType.Null:
+                            {
+                                break;
+                            }
                         }
-                    }
 
-
-                    foreach (string expansionObj in bindUiType.expansionType)
-                    {
-                        allUiVariableName.Add(
-                            Indents(4) + "private " + expansionObj + " _" +
-                            DataFrameComponent.String_FirstCharToLower(child.name) + expansionObj + Semicolon
-                        );
+                        foreach (string expansionObj in bindUiType.expansionType)
+                        {
+                            allUiVariableName.Add(Indents(4) + "private " + expansionObj + " _" + DataFrameComponent.String_FirstCharToLower(child.name) + expansionObj + Semicolon);
+                        }
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// 多层父级是ChildBaseWindow
+        /// 该方法是为了判断当期BindUiType.type等于ChildList的情况下是否是一级,二几及以后的ChildList不予生成
+        /// </summary>
+        /// <param name="thisTransform"></param>
+        /// <returns></returns>
+        private bool ParentIsChildBaseWindow(Transform thisTransform, int count)
+        {
+            if (thisTransform.GetComponent<BaseWindow>())
+            {
+                return true;
+            }
+
+            if (thisTransform.GetComponent<ChildBaseWindow>())
+            {
+                if (count == 0)
+                {
+                    count += 1;
+                    return ParentIsChildBaseWindow(thisTransform.parent, count);
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return ParentIsChildBaseWindow(thisTransform.parent, count);
         }
 
         /// <summary>
@@ -516,36 +546,41 @@ namespace DltFramework
                 BindUiType bindUiType = child.GetComponent<BindUiType>();
                 if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
                 {
-                    if (bindUiType.type != UiType.Null)
+                    if (DataFrameComponent.String_IsScriptsStandard(child.name))
                     {
-                        allUiVariableBind.Add(
-                            Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) + ",\"" +
-                            GetUiComponentPath(child, "") + "\");");
+                        if (bindUiType.type != UiType.Null)
+                        {
+                            allUiVariableBind.Add(
+                                Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) + ",\"" +
+                                GetUiComponentPath(child, "") + "\");");
+                        }
+
+
+                        foreach (string expansionObj in bindUiType.expansionType)
+                        {
+                            allUiVariableBind.Add(Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) + expansionObj + ",\"" +
+                                                  GetUiComponentPath(child, "") + "\");");
+                        }
+
+                        if (child.GetComponent<BindUiType>() && child.GetComponent<BindUiType>().type == UiType.ChildList)
+                        {
+                            if (ParentIsChildBaseWindow(child, 0))
+                            {
+                                string listChildBaseWindowContent = String.Empty;
+                                listChildBaseWindowContent +=
+                                    Indents(8) + "for" + Indents(1) + "(" + "int" + Indents(1) + "i" + Indents(1) + "=" +
+                                    Indents(1) + "0" + Semicolon +
+                                    Indents(1) + "i" + Indents(1) + "<" + Indents(1) + "_" +
+                                    DataFrameComponent.String_FirstCharToLower(child.name) + ".Count" + Semicolon + Indents(1) + "i++" +
+                                    ")" + LineFeed + Indents(8) + "{"
+                                    + LineFeed + Indents(12) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) + "[i]" + "." + "ViewStartInit();"
+                                    + LineFeed + Indents(12) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) + "[i]" + "." +
+                                    "InitData(i);" + LineFeed + Indents(8) + "}";
+
+                                allUiVariableBind.Add(listChildBaseWindowContent);
+                            }
+                        }
                     }
-
-
-                    foreach (string expansionObj in bindUiType.expansionType)
-                    {
-                        allUiVariableBind.Add(
-                            Indents(8) + "BindUi(ref _" + DataFrameComponent.String_FirstCharToLower(child.name) + expansionObj + ",\"" +
-                            GetUiComponentPath(child, "") + "\");");
-                    }
-                }
-
-                if (child.GetComponent<BindUiType>() && child.GetComponent<BindUiType>().type == UiType.ChildList)
-                {
-                    string listChildBaseWindowContent = String.Empty;
-                    listChildBaseWindowContent +=
-                        Indents(8) + "for" + Indents(1) + "(" + "int" + Indents(1) + "i" + Indents(1) + "=" +
-                        Indents(1) + "0" + Semicolon +
-                        Indents(1) + "i" + Indents(1) + "<" + Indents(1) + "_" +
-                        DataFrameComponent.String_FirstCharToLower(child.name) + ".Count" + Semicolon + Indents(1) + "i++" +
-                        ")" + LineFeed + Indents(8) + "{"
-                        + LineFeed + Indents(12) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) + "[i]" + "." + "ViewStartInit();"
-                        + LineFeed + Indents(12) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) + "[i]" + "." +
-                        "InitData(i);" + LineFeed + Indents(8) + "}";
-
-                    allUiVariableBind.Add(listChildBaseWindowContent);
                 }
             }
         }
@@ -565,91 +600,94 @@ namespace DltFramework
                 if (bindUiType && !GetUiComponentContainLocalBaseWindow(child))
                 {
                     string bindStr;
-                    if (bindUiType.type == UiType.Button)
+                    if (DataFrameComponent.String_IsScriptsStandard(child.name))
                     {
-                        UIEventTriggerType uiEventTriggerType =
-                            child.GetComponent<BindUiType>().eventTriggerType;
-
-                        if ((UIEventTriggerType.PointerClick & uiEventTriggerType) ==
-                            UIEventTriggerType.PointerClick)
+                        if (bindUiType.type == UiType.Button)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.PointerClick" + "," + "On" + child.name + "Click" + ");";
-                            allUiVariableBindListener.Add(bindStr);
-                        }
+                            UIEventTriggerType uiEventTriggerType =
+                                child.GetComponent<BindUiType>().eventTriggerType;
 
-                        if ((UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
-                            UIEventTriggerType.PointerEnter)
+                            if ((UIEventTriggerType.PointerClick & uiEventTriggerType) ==
+                                UIEventTriggerType.PointerClick)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.PointerClick" + "," + "On" + child.name + "Click" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            if ((UIEventTriggerType.PointerEnter & uiEventTriggerType) ==
+                                UIEventTriggerType.PointerEnter)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.PointerEnter" + "," + "On" + child.name + "Enter" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            if ((UIEventTriggerType.PointerExit & uiEventTriggerType) ==
+                                UIEventTriggerType.PointerExit)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.PointerExit" + "," + "On" + child.name + "Exit" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            if ((UIEventTriggerType.PointerDown & uiEventTriggerType) ==
+                                UIEventTriggerType.PointerDown)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.PointerDown" + "," + "On" + child.name + "Down" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            if ((UIEventTriggerType.PointerUp & uiEventTriggerType) ==
+                                UIEventTriggerType.PointerUp)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.PointerUp" + "," + "On" + child.name + "Up" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            if ((UIEventTriggerType.Drag & uiEventTriggerType) ==
+                                UIEventTriggerType.Drag)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.Drag" + "," + "On" + child.name + "Drag" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            if ((UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
+                                UIEventTriggerType.BeginDrag)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.BeginDrag" + "," + "On" + child.name + "BeginDrag" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            if ((UIEventTriggerType.EndDrag & uiEventTriggerType) ==
+                                UIEventTriggerType.EndDrag)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.EndDrag" + "," + "On" + child.name + "EndDrag" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            if ((UIEventTriggerType.Scroll & uiEventTriggerType) ==
+                                UIEventTriggerType.Scroll)
+                            {
+                                bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
+                                          "EventTriggerType.Scroll" + "," + "On" + child.name + "Scroll" + ");";
+                                allUiVariableBindListener.Add(bindStr);
+                            }
+
+                            AddUsing("using UnityEngine.EventSystems;");
+                        }
+                        else if (bindUiType.type == UiType.Toggle)
                         {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.PointerEnter" + "," + "On" + child.name + "Enter" + ");";
+                            bindStr = Indents(8) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) +
+                                      ".onValueChanged.AddListener(" + "On" + child.name + ");";
                             allUiVariableBindListener.Add(bindStr);
+                            AddUsing("using UnityEngine.EventSystems;");
                         }
-
-                        if ((UIEventTriggerType.PointerExit & uiEventTriggerType) ==
-                            UIEventTriggerType.PointerExit)
-                        {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.PointerExit" + "," + "On" + child.name + "Exit" + ");";
-                            allUiVariableBindListener.Add(bindStr);
-                        }
-
-                        if ((UIEventTriggerType.PointerDown & uiEventTriggerType) ==
-                            UIEventTriggerType.PointerDown)
-                        {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.PointerDown" + "," + "On" + child.name + "Down" + ");";
-                            allUiVariableBindListener.Add(bindStr);
-                        }
-
-                        if ((UIEventTriggerType.PointerUp & uiEventTriggerType) ==
-                            UIEventTriggerType.PointerUp)
-                        {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.PointerUp" + "," + "On" + child.name + "Up" + ");";
-                            allUiVariableBindListener.Add(bindStr);
-                        }
-
-                        if ((UIEventTriggerType.Drag & uiEventTriggerType) ==
-                            UIEventTriggerType.Drag)
-                        {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.Drag" + "," + "On" + child.name + "Drag" + ");";
-                            allUiVariableBindListener.Add(bindStr);
-                        }
-
-                        if ((UIEventTriggerType.BeginDrag & uiEventTriggerType) ==
-                            UIEventTriggerType.BeginDrag)
-                        {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.BeginDrag" + "," + "On" + child.name + "BeginDrag" + ");";
-                            allUiVariableBindListener.Add(bindStr);
-                        }
-
-                        if ((UIEventTriggerType.EndDrag & uiEventTriggerType) ==
-                            UIEventTriggerType.EndDrag)
-                        {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.EndDrag" + "," + "On" + child.name + "EndDrag" + ");";
-                            allUiVariableBindListener.Add(bindStr);
-                        }
-
-                        if ((UIEventTriggerType.Scroll & uiEventTriggerType) ==
-                            UIEventTriggerType.Scroll)
-                        {
-                            bindStr = Indents(8) + "BindListener(_" + DataFrameComponent.String_FirstCharToLower(child.name) + "," +
-                                      "EventTriggerType.Scroll" + "," + "On" + child.name + "Scroll" + ");";
-                            allUiVariableBindListener.Add(bindStr);
-                        }
-
-                        AddUsing("using UnityEngine.EventSystems;");
-                    }
-                    else if (bindUiType.type == UiType.Toggle)
-                    {
-                        bindStr = Indents(8) + "_" + DataFrameComponent.String_FirstCharToLower(child.name) +
-                                  ".onValueChanged.AddListener(" + "On" + child.name + ");";
-                        allUiVariableBindListener.Add(bindStr);
-                        AddUsing("using UnityEngine.EventSystems;");
                     }
                 }
             }

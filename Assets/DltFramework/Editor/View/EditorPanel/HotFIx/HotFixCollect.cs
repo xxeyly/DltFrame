@@ -750,9 +750,22 @@ namespace DltFramework
             #region 场景中热更文件打包
 
             List<HotFixAssetPathConfig> hotFixAssetPathConfigs = DataFrameComponent.Hierarchy_GetAllObjectsInScene<HotFixAssetPathConfig>();
+            List<HotFixAssetPathConfig> removeChildHotFixAssetPathConfig = new List<HotFixAssetPathConfig>();
+
+            foreach (HotFixAssetPathConfig hotFixAssetPathConfig in hotFixAssetPathConfigs)
+            {
+                if (!hotFixAssetPathConfig.ParentIsContainHotFixAssetPathConfig(hotFixAssetPathConfig.transform.parent))
+                {
+                    removeChildHotFixAssetPathConfig.Add(hotFixAssetPathConfig);
+                }
+            }
+            hotFixAssetPathConfigs = removeChildHotFixAssetPathConfig;
+
+            AssetDatabase.Refresh();
             //应用热更配置并记录路径
             for (int i = 0; i < hotFixAssetPathConfigs.Count; i++)
             {
+                hotFixAssetPathConfigs[i].RemoveChildHotFixAssetPathConfig();
                 //应用预制体
                 hotFixAssetPathConfigs[i].SetPathAndApplyPrefab();
                 //设置AssetBundle名称

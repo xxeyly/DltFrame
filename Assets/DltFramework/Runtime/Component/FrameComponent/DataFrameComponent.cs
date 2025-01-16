@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -516,6 +517,12 @@ namespace DltFramework
         public static bool String_CharisChinese(char c)
         {
             return c >= 0x4E00 && c <= 0x9FA5;
+        }
+
+        [LabelText("字符串是否符合代码规范")]
+        public static bool String_IsScriptsStandard(string content)
+        {
+            return !(string.IsNullOrEmpty(content) || content.Contains(" ") || Regex.IsMatch(content[0].ToString(), @"[0-9!@#$%^&*()\-_+=$${}|\\:;'""<>,.?/]"));
         }
 
         [LabelText("文字换行")]

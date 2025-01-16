@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Sirenix.OdinInspector;
 using UnityEditor;
@@ -11,6 +12,41 @@ public class HotFixAssetPathConfig : MonoBehaviour
     [LabelText("预制体路径")] public string prefabPath;
     [LabelText("Ab包路径")] public string assetBundlePath;
     private string _hotFixPrefabsPath;
+
+    /// <summary>
+    /// 移除子级HotFixAssetPathConfig
+    /// </summary>
+    public void RemoveChildHotFixAssetPathConfig()
+    {
+        List<HotFixAssetPathConfig> childHotFixAssetPathConfigs = new List<HotFixAssetPathConfig>(GetComponentsInChildren<HotFixAssetPathConfig>());
+        if (childHotFixAssetPathConfigs.Count > 1)
+        {
+            for (int i = 0; i < childHotFixAssetPathConfigs.Count; i++)
+            {
+                if (childHotFixAssetPathConfigs[i] != gameObject.GetComponent<HotFixAssetPathConfig>())
+                {
+                    DestroyImmediate(childHotFixAssetPathConfigs[i]);
+                }
+            }
+        }
+    }
+
+    public bool ParentIsContainHotFixAssetPathConfig(Transform parent)
+    {
+        if (parent == null)
+        {
+            return false;
+        }
+
+        if (parent.GetComponent<HotFixAssetPathConfig>())
+        {
+            return true;
+        }
+        else
+        {
+            return ParentIsContainHotFixAssetPathConfig(parent.parent);
+        }
+    }
 #if UNITY_EDITOR
     [Button("生成路径并应用预制体", ButtonSizes.Medium)]
     [GUIColor(0, 1, 0)]
