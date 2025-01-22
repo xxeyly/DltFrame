@@ -7,7 +7,7 @@ B站地址:【DltFrame-简介】 https://www.bilibili.com/video/BV1WrefeSELQ/sha
 
 Odin - Inspector and Serializer
 
-插件地址:https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041
+插件地址:https://space.bilibili.com/198957510/lists/3664239?type=season
 
 ## 框架功能:
 
