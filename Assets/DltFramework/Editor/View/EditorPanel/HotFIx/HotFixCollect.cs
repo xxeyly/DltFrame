@@ -568,7 +568,6 @@ namespace DltFramework
                     File.Copy(metaDataDllPath, MetadataPath + metadataName + ".bytes", true);
                 }
             }
-#endif
             string hotFixMetaAssemblyConfigPath = MetadataConfigPath + "MetadataConfig.json";
             List<HotFixRuntimeDownConfig> oldHotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             if (File.Exists(hotFixMetaAssemblyConfigPath))
@@ -600,6 +599,8 @@ namespace DltFramework
             }
 
             FileOperationComponent.SaveTextToLoad(MetadataConfigPath, "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
+#endif
+
         }
 
         #endregion
