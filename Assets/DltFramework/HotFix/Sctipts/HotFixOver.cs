@@ -19,6 +19,8 @@ namespace HotFix
             LoadMetadataForAOTAssemblies();
             HotFixDebug.Log("开始加载Assembly-CSharp");
             LoadAssemblyCSharp();
+            HotFixDebug.Log("开始加载OtherAssembly-CSharp");
+            LoadOtherAssemblyCSharp();
             HotFixDebug.Log("开始加载游戏");
             LoadGameRootStart();
         }
@@ -46,6 +48,7 @@ namespace HotFix
             {
                 Directory.CreateDirectory(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/Metadata/");
             }
+
             //获得元数据配置表
             List<HotFixRuntimeDownConfig> metadataHotFixRuntimeDownConfigTable =
                 JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/MetadataConfig", "MetadataConfig.json"));
@@ -55,6 +58,7 @@ namespace HotFix
             {
                 metadataHotFixRuntimeDownConfigTableList.Add(hotFixRuntimeDownConfig.name);
             }
+
             //加载元数据
             foreach (string metadata in metadataHotFixRuntimeDownConfigTableList)
             {
@@ -71,6 +75,22 @@ namespace HotFix
         {
 #if !UNITY_EDITOR
         Assembly.Load(File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/HotFixRuntime/Assembly/Assembly-CSharp.dll.bytes"));
+#else
+
+#endif
+        }
+
+        //加载OtherAssembly-CSharp数据
+        private static void LoadOtherAssemblyCSharp()
+        {
+#if !UNITY_EDITOR
+            //获得OtherAssembly
+            List<HotFixRuntimeDownConfig> otherAssemblyHotFixRuntimeDownConfigTable =
+                JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(HotFixGlobal.GetTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/OtherAssemblyConfig", "OtherAssemblyConfig.json"));
+            foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in otherAssemblyHotFixRuntimeDownConfigTable)
+            {
+                Assembly.Load(File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/HotFixRuntime/OtherAssembly/" + hotFixRuntimeDownConfig.name));
+            }
 #else
 
 #endif

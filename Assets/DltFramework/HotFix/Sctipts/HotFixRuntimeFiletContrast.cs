@@ -58,6 +58,23 @@ namespace HotFix
         [BoxGroup("Assembly资源内容")] [LabelText("Assembly对比")]
         public bool isAssemblyContrast = false;
 
+
+        //------------------------------------------------------------
+        [BoxGroup("OtherAssembly资源内容")] [LabelText("本地OtherAssembly数据")]
+        public List<HotFixRuntimeDownConfig> localOtherAssemblyHotFixRuntimeDownConfigs = new List<HotFixRuntimeDownConfig>();
+
+        [BoxGroup("OtherAssembly资源内容")] [LabelText("远程OtherAssembly数据")]
+        public List<HotFixRuntimeDownConfig> remoteOtherAssemblyHotFixRuntimeDownConfigs = new List<HotFixRuntimeDownConfig>();
+
+        [BoxGroup("OtherAssembly资源内容")] [LabelText("本地OtherAssembly数据表读取")]
+        public bool isLocalOtherAssemblyConfigLoad;
+
+        [BoxGroup("OtherAssembly资源内容")] [LabelText("远程OtherAssembly数据表下载")]
+        public bool isRemoteOtherAssemblyConfigDownLoad;
+
+        [BoxGroup("Assembly资源内容")] [LabelText("Assembly对比")]
+        public bool isOtherAssemblyContrast = false;
+
         //------------------------------------------------------------
         [BoxGroup("GameRootStart资源内容")] [LabelText("本地GameRootStart数据")]
         public HotFixRuntimeDownConfig localGameRootStartHotFixRuntimeDownConfig = new HotFixRuntimeDownConfig();
@@ -115,8 +132,10 @@ namespace HotFix
             _hotFixFileErrorList = HotFixGlobal.GetAllObjectsInScene<IHotFixFileError>();
             StartCoroutine(LocalIsUpdateLoad());
             yield return new WaitUntil(() => localIsUpdateLoad);
+            Debug.Log("本地更新:" + localIsUpdate);
             StartCoroutine(OnlyResourcesVersionContrast());
             yield return new WaitUntil(() => OnlyResourcesVersionContrastLoad);
+            Debug.Log("仅资源版本对比:" + onlyResourcesVersionContrast);
             StartCoroutine(HotFixPathLocalLoad());
             yield return new WaitUntil(() => hotFixPathLocalLoad);
             if (localIsUpdate)
@@ -228,10 +247,17 @@ namespace HotFix
             StartCoroutine(DownMetadataConfig());
             yield return new WaitUntil(() => isRemoteMetadataConfigDownLoad);
             HotFixDebug.Log("元数据表下载完毕");
+
             HotFixDebug.Log("Assembly表开始下载");
             StartCoroutine(DownAssemblyConfig());
             yield return new WaitUntil(() => isRemoteAssemblyConfigDownLoad);
             HotFixDebug.Log("Assembly表下载完毕");
+
+            HotFixDebug.Log("OtherAssembly表开始下载");
+            StartCoroutine(DownOtherAssemblyConfig());
+            yield return new WaitUntil(() => isRemoteOtherAssemblyConfigDownLoad);
+            HotFixDebug.Log("OtherAssembly表下载完毕");
+
             HotFixDebug.Log("GameRoot表开始下载");
             StartCoroutine(DownGameRootStartConfig());
             yield return new WaitUntil(() => isRemoteGameRootStartDownLoad);
@@ -241,6 +267,7 @@ namespace HotFix
             HotFixDebug.Log("SceneCount下载完毕");
 
             StartCoroutine(StartDownSceneAssetBundleConfig());
+            yield return new WaitUntil(() => isRemoteSceneHotFixRuntimeDownConfigDownLoad);
             HotFixDebug.Log("配置表下载完毕----------");
             // yield return new WaitForSeconds(0.02f);
             foreach (IHotFixRuntimeFileContrast hotFixRuntimeFileCheck in _hotFixRuntimeFileContrasts)
@@ -293,6 +320,28 @@ namespace HotFix
                 remoteAssemblyHotFixRuntimeDownConfig = JsonUtil.FromJson<HotFixRuntimeDownConfig>(request.downloadHandler.text);
                 //Assembly下载完毕
                 isRemoteAssemblyConfigDownLoad = true;
+                //更新检测数量
+                localFileUpdateCheckAssetNumberMax += 1;
+            }
+        }
+
+        //下载远程Assembly配置表
+        IEnumerator DownOtherAssemblyConfig()
+        {
+            UnityWebRequest request = UnityWebRequest.Get(hotFixPath + "HotFixRuntime/OtherAssemblyConfig/" + "OtherAssemblyConfig.json");
+            yield return request.SendWebRequest();
+            if (request.responseCode != 200)
+            {
+                //请求错误,等待一定时间后再次请求
+                yield return new WaitForSeconds(againDownWaitTime);
+                StartCoroutine(DownOtherAssemblyConfig());
+            }
+            else
+            {
+                //获得OtherAssembly配置表
+                remoteOtherAssemblyHotFixRuntimeDownConfigs = JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(request.downloadHandler.text);
+                //Assembly下载完毕
+                isRemoteOtherAssemblyConfigDownLoad = true;
                 //更新检测数量
                 localFileUpdateCheckAssetNumberMax += 1;
             }
@@ -374,7 +423,8 @@ namespace HotFix
                 localFileUpdateCheckAssetNumberMax += hotFixRuntimeSceneAssetBundleConfig.assetBundleHotFixRuntimeDownConfigs.Count;
                 //添加到场景AssetBundle配置表
                 remoteSceneHotFixRuntimeDownConfig.Add(hotFixRuntimeSceneAssetBundleConfig);
-                isRemoteSceneHotFixRuntimeDownConfigDownLoad = true;
+                // isRemoteSceneHotFixRuntimeDownConfigDownLoad = true;
+                Debug.Log("添加场景:" + hotFixRuntimeSceneAssetBundleConfig.sceneHotFixRuntimeDownConfig.name);
             }
         }
 
@@ -398,6 +448,13 @@ namespace HotFix
             //保存配置表缓存文件
             SaveAssemblyConfigCacheFile();
 
+            //OtherAssembly配置表本地读取
+            yield return StartCoroutine(OtherAssemblyConfigLocalLoad());
+            //Assembly对比
+            yield return StartCoroutine(OtherAssemblyLocalContrast());
+            //保存配置表缓存文件
+            SaveOtherAssemblyConfigCacheFile();
+
             //GameRootStart本地读取
             yield return StartCoroutine(GameRootStartConfigLocalLoad());
             //GameRootStart对比
@@ -409,26 +466,31 @@ namespace HotFix
             yield return StartCoroutine(HotFixAssetAssetBundleSceneConfigLocalLoad());
             //HotFixAssetAssetBundle远程读取
             List<HotFixRuntimeDownConfig> hotFixAssetAssetBundleAssetConfigs = HotFixAssetAssetBundleSceneConfigGroup();
+
             //HotFixAssetAssetBundle对比
             yield return StartCoroutine(AssetBundleLocalContrast(hotFixAssetAssetBundleAssetConfigs));
             //保存配置表缓存文件
             SaveSceneHotFixRuntimeAssetBundleConfigCacheFile();
-            HotFixDebug.Log("本地检测完毕");
+            Debug.Log("本地检测完毕");
             yield return new WaitForSeconds(0.02f);
             foreach (IHotFixRuntimeFileContrast hotFixRuntimeFileCheck in _hotFixRuntimeFileContrasts)
             {
                 hotFixRuntimeFileCheck.HotFixRuntimeLocalFileContrastOver();
             }
-
+            
             //没有要更新的文件,直接进入游戏
             if (needDownHotFixRuntimeDownConfig.Count == 0)
             {
-                HotFixDebug.Log("无新配置,直接进入游戏");
+                Debug.Log("无新配置,直接进入游戏");
                 hotFixRuntimeFileDown.ReplaceCacheFile();
                 HotFixOver.Over();
             }
             else
             {
+                foreach (HotFixRuntimeDownConfig hotFixRuntimeDownConfig in needDownHotFixRuntimeDownConfig)
+                {
+                    Debug.Log("需要下载的资源:"+hotFixRuntimeDownConfig.name);
+                }
                 hotFixRuntimeFileDown.DownHotFixRuntimeDownConfig(needDownHotFixRuntimeDownConfig, hotFixPath);
             }
         }
@@ -466,10 +528,24 @@ namespace HotFix
             //开启仅资源对比
             if (onlyResourcesVersionContrast)
             {
-                if (localHotFixRuntimeDownConfig == null || localHotFixRuntimeDownConfig.version != remoteHotFixRuntimeDownConfig.version)
+                if (localHotFixRuntimeDownConfig == null)
                 {
-                    Debug.Log("版本号不一致,或者为空");
                     needDownHotFixRuntimeDownConfig.Add(remoteHotFixRuntimeDownConfig);
+                    Debug.Log("本地文件不存在:" + remoteHotFixRuntimeDownConfig.name + "\n" + "远程版本号:" + remoteHotFixRuntimeDownConfig.version);
+                }
+                else
+                {
+                    if (localHotFixRuntimeDownConfig.version != remoteHotFixRuntimeDownConfig.version)
+                    {
+                        Debug.Log("文件不一致:" + remoteHotFixRuntimeDownConfig.name + "\n" + "远程版本号:" + remoteHotFixRuntimeDownConfig.version + "\n" + "本地版本号:" + localHotFixRuntimeDownConfig.version +
+                                  "\n" + "远程md5:" + remoteHotFixRuntimeDownConfig.md5 + "\n" + "本地md5:" + localHotFixRuntimeDownConfig.md5);
+                        needDownHotFixRuntimeDownConfig.Add(remoteHotFixRuntimeDownConfig);
+                    }
+                    else
+                    {
+                        /*Debug.Log("文件一致:" + remoteHotFixRuntimeDownConfig.name + "\n" + "远程版本号:" + remoteHotFixRuntimeDownConfig.version + "\n" + "本地版本号:" + localHotFixRuntimeDownConfig.version +
+                                  "\n" + "远程md5:" + remoteHotFixRuntimeDownConfig.md5 + "\n" + "本地md5:" + localHotFixRuntimeDownConfig.md5);*/
+                    }
                 }
             }
             else
@@ -492,6 +568,10 @@ namespace HotFix
                         Debug.Log("远端md5:" + remoteHotFixRuntimeDownConfig.md5);
                         Debug.Log("本地md5:" + HotFixGlobal.GetMD5HashByte(request.downloadHandler.data));
                         needDownHotFixRuntimeDownConfig.Add(remoteHotFixRuntimeDownConfig);
+                    }
+                    else
+                    {
+                        // Debug.Log("文件一致:" + remoteHotFixRuntimeDownConfig.name + "md5:" + remoteHotFixRuntimeDownConfig.md5);
                     }
                 }
             }
@@ -536,8 +616,9 @@ namespace HotFix
         {
             for (int i = 0; i < remoteMetadataHotFixRuntimeDownConfigTable.Count; i++)
             {
-                yield return StartCoroutine(HotFixRuntimeFileContrast(remoteMetadataHotFixRuntimeDownConfigTable[i],
-                    GetHotFixRuntimeDownConfigByName(remoteMetadataHotFixRuntimeDownConfigTable[i].name, localMetadataHotFixRuntimeDownConfigTable)));
+                yield return StartCoroutine(
+                    HotFixRuntimeFileContrast(remoteMetadataHotFixRuntimeDownConfigTable[i],
+                        GetHotFixRuntimeDownConfigByName(remoteMetadataHotFixRuntimeDownConfigTable[i].name, localMetadataHotFixRuntimeDownConfigTable)));
             }
 
             isMetadataContrast = true;
@@ -548,7 +629,8 @@ namespace HotFix
         /// </summary>
         private void SaveMetadataConfigCacheFile()
         {
-            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/MetadataConfig", "MetadataConfig.json" + ".Cache", JsonUtil.ToJson(remoteMetadataHotFixRuntimeDownConfigTable));
+            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/MetadataConfig", "MetadataConfig.json" + ".Cache",
+                JsonUtil.ToJson(remoteMetadataHotFixRuntimeDownConfigTable));
 
             //添加到缓存列表中
             hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/MetadataConfig/" + "MetadataConfig.json" + ".Cache");
@@ -594,9 +676,69 @@ namespace HotFix
         /// </summary>
         private void SaveAssemblyConfigCacheFile()
         {
-            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/AssemblyConfig", "AssemblyConfig.json" + ".Cache", JsonUtil.ToJson(remoteAssemblyHotFixRuntimeDownConfig));
+            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/AssemblyConfig", "AssemblyConfig.json" + ".Cache",
+                JsonUtil.ToJson(remoteAssemblyHotFixRuntimeDownConfig));
             //添加到缓存列表中
             hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/AssemblyConfig/" + "AssemblyConfig.json" + ".Cache");
+        }
+
+        #endregion
+
+        #region OtherAssembly
+
+        /// <summary>
+        /// OtherAssembly配置本地加载
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator OtherAssemblyConfigLocalLoad()
+        {
+            string otherAssemblyConfigLocalPath = HotFixGlobal.GetDeviceStoragePath(true) + "/HotFixRuntime/OtherAssemblyConfig/" + "OtherAssemblyConfig.json";
+            UnityWebRequest assemblyConfigLocalFile = UnityWebRequest.Get(otherAssemblyConfigLocalPath);
+            yield return assemblyConfigLocalFile.SendWebRequest();
+            if (assemblyConfigLocalFile.responseCode == 200)
+            {
+                localOtherAssemblyHotFixRuntimeDownConfigs = JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(assemblyConfigLocalFile.downloadHandler.text);
+            }
+            else
+            {
+                localOtherAssemblyHotFixRuntimeDownConfigs = new List<HotFixRuntimeDownConfig>();
+            }
+
+            isLocalOtherAssemblyConfigLoad = true;
+        }
+
+        /// <summary>
+        /// OtherAssembly资源对比
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator OtherAssemblyLocalContrast()
+        {
+            for (int i = 0; i < remoteOtherAssemblyHotFixRuntimeDownConfigs.Count; i++)
+            {
+                HotFixRuntimeDownConfig localOtherAssemblyHotFixRuntimeDownConfig = null;
+                for (int j = 0; j < localOtherAssemblyHotFixRuntimeDownConfigs.Count; j++)
+                {
+                    if (localOtherAssemblyHotFixRuntimeDownConfigs[j].name == remoteOtherAssemblyHotFixRuntimeDownConfigs[i].name)
+                    {
+                        localOtherAssemblyHotFixRuntimeDownConfig = localOtherAssemblyHotFixRuntimeDownConfigs[j];
+                    }
+                }
+
+                yield return StartCoroutine(HotFixRuntimeFileContrast(remoteOtherAssemblyHotFixRuntimeDownConfigs[i], localOtherAssemblyHotFixRuntimeDownConfig));
+            }
+
+            isOtherAssemblyContrast = true;
+        }
+
+        /// <summary>
+        /// 保存OtherAssembly配置表缓存文件
+        /// </summary>
+        private void SaveOtherAssemblyConfigCacheFile()
+        {
+            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/OtherAssemblyConfig", "OtherAssemblyConfig.json" + ".Cache",
+                JsonUtil.ToJson(remoteOtherAssemblyHotFixRuntimeDownConfigs));
+            //添加到缓存列表中
+            hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/OtherAssemblyConfig/" + "OtherAssemblyConfig.json" + ".Cache");
         }
 
         #endregion
@@ -662,7 +804,8 @@ namespace HotFix
         /// </summary>
         private void SaveGameRootStartConfigCacheFile()
         {
-            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json" + ".Cache", JsonUtil.ToJson(remoteGameRootStartHotFixRuntimeDownConfig));
+            HotFixGlobal.SaveTextToLoad(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig", "GameRootStartConfig.json" + ".Cache",
+                JsonUtil.ToJson(remoteGameRootStartHotFixRuntimeDownConfig));
             //添加到缓存列表中
             hotFixRuntimeFileDown.replaceCacheFile.Add(HotFixGlobal.GetDeviceStoragePath() + "/HotFixRuntime/GameRootStartAssetBundleConfig/" + "GameRootStartConfig.json" + ".Cache");
         }

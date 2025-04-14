@@ -96,6 +96,8 @@ namespace DltFramework
         private string HotFixRuntimePath;
         private string AssemblyPath;
         private string AssemblyConfigPath;
+        private string OtherAssemblyPath;
+        private string OtherAssemblyConfigPath;
         private string GameRootStartAssetBundlePath;
         private string GameRootStartAssetBundleConfigPath;
         private string HotFixAssetBundlePath;
@@ -177,6 +179,18 @@ namespace DltFramework
                 Directory.CreateDirectory(AssemblyConfigPath);
             }
 
+            OtherAssemblyPath = HotFixRuntimePath + "OtherAssembly/";
+            if (!Directory.Exists(OtherAssemblyPath))
+            {
+                Directory.CreateDirectory(OtherAssemblyPath);
+            }
+
+            OtherAssemblyConfigPath = HotFixRuntimePath + "OtherAssemblyConfig/";
+            if (!Directory.Exists(OtherAssemblyConfigPath))
+            {
+                Directory.CreateDirectory(OtherAssemblyConfigPath);
+            }
+
             GameRootStartAssetBundlePath = HotFixRuntimePath + "GameRootStartAssetBundle/";
             if (!Directory.Exists(GameRootStartAssetBundlePath))
             {
@@ -206,6 +220,15 @@ namespace DltFramework
             AssetDatabase.Refresh();
 
             platformName = EditorUserBuildSettings.activeBuildTarget.ToString();
+
+            buildOtherAssemblyName = new List<string>();
+            foreach (string hotUpdateAssemblyName in HybridCLR.Editor.SettingsUtil.HotUpdateAssemblyNamesExcludePreserved)
+            {
+                if (hotUpdateAssemblyName != "HotFixCode" && hotUpdateAssemblyName != "Assembly-CSharp")
+                {
+                    buildOtherAssemblyName.Add(hotUpdateAssemblyName);
+                }
+            }
 
             // Debug.Log("初始化");
         }
@@ -237,8 +260,22 @@ namespace DltFramework
         [BoxGroup("MetaAssembly")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
         public bool buildMetaAssemblyParticipatePackaging;
 
+        #endregion
+
+        #region Assembly
+
         [BoxGroup("Assembly")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
         public bool buildAssemblyParticipatePackaging;
+
+        #endregion
+
+        #region 其他热更程序集
+
+        [BoxGroup("OtherAssembly")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
+        public bool buildOtherAssemblyParticipatePackaging;
+
+        [BoxGroup("OtherAssembly")] [LabelText("其他程序集")][ReadOnly] [OnValueChanged("OnSaveConfig")] [EnableIf("buildOtherAssemblyParticipatePackaging")]
+        public List<string> buildOtherAssemblyName;
 
         #endregion
 
@@ -328,6 +365,11 @@ namespace DltFramework
                 HotFixCodeBuild();
             }
 
+            if (buildOtherAssemblyParticipatePackaging)
+            {
+                OtherAssemblyBuild();
+            }
+
             if (buildAssemblyParticipatePackaging)
             {
                 AssemblyBuild();
@@ -403,6 +445,8 @@ namespace DltFramework
                 FileOperationComponent.Copy(MetadataConfigPath, targetOutPath + "/HotFixRuntime/MetadataConfig");
                 FileOperationComponent.Copy(AssemblyPath, targetOutPath + "/HotFixRuntime/Assembly");
                 FileOperationComponent.Copy(AssemblyConfigPath, targetOutPath + "/HotFixRuntime/AssemblyConfig");
+                FileOperationComponent.Copy(OtherAssemblyPath, targetOutPath + "/HotFixRuntime/OtherAssembly");
+                FileOperationComponent.Copy(OtherAssemblyConfigPath, targetOutPath + "/HotFixRuntime/OtherAssemblyConfig");
                 FileOperationComponent.Copy(GameRootStartAssetBundlePath, targetOutPath + "/HotFixRuntime/GameRootStartAssetBundle");
                 FileOperationComponent.Copy(GameRootStartAssetBundleConfigPath, targetOutPath + "/HotFixRuntime/GameRootStartAssetBundleConfig");
                 FileOperationComponent.Copy(HotFixAssetBundlePath, targetOutPath + "/HotFixRuntime/HotFixAssetBundle");
@@ -454,6 +498,7 @@ namespace DltFramework
             OpenScene(this.currentOpenSceneName);
             return UniTask.CompletedTask;
         }
+
 
         #region 打包HotFixView
 
@@ -568,6 +613,7 @@ namespace DltFramework
                     File.Copy(metaDataDllPath, MetadataPath + metadataName + ".bytes", true);
                 }
             }
+
             string hotFixMetaAssemblyConfigPath = MetadataConfigPath + "MetadataConfig.json";
             List<HotFixRuntimeDownConfig> oldHotFixMetaAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
             if (File.Exists(hotFixMetaAssemblyConfigPath))
@@ -600,7 +646,6 @@ namespace DltFramework
 
             FileOperationComponent.SaveTextToLoad(MetadataConfigPath, "MetadataConfig.json", JsonMapper.ToJson(hotFixMetaAssemblyConfigs));
 #endif
-
         }
 
         #endregion
@@ -636,6 +681,60 @@ namespace DltFramework
 
             hotFixAssemblyConfig.version = oldHotFixAssemblyConfigs.version;
             FileOperationComponent.SaveTextToLoad(AssemblyConfigPath, "AssemblyConfig.json", JsonUtil.ToJson(hotFixAssemblyConfig));
+        }
+
+        #endregion
+
+        #region 其他Assembly
+
+        private void OtherAssemblyBuild()
+        {
+#if HybridCLR
+            CompileDllCommand.CompileDllActiveBuildTarget();
+#endif
+            List<HotFixRuntimeDownConfig> oldHotFixAssemblyConfigs = new List<HotFixRuntimeDownConfig>();
+            string configPath = AssemblyConfigPath + "OtherAssemblyConfig.json";
+            if (File.Exists(configPath))
+            {
+                oldHotFixAssemblyConfigs = JsonUtil.FromJson<List<HotFixRuntimeDownConfig>>(FileOperationComponent.GetTextToLoad(configPath));
+            }
+
+            foreach (string otherAssemblyName in buildOtherAssemblyName)
+            {
+                string assemblyDllPath = DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/" + otherAssemblyName + ".dll";
+                File.Copy(assemblyDllPath, OtherAssemblyPath + otherAssemblyName + ".dll.bytes", true);
+                HotFixRuntimeDownConfig oldHotFixAssemblyConfig = null;
+                HotFixRuntimeDownConfig hotFixAssemblyConfig = new HotFixRuntimeDownConfig();
+                for (int i = 0; i < oldHotFixAssemblyConfigs.Count; i++)
+                {
+                    if (oldHotFixAssemblyConfigs[i].name == otherAssemblyName)
+                    {
+                        oldHotFixAssemblyConfig = oldHotFixAssemblyConfigs[i];
+                        break;
+                    }
+                }
+
+                if (oldHotFixAssemblyConfig == null)
+                {
+                    hotFixAssemblyConfig.md5 = FileOperationComponent.GetMD5HashFromFile(OtherAssemblyPath + otherAssemblyName + ".dll.bytes");
+                    hotFixAssemblyConfig.name = otherAssemblyName + ".dll.bytes";
+                    hotFixAssemblyConfig.size = FileOperationComponent.GetFileSize(OtherAssemblyPath + otherAssemblyName + ".dll.bytes").ToString();
+                    hotFixAssemblyConfig.path = "HotFixRuntime/OtherAssembly/";
+                    newBuildHotFixData.Add(otherAssemblyName + ".dll.bytes");
+                    oldHotFixAssemblyConfigs.Add(hotFixAssemblyConfig);
+                }
+                else
+                {
+                    if (hotFixAssemblyConfig.md5 != oldHotFixAssemblyConfig.md5)
+                    {
+                        oldHotFixAssemblyConfig.version += 1;
+                        oldHotFixAssemblyConfig.md5 = hotFixAssemblyConfig.md5;
+                        newBuildHotFixData.Add(otherAssemblyName + ".dll.bytes");
+                    }
+                }
+            }
+
+            FileOperationComponent.SaveTextToLoad(OtherAssemblyConfigPath, "OtherAssemblyConfig.json", JsonUtil.ToJson(oldHotFixAssemblyConfigs));
         }
 
         #endregion
@@ -760,6 +859,7 @@ namespace DltFramework
                     removeChildHotFixAssetPathConfig.Add(hotFixAssetPathConfig);
                 }
             }
+
             hotFixAssetPathConfigs = removeChildHotFixAssetPathConfig;
 
             AssetDatabase.Refresh();
@@ -1343,6 +1443,7 @@ namespace DltFramework
             HotFixViewPrePath = hotFixCollectConfig.HotFixViewPrePath;
             buildHotFixCode = hotFixCollectConfig.buildHotFixCode;
             buildAssemblyParticipatePackaging = hotFixCollectConfig.buildAssemblyParticipatePackaging;
+            buildOtherAssemblyParticipatePackaging = hotFixCollectConfig.buildOtherAssemblyParticipatePackaging;
             buildMetaAssemblyParticipatePackaging = hotFixCollectConfig.buildMetaAssemblyParticipatePackaging;
             buildGameRootStart = hotFixCollectConfig.buildGameRootStart;
             GameRootStartPath = hotFixCollectConfig.GameRootStartPath;

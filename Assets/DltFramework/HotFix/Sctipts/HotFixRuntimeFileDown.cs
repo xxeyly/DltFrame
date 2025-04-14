@@ -48,8 +48,8 @@ namespace HotFix
                 }
 
 
-                Debug.Log("缓存地址:" + cachePath);
-                Debug.Log("替换地址:" + replacePath);
+                /*Debug.Log("缓存地址:" + cachePath);
+                Debug.Log("替换地址:" + replacePath);*/
 
                 if (File.Exists(replacePath))
                 {

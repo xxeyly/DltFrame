@@ -21,6 +21,7 @@ namespace DltFramework
         public static EntityFrameComponent Instance;
         [Searchable] [LabelText("场景所有实体")] public List<EntityItem> sceneEntity;
         [LabelText("场景中重复名实体")] public List<SceneRepeatEntity> sceneRepeatEntityList;
+
         /// <summary>
         /// 实体实例化
         /// </summary>
@@ -58,7 +59,6 @@ namespace DltFramework
             {
                 entityItem.AddToEntityList();
             }
-           
         }
 
 
@@ -176,6 +176,20 @@ namespace DltFramework
             }
 
             return default(T);
+        }
+
+        public List<T> GetEntitys<T>()
+        {
+            List<T> tempEntity = new List<T>();
+            foreach (EntityItem entityItem in sceneEntity)
+            {
+                if (entityItem.GetComponent<T>() != null)
+                {
+                    tempEntity.Add(entityItem.GetComponent<T>());
+                }
+            }
+
+            return tempEntity;
         }
 
         /// <summary>

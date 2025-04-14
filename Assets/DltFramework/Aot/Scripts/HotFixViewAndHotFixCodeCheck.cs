@@ -81,6 +81,7 @@ namespace Aot
                 }
 
                 //开始本地文件检测
+                Debug.Log("开始本地文件检测");
                 await HotFixAssetContrast();
             }
             else
@@ -143,9 +144,13 @@ namespace Aot
             //HotFixView本地对比
             Debug.Log("HotFixView本地对比");
             HotFixViewLocalContrast();
-            //hotFixView缓存配置表保存
-            Debug.Log("HotFixView缓存配置表保存");
-            SaveHotFixViewConfigCacheFile();
+            if (hotFixViewIsNeedDown)
+            {
+                //hotFixView缓存配置表保存
+                Debug.Log("HotFixView缓存配置表保存");
+                SaveHotFixViewConfigCacheFile();
+            }
+
             //-------------------------------------------
             //HotFixCode本地配置表读取
             Debug.Log("本地HotFixCodeConfig读取");
@@ -156,9 +161,12 @@ namespace Aot
             //HotFixCode本地对比
             Debug.Log("HotFixCode本地对比");
             HotFixCodeLocalContrast();
-            //hotFixView缓存配置表保存
-            Debug.Log("HotFixCode缓存配置表保存");
-            SaveHotFixCodeConfigCacheFile();
+            if (hotFixCodeIsNeedDown)
+            {
+                //hotFixView缓存配置表保存
+                Debug.Log("HotFixCode缓存配置表保存");
+                SaveHotFixCodeConfigCacheFile();
+            }
             //-------------------------------------------
 
             foreach (IHotFixViewAndHotFixCode hotFixViewAndHotFixCode in _hotFixViewAndHotFixCodes)
@@ -244,7 +252,6 @@ namespace Aot
 
                 if (_hotFixUnityWebRequest.responseCode == 200)
                 {
-                    Debug.Log("HotFixDownPath读取成功");
                     foreach (IAotFilePathError aotFilePathError in _aotFilePathErrors)
                     {
                         aotFilePathError.FilePathCorrect();
@@ -256,6 +263,8 @@ namespace Aot
                     {
                         hotFixPath = AotGlobal.StringBuilderString(hotFixPath, "/");
                     }
+
+                    Debug.Log("HotFixDownPath读取成功,地址:" + hotFixPath);
                 }
             }
             catch (Exception e)
@@ -330,7 +339,6 @@ namespace Aot
         async UniTask RemoteHotFixViewConfigDownLoad()
         {
             _hotFixUnityWebRequest = UnityWebRequest.Get(AotGlobal.StringBuilderString(hotFixPath, "HotFix/HotFixViewConfig/HotFixViewConfig.json"));
-            Debug.Log(_hotFixUnityWebRequest.url);
             await _hotFixUnityWebRequest.SendWebRequest();
             if (_hotFixUnityWebRequest.responseCode == 200)
             {
@@ -366,6 +374,7 @@ namespace Aot
             {
                 //需要下载
                 hotFixViewIsNeedDown = true;
+                Debug.Log("hotFixView版本不一致,需要下载");
             }
 
             if (hotFixViewIsNeedDown)
@@ -377,12 +386,12 @@ namespace Aot
 
 
         /// <summary>
-        /// 保存Assembly配置表缓存文件
+        /// 保存HotFixView配置表缓存文件
         /// </summary>
         private void SaveHotFixViewConfigCacheFile()
         {
             string saveDirectory = AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixViewConfig/";
-            string saveName = "HotFixViewConfig.json" + ".Cache";
+            string saveName = "HotFixViewConfig.json" + "." + remoteHotFixViewHotFixAssetConfig.version + ".Cache";
             AotGlobal.SaveTextToLoad(saveDirectory, saveName, JsonUtility.ToJson(remoteHotFixViewHotFixAssetConfig));
             //添加到缓存列表中
             replaceCacheFile.Add(saveDirectory + saveName);
@@ -447,6 +456,7 @@ namespace Aot
             if (localHotFixCodeHotFixAssetConfig.version != remoteHotFixCodeHotFixAssetConfig.version)
             {
                 hotFixCodeIsNeedDown = true;
+                Debug.Log("hotFixCode版本不一致,需要下载");
             }
 
             if (hotFixCodeIsNeedDown)
@@ -462,7 +472,7 @@ namespace Aot
         private void SaveHotFixCodeConfigCacheFile()
         {
             string saveDirectory = AotGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCodeConfig/";
-            string saveName = "HotFixCodeConfig.json" + ".Cache";
+            string saveName = "HotFixCodeConfig.json" + "." + remoteHotFixCodeHotFixAssetConfig.version + ".Cache";
             AotGlobal.SaveTextToLoad(saveDirectory, saveName, JsonUtility.ToJson(remoteHotFixCodeHotFixAssetConfig));
             //添加到缓存列表中
             replaceCacheFile.Add(saveDirectory + saveName);
