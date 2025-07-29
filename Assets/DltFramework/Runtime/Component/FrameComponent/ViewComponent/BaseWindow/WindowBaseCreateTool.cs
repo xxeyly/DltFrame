@@ -16,7 +16,6 @@ public class WindowBaseCreateTool : MonoBehaviour
 
     private string _createErrorTip = "创建的名称不能为空";
 
-    private bool _isCreate;
 
     [GUIColor(0f, 1f, 0f),]
     [Button("创建", ButtonSizes.Large)]
@@ -38,7 +37,6 @@ public class WindowBaseCreateTool : MonoBehaviour
         if (windowBaseName.Length <= 0)
         {
             _createErrorTip = "创建的名称不能为空";
-            _isCreate = false;
         }
         else
         {
@@ -52,13 +50,13 @@ public class WindowBaseCreateTool : MonoBehaviour
             if (!baseWindowNames.Contains(windowBaseName))
             {
                 _createErrorTip = "可以创建";
-                _isCreate = true;
             }
             else
             {
                 _createErrorTip = "创建的名称已存在";
-                _isCreate = false;
             }
         }
+
+        Debug.Log(_createErrorTip);
     }
 }

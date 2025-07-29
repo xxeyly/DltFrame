@@ -1,11 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 #if HybridCLR
 using HybridCLR;
 #endif
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace HotFix
 {
@@ -74,9 +77,16 @@ namespace HotFix
         private static void LoadAssemblyCSharp()
         {
 #if !UNITY_EDITOR
-        Assembly.Load(File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/HotFixRuntime/Assembly/Assembly-CSharp.dll.bytes"));
-#else
+            Assembly assemblyCSharp = Assembly.Load(File.ReadAllBytes($"{HotFixGlobal.GetDeviceStoragePath()}/HotFixRuntime/Assembly/Assembly-CSharp.dll.bytes"));
 
+#else
+            Assembly assemblyCSharp = AppDomain.CurrentDomain.GetAssemblies().First(a => a.GetName().Name == "Assembly-CSharp");
+
+#endif
+
+#if Obfuz4HybridCLR
+             Type type = assemblyCSharp.GetType("DltFramework.Encryption");
+             type.GetMethod("Initialize")?.Invoke(null, null);
 #endif
         }
 

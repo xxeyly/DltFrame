@@ -17,43 +17,8 @@ namespace DltFramework
         {
         }
 
-        //添加宏定义
-        [Obsolete("Obsolete")]
-        private static void AddMacro(string macroName)
-        {
-            BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-            //获取当前平台已有的宏定义
-            var symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
-            //添加想要的宏定义
-            var symbolsList = symbols.Split(';').ToList();
-            if (symbolsList.Contains(macroName))
-            {
-                return;
-            }
-
-            symbolsList.Add(macroName);
-            symbols = string.Join(";", symbolsList);
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, symbols);
-        }
-
-        //删除宏定义
-        [Obsolete("Obsolete")]
-        private static void RemoveMacro(string macroName)
-        {
-            BuildTargetGroup buildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-            //获取当前平台已有的宏定义
-            var symbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(buildTargetGroup);
-            //添加想要的宏定义
-            var symbolsList = symbols.Split(';').ToList();
-            if (!symbolsList.Contains(macroName))
-            {
-                return;
-            }
-
-            symbolsList.Remove(macroName);
-            symbols = string.Join(";", symbolsList);
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, symbols);
-        }
+       
+        
 
         [MenuItem("DltFrame/框架界面")]
         private static void OpenWindow()
@@ -111,7 +76,7 @@ namespace DltFramework
             }
         }
 
-#if !HybridCLR
+/*#if !HybridCLR
         [MenuItem("DltFrame/开启热更功能")]
         public static void OpenHotFix()
         {
@@ -126,7 +91,7 @@ namespace DltFramework
         {
             RemoveMacro("HybridCLR");
         }
-#endif
+#endif*/
 
 #endif
 

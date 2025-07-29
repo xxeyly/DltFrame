@@ -220,7 +220,7 @@ namespace DltFramework
             AssetDatabase.Refresh();
 
             platformName = EditorUserBuildSettings.activeBuildTarget.ToString();
-
+#if HybridCLR
             buildOtherAssemblyName = new List<string>();
             foreach (string hotUpdateAssemblyName in HybridCLR.Editor.SettingsUtil.HotUpdateAssemblyNamesExcludePreserved)
             {
@@ -229,6 +229,7 @@ namespace DltFramework
                     buildOtherAssemblyName.Add(hotUpdateAssemblyName);
                 }
             }
+#endif
 
             // Debug.Log("初始化");
         }
@@ -274,7 +275,7 @@ namespace DltFramework
         [BoxGroup("OtherAssembly")] [LabelText("打包")] [OnValueChanged("OnSaveConfig")]
         public bool buildOtherAssemblyParticipatePackaging;
 
-        [BoxGroup("OtherAssembly")] [LabelText("其他程序集")][ReadOnly] [OnValueChanged("OnSaveConfig")] [EnableIf("buildOtherAssemblyParticipatePackaging")]
+        [BoxGroup("OtherAssembly")] [LabelText("其他程序集")] [ReadOnly] [OnValueChanged("OnSaveConfig")] [EnableIf("buildOtherAssemblyParticipatePackaging")]
         public List<string> buildOtherAssemblyName;
 
         #endregion
@@ -560,10 +561,16 @@ namespace DltFramework
         {
             //热更新打包
 #if HybridCLR
+#if Obfuz4HybridCLR
+            Obfuz4HybridCLR.PrebuildCommandExt.CompileAndObfuscateDll();
+            File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/Library/Obfuz/" + platformName + "/ObfuscatedHotUpdateAssemblies"+"/HotFixCode.dll",
+                RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + "HotFixCode.dll.bytes", true);
+#else
             CompileDllCommand.CompileDllActiveBuildTarget();
-#endif
             File.Copy(DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/HotFixCode.dll",
                 RuntimeGlobal.GetDeviceStoragePath() + "/HotFix/HotFixCode/" + "HotFixCode.dll.bytes", true);
+#endif
+#endif
             string hotfixCodeDllPath = HotFixCodePath + "HotFixCode.dll.bytes";
             string hotfixCodeDllConfigPath = HotFixCodeConfigPath + "HotFixCodeConfig.json";
             HotFixAssetConfig oldHotFixAssetConfig = new HotFixAssetConfig();
@@ -597,7 +604,6 @@ namespace DltFramework
         private void MetaAssemblyBuild()
         {
 #if HybridCLR
-
             //生成元数据
             StripAOTDllCommand.GenerateStripedAOTDlls();
             //移动元文件
@@ -655,10 +661,15 @@ namespace DltFramework
         private void AssemblyBuild()
         {
 #if HybridCLR
+#if Obfuz4HybridCLR
+            Obfuz4HybridCLR.PrebuildCommandExt.CompileAndObfuscateDll();
+            string assemblyDllPath = DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) +  "/Library/Obfuz/" + platformName + "/ObfuscatedHotUpdateAssemblies"+"/Assembly-CSharp.dll";
+#else
             CompileDllCommand.CompileDllActiveBuildTarget();
+            string assemblyDllPath = DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) +  "/Library/Obfuz/HotUpdateDlls/" + platformName + "/ObfuscatedHotUpdateAssemblies"+"/Assembly-CSharp.dll";
+#endif
 #endif
 
-            string assemblyDllPath = DataFrameComponent.Path_GetParentDirectory(Application.dataPath, 1) + "/HybridCLRData/HotUpdateDlls/" + platformName + "/Assembly-CSharp.dll";
             File.Copy(assemblyDllPath, AssemblyPath + "Assembly-CSharp.dll.bytes", true);
 
             string configPath = AssemblyConfigPath + "AssemblyConfig.json";
